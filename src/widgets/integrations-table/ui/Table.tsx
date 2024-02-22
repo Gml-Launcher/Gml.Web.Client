@@ -42,7 +42,7 @@ export const Table = () => {
       {integrations &&
         integrations.data &&
         integrations.data.map((item) => (
-          <h1>
+          <h1 key={item.name}>
             {item.authType} {item.name} {item.endpoint}
           </h1>
         ))}
