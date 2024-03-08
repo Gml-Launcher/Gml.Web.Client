@@ -7,6 +7,7 @@ import {
 } from "@/widgets/auth-credentials-form/lib/static";
 import { authService } from "@/shared/services";
 import { DASHBOARD_PAGES } from "@/shared/routes";
+import { isAxiosError } from "axios";
 
 export const useRegistration = () => {
   const route = useRouter();
@@ -21,6 +22,15 @@ export const useRegistration = () => {
         description: "Добро пожаловать в платформу",
       });
       route.push(DASHBOARD_PAGES.HOME);
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast.toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
     },
   });
 };

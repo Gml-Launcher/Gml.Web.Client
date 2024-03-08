@@ -33,8 +33,8 @@ export const useProfile = () => {
       if (isAxiosError(error)) {
         toast.toast({
           variant: "destructive",
-          title: "Ошибка!",
-          description: error.response && error.response.data.message,
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
         });
       }
     },
@@ -93,8 +93,8 @@ export const useEditProfile = () => {
       if (isAxiosError(error)) {
         toast.toast({
           variant: "destructive",
-          title: "Ошибка!",
-          description: error.response && error.response.data.message,
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
         });
       }
     },
@@ -122,8 +122,8 @@ export const useDeleteProfile = () => {
       if (isAxiosError(error)) {
         toast({
           variant: "destructive",
-          title: "Ошибка!",
-          description: error.response && error.response.data.errors,
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
         });
       }
     },
