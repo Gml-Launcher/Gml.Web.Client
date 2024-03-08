@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { ProfileServerTypes } from "@/shared/api/contracts";
 
 export const createProfileSchema = z.object({
   name: z
@@ -17,11 +16,7 @@ export const createProfileSchema = z.object({
       message: "Не выбрана версия игры",
     }),
   }),
-  gameLoader: z.nativeEnum(ProfileServerTypes, {
-    errorMap: () => ({
-      message: "Неверный тип игрового загрузчика",
-    }),
-  }),
+  gameLoader: z.string(),
   iconBase64: z
     .string()
     .min(2, { message: "Длина Base64 должна быть больше 2 символов" })

@@ -2,19 +2,13 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/shared/lib/utils";
+import { cn, enumValues } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
-import { profileService } from "@/shared/services";
-import { useMutation } from "@tanstack/react-query";
-import {
-  CreateProfileFormSchemaType,
-  createProfileSchema,
-} from "@/widgets/create-profile-form/lib/static";
+
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -23,41 +17,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { isAxiosError } from "axios";
-import { ProfileServerTypes } from "@/shared/api/contracts";
+import {
+  CreateProfileFormSchemaType,
+  createProfileSchema,
+  GameLoaderOption,
+  GameLoaderType,
+} from "@/shared/api/contracts";
+import { useCreateProfile } from "@/shared/hooks/useProfiles";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const CreateProfileForm = ({ className, ...props }: CreateProfileFormProps) => {
-  const toast = useToast();
+  const { mutateAsync, isPending } = useCreateProfile();
 
   const form = useForm<CreateProfileFormSchemaType>({
     resolver: zodResolver(createProfileSchema),
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["create-profile"],
-    mutationFn: (data: CreateProfileFormSchemaType) => profileService.createProfile(data),
-    onSuccess: (data) => {
-      toast.toast({
-        title: "Успешно",
-        description: `Профиль "${data.data.name}" успешно создан`,
-      });
-    },
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        toast.toast({
-          title: "Ошибка!",
-          description: error.response && error.response.data.message,
-        });
-      }
-    },
-  });
-
   const onSubmit: SubmitHandler<CreateProfileFormSchemaType> = async (
     data: CreateProfileFormSchemaType,
   ) => {
-    mutate(data);
+    await mutateAsync(data);
   };
 
   return (
@@ -99,7 +79,7 @@ export const CreateProfileForm = ({ className, ...props }: CreateProfileFormProp
               name="version"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Выберите игровой загрузчик</FormLabel>
+                  <FormLabel>Выберите версию игры</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <SelectTrigger>
@@ -133,12 +113,11 @@ export const CreateProfileForm = ({ className, ...props }: CreateProfileFormProp
                         <SelectValue placeholder="Выберите игровой загрузчик" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value={ProfileServerTypes.FORGE}>
-                          {ProfileServerTypes.FORGE}
-                        </SelectItem>
-                        <SelectItem value={ProfileServerTypes.VANILLA}>
-                          {ProfileServerTypes.VANILLA}
-                        </SelectItem>
+                        {enumValues(GameLoaderType).map(([loader, value]) => (
+                          <SelectItem key={loader} value={String(value)}>
+                            {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
