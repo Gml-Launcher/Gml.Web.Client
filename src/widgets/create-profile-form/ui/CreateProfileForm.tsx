@@ -23,7 +23,7 @@ import {
   GameLoaderOption,
   GameLoaderType,
 } from "@/shared/api/contracts";
-import { useCreateProfile } from "@/shared/hooks/useProfiles";
+import { useCreateProfile } from "@/shared/hooks";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -83,7 +83,7 @@ export const CreateProfileForm = ({ className, ...props }: CreateProfileFormProp
                   <FormControl>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Выберите игровой загрузчик" />
+                        <SelectValue placeholder="Выберите версию игры" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="1.5.2">1.5.2</SelectItem>

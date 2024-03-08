@@ -21,13 +21,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React, { useState } from "react";
-import { DataTableToolbar } from "@/entities/Table";
 import { DataTablePagination } from "@/entities/Table/ui/items/data-table-pagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onOpenChange?: () => void;
   rowSelection: RowSelectionState;
   setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
 }
@@ -35,7 +33,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  onOpenChange,
   rowSelection,
   setRowSelection,
 }: DataTableProps<TData, TValue>) {
@@ -62,7 +59,6 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <DataTableToolbar table={table} rowSelection={rowSelection} onOpenChange={onOpenChange} />
       <div className="rounded-md border w-full">
         <Table>
           <TableHeader>
@@ -70,7 +66,7 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead key={header.id} style={{ width: header.getSize() }}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(header.column.columnDef.header, header.getContext())}
