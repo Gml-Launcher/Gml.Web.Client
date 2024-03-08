@@ -63,10 +63,11 @@ export const useColumns = (props: UseColumnsProps) => {
       enableHiding: false,
     }),
     columnsHelper.accessor("iconBase64", {
-      size: 48,
+      size: 64,
       header: ColumnHeader.ICON,
       cell: ({ row }) => (
         <Image
+          className="min-w-8 min-h-8"
           src={`data:text/plain;base64,${row.original.iconBase64}`}
           alt={row.original.name}
           width={32}
@@ -77,7 +78,7 @@ export const useColumns = (props: UseColumnsProps) => {
     columnsHelper.accessor("name", {
       size: 500,
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
-      cell: ({ getValue, row }) => getValue(),
+      cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor("launchVersion", {
       size: 500,

@@ -44,7 +44,6 @@ export const CreateProfileForm = ({
       name: profile?.profileName || "",
       description: profile?.description || "",
       gameLoader: profile?.minecraftVersion || "",
-      iconBase64: profile?.iconBase64 || "",
       version: profile?.clientVersion || "",
     },
     resolver: zodResolver(createProfileSchema),
@@ -54,17 +53,25 @@ export const CreateProfileForm = ({
     data: CreateProfileFormSchemaType,
   ) => {
     if (isEditing) {
-      await mutateAsyncEdit({
-        name: data.name,
-        originalName: profile?.profileName || "",
-        description: data.description,
-        iconBase64: data.iconBase64,
-      });
+      const formUpdate = new FormData();
+      formUpdate.append("name", data.name);
+      formUpdate.append("originalName", profile?.profileName || "");
+      formUpdate.append("description", data.description);
+      formUpdate.append("icon", data.icon[0]);
+
+      await mutateAsyncEdit(formUpdate);
 
       return;
     }
 
-    return await mutateAsyncCreate(data);
+    const formCreate = new FormData();
+    formCreate.append("name", data.name);
+    formCreate.append("description", data.description);
+    formCreate.append("version", data.version);
+    formCreate.append("gameLoader", data.gameLoader);
+    formCreate.append("icon", data.icon[0]);
+
+    return await mutateAsyncCreate(formCreate);
   };
 
   return (
@@ -74,10 +81,10 @@ export const CreateProfileForm = ({
           <FormItem>
             <FormLabel>Иконка сервера</FormLabel>
             <FormControl>
-              <Input placeholder="Выберите иконку сервера" {...form.register("iconBase64")} />
+              <Input type="file" placeholder="Выберите иконку сервера" {...form.register("icon")} />
             </FormControl>
-            {form.formState.errors.iconBase64 && (
-              <FormMessage>{form.formState.errors.iconBase64.message}</FormMessage>
+            {form.formState.errors.icon && (
+              <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
             )}
           </FormItem>
 
@@ -102,7 +109,7 @@ export const CreateProfileForm = ({
           </FormItem>
 
           {!isEditing && !profile && (
-            <div className="flex gap-x-4">
+            <>
               <Controller
                 name="version"
                 render={({ field }) => (
@@ -155,15 +162,17 @@ export const CreateProfileForm = ({
                   </FormItem>
                 )}
               />
-            </div>
+            </>
           )}
 
-          <Button disabled={isPendingCreate || isPendingEdit}>
-            {(isPendingCreate || isPendingEdit) && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {isEditing || profile ? "Сохранить" : "Создать профиль"}
-          </Button>
+          <div className={"flex justify-end"}>
+            <Button disabled={isPendingCreate || isPendingEdit}>
+              {(isPendingCreate || isPendingEdit) && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {isEditing || profile ? "Сохранить" : "Создать"}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

@@ -9,13 +9,7 @@ export type TGetProfilesResponse = ResponseBaseEntity & {
 };
 
 // Создание профиля
-export type TPostProfilesRequest = {
-  name: string;
-  description: string;
-  version: string;
-  gameLoader: string;
-  iconBase64?: any;
-};
+export type TPostProfilesRequest = FormData;
 export type TPostProfilesResponse = ResponseBaseEntity & {
   data: ProfileBaseEntity;
 };
@@ -41,12 +35,7 @@ export type TGetProfileResponse = ResponseBaseEntity & {
 };
 
 // Редактирование профиля
-export type TPutProfileRequest = {
-  originalName: string;
-  name: string;
-  description: string;
-  iconBase64: string;
-};
+export type TPutProfileRequest = FormData;
 export type TPutProfileResponse = ResponseBaseEntity & {
   data: ProfileBaseEntity;
 };
@@ -57,3 +46,10 @@ export type TDeleteProfileRequest = {
   removeFiles: boolean;
 };
 export type TDeleteProfileResponse = ResponseBaseEntity & {};
+
+// Удаление профилей
+export type TDeleteProfilesRequest = {
+  profileNames: string;
+  removeFiles: boolean;
+};
+export type TDeleteProfilesResponse = ResponseBaseEntity & {};
