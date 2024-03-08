@@ -29,6 +29,7 @@ export const Table = () => {
     onError: (error) => {
       if (isAxiosError(error)) {
         toast.toast({
+          variant: "destructive",
           title: "Ошибка!",
           description: error.response && error.response.data.message,
         });

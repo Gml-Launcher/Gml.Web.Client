@@ -1,5 +1,5 @@
 import { $api } from "@/core/api";
-import { removeStorageTokens, setStorageAccessToken } from "@/shared/services";
+import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from "@/shared/services";
 import {
   TPostSignInRequest,
   TPostSignInResponse,
@@ -12,16 +12,18 @@ class AuthService {
 
   async signUp(body: TPostSignUpRequest): Promise<TPostSignUpResponse> {
     const { data } = await $api.post<TPostSignUpResponse>(`${this.BASE_URL}/signup`, body);
-
-    setStorageAccessToken(data.data.accessToken);
+    const { accessToken, ...profile } = data.data;
+    setStorageAccessToken(accessToken);
+    setStorageProfile(profile);
 
     return data;
   }
 
   async signIn(body: TPostSignInRequest): Promise<TPostSignInResponse> {
     const { data } = await $api.post<TPostSignInResponse>(`${this.BASE_URL}/signin`, body);
-
-    setStorageAccessToken(data.data.accessToken);
+    const { accessToken, ...profile } = data.data;
+    setStorageAccessToken(accessToken);
+    setStorageProfile(profile);
 
     return data;
   }
