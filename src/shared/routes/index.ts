@@ -7,7 +7,7 @@ export const AUTH_PAGES = {
 export const DASHBOARD_PAGES = {
   HOME: "/dashboard",
   INTEGRATIONS: "/integrations",
-  PROFILES: "/profiles",
-  PROFILE: "/profiles/:id",
+  PROFILES: "/dashboard/profiles",
+  PROFILE: "/dashboard/profile",
   SETTINGS: "/settings",
 };

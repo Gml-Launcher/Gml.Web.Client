@@ -8,44 +8,20 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { SignInFormSchemaType, signInSchema } from "@/widgets/auth-credentials-form/lib/static";
-import { authService } from "@/shared/services";
-import { useMutation } from "@tanstack/react-query";
-import { DASHBOARD_PAGES } from "@/shared/routes";
+import { useLogin } from "@/shared/hooks";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SignInForm = ({ className, ...props }: SignInFormProps) => {
-  const route = useRouter();
-  const toast = useToast();
+  const { mutateAsync, isPending } = useLogin();
 
   const form = useForm<SignInFormSchemaType>({
     resolver: zodResolver(signInSchema),
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["signin"],
-    mutationFn: (data: SignInFormSchemaType) => authService.signIn(data),
-    onSuccess: () => {
-      toast.toast({
-        title: "Успешная авторизация",
-        description: "Добро пожаловать в платформу",
-      });
-      form.reset();
-      route.push(DASHBOARD_PAGES.HOME);
-    },
-    onError: () => {
-      toast.toast({
-        title: "Упс!",
-        description: "Проверьте правильность введенных данных",
-      });
-    },
-  });
-
   const onSubmit: SubmitHandler<SignInFormSchemaType> = async (data: SignInFormSchemaType) => {
-    mutate(data);
+    await mutateAsync(data);
   };
 
   return (

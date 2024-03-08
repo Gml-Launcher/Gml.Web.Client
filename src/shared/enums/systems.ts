@@ -4,3 +4,8 @@ export enum OsTypeEnum {
   OSX,
   WINDOWS,
 }
+
+export enum OsArchitectureEnum {
+  X64 = "64",
+  X32 = "32",
+}

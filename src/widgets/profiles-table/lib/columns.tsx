@@ -10,6 +10,8 @@ import { Edit2Icon, Trash2Icon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Icons } from "@/shared/ui/icons";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 enum ColumnHeader {
   ICON = "",
@@ -26,8 +28,13 @@ interface UseColumnsProps {
 export const columnsHelper = createColumnHelper<ProfileBaseEntity>();
 export const useColumns = (props: UseColumnsProps) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { onProfileDeleteModalToggle } = props;
+
+  const onRedirectEditProfile = (profileName: string) => () => {
+    router.push(`${DASHBOARD_PAGES.PROFILE}/${profileName}`);
+  };
 
   const columns = [
     columnsHelper.display({
@@ -70,7 +77,7 @@ export const useColumns = (props: UseColumnsProps) => {
     columnsHelper.accessor("name", {
       size: 500,
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue, row }) => getValue(),
     }),
     columnsHelper.accessor("launchVersion", {
       size: 500,
@@ -89,8 +96,8 @@ export const useColumns = (props: UseColumnsProps) => {
     columnsHelper.display({
       size: 48,
       id: "edit",
-      cell: () => (
-        <Button variant={"ghost"} size={"icon"}>
+      cell: ({ row }) => (
+        <Button variant={"ghost"} size={"icon"} onClick={onRedirectEditProfile(row.original.name)}>
           <Edit2Icon size={16} />
         </Button>
       ),

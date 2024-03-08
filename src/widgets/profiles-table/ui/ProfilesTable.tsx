@@ -20,11 +20,16 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useTable } from "../lib/table";
 import { ProfilesTableSkeleton } from "@/widgets/profiles-table";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export const ProfilesTable = () => {
   const { data: profiles, isLoading } = useProfiles();
   const currentProfile = useCurrentProfile();
   const deleteMutation = useDeleteProfile();
+
+  const [isRemoveFilesSwitch, setIsRemoveFilesSwitch] = useState(true);
+  const onRemoveFilesSwitchToggle = () => setIsRemoveFilesSwitch((prev) => !prev);
 
   const [isProfilesDrawerOpen, setIsProfilesDrawerOpen] = useState(false);
   const onProfilesDrawerToggle = () => setIsProfilesDrawerOpen((prev) => !prev);
@@ -39,9 +44,12 @@ export const ProfilesTable = () => {
   });
   const { table } = useTable({ data: profiles, columns, rowSelection, setRowSelection });
 
-  const onProfileDelete = (profileName: string) => async () => {
-    await deleteMutation.mutateAsync(profileName);
-  };
+  const onProfileDelete =
+    ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
+    async () => {
+      await deleteMutation.mutateAsync({ profileName, removeFiles });
+      onRemoveFilesSwitchToggle();
+    };
 
   return (
     <>
@@ -94,9 +102,22 @@ export const ProfilesTable = () => {
               {`Вы уверены что хотите безвозвратно удалить профиль "${currentProfile?.name}"?`}
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="remove-files"
+              checked={isRemoveFilesSwitch}
+              onClick={onRemoveFilesSwitchToggle}
+            />
+            <Label htmlFor="remove-files">Удалить файлы</Label>
+          </div>
           <AlertDialogFooter>
             <AlertDialogCancel>Отмена</AlertDialogCancel>
-            <AlertDialogAction onClick={onProfileDelete(currentProfile?.name || "")}>
+            <AlertDialogAction
+              onClick={onProfileDelete({
+                profileName: currentProfile?.name || "",
+                removeFiles: isRemoveFilesSwitch,
+              })}
+            >
               Удалить
             </AlertDialogAction>
           </AlertDialogFooter>

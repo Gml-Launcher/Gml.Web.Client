@@ -1,5 +1,6 @@
 import { ProfileBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { ResponseBaseEntity } from "@/shared/api/schemas";
+import { OsArchitectureEnum } from "@/shared/enums";
 
 // Получение профилей
 export type TGetProfilesRequest = {};
@@ -25,7 +26,7 @@ export type TGetProfileRequest = {
   ProfileName: string;
   UserAccessToken: string;
   UserUuid: string;
-  OsArchitecture: string;
+  OsArchitecture: OsArchitectureEnum;
   OsType: string;
 
   WindowWidth?: number;
@@ -39,8 +40,20 @@ export type TGetProfileResponse = ResponseBaseEntity & {
   data: ProfileExtendedBaseEntity;
 };
 
+// Редактирование профиля
+export type TPutProfileRequest = {
+  originalName: string;
+  name: string;
+  description: string;
+  iconBase64: string;
+};
+export type TPutProfileResponse = ResponseBaseEntity & {
+  data: ProfileBaseEntity;
+};
+
 // Удаление профиля
 export type TDeleteProfileRequest = {
   profileName: string;
+  removeFiles: boolean;
 };
 export type TDeleteProfileResponse = ResponseBaseEntity & {};

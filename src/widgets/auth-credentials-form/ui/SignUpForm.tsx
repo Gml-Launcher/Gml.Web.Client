@@ -8,38 +8,20 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { SignUpFormSchemaType, signUpSchema } from "@/widgets/auth-credentials-form/lib/static";
-import { authService } from "@/shared/services";
-import { useMutation } from "@tanstack/react-query";
-import { DASHBOARD_PAGES } from "@/shared/routes";
+import { useRegistration } from "@/shared/hooks";
 
 interface SignUpFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
-  const route = useRouter();
-  const toast = useToast();
+  const { mutateAsync, isPending } = useRegistration();
 
   const form = useForm<SignUpFormSchemaType>({
     resolver: zodResolver(signUpSchema),
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["signup"],
-    mutationFn: (data: SignUpFormSchemaType) => authService.signUp(data),
-    onSuccess: () => {
-      toast.toast({
-        title: "Успешная регистрация",
-        description: "Добро пожаловать в платформу",
-      });
-      form.reset();
-      route.push(DASHBOARD_PAGES.HOME);
-    },
-  });
-
   const onSubmit: SubmitHandler<SignUpFormSchemaType> = async (data: SignUpFormSchemaType) => {
-    mutate(data);
+    mutateAsync(data);
   };
 
   return (

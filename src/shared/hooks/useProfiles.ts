@@ -2,7 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { profileService } from "@/shared/services/ProfileService";
 import { useToast } from "@/components/ui/use-toast";
 import { isAxiosError } from "axios";
-import { CreateProfileFormSchemaType, ProfileBaseEntity } from "@/shared/api/contracts";
+import {
+  ProfileBaseEntity,
+  TDeleteProfileRequest,
+  TGetProfileRequest,
+  TPostProfilesRequest,
+  TPutProfileRequest,
+} from "@/shared/api/contracts";
 
 export const useProfiles = () => {
   const { data, isLoading } = useQuery({
@@ -11,6 +17,28 @@ export const useProfiles = () => {
   });
 
   return { data: data?.data, isLoading };
+};
+
+export const useProfile = () => {
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["get-profile"],
+    mutationFn: (data: TGetProfileRequest) => profileService.getProfile(data),
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["profiles"] });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast.toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
 };
 
 export const useCurrentProfile = () => {
@@ -27,7 +55,7 @@ export const useCreateProfile = () => {
 
   return useMutation({
     mutationKey: ["create-profile"],
-    mutationFn: (data: CreateProfileFormSchemaType) => profileService.createProfile(data),
+    mutationFn: (data: TPostProfilesRequest) => profileService.createProfile(data),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["profiles"] });
     },
@@ -40,8 +68,33 @@ export const useCreateProfile = () => {
     onError: (error) => {
       if (isAxiosError(error)) {
         toast.toast({
-          title: "Ошибка!",
-          description: error.response && error.response.data.message,
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
+};
+
+export const useEditProfile = () => {
+  const toast = useToast();
+
+  return useMutation({
+    mutationKey: ["edit-profile"],
+    mutationFn: (data: TPutProfileRequest) => profileService.editProfile(data),
+    onSuccess: (data) => {
+      toast.toast({
+        title: "Успешно",
+        description: `Профиль "${data.data.name}" успешно обновлен`,
+      });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast.toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
         });
       }
     },
@@ -54,7 +107,7 @@ export const useDeleteProfile = () => {
 
   return useMutation({
     mutationKey: ["delete-profile"],
-    mutationFn: (profileName: string) => profileService.deleteProfile({ profileName }),
+    mutationFn: (body: TDeleteProfileRequest) => profileService.deleteProfile(body),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["profiles"] });
       await queryClient.setQueryData(["profile"], () => null);
@@ -68,8 +121,9 @@ export const useDeleteProfile = () => {
     onError: (error) => {
       if (isAxiosError(error)) {
         toast({
-          title: "Ошибка!",
-          description: error.response && error.response.data.message,
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
         });
       }
     },
