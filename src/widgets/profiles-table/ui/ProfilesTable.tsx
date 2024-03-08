@@ -2,7 +2,12 @@
 
 import { DataTable, DataTableToolbar } from "@/entities/Table";
 import { useColumns } from "../lib/columns";
-import { useCurrentProfile, useDeleteProfile, useProfiles } from "@/shared/hooks";
+import {
+  useCurrentProfile,
+  useDeleteProfile,
+  useDeleteProfiles,
+  useProfiles,
+} from "@/shared/hooks";
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { RowSelectionState } from "@tanstack/react-table";
@@ -27,6 +32,7 @@ export const ProfilesTable = () => {
   const { data: profiles, isLoading } = useProfiles();
   const currentProfile = useCurrentProfile();
   const deleteMutation = useDeleteProfile();
+  const deleteAllMutation = useDeleteProfiles();
 
   const [isRemoveFilesSwitch, setIsRemoveFilesSwitch] = useState(true);
   const onRemoveFilesSwitchToggle = () => setIsRemoveFilesSwitch((prev) => !prev);
@@ -48,6 +54,13 @@ export const ProfilesTable = () => {
     ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
     async () => {
       await deleteMutation.mutateAsync({ profileName, removeFiles });
+      onRemoveFilesSwitchToggle();
+    };
+
+  const onProfilesDelete =
+    ({ profiles, removeFiles }: { profiles: string[]; removeFiles: boolean }) =>
+    async () => {
+      await deleteAllMutation.mutateAsync({ profileNames: profiles.join(","), removeFiles });
       onRemoveFilesSwitchToggle();
     };
 
@@ -85,7 +98,22 @@ export const ProfilesTable = () => {
                 <CardDescription>
                   Безвозвратно будут удалены: {Object.keys(rowSelection).join(", ")}
                 </CardDescription>
-                <Button variant="destructive" className="w-fit">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    id="remove-files"
+                    checked={isRemoveFilesSwitch}
+                    onClick={onRemoveFilesSwitchToggle}
+                  />
+                  <Label htmlFor="remove-files">Удалить файлы</Label>
+                </div>
+                <Button
+                  variant="destructive"
+                  className="w-fit"
+                  onClick={onProfilesDelete({
+                    profiles: Object.keys(rowSelection),
+                    removeFiles: isRemoveFilesSwitch,
+                  })}
+                >
                   Удалить профили
                 </Button>
               </CardContent>

@@ -48,7 +48,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnVisibility,
     },
-    getRowId: ({ id }: any) => id,
+    getRowId: ({ name }: any) => name,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

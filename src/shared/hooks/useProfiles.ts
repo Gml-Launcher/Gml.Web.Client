@@ -5,6 +5,7 @@ import { isAxiosError } from "axios";
 import {
   ProfileBaseEntity,
   TDeleteProfileRequest,
+  TDeleteProfilesRequest,
   TGetProfileRequest,
   TPostProfilesRequest,
   TPutProfileRequest,
@@ -111,6 +112,34 @@ export const useDeleteProfile = () => {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: ["profiles"] });
       await queryClient.setQueryData(["profile"], () => null);
+    },
+    onSuccess: async (data) => {
+      toast({
+        title: "Успешно",
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
+};
+
+export const useDeleteProfiles = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["delete-profiles"],
+    mutationFn: (body: TDeleteProfilesRequest) => profileService.deleteProfiles(body),
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["profiles"] });
     },
     onSuccess: async (data) => {
       toast({

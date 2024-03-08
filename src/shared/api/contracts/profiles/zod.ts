@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const MAX_FILE_SIZE = 10_485_760;
+const ACCEPTED_IMAGE_TYPES = ["image/png"];
+
 export const createProfileSchema = z.object({
   name: z
     .string()
@@ -17,12 +20,14 @@ export const createProfileSchema = z.object({
     }),
   }),
   gameLoader: z.string(),
-  iconBase64: z
-    .string()
-    .min(2, { message: "Длина Base64 должна быть больше 2 символов" })
-    .max(1000, {
-      message: "Длина Base64 не должна быть больше 20000 символов",
-    }),
+  icon: z
+    .any()
+    .refine((files) => files?.length == 1, "Выберите изображение")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "Максимальный размер файла 10мб")
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Расширение файла может быть только .png",
+    ),
 });
 
 export type CreateProfileFormSchemaType = z.infer<typeof createProfileSchema>;
