@@ -1,8 +1,8 @@
 "use client";
 
-import { DataTable } from "@/entities/Table";
-import { useColumns } from "@/widgets/profiles-table/lib/columns";
-import { useProfiles } from "@/shared/hooks";
+import { DataTable, DataTableToolbar } from "@/entities/Table";
+import { useColumns } from "../lib/columns";
+import { useCurrentProfile, useDeleteProfile, useProfiles } from "@/shared/hooks";
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { RowSelectionState } from "@tanstack/react-table";
@@ -18,15 +18,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useMutation } from "@tanstack/react-query";
-import { isAxiosError } from "axios";
-import { profileService } from "@/shared/services";
-import { useToast } from "@/components/ui/use-toast";
-
-interface ProfilesTableProps {}
+import { useTable } from "../lib/table";
+import { ProfilesTableSkeleton } from "@/widgets/profiles-table";
 
 export const ProfilesTable = () => {
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const { data: profiles, isLoading } = useProfiles();
+  const currentProfile = useCurrentProfile();
+  const deleteMutation = useDeleteProfile();
 
   const [isProfilesDrawerOpen, setIsProfilesDrawerOpen] = useState(false);
   const onProfilesDrawerToggle = () => setIsProfilesDrawerOpen((prev) => !prev);
@@ -34,43 +32,34 @@ export const ProfilesTable = () => {
   const [isProfileDeleteModalOpen, setIsProfileDeleteModalOpen] = useState(false);
   const onProfileDeleteModalToggle = () => setIsProfileDeleteModalOpen((prev) => !prev);
 
-  const { toast } = useToast();
-  const { data, isLoading } = useProfiles();
-  const { columns } = useColumns({ onProfileDeleteModalToggle });
-
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["delete-profile"],
-    mutationFn: () =>
-      profileService.deleteProfile({
-        profileName: "frontend",
-      }),
-    onSuccess: async (data) => {
-      toast({
-        title: "Успешно",
-        description: data.message,
-      });
-      await profileService.getProfiles();
-    },
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        toast({
-          title: "Ошибка!",
-          description: error.response && error.response.data.message,
-        });
-      }
-    },
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const { columns } = useColumns({
+    onProfileDeleteModalToggle,
+    isPendingDelete: deleteMutation.isPending,
   });
+  const { table } = useTable({ data: profiles, columns, rowSelection, setRowSelection });
+
+  const onProfileDelete = (profileName: string) => async () => {
+    await deleteMutation.mutateAsync(profileName);
+  };
 
   return (
     <>
-      {data && (
-        <DataTable
-          columns={columns}
-          data={data}
-          onOpenChange={onProfilesDrawerToggle}
-          rowSelection={rowSelection}
-          setRowSelection={setRowSelection}
-        />
+      {isLoading && <ProfilesTableSkeleton />}
+      {profiles && (
+        <>
+          <DataTableToolbar
+            table={table}
+            rowSelection={rowSelection}
+            onOpenChange={onProfilesDrawerToggle}
+          />
+          <DataTable
+            data={profiles}
+            columns={columns}
+            rowSelection={rowSelection}
+            setRowSelection={setRowSelection}
+          />
+        </>
       )}
 
       <Sheet open={isProfilesDrawerOpen} onOpenChange={onProfilesDrawerToggle}>
@@ -83,7 +72,7 @@ export const ProfilesTable = () => {
               </CardHeader>
               <CardContent className="flex flex-col gap-y-4">
                 <CardDescription>
-                  Вы моежете безвозвратно удалить профили, если они вам не нужны
+                  Вы можете безвозвратно удалить профили, если они вам не нужны
                 </CardDescription>
                 <CardDescription>
                   Безвозвратно будут удалены: {Object.keys(rowSelection).join(", ")}
@@ -102,12 +91,14 @@ export const ProfilesTable = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Удаление профиля</AlertDialogTitle>
             <AlertDialogDescription>
-              Вы уверены что хотите безвозвратно удалить профиль?
+              {`Вы уверены что хотите безвозвратно удалить профиль "${currentProfile?.name}"?`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={onProfileDeleteModalToggle}>Отмена</AlertDialogCancel>
-            <AlertDialogAction onClick={() => mutate()}>Удалить</AlertDialogAction>
+            <AlertDialogCancel>Отмена</AlertDialogCancel>
+            <AlertDialogAction onClick={onProfileDelete(currentProfile?.name || "")}>
+              Удалить
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
