@@ -1,5 +1,6 @@
-import { AuthIntegrationBaseEntity } from '@/shared/api/contracts'; // Получение списка серверов для авторизации
-import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { AuthIntegrationBaseEntity } from "@/shared/api/contracts";
+import { BranchBaseEntity } from "@/shared/api/contracts/integrations/BranchBaseEntity";
+import { ResponseBaseEntity } from "@/shared/api/schemas";
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};
@@ -11,6 +12,12 @@ export type TGetAuthIntegrationsResponse = ResponseBaseEntity & {
 export type TGetActiveAuthIntegrationsRequest = {};
 export type TGetActiveAuthIntegrationsResponse = ResponseBaseEntity & {
   data: AuthIntegrationBaseEntity;
+};
+
+// Получение списка веток
+export type TGetInstallClientBranchesRequest = {};
+export type TGetInstallClientBranchesResponse = ResponseBaseEntity & {
+  data: BranchBaseEntity[];
 };
 
 // Изменение сервера авторизации
