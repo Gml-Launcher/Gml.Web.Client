@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { SignUpForm } from "@/widgets/auth-credentials-form";
+import { SignUpForm } from "@/feature/auth-credentials-form";
 import Link from "next/link";
 import { AUTH_PAGES } from "@/shared/routes";
 

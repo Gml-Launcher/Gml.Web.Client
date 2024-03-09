@@ -8,7 +8,7 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { SignInFormSchemaType, signInSchema } from "@/widgets/auth-credentials-form/lib/static";
+import { SignInFormSchemaType, signInSchema } from "@/feature/auth-credentials-form/lib/static";
 import { useLogin } from "@/shared/hooks";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}

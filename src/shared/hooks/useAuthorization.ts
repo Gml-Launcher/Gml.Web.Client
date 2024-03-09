@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import {
   SignInFormSchemaType,
   SignUpFormSchemaType,
-} from "@/widgets/auth-credentials-form/lib/static";
+} from "@/feature/auth-credentials-form/lib/static";
 import { authService } from "@/shared/services";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { isAxiosError } from "axios";
