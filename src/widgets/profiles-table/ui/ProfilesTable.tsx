@@ -1,18 +1,16 @@
-"use client";
+'use client';
 
-import { DataTable, DataTableToolbar } from "@/entities/Table";
-import { useColumns } from "../lib/columns";
+import React, { useState } from 'react';
+
+import { RowSelectionState } from '@tanstack/react-table';
+
+import { DataTable, DataTableToolbar } from '@/entities/Table';
 import {
   useCurrentProfile,
   useDeleteProfile,
   useDeleteProfiles,
   useProfiles,
-} from "@/shared/hooks";
-import React, { useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { RowSelectionState } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+} from '@/shared/hooks';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,13 +20,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useTable } from "../lib/table";
-import { ProfilesTableSkeleton } from "@/widgets/profiles-table";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+} from '@/shared/ui/alert-dialog';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Label } from '@/shared/ui/label';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/shared/ui/sheet';
+import { Switch } from '@/shared/ui/switch';
 
-export const ProfilesTable = () => {
+import { useColumns } from '../lib/columns';
+import { useTable } from '../lib/table';
+
+import { ProfilesTableSkeleton } from './ProfilesTableSkeleton';
+
+export function ProfilesTable() {
   const { data: profiles, isLoading } = useProfiles();
   const currentProfile = useCurrentProfile();
   const deleteMutation = useDeleteProfile();
@@ -50,17 +54,15 @@ export const ProfilesTable = () => {
   });
   const { table } = useTable({ data: profiles, columns, rowSelection, setRowSelection });
 
-  const onProfileDelete =
-    ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
+  const onProfileDelete = ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
     async () => {
       await deleteMutation.mutateAsync({ profileName, removeFiles });
       onRemoveFilesSwitchToggle();
     };
 
-  const onProfilesDelete =
-    ({ profiles, removeFiles }: { profiles: string[]; removeFiles: boolean }) =>
+  const onProfilesDelete = ({ profiles, removeFiles }: { profiles: string[]; removeFiles: boolean }) =>
     async () => {
-      await deleteAllMutation.mutateAsync({ profileNames: profiles.join(","), removeFiles });
+      await deleteAllMutation.mutateAsync({ profileNames: profiles.join(','), removeFiles });
       onRemoveFilesSwitchToggle();
     };
 
@@ -96,7 +98,9 @@ export const ProfilesTable = () => {
                   Вы можете безвозвратно удалить профили, если они вам не нужны
                 </CardDescription>
                 <CardDescription>
-                  Безвозвратно будут удалены: {Object.keys(rowSelection).join(", ")}
+                  Безвозвратно будут удалены:
+                  {' '}
+                  {Object.keys(rowSelection).join(', ')}
                 </CardDescription>
                 <div className="flex items-center space-x-2">
                   <Switch
@@ -142,7 +146,7 @@ export const ProfilesTable = () => {
             <AlertDialogCancel>Отмена</AlertDialogCancel>
             <AlertDialogAction
               onClick={onProfileDelete({
-                profileName: currentProfile?.name || "",
+                profileName: currentProfile?.name || '',
                 removeFiles: isRemoveFilesSwitch,
               })}
             >
@@ -153,4 +157,4 @@ export const ProfilesTable = () => {
       </AlertDialog>
     </>
   );
-};
+}

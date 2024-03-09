@@ -1,17 +1,20 @@
-"use client";
+'use client';
 
-import { createColumnHelper } from "@tanstack/table-core";
-import { AuthIntegrationBaseEntity } from "@/shared/api/contracts";
-import { DataTableColumnHeader } from "@/entities/Table";
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Edit2Icon } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import React from 'react';
+
+import { useQueryClient } from '@tanstack/react-query';
+import { createColumnHelper } from '@tanstack/table-core';
+
+import { Edit2Icon } from 'lucide-react';
+
+import { DataTableColumnHeader } from '@/entities/Table';
+import { AuthIntegrationBaseEntity } from '@/shared/api/contracts';
+import { Button } from '@/shared/ui/button';
 
 enum ColumnHeader {
-  NAME = "Название",
-  AUTH_TYPE = "Тип авторизации",
-  ENDPOINT = "Эндпоинт",
+  NAME = 'Название',
+  AUTH_TYPE = 'Тип авторизации',
+  ENDPOINT = 'Эндпоинт',
 }
 
 interface UseColumnsProps {
@@ -25,19 +28,19 @@ export const useColumns = (props: UseColumnsProps) => {
   const queryClient = useQueryClient();
 
   const columns: any = [
-    columnsHelper.accessor("name", {
+    columnsHelper.accessor('name', {
       size: 500,
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
       cell: ({ getValue }) => getValue(),
     }),
-    columnsHelper.accessor("authType", {
+    columnsHelper.accessor('authType', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.AUTH_TYPE} />
       ),
       cell: ({ getValue }) => getValue(),
     }),
-    columnsHelper.accessor("endpoint", {
+    columnsHelper.accessor('endpoint', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.ENDPOINT} />
@@ -46,15 +49,15 @@ export const useColumns = (props: UseColumnsProps) => {
     }),
     columnsHelper.display({
       size: 48,
-      id: "edit",
+      id: 'edit',
       cell: ({ row }) => {
         const onClickEditIntegration = () => {
-          queryClient.setQueryData(["integration"], () => row.original);
+          queryClient.setQueryData(['integration'], () => row.original);
           onIntegrationEditDialogToggle();
         };
 
         return (
-          <Button variant={"ghost"} size={"icon"} onClick={onClickEditIntegration}>
+          <Button variant="ghost" size="icon" onClick={onClickEditIntegration}>
             <Edit2Icon size={16} />
           </Button>
         );

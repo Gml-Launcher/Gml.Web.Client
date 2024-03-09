@@ -1,18 +1,24 @@
-"use client";
+'use client';
 
-import { useAuthIntegrations } from "@/shared/hooks/useIntegraions";
-import { IntegrationsTableSkeleton } from "@/widgets/integrations-table";
-import React, { useState } from "react";
-import { useColumns } from "@/widgets/integrations-table/lib/columns";
-import { RowSelectionState } from "@tanstack/react-table";
-import { DataTable } from "@/entities/Table";
-import { EditIntegrationDialog } from "@/widgets/EditIntegrationDialog";
+import React, { useState } from 'react';
 
-export const IntegrationsTable = () => {
+import { RowSelectionState } from '@tanstack/react-table';
+
+import { DataTable } from '@/entities/Table';
+import { useAuthIntegrations } from '@/shared/hooks/useIntegraions';
+
+import { useColumns } from '../lib/columns';
+
+import { IntegrationsTableSkeleton } from './IntegrationsTableSkeleton';
+
+interface IntegrationsTableProps {
+  onIntegrationEditDialogToggle: () => void;
+}
+
+export function IntegrationsTable(props: IntegrationsTableProps) {
+  const { onIntegrationEditDialogToggle } = props;
+
   const { data: integrations, isLoading: integrationsLoading } = useAuthIntegrations();
-
-  const [isIntegrationEditDialogOpen, setIsIntegrationEditDialogOpen] = useState(false);
-  const onIntegrationEditDialogToggle = () => setIsIntegrationEditDialogOpen((prev) => !prev);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const { columns } = useColumns({ onIntegrationEditDialogToggle });
@@ -28,11 +34,6 @@ export const IntegrationsTable = () => {
           setRowSelection={setRowSelection}
         />
       )}
-
-      <EditIntegrationDialog
-        open={isIntegrationEditDialogOpen}
-        onOpenChange={onIntegrationEditDialogToggle}
-      />
     </>
   );
-};
+}

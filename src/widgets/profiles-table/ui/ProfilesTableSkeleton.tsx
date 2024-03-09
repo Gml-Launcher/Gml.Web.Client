@@ -1,17 +1,16 @@
-import React from "react";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Skeleton } from "@/components/ui/skeleton";
 import { emptyArray } from "@/shared/lib/utils";
+import { Skeleton } from "@/shared/ui/skeleton";
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 
-export const ProfilesTableSkeleton = () => {
+export function ProfilesTableSkeleton() {
   return (
     <div className="rounded-md border w-full mb-8">
       <Table>
         <TableHeader>
           <TableRow>
-            {emptyArray(7).map((_, index) => (
+            {emptyArray(7).map((item, index) => (
               <TableHead key={index}>
-                <Skeleton className={"h-4 w-[calc(100%-2rem)]"} />
+                <Skeleton className="h-4 w-[calc(100%-2rem)]" />
               </TableHead>
             ))}
           </TableRow>
@@ -21,7 +20,7 @@ export const ProfilesTableSkeleton = () => {
             <TableRow key={rowIndex}>
               {emptyArray(7).map((_, cellIndex) => (
                 <TableHead key={cellIndex}>
-                  <Skeleton className={"h-4 w-[calc(100%-1rem)]"} />
+                  <Skeleton className="h-4 w-[calc(100%-1rem)]" />
                 </TableHead>
               ))}
             </TableRow>
@@ -30,4 +29,4 @@ export const ProfilesTableSkeleton = () => {
       </Table>
     </div>
   );
-};
+}

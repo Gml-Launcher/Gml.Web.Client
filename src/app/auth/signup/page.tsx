@@ -1,8 +1,9 @@
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/shared/lib/utils";
-import { SignUpForm } from "@/feature/auth-credentials-form";
-import Link from "next/link";
-import { AUTH_PAGES } from "@/shared/routes";
+import Link from 'next/link';
+
+import { SignUpForm } from '@/features/auth-credentials-form';
+import { cn } from '@/shared/lib/utils';
+import { AUTH_PAGES } from '@/shared/routes';
+import { buttonVariants } from '@/shared/ui/button';
 
 export default function SignUPPage() {
   return (
@@ -11,8 +12,8 @@ export default function SignUPPage() {
         <Link
           href={AUTH_PAGES.SIGN_IN}
           className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8",
+            buttonVariants({ variant: 'ghost' }),
+            'absolute right-4 top-4 md:right-8 md:top-8',
           )}
         >
           Войти

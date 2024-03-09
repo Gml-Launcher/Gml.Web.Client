@@ -1,1 +1,1 @@
-export { CreateProfileDialog } from "@/widgets/CreateProfileDialog/ui/CreateProfileDialog";
+export { CreateProfileDialog } from '@/widgets/CreateProfileDialog/ui/CreateProfileDialog';

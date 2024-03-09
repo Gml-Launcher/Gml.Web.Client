@@ -1,7 +1,7 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Дашборд",
+  title: 'Дашборд',
 };
 
 export default async function DashboardPage() {

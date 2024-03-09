@@ -1,12 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { integrationService } from "@/shared/services/IntegrationService";
-import { AuthIntegrationBaseEntity, TPostAuthIntegrationsRequest } from "@/shared/api/contracts";
-import { isAxiosError } from "axios";
-import { useToast } from "@/components/ui/use-toast";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import { isAxiosError } from 'axios';
+
+import { AuthIntegrationBaseEntity, TPostAuthIntegrationsRequest } from '@/shared/api/contracts';
+import { integrationService } from '@/shared/services/IntegrationService';
+import { useToast } from '@/shared/ui/use-toast';
 
 export const useCurrentIntegration = () => {
   const { data } = useQuery<AuthIntegrationBaseEntity>({
-    queryKey: ["integration"],
+    queryKey: ['integration'],
   });
 
   return data;
@@ -14,20 +16,20 @@ export const useCurrentIntegration = () => {
 
 export const useAuthIntegrations = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["integrations/findAll"],
+    queryKey: ['integrations/findAll'],
     queryFn: () => integrationService.getAuthIntegrations(),
   });
 
-  return { data: data, isLoading };
+  return { data, isLoading };
 };
 
 export const useActiveAuthIntegrations = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["integrations/findActive"],
+    queryKey: ['integrations/findActive'],
     queryFn: () => integrationService.getActiveAuthIntegration(),
   });
 
-  return { data: data, isLoading };
+  return { data, isLoading };
 };
 
 export const useEditIntegration = () => {
@@ -35,24 +37,24 @@ export const useEditIntegration = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["update-integration"],
+    mutationKey: ['update-integration'],
     mutationFn: (data: TPostAuthIntegrationsRequest) =>
       integrationService.putAuthIntegrations(data),
     onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["integrations/findAll"] });
+      await queryClient.invalidateQueries({ queryKey: ['integrations/findAll'] });
     },
     onSuccess: async (data) => {
-      await queryClient.setQueryData(["integration"], () => null);
+      await queryClient.setQueryData(['integration'], () => null);
       toast.toast({
-        title: "Успешно",
+        title: 'Успешно',
         description: data.message,
       });
     },
     onError: (error) => {
       if (isAxiosError(error)) {
         toast.toast({
-          variant: "destructive",
-          title: (error.response && error.response.data.message) || "Ошибка!",
+          variant: 'destructive',
+          title: (error.response && error.response.data.message) || 'Ошибка!',
           description: error.response && error.response.data.errors[0],
         });
       }

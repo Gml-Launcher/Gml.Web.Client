@@ -1,23 +1,25 @@
-"use client";
+'use client';
 
-import { HubConnection, HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
-import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { getStorageAccessToken } from "@/shared/services";
-import { Progress } from "@/components/ui/progress";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useEffect, useState } from 'react';
+
+import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
+
+import { getStorageAccessToken } from '@/shared/services';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Progress } from '@/shared/ui/progress';
 
 interface DownloadClientHubProps {
   profileName: string;
 }
 
-export const DownloadClientHub = (props: DownloadClientHubProps) => {
+export function DownloadClientHub(props: DownloadClientHubProps) {
   const { profileName } = props;
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
 
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [progressPercent, setProgressPercent] = useState(0);
   const [isRestoring, setIsRestoring] = useState(false);
 
@@ -28,7 +30,7 @@ export const DownloadClientHub = (props: DownloadClientHubProps) => {
           .withUrl(
             `${process.env.NEXT_PUBLIC_BASE_URL}/ws/profiles/restore?access_token=${accessToken}`,
             {
-              headers: { "Access-Control-Allow-Credentials": "*" },
+              headers: { 'Access-Control-Allow-Credentials': '*' },
               withCredentials: false,
             },
           )
@@ -38,26 +40,26 @@ export const DownloadClientHub = (props: DownloadClientHubProps) => {
 
         await connection.start();
 
-        connection.on("BlockRestore", (message) => {
+        connection.on('BlockRestore', (message) => {
           setIsRestoring(true);
-          console.log("@BlockRestore", message);
+          console.log('@BlockRestore', message);
         });
 
-        connection.on("SuccessInstalled", () => {
+        connection.on('SuccessInstalled', () => {
           setIsRestoring(false);
-          setMessage("Success");
+          setMessage('Success');
         });
 
-        connection.on("SuccessPacked", () => {
+        connection.on('SuccessPacked', () => {
           setIsRestoring(false);
-          setMessage("Success");
+          setMessage('Success');
         });
 
-        connection.on("Message", (message) => {
+        connection.on('Message', (message) => {
           setMessage(message);
         });
 
-        connection.on("ChangeProgress", (percent) => {
+        connection.on('ChangeProgress', (percent) => {
           setProgressPercent(percent);
         });
       } catch (error) {
@@ -75,12 +77,12 @@ export const DownloadClientHub = (props: DownloadClientHubProps) => {
   const isDisableConnected = connectionHub?.state !== HubConnectionState.Connected || isRestoring;
   const onDownloadDistributive = () => {
     setIsRestoring(true);
-    connectionHub?.invoke("Restore", profileName);
+    connectionHub?.invoke('Restore', profileName);
   };
 
   const onBuildDistributive = () => {
     setIsRestoring(true);
-    connectionHub?.invoke("Build", profileName);
+    connectionHub?.invoke('Build', profileName);
   };
 
   return (
@@ -104,4 +106,4 @@ export const DownloadClientHub = (props: DownloadClientHubProps) => {
       </Card>
     </>
   );
-};
+}

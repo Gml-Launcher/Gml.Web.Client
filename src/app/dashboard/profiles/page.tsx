@@ -1,9 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { ProfilesTable } from "@/widgets/profiles-table";
-import { Button } from "@/components/ui/button";
-import { CreateProfileDialog } from "@/widgets/CreateProfileDialog";
+import React, { useState } from 'react';
+
+import { Button } from '@/shared/ui/button';
+import { CreateProfileDialog } from '@/widgets/CreateProfileDialog';
+import { ProfilesTable } from '@/widgets/profiles-table';
 
 export default function ProfilesPage() {
   const [isCreateProfileDialog, setIsCreateProfileDialog] = useState(false);
