@@ -2,10 +2,9 @@
 
 import React, { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { CreateProfileDialog } from "@/widgets/CreateProfileDialog";
 import { ProfilesTable } from "@/widgets/profiles-table";
-
-import { Button } from "@/components/ui/button";
 
 export default function ProfilesPage() {
   const [isCreateProfileDialog, setIsCreateProfileDialog] = useState(false);

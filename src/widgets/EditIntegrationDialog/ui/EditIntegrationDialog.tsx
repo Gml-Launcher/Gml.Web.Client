@@ -1,10 +1,8 @@
 import React from "react";
 
-import { IntegrationForm } from "@/features/integration-form";
-
-import { useCurrentIntegration } from "@/shared/hooks";
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { IntegrationForm } from "@/features/integration-form";
+import { useCurrentIntegration } from "@/shared/hooks";
 
 export interface DialogProps {
   open: boolean;

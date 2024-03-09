@@ -4,15 +4,6 @@ import React, { useState } from "react";
 
 import { RowSelectionState } from "@tanstack/react-table";
 
-import { DataTable, DataTableToolbar } from "@/entities/Table";
-
-import {
-  useCurrentProfile,
-  useDeleteProfile,
-  useDeleteProfiles,
-  useProfiles,
-} from "@/shared/hooks";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,6 +19,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
+import { DataTable, DataTableToolbar } from "@/entities/Table";
+import {
+  useCurrentProfile,
+  useDeleteProfile,
+  useDeleteProfiles,
+  useProfiles,
+} from "@/shared/hooks";
 
 import { useColumns } from "../lib/columns";
 import { useTable } from "../lib/table";

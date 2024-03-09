@@ -1,18 +1,15 @@
-import React from "react";
+"use client";
 
-import { IntegrationsTable } from "@/widgets/integrations-table";
-
-import { Metadata } from "next";
-
-
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-
-export const metadata: Metadata = {
-  title: "Интеграции",
-};
+import { EditIntegrationDialog } from "@/widgets/EditIntegrationDialog";
+import { IntegrationsTable } from "@/widgets/integrations-table";
 
 export default async function IntegrationsPage() {
+  const [isIntegrationEditDialogOpen, setIsIntegrationEditDialogOpen] = useState(false);
+  const onIntegrationEditDialogToggle = () => setIsIntegrationEditDialogOpen((prev) => !prev);
+
   return (
     <div className="flex flex-col items-start py-4">
       <div className="flex justify-between w-full">
@@ -21,8 +18,13 @@ export default async function IntegrationsPage() {
           Создать интеграцию
         </Button>
       </div>
+
       <div className="flex flex-col gap-y-6 w-full">
-        <IntegrationsTable />
+        <IntegrationsTable onIntegrationEditDialogToggle={onIntegrationEditDialogToggle} />
+        <EditIntegrationDialog
+          open={isIntegrationEditDialogOpen}
+          onOpenChange={onIntegrationEditDialogToggle}
+        />
       </div>
     </div>
   );

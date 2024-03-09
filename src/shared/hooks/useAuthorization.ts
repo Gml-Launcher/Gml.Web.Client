@@ -2,16 +2,12 @@ import { useRouter } from "next/navigation";
 
 import { useMutation } from "@tanstack/react-query";
 
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { authService } from "@/shared/services";
-
 import { isAxiosError } from "axios";
 
 import { useToast } from "@/components/ui/use-toast";
-import {
-  SignInFormSchemaType,
-  SignUpFormSchemaType,
-} from "@/features/auth-credentials-form/lib/static";
+import { TPostSignInRequest, TPostSignUpRequest } from "@/shared/api/contracts";
+import { DASHBOARD_PAGES } from "@/shared/routes";
+import { authService } from "@/shared/services";
 
 export const useRegistration = () => {
   const route = useRouter();
@@ -19,7 +15,7 @@ export const useRegistration = () => {
 
   return useMutation({
     mutationKey: ["signup"],
-    mutationFn: (data: SignUpFormSchemaType) => authService.signUp(data),
+    mutationFn: (data: TPostSignUpRequest) => authService.signUp(data),
     onSuccess: () => {
       toast.toast({
         title: "Успешная регистрация",
@@ -45,7 +41,7 @@ export const useLogin = () => {
 
   return useMutation({
     mutationKey: ["signin"],
-    mutationFn: (data: SignInFormSchemaType) => authService.signIn(data),
+    mutationFn: (data: TPostSignInRequest) => authService.signIn(data),
     onSuccess: () => {
       toast.toast({
         title: "Успешная авторизация",

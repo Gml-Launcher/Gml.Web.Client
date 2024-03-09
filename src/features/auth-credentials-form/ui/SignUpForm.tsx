@@ -4,14 +4,13 @@ import React from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { useRegistration } from "@/shared/hooks";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { SignUpFormSchemaType, signUpSchema } from "@/features/auth-credentials-form/lib/static";
+import { useRegistration } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 

@@ -11,11 +11,20 @@
     "plugin:import/warnings",
     "plugin:import/typescript",
     "plugin:css-modules/recommended",
-    "prettier"
+    "prettier",
+    "@feature-sliced"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
   },
   "plugins": [
     "react"
@@ -104,51 +113,6 @@
           },
           {
             "pattern": "@tanstack/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/app*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/app*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/app/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/pages/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/widgets/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/features/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/entities/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/shared/*",
-            "group": "external",
-            "position": "before"
-          },
-          {
-            "pattern": "@/components/*",
             "group": "external",
             "position": "before"
           }

@@ -4,8 +4,6 @@ import React from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,6 +13,7 @@ import {
   IntegrationFormSchemaType,
   integrationSchema,
 } from "@/features/integration-form/lib/static";
+import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 

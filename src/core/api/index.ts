@@ -1,7 +1,6 @@
-import { getStorageAccessToken } from "@/shared/services";
-
 import axios from "axios";
 
+import { getStorageAccessToken } from "@/shared/services";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const PREFIX_API = process.env.NEXT_PUBLIC_PREFIX_API;
@@ -15,6 +14,6 @@ export const $api = axios.create({
 $api.interceptors.request.use((config) => {
   const accessToken = getStorageAccessToken();
   config.headers.set("Authorization", `Bearer ${accessToken}`);
-  
-return config;
+
+  return config;
 });

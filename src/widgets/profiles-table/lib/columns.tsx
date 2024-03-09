@@ -8,16 +8,13 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/table-core";
 
-import { DataTableColumnHeader } from "@/entities/Table";
-
-import { DASHBOARD_PAGES } from "@/shared/routes";
-
-
 import { Edit2Icon, Trash2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DataTableColumnHeader } from "@/entities/Table";
 import { ProfileBaseEntity } from "@/shared/api/contracts";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
 
 enum ColumnHeader {

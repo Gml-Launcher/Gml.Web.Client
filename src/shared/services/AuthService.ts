@@ -1,4 +1,3 @@
-import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from "@/shared/services";
 
 import { $api } from "@/core/api";
 import {
@@ -7,6 +6,7 @@ import {
   TPostSignUpRequest,
   TPostSignUpResponse,
 } from "@/shared/api/contracts";
+import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from "@/shared/services";
 
 class AuthService {
   private BASE_URL = "/users";

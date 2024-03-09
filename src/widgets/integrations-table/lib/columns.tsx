@@ -2,17 +2,14 @@
 
 import React from "react";
 
-
 import { useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/table-core";
-
-import { DataTableColumnHeader } from "@/entities/Table";
 
 import { Edit2Icon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { DataTableColumnHeader } from "@/entities/Table";
 import { AuthIntegrationBaseEntity } from "@/shared/api/contracts";
-
 
 enum ColumnHeader {
   NAME = "Название",

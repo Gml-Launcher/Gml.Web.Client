@@ -8,7 +8,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 
-
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();

@@ -4,8 +4,6 @@ import React from "react";
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-import { useCreateProfile, useEditProfile } from "@/shared/hooks";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +24,7 @@ import {
   GameLoaderType,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
+import { useCreateProfile, useEditProfile } from "@/shared/hooks";
 import { cn, enumValues } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 

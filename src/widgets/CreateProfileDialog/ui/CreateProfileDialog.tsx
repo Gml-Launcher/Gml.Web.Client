@@ -1,8 +1,7 @@
 import * as React from "react";
 
-import { CreateProfileForm } from "@/features/create-profile-form";
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CreateProfileForm } from "@/features/create-profile-form";
 
 interface CreateProfileDialogProps {
   open?: boolean;
