@@ -1,10 +1,13 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { Icons } from "@/shared/ui/icons";
-import { cn } from "@/shared/lib/utils";
+
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+
+import { cn } from "@/shared/lib/utils";
+import { Icons } from "@/shared/ui/icons";
+
 
 export function Header() {
   const router = useRouter();
@@ -17,7 +20,7 @@ export function Header() {
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Настройки</h2>
           <div className="space-y-1">
             <Link
-              href={"/dashboard/settings"}
+              href="/dashboard/settings"
               className={cn(
                 "flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted",
                 pathname === "/dashboard/settings"
@@ -34,7 +37,7 @@ export function Header() {
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Интеграции</h2>
           <div className="space-y-1">
             <Link
-              href={"/dashboard/integrations"}
+              href="/dashboard/integrations"
               className={cn(
                 "flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted",
                 pathname === "/dashboard/integrations"
@@ -51,7 +54,7 @@ export function Header() {
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Профили</h2>
           <div className="space-y-1">
             <Link
-              href={"/dashboard/profiles"}
+              href="/dashboard/profiles"
               className={cn(
                 "flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted",
                 pathname === "/dashboard/profiles"

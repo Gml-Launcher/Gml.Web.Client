@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { AUTH_PAGES, DASHBOARD_PAGES } from "@/shared/routes";
+
+
 
 export async function middleware(request: NextRequest, response: NextResponse) {
   const { url, cookies } = request;

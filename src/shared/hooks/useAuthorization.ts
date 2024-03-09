@@ -1,13 +1,17 @@
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
+
 import { useMutation } from "@tanstack/react-query";
+
+import { DASHBOARD_PAGES } from "@/shared/routes";
+import { authService } from "@/shared/services";
+
+import { isAxiosError } from "axios";
+
+import { useToast } from "@/components/ui/use-toast";
 import {
   SignInFormSchemaType,
   SignUpFormSchemaType,
-} from "@/feature/auth-credentials-form/lib/static";
-import { authService } from "@/shared/services";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { isAxiosError } from "axios";
+} from "@/features/auth-credentials-form/lib/static";
 
 export const useRegistration = () => {
   const route = useRouter();

@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { cn } from "@/shared/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+
 import { AUTH_PAGES } from "@/shared/routes";
+
+
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 export default function Home() {
   return (

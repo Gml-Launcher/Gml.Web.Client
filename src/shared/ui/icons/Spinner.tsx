@@ -1,6 +1,6 @@
 interface IconProps extends React.HTMLAttributes<HTMLOrSVGElement> {}
 
-export const Spinner = ({ className, ...props }: IconProps) => {
+export function Spinner({ className, ...props }: IconProps) {
   return (
     <svg
       className={className}
@@ -18,4 +18,4 @@ export const Spinner = ({ className, ...props }: IconProps) => {
       <path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10" />
     </svg>
   );
-};
+}

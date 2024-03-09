@@ -1,14 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn, enumValues } from "@/shared/lib/utils";
-import { Icons } from "@/shared/ui/icons";
 import React from "react";
+
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+
+import { useCreateProfile, useEditProfile } from "@/shared/hooks";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -16,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   CreateProfileFormSchemaType,
   createProfileSchema,
@@ -23,19 +26,20 @@ import {
   GameLoaderType,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
-import { useCreateProfile, useEditProfile } from "@/shared/hooks";
+import { cn, enumValues } from "@/shared/lib/utils";
+import { Icons } from "@/shared/ui/icons";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
   isEditing?: boolean;
 }
 
-export const CreateProfileForm = ({
+export function CreateProfileForm({
   profile,
   isEditing,
   className,
   ...props
-}: CreateProfileFormProps) => {
+}: CreateProfileFormProps) {
   const { mutateAsync: mutateAsyncCreate, isPending: isPendingCreate } = useCreateProfile();
   const { mutateAsync: mutateAsyncEdit, isPending: isPendingEdit } = useEditProfile();
 
@@ -165,7 +169,7 @@ export const CreateProfileForm = ({
             </>
           )}
 
-          <div className={"flex justify-end"}>
+          <div className="flex justify-end">
             <Button disabled={isPendingCreate || isPendingEdit}>
               {(isPendingCreate || isPendingEdit) && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -177,4 +181,4 @@ export const CreateProfileForm = ({
       </Form>
     </div>
   );
-};
+}

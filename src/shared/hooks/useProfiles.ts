@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { profileService } from "@/shared/services/ProfileService";
-import { useToast } from "@/components/ui/use-toast";
+
 import { isAxiosError } from "axios";
+
+import { useToast } from "@/components/ui/use-toast";
 import {
   ProfileBaseEntity,
   TDeleteProfileRequest,
@@ -10,6 +11,7 @@ import {
   TPostProfilesRequest,
   TPutProfileRequest,
 } from "@/shared/api/contracts";
+import { profileService } from "@/shared/services/ProfileService";
 
 export const useProfiles = () => {
   const { data, isLoading } = useQuery({

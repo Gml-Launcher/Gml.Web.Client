@@ -1,17 +1,20 @@
 "use client";
 
-import { HubConnection, HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+
 import { getStorageAccessToken } from "@/shared/services";
-import { Progress } from "@/components/ui/progress";
+
+import { HubConnection, HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 interface DownloadClientHubProps {
   profileName: string;
 }
 
-export const DownloadClientHub = (props: DownloadClientHubProps) => {
+export function DownloadClientHub(props: DownloadClientHubProps) {
   const { profileName } = props;
   const accessToken = getStorageAccessToken();
 
@@ -104,4 +107,4 @@ export const DownloadClientHub = (props: DownloadClientHubProps) => {
       </Card>
     </>
   );
-};
+}

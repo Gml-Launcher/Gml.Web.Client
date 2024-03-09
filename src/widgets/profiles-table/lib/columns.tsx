@@ -1,17 +1,24 @@
 "use client";
 
-import { createColumnHelper } from "@tanstack/table-core";
-import { ProfileBaseEntity } from "@/shared/api/contracts";
-import Image from "next/image";
-import { DataTableColumnHeader } from "@/entities/Table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Edit2Icon, Trash2Icon } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { Icons } from "@/shared/ui/icons";
 import React from "react";
+
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+
+import { useQueryClient } from "@tanstack/react-query";
+import { createColumnHelper } from "@tanstack/table-core";
+
+import { DataTableColumnHeader } from "@/entities/Table";
+
 import { DASHBOARD_PAGES } from "@/shared/routes";
+
+
+import { Edit2Icon, Trash2Icon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ProfileBaseEntity } from "@/shared/api/contracts";
+import { Icons } from "@/shared/ui/icons";
 
 enum ColumnHeader {
   ICON = "",
@@ -98,7 +105,7 @@ export const useColumns = (props: UseColumnsProps) => {
       size: 48,
       id: "edit",
       cell: ({ row }) => (
-        <Button variant={"ghost"} size={"icon"} onClick={onRedirectEditProfile(row.original.name)}>
+        <Button variant="ghost" size="icon" onClick={onRedirectEditProfile(row.original.name)}>
           <Edit2Icon size={16} />
         </Button>
       ),
@@ -114,8 +121,8 @@ export const useColumns = (props: UseColumnsProps) => {
 
         return (
           <Button
-            variant={"destructive"}
-            size={"icon"}
+            variant="destructive"
+            size="icon"
             onClick={onClickDeleteProfile}
             disabled={props.isPendingDelete}
           >

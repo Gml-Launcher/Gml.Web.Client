@@ -1,8 +1,11 @@
+import Link from "next/link";
+
+import { SignInForm } from "@/features/auth-credentials-form";
+
+import { AUTH_PAGES } from "@/shared/routes";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { SignInForm } from "@/feature/auth-credentials-form";
-import Link from "next/link";
-import { AUTH_PAGES } from "@/shared/routes";
 
 export default function SignInPage() {
   return (

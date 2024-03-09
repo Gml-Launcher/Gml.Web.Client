@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import {
   ColumnDef,
   getCoreRowModel,
@@ -8,7 +10,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import React, { useState } from "react";
 
 interface TableProps<TData, TValue> {
   data?: TData[];

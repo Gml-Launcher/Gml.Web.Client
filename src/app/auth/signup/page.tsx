@@ -1,8 +1,11 @@
+import Link from "next/link";
+
+import { SignUpForm } from "@/features/auth-credentials-form";
+
+import { AUTH_PAGES } from "@/shared/routes";
+
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { SignUpForm } from "@/feature/auth-credentials-form";
-import Link from "next/link";
-import { AUTH_PAGES } from "@/shared/routes";
 
 export default function SignUPPage() {
   return (

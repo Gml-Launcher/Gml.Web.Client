@@ -1,19 +1,23 @@
 "use client";
 
+import React from "react";
+
+import { SubmitHandler, useForm } from "react-hook-form";
+
+import { useRegistration } from "@/shared/hooks";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { SignUpFormSchemaType, signUpSchema } from "@/features/auth-credentials-form/lib/static";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
-import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { SignUpFormSchemaType, signUpSchema } from "@/feature/auth-credentials-form/lib/static";
-import { useRegistration } from "@/shared/hooks";
 
 interface SignUpFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
+export function SignUpForm({ className, ...props }: SignUpFormProps) {
   const { mutateAsync, isPending } = useRegistration();
 
   const form = useForm<SignUpFormSchemaType>({
@@ -72,7 +76,7 @@ export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
             )}
           </FormItem>
 
-          <Button className={"w-full"} disabled={isPending}>
+          <Button className="w-full" disabled={isPending}>
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Создать аккаунт
           </Button>
@@ -80,4 +84,4 @@ export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
       </Form>
     </div>
   );
-};
+}

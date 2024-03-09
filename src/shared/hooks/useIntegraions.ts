@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { integrationService } from "@/shared/services/IntegrationService";
-import { AuthIntegrationBaseEntity, TPostAuthIntegrationsRequest } from "@/shared/api/contracts";
+
 import { isAxiosError } from "axios";
+
 import { useToast } from "@/components/ui/use-toast";
+import { AuthIntegrationBaseEntity, TPostAuthIntegrationsRequest } from "@/shared/api/contracts";
+import { integrationService } from "@/shared/services/IntegrationService";
 
 export const useCurrentIntegration = () => {
   const { data } = useQuery<AuthIntegrationBaseEntity>({
@@ -18,7 +20,7 @@ export const useAuthIntegrations = () => {
     queryFn: () => integrationService.getAuthIntegrations(),
   });
 
-  return { data: data, isLoading };
+  return { data, isLoading };
 };
 
 export const useActiveAuthIntegrations = () => {
@@ -27,7 +29,7 @@ export const useActiveAuthIntegrations = () => {
     queryFn: () => integrationService.getActiveAuthIntegration(),
   });
 
-  return { data: data, isLoading };
+  return { data, isLoading };
 };
 
 export const useEditIntegration = () => {

@@ -1,7 +1,8 @@
 "use client";
 
-import { HubConnectionBuilder } from "@microsoft/signalr";
 import { useEffect, useState } from "react";
+
+import { HubConnectionBuilder } from "@microsoft/signalr";
 
 export const ClientHub = () => {
   const [connectionCount, setConnectionCount] = useState(0);

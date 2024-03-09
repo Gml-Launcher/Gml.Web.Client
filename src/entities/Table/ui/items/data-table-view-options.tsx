@@ -1,8 +1,9 @@
 "use client";
 
+import { Table } from "@tanstack/react-table";
+
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,8 +33,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
         {table
           .getAllColumns()
           .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
-          .map((column) => {
-            return (
+          .map((column) => (
               <DropdownMenuCheckboxItem
                 key={column.id}
                 className="capitalize"
@@ -42,8 +42,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
               >
                 {column.id}
               </DropdownMenuCheckboxItem>
-            );
-          })}
+            ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

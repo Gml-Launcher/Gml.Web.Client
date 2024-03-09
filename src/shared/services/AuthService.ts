@@ -1,5 +1,6 @@
-import { $api } from "@/core/api";
 import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from "@/shared/services";
+
+import { $api } from "@/core/api";
 import {
   TPostSignInRequest,
   TPostSignInResponse,

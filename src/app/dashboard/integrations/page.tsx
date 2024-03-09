@@ -1,7 +1,12 @@
-import { Metadata } from "next";
-import { Button } from "@/components/ui/button";
 import React from "react";
+
 import { IntegrationsTable } from "@/widgets/integrations-table";
+
+import { Metadata } from "next";
+
+
+
+import { Button } from "@/components/ui/button";
 
 export const metadata: Metadata = {
   title: "Интеграции",

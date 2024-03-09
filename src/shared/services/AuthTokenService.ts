@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+
 import { UserBaseEntity } from "@/shared/api/contracts";
 
 export const getStorageProfile = () => {

@@ -24,7 +24,8 @@ let count = 0;
 
 function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
-  return count.toString();
+  
+return count.toString();
 }
 
 type ActionType = typeof actionTypes;
@@ -62,7 +63,7 @@ const addToRemoveQueue = (toastId: string) => {
     toastTimeouts.delete(toastId);
     dispatch({
       type: "REMOVE_TOAST",
-      toastId: toastId,
+      toastId,
     });
   }, TOAST_REMOVE_DELAY);
 
@@ -115,7 +116,8 @@ export const reducer = (state: State, action: Action): State => {
           toasts: [],
         };
       }
-      return {
+      
+return {
         ...state,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       };
@@ -158,7 +160,7 @@ function toast({ ...props }: Toast) {
   });
 
   return {
-    id: id,
+    id,
     dismiss,
     update,
   };
@@ -169,7 +171,8 @@ function useToast() {
 
   React.useEffect(() => {
     listeners.push(setState);
-    return () => {
+    
+return () => {
       const index = listeners.indexOf(setState);
       if (index > -1) {
         listeners.splice(index, 1);

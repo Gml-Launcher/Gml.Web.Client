@@ -1,13 +1,15 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import * as React from "react";
-import { CreateProfileForm } from "@/feature/create-profile-form";
+
+import { CreateProfileForm } from "@/features/create-profile-form";
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface CreateProfileDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
-export const CreateProfileDialog = (props: CreateProfileDialogProps) => {
+export function CreateProfileDialog(props: CreateProfileDialogProps) {
   const { open, onOpenChange } = props;
 
   return (
@@ -20,4 +22,4 @@ export const CreateProfileDialog = (props: CreateProfileDialogProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}

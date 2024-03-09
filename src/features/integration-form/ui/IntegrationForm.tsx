@@ -1,24 +1,28 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/shared/lib/utils";
 import React from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Icons } from "@/shared/ui/icons";
+
+import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   IntegrationFormSchemaType,
   integrationSchema,
-} from "@/feature/integration-form/lib/static";
-import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
+} from "@/features/integration-form/lib/static";
+import { cn } from "@/shared/lib/utils";
+import { Icons } from "@/shared/ui/icons";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
 }
 
-export const IntegrationForm = ({ className, onOpenChange, ...props }: SignInFormProps) => {
+export function IntegrationForm({ className, onOpenChange, ...props }: SignInFormProps) {
   const currentIntegration = useCurrentIntegration();
 
   const { mutateAsync, isPending } = useEditIntegration();
@@ -68,7 +72,7 @@ export const IntegrationForm = ({ className, onOpenChange, ...props }: SignInFor
             )}
           </FormItem>
 
-          <Button type="submit" className={"w-full"} disabled={isPending}>
+          <Button type="submit" className="w-full" disabled={isPending}>
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Сохранить
           </Button>
@@ -76,4 +80,4 @@ export const IntegrationForm = ({ className, onOpenChange, ...props }: SignInFor
       </Form>
     </div>
   );
-};
+}

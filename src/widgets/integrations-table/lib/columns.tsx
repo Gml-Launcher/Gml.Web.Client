@@ -1,12 +1,18 @@
 "use client";
 
-import { createColumnHelper } from "@tanstack/table-core";
-import { AuthIntegrationBaseEntity } from "@/shared/api/contracts";
-import { DataTableColumnHeader } from "@/entities/Table";
 import React from "react";
-import { Button } from "@/components/ui/button";
-import { Edit2Icon } from "lucide-react";
+
+
 import { useQueryClient } from "@tanstack/react-query";
+import { createColumnHelper } from "@tanstack/table-core";
+
+import { DataTableColumnHeader } from "@/entities/Table";
+
+import { Edit2Icon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { AuthIntegrationBaseEntity } from "@/shared/api/contracts";
+
 
 enum ColumnHeader {
   NAME = "Название",
@@ -54,7 +60,7 @@ export const useColumns = (props: UseColumnsProps) => {
         };
 
         return (
-          <Button variant={"ghost"} size={"icon"} onClick={onClickEditIntegration}>
+          <Button variant="ghost" size="icon" onClick={onClickEditIntegration}>
             <Edit2Icon size={16} />
           </Button>
         );

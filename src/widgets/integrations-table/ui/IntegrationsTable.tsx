@@ -1,14 +1,19 @@
 "use client";
 
-import { useAuthIntegrations } from "@/shared/hooks/useIntegraions";
-import { IntegrationsTableSkeleton } from "@/widgets/integrations-table";
 import React, { useState } from "react";
-import { useColumns } from "@/widgets/integrations-table/lib/columns";
-import { RowSelectionState } from "@tanstack/react-table";
-import { DataTable } from "@/entities/Table";
-import { EditIntegrationDialog } from "@/widgets/EditIntegrationDialog";
 
-export const IntegrationsTable = () => {
+import { RowSelectionState } from "@tanstack/react-table";
+
+import { EditIntegrationDialog } from "@/widgets/EditIntegrationDialog";
+import { IntegrationsTableSkeleton } from "@/widgets/integrations-table";
+
+import { DataTable } from "@/entities/Table";
+
+
+import { useAuthIntegrations } from "@/shared/hooks/useIntegraions";
+import { useColumns } from "@/widgets/integrations-table/lib/columns";
+
+export function IntegrationsTable() {
   const { data: integrations, isLoading: integrationsLoading } = useAuthIntegrations();
 
   const [isIntegrationEditDialogOpen, setIsIntegrationEditDialogOpen] = useState(false);
@@ -35,4 +40,4 @@ export const IntegrationsTable = () => {
       />
     </>
   );
-};
+}

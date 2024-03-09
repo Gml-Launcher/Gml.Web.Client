@@ -1,12 +1,16 @@
 "use client";
 
-import { CreateProfileForm } from "@/feature/create-profile-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React, { useEffect } from "react";
-import { useProfile } from "@/shared/hooks";
-import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
-import { getStorageAccessToken, getStorageProfile } from "@/shared/services/AuthTokenService";
+
 import { DownloadClientHub } from "@/widgets/client-hub";
+
+import { CreateProfileForm } from "@/features/create-profile-form";
+
+import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
+import { useProfile } from "@/shared/hooks";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getStorageAccessToken, getStorageProfile } from "@/shared/services/AuthTokenService";
 
 export default function ProfilePage({ params }: { params: { name: string } }) {
   const profile = getStorageProfile();

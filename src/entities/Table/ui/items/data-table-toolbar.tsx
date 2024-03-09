@@ -1,10 +1,13 @@
 "use client";
 
-import { RowSelectionState, Table } from "@tanstack/react-table";
-import { DataTableViewOptions } from "@/entities/Table/ui/items/data-table-view-options";
-import { Button } from "@/components/ui/button";
 import React from "react";
+
+import { RowSelectionState, Table } from "@tanstack/react-table";
+
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+
+import { Button } from "@/components/ui/button";
+import { DataTableViewOptions } from "@/entities/Table/ui/items/data-table-view-options";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;

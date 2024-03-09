@@ -18,12 +18,14 @@ class ProfileService {
 
   async getProfiles(): Promise<TGetProfilesResponse> {
     const { data } = await $api.get<TGetProfilesResponse>(this.BASE_URL);
-    return data;
+    
+return data;
   }
 
   async getProfile(body: TGetProfileRequest): Promise<TGetProfileResponse> {
     const { data } = await $api.post<TGetProfileResponse>(`${this.BASE_URL}/info`, body);
-    return data;
+    
+return data;
   }
 
   async createProfile(body: TPostProfilesRequest): Promise<TPostProfilesResponse> {

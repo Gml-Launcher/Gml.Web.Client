@@ -1,18 +1,18 @@
 "use client";
 
+import React, { useState } from "react";
+
+import { RowSelectionState } from "@tanstack/react-table";
+
 import { DataTable, DataTableToolbar } from "@/entities/Table";
-import { useColumns } from "../lib/columns";
+
 import {
   useCurrentProfile,
   useDeleteProfile,
   useDeleteProfiles,
   useProfiles,
 } from "@/shared/hooks";
-import React, { useState } from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { RowSelectionState } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,12 +23,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useTable } from "../lib/table";
-import { ProfilesTableSkeleton } from "@/widgets/profiles-table";
-import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Switch } from "@/components/ui/switch";
 
-export const ProfilesTable = () => {
+import { useColumns } from "../lib/columns";
+import { useTable } from "../lib/table";
+
+import { ProfilesTableSkeleton } from "./ProfilesTableSkeleton";
+
+export function ProfilesTable() {
   const { data: profiles, isLoading } = useProfiles();
   const currentProfile = useCurrentProfile();
   const deleteMutation = useDeleteProfile();
@@ -153,4 +159,4 @@ export const ProfilesTable = () => {
       </AlertDialog>
     </>
   );
-};
+}

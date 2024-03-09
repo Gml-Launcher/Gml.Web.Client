@@ -1,14 +1,17 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { IntegrationForm } from "@/feature/integration-form";
 import React from "react";
+
+import { IntegrationForm } from "@/features/integration-form";
+
 import { useCurrentIntegration } from "@/shared/hooks";
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export interface DialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export const EditIntegrationDialog = (props: DialogProps) => {
+export function EditIntegrationDialog(props: DialogProps) {
   const currentIntegration = useCurrentIntegration();
 
   return (
@@ -21,4 +24,4 @@ export const EditIntegrationDialog = (props: DialogProps) => {
       </DialogContent>
     </Dialog>
   );
-};
+}
