@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { EditIntegrationDialog } from "@/widgets/EditIntegrationDialog";
 import { IntegrationsTable } from "@/widgets/integrations-table";
 
-export default async function IntegrationsPage() {
+export default function IntegrationsPage() {
   const [isIntegrationEditDialogOpen, setIsIntegrationEditDialogOpen] = useState(false);
   const onIntegrationEditDialogToggle = () => setIsIntegrationEditDialogOpen((prev) => !prev);
 
