@@ -1,9 +1,16 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { RowSelectionState } from "@tanstack/react-table";
+import { RowSelectionState } from '@tanstack/react-table';
 
+import { DataTable, DataTableToolbar } from '@/entities/Table';
+import {
+  useCurrentProfile,
+  useDeleteProfile,
+  useDeleteProfiles,
+  useProfiles,
+} from '@/shared/hooks';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,24 +20,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Switch } from "@/components/ui/switch";
-import { DataTable, DataTableToolbar } from "@/entities/Table";
-import {
-  useCurrentProfile,
-  useDeleteProfile,
-  useDeleteProfiles,
-  useProfiles,
-} from "@/shared/hooks";
+} from '@/shared/ui/alert-dialog';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Label } from '@/shared/ui/label';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/shared/ui/sheet';
+import { Switch } from '@/shared/ui/switch';
 
-import { useColumns } from "../lib/columns";
-import { useTable } from "../lib/table";
+import { useColumns } from '../lib/columns';
+import { useTable } from '../lib/table';
 
-import { ProfilesTableSkeleton } from "./ProfilesTableSkeleton";
+import { ProfilesTableSkeleton } from './ProfilesTableSkeleton';
 
 export function ProfilesTable() {
   const { data: profiles, isLoading } = useProfiles();
@@ -54,17 +54,15 @@ export function ProfilesTable() {
   });
   const { table } = useTable({ data: profiles, columns, rowSelection, setRowSelection });
 
-  const onProfileDelete =
-    ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
+  const onProfileDelete = ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
     async () => {
       await deleteMutation.mutateAsync({ profileName, removeFiles });
       onRemoveFilesSwitchToggle();
     };
 
-  const onProfilesDelete =
-    ({ profiles, removeFiles }: { profiles: string[]; removeFiles: boolean }) =>
+  const onProfilesDelete = ({ profiles, removeFiles }: { profiles: string[]; removeFiles: boolean }) =>
     async () => {
-      await deleteAllMutation.mutateAsync({ profileNames: profiles.join(","), removeFiles });
+      await deleteAllMutation.mutateAsync({ profileNames: profiles.join(','), removeFiles });
       onRemoveFilesSwitchToggle();
     };
 
@@ -100,7 +98,9 @@ export function ProfilesTable() {
                   Вы можете безвозвратно удалить профили, если они вам не нужны
                 </CardDescription>
                 <CardDescription>
-                  Безвозвратно будут удалены: {Object.keys(rowSelection).join(", ")}
+                  Безвозвратно будут удалены:
+                  {' '}
+                  {Object.keys(rowSelection).join(', ')}
                 </CardDescription>
                 <div className="flex items-center space-x-2">
                   <Switch
@@ -146,7 +146,7 @@ export function ProfilesTable() {
             <AlertDialogCancel>Отмена</AlertDialogCancel>
             <AlertDialogAction
               onClick={onProfileDelete({
-                profileName: currentProfile?.name || "",
+                profileName: currentProfile?.name || '',
                 removeFiles: isRemoveFilesSwitch,
               })}
             >

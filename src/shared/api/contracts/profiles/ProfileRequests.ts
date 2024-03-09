@@ -1,7 +1,6 @@
-
-import { ProfileBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
-import { OsArchitectureEnum } from "@/shared/enums";
+import { ProfileBaseEntity, ProfileExtendedBaseEntity } from '@/shared/api/contracts';
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { OsArchitectureEnum } from '@/shared/enums';
 
 // Получение профилей
 export type TGetProfilesRequest = {};

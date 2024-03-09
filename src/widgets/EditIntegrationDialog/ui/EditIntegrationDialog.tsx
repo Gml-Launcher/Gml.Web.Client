@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { IntegrationForm } from "@/features/integration-form";
-import { useCurrentIntegration } from "@/shared/hooks";
+import { IntegrationForm } from '@/features/integration-form';
+import { useCurrentIntegration } from '@/shared/hooks';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 
 export interface DialogProps {
   open: boolean;

@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 
 import { Manrope } from "next/font/google";
 
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { TooltipProvider } from "@/components/providers/tooltip-provider";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { QueryProvider } from "@/core/providers/QueryProvider";
+import { ThemeProvider } from "@/core/providers/ThemeProvider";
+import { TooltipProvider } from "@/core/providers/TooltipProvider";
 import { cn } from "@/shared/lib/utils";
+import { Toaster } from "@/shared/ui/toaster";
 
 const manrope = Manrope({
   subsets: ["latin"],

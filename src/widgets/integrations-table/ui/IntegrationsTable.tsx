@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { RowSelectionState } from "@tanstack/react-table";
+import { RowSelectionState } from '@tanstack/react-table';
 
-import { DataTable } from "@/entities/Table";
-import { useAuthIntegrations } from "@/shared/hooks/useIntegraions";
+import { DataTable } from '@/entities/Table';
+import { useAuthIntegrations } from '@/shared/hooks/useIntegraions';
 
-import { useColumns } from "../lib/columns";
+import { useColumns } from '../lib/columns';
 
-import { IntegrationsTableSkeleton } from "./IntegrationsTableSkeleton";
+import { IntegrationsTableSkeleton } from './IntegrationsTableSkeleton';
 
 interface IntegrationsTableProps {
   onIntegrationEditDialogToggle: () => void;

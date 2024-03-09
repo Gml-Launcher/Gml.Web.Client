@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
-import { cn } from "@/shared/lib/utils";
-import { Icons } from "@/shared/ui/icons";
+import { cn } from '@/shared/lib/utils';
+import { Icons } from '@/shared/ui/icons';
 
 export function Header() {
   const router = useRouter();
@@ -21,10 +21,10 @@ export function Header() {
             <Link
               href="/dashboard/settings"
               className={cn(
-                "flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted",
-                pathname === "/dashboard/settings"
-                  ? "font-medium text-foreground bg-muted"
-                  : "text-muted-foreground",
+                'flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted',
+                pathname === '/dashboard/settings'
+                  ? 'font-medium text-foreground bg-muted'
+                  : 'text-muted-foreground',
               )}
             >
               <Icons.command className="mr-2 h-4 w-4" />
@@ -38,10 +38,10 @@ export function Header() {
             <Link
               href="/dashboard/integrations"
               className={cn(
-                "flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted",
-                pathname === "/dashboard/integrations"
-                  ? "font-medium text-foreground bg-muted"
-                  : "text-muted-foreground",
+                'flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted',
+                pathname === '/dashboard/integrations'
+                  ? 'font-medium text-foreground bg-muted'
+                  : 'text-muted-foreground',
               )}
             >
               <Icons.command className="mr-2 h-4 w-4" />
@@ -55,10 +55,10 @@ export function Header() {
             <Link
               href="/dashboard/profiles"
               className={cn(
-                "flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted",
-                pathname === "/dashboard/profiles"
-                  ? "font-medium text-foreground bg-muted"
-                  : "text-muted-foreground",
+                'flex w-full items-center rounded-md border border-transparent px-4 py-3 hover:bg-muted',
+                pathname === '/dashboard/profiles'
+                  ? 'font-medium text-foreground bg-muted'
+                  : 'text-muted-foreground',
               )}
             >
               <Icons.command className="mr-2 h-4 w-4" />

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { Header } from "@/shared/ui/Header";
+import { Header } from '@/shared/ui/Header';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

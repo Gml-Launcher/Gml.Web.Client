@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreateProfileForm } from "@/features/create-profile-form";
-import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
-import { useProfile } from "@/shared/hooks";
-import { getStorageAccessToken, getStorageProfile } from "@/shared/services/AuthTokenService";
-import { DownloadClientHub } from "@/widgets/client-hub";
+import { CreateProfileForm } from '@/features/create-profile-form';
+import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
+import { useProfile } from '@/shared/hooks';
+import { getStorageAccessToken, getStorageProfile } from '@/shared/services/AuthTokenService';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { DownloadClientHub } from '@/widgets/client-hub';
 
 export default function ProfilePage({ params }: { params: { name: string } }) {
   const profile = getStorageProfile();
@@ -20,7 +20,7 @@ export default function ProfilePage({ params }: { params: { name: string } }) {
         UserName: profile.login,
         ProfileName: params.name,
         UserAccessToken: accessToken,
-        UserUuid: "uuid",
+        UserUuid: 'uuid',
         OsArchitecture: OsArchitectureEnum.X64,
         OsType: OsTypeEnum.WINDOWS.toString(),
       });
@@ -29,7 +29,10 @@ export default function ProfilePage({ params }: { params: { name: string } }) {
 
   return (
     <div className="flex flex-col items-start py-4">
-      <h1 className="text-xl font-bold mb-8">Профиль {params.name}</h1>
+      <h1 className="text-xl font-bold mb-8">
+        Профиль
+        {params.name}
+      </h1>
       <div className="flex flex-col gap-y-6 w-full">
         <Card className="w-[700px]">
           <CardHeader>

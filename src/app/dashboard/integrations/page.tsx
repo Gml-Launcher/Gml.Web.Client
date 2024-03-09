@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import { EditIntegrationDialog } from "@/widgets/EditIntegrationDialog";
 import { IntegrationsTable } from "@/widgets/integrations-table";
 

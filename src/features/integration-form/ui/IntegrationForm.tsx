@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   IntegrationFormSchemaType,
   integrationSchema,
-} from "@/features/integration-form/lib/static";
-import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Icons } from "@/shared/ui/icons";
+} from '@/features/integration-form/lib/static';
+import { useCurrentIntegration, useEditIntegration } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -28,7 +28,7 @@ export function IntegrationForm({ className, onOpenChange, ...props }: SignInFor
 
   const form = useForm<IntegrationFormSchemaType>({
     values: {
-      endpoint: currentIntegration?.endpoint || "",
+      endpoint: currentIntegration?.endpoint || '',
       authType: currentIntegration?.authType || 0,
     },
     resolver: zodResolver(integrationSchema),
@@ -43,7 +43,7 @@ export function IntegrationForm({ className, onOpenChange, ...props }: SignInFor
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
@@ -51,7 +51,7 @@ export function IntegrationForm({ className, onOpenChange, ...props }: SignInFor
             <FormControl>
               <Input
                 placeholder="Тип авторизации"
-                {...form.register("authType")}
+                {...form.register('authType')}
                 readOnly
                 disabled
               />
@@ -64,7 +64,7 @@ export function IntegrationForm({ className, onOpenChange, ...props }: SignInFor
           <FormItem>
             <FormLabel>Введите эндпоинт</FormLabel>
             <FormControl>
-              <Input placeholder="Введите эндпоинт" {...form.register("endpoint")} />
+              <Input placeholder="Введите эндпоинт" {...form.register('endpoint')} />
             </FormControl>
             {form.formState.errors.endpoint && (
               <FormMessage>{form.formState.errors.endpoint.message}</FormMessage>

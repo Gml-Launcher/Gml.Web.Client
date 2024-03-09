@@ -1,6 +1,6 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
-import { $api } from "@/core/api";
+import { $api } from '@/core/api';
 import {
   TGetActiveAuthIntegrationsRequest,
   TGetActiveAuthIntegrationsResponse,
@@ -8,18 +8,18 @@ import {
   TGetAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class IntegrationService {
-  private BASE_URL = "/integrations/auth";
+  private BASE_URL = '/integrations/auth';
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<
       TGetAuthIntegrationsRequest,
       AxiosResponse<TGetAuthIntegrationsResponse>
     >(this.BASE_URL);
-    
-return data;
+
+    return data;
   }
 
   async getActiveAuthIntegration(): Promise<TGetActiveAuthIntegrationsResponse> {
@@ -27,16 +27,16 @@ return data;
       TGetActiveAuthIntegrationsRequest,
       AxiosResponse<TGetActiveAuthIntegrationsResponse>
     >(`${this.BASE_URL}/active`);
-    
-return data;
+
+    return data;
   }
 
   async putAuthIntegrations(
     body: TPostAuthIntegrationsRequest,
   ): Promise<TPostAuthIntegrationsResponse> {
     const { data } = await $api.put<TPostAuthIntegrationsResponse>(this.BASE_URL, body);
-    
-return data;
+
+    return data;
   }
 }
 

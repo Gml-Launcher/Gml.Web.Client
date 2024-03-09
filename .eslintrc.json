@@ -4,15 +4,10 @@
     "es2021": true
   },
   "extends": [
-    "next/core-web-vitals",
     "plugin:react/recommended",
     "airbnb",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "plugin:css-modules/recommended",
     "prettier",
-    "@feature-sliced"
+    "next/core-web-vitals"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -36,11 +31,9 @@
     "object-curly-newline": "off",
     "consistent-return": "off",
     "no-param-reassign": "off",
-    "no-unused-vars": "off",
     "no-shadow": "off",
     "max-len": "off",
     "no-undef": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
     "jsx-a11y/tabindex-no-positive": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
@@ -52,6 +45,15 @@
         "arrow": true,
         "return": true,
         "declaration": true
+      }
+    ],
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".jsx",
+          ".tsx"
+        ]
       }
     ],
     "react/no-unstable-nested-components": "off",

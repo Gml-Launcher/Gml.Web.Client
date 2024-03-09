@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { AUTH_PAGES, DASHBOARD_PAGES } from "@/shared/routes";
+import { AUTH_PAGES, DASHBOARD_PAGES } from '@/shared/routes';
 
 export async function middleware(request: NextRequest, response: NextResponse) {
   const { url, cookies } = request;
 
-  const accessToken = cookies.get("accessToken");
+  const accessToken = cookies.get('accessToken');
 
   const isAuthPage = url.includes(AUTH_PAGES.HOME);
 
@@ -25,5 +25,5 @@ export async function middleware(request: NextRequest, response: NextResponse) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/auth/:path*"],
+  matcher: ['/dashboard/:path*', '/auth/:path*'],
 };

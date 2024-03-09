@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { TooltipProvider as TooltipProviderBase } from "@/components/ui/tooltip";
+import { TooltipProvider as TooltipProviderBase } from '@/shared/ui/tooltip';
 
 interface TooltipProviderProps {
   children: React.ReactNode;

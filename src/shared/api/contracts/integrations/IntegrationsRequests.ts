@@ -1,5 +1,5 @@
-import { AuthIntegrationBaseEntity } from "@/shared/api/contracts"; // Получение списка серверов для авторизации
-import { ResponseBaseEntity } from "@/shared/api/schemas";
+import { AuthIntegrationBaseEntity } from '@/shared/api/contracts'; // Получение списка серверов для авторизации
+import { ResponseBaseEntity } from '@/shared/api/schemas';
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};

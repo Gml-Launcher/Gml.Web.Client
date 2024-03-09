@@ -1,4 +1,4 @@
-export { authService } from "./AuthService";
+export { authService } from './AuthService';
 export {
   getStorageAccessToken,
   setStorageAccessToken,
@@ -6,5 +6,5 @@ export {
   removeStorageProfile,
   getStorageProfile,
   setStorageProfile,
-} from "./AuthTokenService";
-export { profileService } from "./ProfileService";
+} from './AuthTokenService';
+export { profileService } from './ProfileService';

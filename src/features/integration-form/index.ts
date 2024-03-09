@@ -1,1 +1,1 @@
-export { IntegrationForm } from "@/features/integration-form/ui/IntegrationForm";
+export { IntegrationForm } from '@/features/integration-form/ui/IntegrationForm';

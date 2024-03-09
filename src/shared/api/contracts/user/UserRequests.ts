@@ -1,5 +1,5 @@
-import { UserBaseEntity } from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
+import { UserBaseEntity } from '@/shared/api/contracts';
+import { ResponseBaseEntity } from '@/shared/api/schemas';
 
 // Регистрация
 export type TPostSignUpRequest = {

@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { SignInFormSchemaType, signInSchema } from "@/features/auth-credentials-form/lib/static";
-import { useLogin } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Icons } from "@/shared/ui/icons";
+import { SignInFormSchemaType, signInSchema } from '@/features/auth-credentials-form/lib/static';
+import { useLogin } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -28,13 +28,13 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
             <FormLabel>Введите логин</FormLabel>
             <FormControl>
-              <Input placeholder="Введите логин" {...form.register("login")} />
+              <Input placeholder="Введите логин" {...form.register('login')} />
             </FormControl>
             {form.formState.errors.login && (
               <FormMessage>{form.formState.errors.login.message}</FormMessage>
@@ -44,7 +44,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
           <FormItem>
             <FormLabel>Введите пароль</FormLabel>
             <FormControl>
-              <Input type="password" placeholder="Введите пароль" {...form.register("password")} />
+              <Input type="password" placeholder="Введите пароль" {...form.register('password')} />
             </FormControl>
             {form.formState.errors.password && (
               <FormMessage>{form.formState.errors.password.message}</FormMessage>

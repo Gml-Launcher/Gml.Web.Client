@@ -1,4 +1,4 @@
-import { $api } from "@/core/api";
+import { $api } from '@/core/api';
 import {
   TDeleteProfileRequest,
   TDeleteProfileResponse,
@@ -11,26 +11,26 @@ import {
   TPostProfilesResponse,
   TPutProfileRequest,
   TPutProfileResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class ProfileService {
-  private BASE_URL = "/profiles";
+  private BASE_URL = '/profiles';
 
   async getProfiles(): Promise<TGetProfilesResponse> {
     const { data } = await $api.get<TGetProfilesResponse>(this.BASE_URL);
-    
-return data;
+
+    return data;
   }
 
   async getProfile(body: TGetProfileRequest): Promise<TGetProfileResponse> {
     const { data } = await $api.post<TGetProfileResponse>(`${this.BASE_URL}/info`, body);
-    
-return data;
+
+    return data;
   }
 
   async createProfile(body: TPostProfilesRequest): Promise<TPostProfilesResponse> {
     const { data } = await $api.post<TPostProfilesResponse>(this.BASE_URL, body, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
 
     return data;
