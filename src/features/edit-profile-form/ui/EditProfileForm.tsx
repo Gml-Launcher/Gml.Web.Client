@@ -1,0 +1,115 @@
+import { Input, InputFile } from "@/shared/ui/input";
+import React from "react";
+import { useEditProfile } from "@/shared/hooks";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  EditProfileFormSchemaType,
+  EditProfileSchema,
+  ProfileExtendedBaseEntity,
+} from "@/shared/api/contracts";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormMessage } from "@/shared/ui/form";
+import { Button } from "@/shared/ui/button";
+import { Icons } from "@/shared/ui/icons";
+import Image from "next/image";
+import { Textarea } from "@/shared/ui/textarea";
+import { Skeleton } from "@/shared/ui/skeleton";
+
+interface EditProfileFormProps {
+  profile?: ProfileExtendedBaseEntity;
+  isLoading?: boolean;
+}
+
+export const EditProfileForm = (props: EditProfileFormProps) => {
+  const { profile, isLoading } = props;
+
+  const { mutateAsync, isPending } = useEditProfile();
+  const form = useForm<EditProfileFormSchemaType>({
+    disabled: isLoading,
+    values: {
+      name: profile?.profileName || "",
+      description: profile?.description || "",
+    },
+    resolver: zodResolver(EditProfileSchema),
+  });
+
+  const onSubmit: SubmitHandler<EditProfileFormSchemaType> = async (
+    body: EditProfileFormSchemaType,
+  ) => {
+    const formUpdate = new FormData();
+    formUpdate.append("name", body.name);
+    formUpdate.append("originalName", profile?.profileName || "");
+    formUpdate.append("description", body.description);
+    formUpdate.append("icon", body.icon?.[0]);
+
+    await mutateAsync(formUpdate);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-y-8">
+          <div className="flex gap-x-8">
+            <div className="flex flex-col gap-y-1 w-96">
+              <h6 className="text-sm font-bold">Название</h6>
+              <p className="text-sm text-gray-700">Отображается на клиенте</p>
+            </div>
+            <div className="flex flex-col gap-y-1 w-[32rem]">
+              <Input
+                type="text"
+                placeholder="Введите название профиля"
+                {...form.register("name")}
+              />
+              {form.formState.errors.name && (
+                <FormMessage>{form.formState.errors.name.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-x-8">
+            <div className="flex flex-col gap-y-1 w-96">
+              <h6 className="text-sm font-bold">Описание</h6>
+              <p className="text-sm text-gray-700">Отображается в лаунчере</p>
+            </div>
+            <div className="flex flex-col gap-y-1 w-[32rem]">
+              <Textarea placeholder="Введите описание сервера" {...form.register("description")} />
+              {form.formState.errors.description && (
+                <FormMessage>{form.formState.errors.description.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-x-8">
+            <div className="flex flex-col gap-y-1 w-96">
+              <h6 className="text-sm font-bold">Иконка</h6>
+              <p className="text-sm text-gray-700">Отображается в лаунчере</p>
+            </div>
+            <div className="flex gap-x-8 w-[32rem]">
+              {profile ? (
+                <Image
+                  className="w-16 h-16"
+                  src={`data:text/plain;base64,${profile.iconBase64}`}
+                  alt={profile.profileName}
+                  width={32}
+                  height={32}
+                />
+              ) : (
+                <Skeleton className="min-w-16 min-h-16 w-16 h-16" />
+              )}
+              <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
+              {form.formState.errors.icon && (
+                <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="flex gap-x-8">
+            <div className="flex justify-end w-[58rem]">
+              <Button disabled={isPending || form.formState.disabled}>
+                {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                Сохранить
+              </Button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </Form>
+  );
+};

@@ -1,109 +1,55 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import React from "react";
+import { Button } from "@/shared/ui/button";
+import { Progress } from "@/shared/ui/progress";
 
-import { HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
-
-import { getStorageAccessToken } from '@/shared/services';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Progress } from '@/shared/ui/progress';
+import { useConnectionHub } from "../lib/useConnectionHub";
 
 interface DownloadClientHubProps {
   profileName: string;
+  isLoading?: boolean;
 }
 
 export function DownloadClientHub(props: DownloadClientHubProps) {
-  const { profileName } = props;
-  const accessToken = getStorageAccessToken();
-
-  const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
-
-  const [message, setMessage] = useState('');
-  const [progressPercent, setProgressPercent] = useState(0);
-  const [isRestoring, setIsRestoring] = useState(false);
-
-  useEffect(() => {
-    const onConnectedHub = async () => {
-      try {
-        const connection = new HubConnectionBuilder()
-          .withUrl(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/ws/profiles/restore?access_token=${accessToken}`,
-            {
-              headers: { 'Access-Control-Allow-Credentials': '*' },
-              withCredentials: false,
-            },
-          )
-          .withAutomaticReconnect()
-          .build();
-        setConnectionHub(connection);
-
-        await connection.start();
-
-        connection.on('BlockRestore', (message) => {
-          setIsRestoring(true);
-          console.log('@BlockRestore', message);
-        });
-
-        connection.on('SuccessInstalled', () => {
-          setIsRestoring(false);
-          setMessage('Success');
-        });
-
-        connection.on('SuccessPacked', () => {
-          setIsRestoring(false);
-          setMessage('Success');
-        });
-
-        connection.on('Message', (message) => {
-          setMessage(message);
-        });
-
-        connection.on('ChangeProgress', (percent) => {
-          setProgressPercent(percent);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    onConnectedHub().then(() => {});
-
-    return () => {
-      connectionHub?.stop().then(() => {});
-    };
-  }, []);
-
-  const isDisableConnected = connectionHub?.state !== HubConnectionState.Connected || isRestoring;
-  const onDownloadDistributive = () => {
-    setIsRestoring(true);
-    connectionHub?.invoke('Restore', profileName);
-  };
-
-  const onBuildDistributive = () => {
-    setIsRestoring(true);
-    connectionHub?.invoke('Build', profileName);
-  };
+  const { onDownloadDistributive, onBuildDistributive, isDisable, progress } =
+    useConnectionHub(props);
 
   return (
     <>
-      <Card className="w-[700px]">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">Загрузка клиента</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-y-6">
-          <Button className="w-fit" onClick={onDownloadDistributive} disabled={isDisableConnected}>
+      <div className="flex gap-x-8">
+        <div className="flex flex-col gap-y-1 w-96">
+          <h6 className="text-sm font-bold">Шаг первый</h6>
+          <p className="text-sm text-gray-700">Необходимо загрузить клиент</p>
+        </div>
+        <div className="flex flex-col gap-y-1 w-[32rem]">
+          <Button className="w-fit" onClick={onDownloadDistributive} disabled={isDisable}>
             Загрузить
           </Button>
-
-          <Button className="w-fit" onClick={onBuildDistributive} disabled={isDisableConnected}>
-            Собрать профиль
+        </div>
+      </div>
+      <div className="flex gap-x-8">
+        <div className="flex flex-col gap-y-1 w-96">
+          <h6 className="text-sm font-bold">Шаг второй</h6>
+          <p className="text-sm text-gray-700">Необходимо собрать профиль</p>
+        </div>
+        <div className="flex flex-col gap-y-1 w-[32rem]">
+          <Button className="w-fit" onClick={onBuildDistributive} disabled={isDisable}>
+            Собрать
           </Button>
-          <Progress value={progressPercent} />
-          <p>{message}</p>
-          <p>{connectionHub?.state}</p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
+      {Boolean(progress) && (
+        <div className="flex gap-x-8">
+          <div className="flex flex-col gap-y-1 w-96">
+            <h6 className="text-sm font-bold">Прогресс</h6>
+            <p className="text-sm text-gray-700">Выполнено на {progress}% из 100%</p>
+          </div>
+          <div className="flex flex-col gap-y-1 w-[32rem]">
+            <Progress className="h-2" value={progress} />
+          </div>
+        </div>
+      )}
     </>
   );
 }

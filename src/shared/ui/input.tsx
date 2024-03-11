@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/shared/lib/utils";
+import { UploadCloud } from "lucide-react";
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
@@ -18,3 +19,35 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ),
 );
 Input.displayName = "Input";
+
+interface InputFileProps extends InputProps {
+  fileTypes?: string[];
+}
+
+export const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
+  ({ className, id, fileTypes, type = "file", ...props }, ref) => (
+    <label
+      htmlFor={id}
+      className="bg-white text-black text-base rounded w-full h-32 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed font-[sans-serif]"
+    >
+      <div className="flex justify-center items-center bg-gray-100 w-12 h-12 rounded-full mb-2">
+        <UploadCloud size={24} />
+      </div>
+      <p className="text-xs text-gray-400 text-center leading-6">
+        <span className="underline">Нажмите, чтобы загрузить</span>, или перетащите изображение
+      </p>
+      <input type="file" id={id} className="hidden" ref={ref} {...props} />
+      {fileTypes && (
+        <>
+          {fileTypes.length === 1 && (
+            <p className="text-xs text-gray-400 mt-2">Доступный формат: {fileTypes[0]}</p>
+          )}
+          {fileTypes.length > 1 && (
+            <p className="text-xs text-gray-400 mt-2">Доступные форматы: {fileTypes.join(", ")}</p>
+          )}
+        </>
+      )}
+    </label>
+  ),
+);
+InputFile.displayName = "Input";

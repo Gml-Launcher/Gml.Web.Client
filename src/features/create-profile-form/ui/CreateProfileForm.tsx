@@ -8,12 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   CreateProfileFormSchemaType,
-  createProfileSchema,
+  CreateProfileSchema,
   GameLoaderOption,
   GameLoaderType,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
-import { useCreateProfile, useEditProfile } from "@/shared/hooks";
+import { useCreateProfile } from "@/shared/hooks";
 import { cn, enumValues } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
@@ -24,7 +24,6 @@ import { Textarea } from "@/shared/ui/textarea";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
-  isEditing?: boolean;
 }
 
 const versions = [
@@ -59,14 +58,8 @@ const versions = [
   "1.20.4",
 ];
 
-export function CreateProfileForm({
-  profile,
-  isEditing,
-  className,
-  ...props
-}: CreateProfileFormProps) {
-  const { mutateAsync: mutateAsyncCreate, isPending: isPendingCreate } = useCreateProfile();
-  const { mutateAsync: mutateAsyncEdit, isPending: isPendingEdit } = useEditProfile();
+export function CreateProfileForm({ profile, className, ...props }: CreateProfileFormProps) {
+  const { mutateAsync, isPending } = useCreateProfile();
 
   const form = useForm<CreateProfileFormSchemaType>({
     values: {
@@ -75,24 +68,12 @@ export function CreateProfileForm({
       gameLoader: profile?.minecraftVersion || "",
       version: profile?.clientVersion || "",
     },
-    resolver: zodResolver(createProfileSchema),
+    resolver: zodResolver(CreateProfileSchema),
   });
 
   const onSubmit: SubmitHandler<CreateProfileFormSchemaType> = async (
     data: CreateProfileFormSchemaType,
   ) => {
-    if (isEditing) {
-      const formUpdate = new FormData();
-      formUpdate.append("name", data.name);
-      formUpdate.append("originalName", profile?.profileName || "");
-      formUpdate.append("description", data.description);
-      formUpdate.append("icon", data.icon[0]);
-
-      await mutateAsyncEdit(formUpdate);
-
-      return;
-    }
-
     const formCreate = new FormData();
     formCreate.append("name", data.name);
     formCreate.append("description", data.description);
@@ -100,7 +81,7 @@ export function CreateProfileForm({
     formCreate.append("gameLoader", data.gameLoader);
     formCreate.append("icon", data.icon[0]);
 
-    return await mutateAsyncCreate(formCreate);
+    await mutateAsync(formCreate);
   };
 
   return (
@@ -137,68 +118,62 @@ export function CreateProfileForm({
             )}
           </FormItem>
 
-          {!isEditing && !profile && (
-            <>
-              <Controller
-                name="version"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Выберите версию игры</FormLabel>
-                    <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Выберите версию игры" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {versions.map((version) => (
-                            <SelectItem key={version} value={version}>
-                              {version}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    {form.formState.errors.version && (
-                      <FormMessage>{form.formState.errors.version.message}</FormMessage>
-                    )}
-                  </FormItem>
+          <Controller
+            name="version"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Выберите версию игры</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите версию игры" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {versions.map((version) => (
+                        <SelectItem key={version} value={version}>
+                          {version}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                {form.formState.errors.version && (
+                  <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
-              />
+              </FormItem>
+            )}
+          />
 
-              <Controller
-                name="gameLoader"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Выберите игровой загрузчик</FormLabel>
-                    <FormControl>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Выберите игровой загрузчик" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {enumValues(GameLoaderType).map(([loader, value]) => (
-                            <SelectItem key={loader} value={String(value)}>
-                              {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    {form.formState.errors.gameLoader && (
-                      <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
-                    )}
-                  </FormItem>
+          <Controller
+            name="gameLoader"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Выберите игровой загрузчик</FormLabel>
+                <FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Выберите игровой загрузчик" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {enumValues(GameLoaderType).map(([loader, value]) => (
+                        <SelectItem key={loader} value={String(value)}>
+                          {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                {form.formState.errors.gameLoader && (
+                  <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
                 )}
-              />
-            </>
-          )}
+              </FormItem>
+            )}
+          />
 
           <div className="flex justify-end">
-            <Button disabled={isPendingCreate || isPendingEdit}>
-              {(isPendingCreate || isPendingEdit) && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {isEditing || profile ? "Сохранить" : "Создать"}
+            <Button disabled={isPending}>
+              {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              Создать
             </Button>
           </div>
         </form>
