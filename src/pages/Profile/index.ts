@@ -1,2 +1,2 @@
 export { ProfileLoading } from "./ui/ProfileLoading";
-export { default as ProfilePage } from "./ui/Profile";
+export { ProfilePage } from "./ui/Profile";

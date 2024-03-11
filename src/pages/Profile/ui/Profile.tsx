@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
 import { useProfile } from "@/shared/hooks";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services/AuthTokenService";
@@ -10,7 +10,7 @@ import { Section } from "@/entities/Section";
 import { ProfileLoading } from "@/pages/Profile";
 import { EditProfileForm } from "@/features/edit-profile-form/ui/EditProfileForm";
 
-export default function ProfilePage({ params }: { params: { name: string } }) {
+export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
   const accessToken = getStorageAccessToken();
   const { data, mutate, isPending } = useProfile();
@@ -61,4 +61,4 @@ export default function ProfilePage({ params }: { params: { name: string } }) {
       </Section>
     </>
   );
-}
+};

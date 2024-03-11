@@ -35,16 +35,31 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
     data: InstallClientFormSchemaType,
   ) => {
     process.onIsProcessingToggle();
-    connectionHub?.invoke("Download", data.branch, data.host, data.folder).finally(() => {
-      process.onIsProcessingToggle();
-      percent.setProgressPercent(0);
-    });
+    connectionHub
+      ?.invoke("Download", data.branch, data.host, data.folder)
+      .then(() => {
+        toast.toast({
+          title: "Успешно",
+          description: "Лаунчер успешно собран!",
+        });
+      })
+      .catch((error) => {
+        toast.toast({
+          variant: "destructive",
+          title: "Ошибка!",
+          description: JSON.stringify(error),
+        });
+      })
+      .finally(() => {
+        process.onIsProcessingToggle();
+        percent.setProgressPercent(0);
+      });
   };
 
   return (
     <div className={cn("grid gap-4", className)} {...props}>
       <Form {...form}>
-        <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller
             control={form.control}
             name="branch"
@@ -106,13 +121,15 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
           />
 
           <div className="flex justify-between items-center">
-            <Button disabled={process.isProcessing}>
-              {process.isProcessing && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              Скачать
-            </Button>
             {Boolean(percent.progressPercent) && (
-              <p className="text-gray-800 text-sm">{percent.progressPercent}%</p>
+              <p className="text-gray-800 text-sm">
+                Сборка завершена на {percent.progressPercent}% из 100%
+              </p>
             )}
+            <Button className="w-fit ml-auto" disabled={process.isProcessing}>
+              {process.isProcessing && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              Скачать исходники
+            </Button>
           </div>
         </form>
       </Form>
