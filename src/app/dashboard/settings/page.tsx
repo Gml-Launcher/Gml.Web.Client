@@ -1,13 +1,11 @@
-import React from 'react';
+import { Metadata } from "next";
 
-import { Metadata } from 'next';
-
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Input } from '@/shared/ui/input';
+import { Button } from "@/shared/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Input } from "@/shared/ui/input";
 
 export const metadata: Metadata = {
-  title: 'Настройки',
+  title: "Настройки",
 };
 
 export default async function SettingsPage() {

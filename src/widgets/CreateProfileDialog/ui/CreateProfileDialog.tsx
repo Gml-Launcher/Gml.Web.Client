@@ -1,18 +1,14 @@
-import * as React from 'react';
-
-import { CreateProfileForm } from '@/features/create-profile-form';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
+import { CreateProfileForm } from "@/features/create-profile-form";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
 
 interface CreateProfileDialogProps {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function CreateProfileDialog(props: CreateProfileDialogProps) {
-  const { open, onOpenChange } = props;
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog {...props}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="mb-4">Создание профиля</DialogTitle>

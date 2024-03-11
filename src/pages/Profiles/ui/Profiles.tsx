@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Button } from "@/shared/ui/button";
 import { CreateProfileDialog } from "@/widgets/CreateProfileDialog";
 import { ProfilesTable } from "@/widgets/profiles-table";
 
-export default function ProfilesPage() {
+export const ProfilesPage = () => {
   const [isCreateProfileDialog, setIsCreateProfileDialog] = useState(false);
   const onCreateProfileDialogToggle = () => setIsCreateProfileDialog((prev) => !prev);
 
@@ -30,4 +30,4 @@ export default function ProfilesPage() {
       />
     </>
   );
-}
+};
