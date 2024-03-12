@@ -7,7 +7,7 @@ import { getStorageAccessToken, getStorageProfile } from "@/shared/services/Auth
 import { DownloadClientHub } from "@/widgets/client-hub";
 import Image from "next/image";
 import { Section } from "@/entities/Section";
-import { ProfileLoading } from "@/pages/Profile";
+import { ProfileLoading } from "@/screens/Profile";
 import { EditProfileForm } from "@/features/edit-profile-form/ui/EditProfileForm";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
