@@ -24,7 +24,7 @@ interface InstallClientFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function InstallClientForm({ className, ...props }: InstallClientFormProps) {
   const { connectionHub, process, percent } = useConnectionHub();
   const { data: branches } = useGithubLauncherVersions();
-  const toast = useToast();
+  const { toast } = useToast();
 
   const form = useForm<InstallClientFormSchemaType>({
     values: { branch: "", host: getApiBaseUrl() || "", folder: "" },
@@ -38,13 +38,13 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
     connectionHub
       ?.invoke("Download", data.branch, data.host, data.folder)
       .then(() => {
-        toast.toast({
+        toast({
           title: "Успешно",
           description: "Лаунчер успешно собран!",
         });
       })
       .catch((error) => {
-        toast.toast({
+        toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),

@@ -14,7 +14,7 @@ const CONNECTION_URL = (token: string) =>
 export const useConnectionHub = (props: ConnectionHubProps) => {
   const { profileName, isLoading } = props;
 
-  const toast = useToast();
+  const { toast } = useToast();
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
@@ -72,13 +72,13 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     connectionHub
       ?.invoke("Restore", profileName)
       .then(() => {
-        toast.toast({
+        toast({
           title: "Успешно",
           description: "Клиент успешно загружен",
         });
       })
       .catch((error) => {
-        toast.toast({
+        toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
@@ -94,13 +94,13 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     connectionHub
       ?.invoke("Build", profileName)
       .then(() => {
-        toast.toast({
+        toast({
           title: "Успешно",
           description: "Клиент успешно собран",
         });
       })
       .catch((error) => {
-        toast.toast({
+        toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
