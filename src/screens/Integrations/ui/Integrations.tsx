@@ -18,7 +18,7 @@ export const IntegrationsPage = () => {
         <div className="flex justify-between w-full">
           <h1 className="text-xl font-bold mb-8">Интеграции</h1>
         </div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
           <IntegrationCard
             title="Аутентификация"
             description="Синхронизация и управление данными о пользователях на платформе"

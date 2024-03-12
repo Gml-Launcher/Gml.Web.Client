@@ -48,13 +48,13 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-y-8">
-          <div className="flex gap-x-8">
-            <div className="flex flex-col gap-y-1 w-96">
+        <div className="flex flex-col gap-y-8 w-full lg:w-[58rem]">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Название</h6>
               <p className="text-sm text-gray-700">Отображается на клиенте</p>
             </div>
-            <div className="flex flex-col gap-y-1 w-[32rem]">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <Input
                 type="text"
                 placeholder="Введите название профиля"
@@ -65,48 +65,46 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               )}
             </div>
           </div>
-          <div className="flex gap-x-8">
-            <div className="flex flex-col gap-y-1 w-96">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Описание</h6>
               <p className="text-sm text-gray-700">Отображается в лаунчере</p>
             </div>
-            <div className="flex flex-col gap-y-1 w-[32rem]">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <Textarea placeholder="Введите описание сервера" {...form.register("description")} />
               {form.formState.errors.description && (
                 <FormMessage>{form.formState.errors.description.message?.toString()}</FormMessage>
               )}
             </div>
           </div>
-          <div className="flex gap-x-8">
-            <div className="flex flex-col gap-y-1 w-96">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Иконка</h6>
               <p className="text-sm text-gray-700">Отображается в лаунчере</p>
-            </div>
-            <div className="flex gap-x-8 w-[32rem]">
               {profile ? (
                 <Image
-                  className="w-16 h-16"
+                  className="w-16 h-16 mt-2"
                   src={`data:text/plain;base64,${profile.iconBase64}`}
                   alt={profile.profileName}
                   width={32}
                   height={32}
                 />
               ) : (
-                <Skeleton className="min-w-16 min-h-16 w-16 h-16" />
+                <Skeleton className="min-w-16 min-h-16 w-16 h-16 mt-2" />
               )}
+            </div>
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
               {form.formState.errors.icon && (
                 <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
               )}
             </div>
           </div>
-          <div className="flex gap-x-8">
-            <div className="flex justify-end w-[58rem]">
-              <Button disabled={isPending || form.formState.disabled}>
-                {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                Сохранить
-              </Button>
-            </div>
+          <div className="flex justify-end">
+            <Button disabled={isPending || form.formState.disabled}>
+              {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              Сохранить
+            </Button>
           </div>
         </div>
       </form>
