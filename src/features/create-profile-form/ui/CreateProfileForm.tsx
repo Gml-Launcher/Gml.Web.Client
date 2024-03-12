@@ -24,6 +24,7 @@ import { Textarea } from "@/shared/ui/textarea";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
+  onModalToggle: () => void;
 }
 
 const versions = [
@@ -58,7 +59,9 @@ const versions = [
   "1.20.4",
 ];
 
-export function CreateProfileForm({ profile, className, ...props }: CreateProfileFormProps) {
+export function CreateProfileForm(props: CreateProfileFormProps) {
+  const { profile, className, onModalToggle, ...rest } = props;
+
   const { mutateAsync, isPending } = useCreateProfile();
 
   const form = useForm<CreateProfileFormSchemaType>({
@@ -81,11 +84,13 @@ export function CreateProfileForm({ profile, className, ...props }: CreateProfil
     formCreate.append("gameLoader", data.gameLoader);
     formCreate.append("icon", data.icon[0]);
 
-    await mutateAsync(formCreate);
+    await mutateAsync(formCreate).then(() => {
+      onModalToggle();
+    });
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn("grid gap-4", className)} {...rest}>
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>

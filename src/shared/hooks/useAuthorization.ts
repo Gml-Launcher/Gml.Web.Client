@@ -21,7 +21,7 @@ export const useRegistration = () => {
         title: "Успешная регистрация",
         description: "Добро пожаловать в платформу",
       });
-      route.push(DASHBOARD_PAGES.HOME);
+      route.push(DASHBOARD_PAGES.PROFILES);
     },
     onError: (error) => {
       if (isAxiosError(error)) {
@@ -47,7 +47,7 @@ export const useLogin = () => {
         title: "Успешная авторизация",
         description: "Добро пожаловать в платформу",
       });
-      route.push(DASHBOARD_PAGES.HOME);
+      route.push(DASHBOARD_PAGES.PROFILES);
     },
     onError: (error) => {
       if (isAxiosError(error)) {

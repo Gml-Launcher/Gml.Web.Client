@@ -1,15 +1,13 @@
 export enum GameLoaderType {
-  UNDEFINED,
-  VANILLA,
-  FORGE,
-  FABRIC,
-  LITELOADER,
+  VANILLA = 1,
+  FORGE = 2,
+  FABRIC = 3,
+  LITELOADER = 4,
 }
 
 export enum GameLoaderOption {
-  UNDEFINED = 'Undefined',
-  VANILLA = 'Vanilla',
-  FORGE = 'Forge',
-  FABRIC = 'Fabric',
-  LITELOADER = 'LiteLoader',
+  VANILLA = "Vanilla",
+  FORGE = "Forge",
+  FABRIC = "Fabric",
+  LITELOADER = "LiteLoader",
 }

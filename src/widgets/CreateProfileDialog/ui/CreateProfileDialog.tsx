@@ -12,7 +12,7 @@ export function CreateProfileDialog(props: CreateProfileDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="mb-4">Создание профиля</DialogTitle>
-          <CreateProfileForm />
+          <CreateProfileForm onModalToggle={() => props.onOpenChange(false)} />
         </DialogHeader>
       </DialogContent>
     </Dialog>
