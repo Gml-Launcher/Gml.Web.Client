@@ -9,7 +9,7 @@ const CONNECTION_URL = (token: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}/ws/launcher/build?access_token=${token}`;
 
 export const useConnectionHub = () => {
-  const toast = useToast();
+  const { toast } = useToast();
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
@@ -39,7 +39,7 @@ export const useConnectionHub = () => {
         });
 
         connection.on("Message", (message) => {
-          toast.toast({
+          toast({
             title: message,
           });
         });

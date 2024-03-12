@@ -33,7 +33,7 @@ export const useActiveAuthIntegrations = () => {
 };
 
 export const useEditIntegration = () => {
-  const toast = useToast();
+  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -45,14 +45,14 @@ export const useEditIntegration = () => {
     },
     onSuccess: async (data) => {
       await queryClient.setQueryData(["integration"], () => null);
-      toast.toast({
+      toast({
         title: "Успешно",
         description: data.message,
       });
     },
     onError: (error) => {
       if (isAxiosError(error)) {
-        toast.toast({
+        toast({
           variant: "destructive",
           title: (error.response && error.response.data.message) || "Ошибка!",
           description: error.response && error.response.data.errors[0],
