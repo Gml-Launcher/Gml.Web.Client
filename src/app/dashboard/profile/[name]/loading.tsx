@@ -1,3 +1,3 @@
-import { ProfileLoading } from "@/pages/Profile/ui/ProfileLoading";
+import { ProfileLoading } from "@/screens/Profile/ui/ProfileLoading";
 
 export default ProfileLoading;

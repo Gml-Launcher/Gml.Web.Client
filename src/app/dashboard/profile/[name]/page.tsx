@@ -1,4 +1,4 @@
-import { ProfilePage } from "@/pages/Profile";
+import { ProfilePage } from "@/screens/Profile";
 import type { Metadata } from "next";
 
 type PageProps = {

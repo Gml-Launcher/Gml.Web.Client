@@ -1,4 +1,4 @@
-import { IntegrationsPage } from "@/pages/Integrations";
+import { IntegrationsPage } from "@/screens/Integrations";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
