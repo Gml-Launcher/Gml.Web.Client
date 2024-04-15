@@ -15,6 +15,7 @@ export type ProfileExtendedBaseEntity = {
   iconBase64: string;
   description: string;
   arguments: string;
+  hasUpdate: boolean;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
 };

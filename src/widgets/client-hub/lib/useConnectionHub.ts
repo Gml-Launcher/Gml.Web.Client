@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { getStorageAccessToken } from "@/shared/services";
 import { useToast } from "@/shared/ui/use-toast";
+import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 
 interface ConnectionHubProps {
-  profileName: string;
+  profile?: ProfileExtendedBaseEntity;
   isLoading?: boolean;
 }
 
@@ -12,7 +13,7 @@ const CONNECTION_URL = (token: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}/ws/profiles/restore?access_token=${token}`;
 
 export const useConnectionHub = (props: ConnectionHubProps) => {
-  const { profileName, isLoading } = props;
+  const { profile, isLoading } = props;
 
   const { toast } = useToast();
   const accessToken = getStorageAccessToken();
@@ -70,7 +71,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const onDownloadDistributive = () => {
     setIsRestoring(true);
     connectionHub
-      ?.invoke("Restore", profileName)
+      ?.invoke("Restore", profile?.profileName)
       .then(() => {
         toast({
           title: "Успешно",
@@ -92,7 +93,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const onBuildDistributive = () => {
     setIsRestoring(true);
     connectionHub
-      ?.invoke("Build", profileName)
+      ?.invoke("Build", profile?.profileName)
       .then(() => {
         toast({
           title: "Успешно",

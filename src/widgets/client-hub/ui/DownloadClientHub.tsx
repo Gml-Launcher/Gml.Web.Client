@@ -5,9 +5,10 @@ import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
 
 import { useConnectionHub } from "../lib/useConnectionHub";
+import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 
 interface DownloadClientHubProps {
-  profileName: string;
+  profile: ProfileExtendedBaseEntity;
   isLoading?: boolean;
 }
 
@@ -23,7 +24,11 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           <p className="text-sm text-gray-700">Необходимо загрузить клиент</p>
         </div>
         <div className="flex flex-col gap-y-1 w-[32rem]">
-          <Button className="w-fit" onClick={onDownloadDistributive} disabled={isDisable}>
+          <Button
+            className="w-fit"
+            onClick={onDownloadDistributive}
+            disabled={isDisable || !props.profile || !props.profile.hasUpdate}
+          >
             Загрузить
           </Button>
         </div>
@@ -34,7 +39,11 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           <p className="text-sm text-gray-700">Необходимо собрать профиль</p>
         </div>
         <div className="flex flex-col gap-y-1 w-[32rem]">
-          <Button className="w-fit" onClick={onBuildDistributive} disabled={isDisable}>
+          <Button
+            className="w-fit"
+            onClick={onBuildDistributive}
+            disabled={isDisable || !props.profile || !props.profile.hasUpdate}
+          >
             Собрать
           </Button>
         </div>
