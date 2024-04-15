@@ -57,7 +57,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       </Section>
 
       <Section title="Загрузка клиента" subtitle="Необходимо для генерации клиента Minecraft">
-        <DownloadClientHub key="DownloadClientHub" profileName={params.name} />
+        <DownloadClientHub key="DownloadClientHub" profile={profile} />
       </Section>
     </>
   );
