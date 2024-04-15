@@ -3,10 +3,22 @@
 import { Skeleton } from "@/shared/ui/skeleton";
 import { DownloadClientHub } from "@/widgets/client-hub";
 import { EditProfileForm } from "@/features/edit-profile-form";
+import { DASHBOARD_PAGES } from "@/shared/routes";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
 
 export const ProfileLoading = () => {
   return (
     <>
+      <Breadcrumbs
+        current={"..."}
+        breadcrumbs={[
+          { value: "Главная", path: DASHBOARD_PAGES.HOME },
+          {
+            value: "Профили",
+            path: DASHBOARD_PAGES.PROFILES,
+          },
+        ]}
+      />
       <div className="flex gap-x-8 items-center">
         <Skeleton className="h-24 w-24" />
         <div className="flex flex-col gap-y-2">
@@ -30,7 +42,7 @@ export const ProfileLoading = () => {
           <p className="text-sm text-gray-700">Необходимо для генерации клиента Minecraft</p>
         </div>
         <hr />
-        <DownloadClientHub key="DownloadClientHub" profileName={""} isLoading />
+        <DownloadClientHub key="DownloadClientHub" isLoading />
       </section>
     </>
   );

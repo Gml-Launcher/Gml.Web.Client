@@ -8,7 +8,7 @@ import { useConnectionHub } from "../lib/useConnectionHub";
 import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 
 interface DownloadClientHubProps {
-  profile: ProfileExtendedBaseEntity;
+  profile?: ProfileExtendedBaseEntity;
   isLoading?: boolean;
 }
 

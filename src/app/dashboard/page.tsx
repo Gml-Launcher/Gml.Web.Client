@@ -1,9 +1,15 @@
-import { Metadata } from 'next';
+import { Metadata } from "next";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: 'Дашборд',
+  title: "Дашборд",
 };
 
 export default async function DashboardPage() {
-  return <>Дашборд</>;
+  return (
+    <>
+      <Breadcrumbs current={"Главная"} />
+      <h3>Дашборд</h3>
+    </>
+  );
 }

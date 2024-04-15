@@ -6,6 +6,8 @@ import { GenerateLauncherDialog } from "@/widgets/GenerateLauncherDialog";
 import { AuthenticationMethodDialog } from "@/widgets/AuthenticationMethodDialog";
 import { SentryConnectDialog } from "@/widgets/SentryConnectDialog";
 import { useSentry } from "@/shared/hooks";
+import { DASHBOARD_PAGES } from "@/shared/routes";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
 
 export const IntegrationsPage = () => {
   const [isGenerateLauncherDialogOpen, setIsGenerateLauncherDialogOpen] = useState(false);
@@ -21,6 +23,10 @@ export const IntegrationsPage = () => {
 
   return (
     <>
+      <Breadcrumbs
+        current={"Интеграции"}
+        breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
+      />
       <div className="flex flex-col items-start py-4">
         <div className="flex justify-between w-full">
           <h1 className="text-xl font-bold mb-8">Интеграции</h1>

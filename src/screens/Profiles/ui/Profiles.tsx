@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Button } from "@/shared/ui/button";
 import { CreateProfileDialog } from "@/widgets/CreateProfileDialog";
 import { ProfilesTable } from "@/widgets/profiles-table";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 export const ProfilesPage = () => {
   const [isCreateProfileDialog, setIsCreateProfileDialog] = useState(false);
@@ -12,6 +14,10 @@ export const ProfilesPage = () => {
 
   return (
     <>
+      <Breadcrumbs
+        current={"Профили"}
+        breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
+      />
       <div className="flex flex-col items-start py-4">
         <div className="flex justify-between w-full">
           <h1 className="text-xl font-bold mb-8">Профили</h1>

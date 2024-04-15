@@ -9,6 +9,8 @@ import Image from "next/image";
 import { Section } from "@/entities/Section";
 import { ProfileLoading } from "@/screens/Profile";
 import { EditProfileForm } from "@/features/edit-profile-form/ui/EditProfileForm";
+import { DASHBOARD_PAGES } from "@/shared/routes";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -33,6 +35,16 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
 
   return (
     <>
+      <Breadcrumbs
+        current={profile.profileName}
+        breadcrumbs={[
+          { value: "Главная", path: DASHBOARD_PAGES.HOME },
+          {
+            value: "Профили",
+            path: DASHBOARD_PAGES.PROFILES,
+          },
+        ]}
+      />
       <div className="flex gap-x-8 items-center">
         <div className={"flex justify-center items-center h-24 w-24 bg-gray-50 rounded-lg"}>
           <Image
