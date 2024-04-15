@@ -7,16 +7,19 @@ import {
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
   TGetInstallClientBranchesResponse,
+  TGetSentryConnectRequest,
+  TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
+  TPutSentryConnectRequest,
+  TPutSentryConnectResponse,
 } from "@/shared/api/contracts";
 
 class IntegrationService {
   private BASE_URL = "/integrations";
-
   private BASE_URL_AUTH = `${this.BASE_URL}/auth`;
-
   private BASE_URL_GITHUB = `${this.BASE_URL}/github`;
+  private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<
@@ -48,6 +51,18 @@ class IntegrationService {
     const { data } = await $api.get<TGetInstallClientBranchesResponse>(
       `${this.BASE_URL_GITHUB}/launcher/versions`,
     );
+
+    return data;
+  }
+
+  async getSentryConnect(params: TGetSentryConnectRequest): Promise<TGetSentryConnectResponse> {
+    const { data } = await $api.get<TGetSentryConnectResponse>(this.BASE_URL_SENTRY, { params });
+
+    return data;
+  }
+
+  async putSentryConnect(body: TPutSentryConnectRequest): Promise<TPutSentryConnectResponse> {
+    const { data } = await $api.put<TPutSentryConnectResponse>(this.BASE_URL_SENTRY, body);
 
     return data;
   }

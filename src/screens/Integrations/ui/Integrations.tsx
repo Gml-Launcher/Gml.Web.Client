@@ -4,6 +4,8 @@ import { useState } from "react";
 import { IntegrationCard } from "@/widgets/IntegrationCard";
 import { GenerateLauncherDialog } from "@/widgets/GenerateLauncherDialog";
 import { AuthenticationMethodDialog } from "@/widgets/AuthenticationMethodDialog";
+import { SentryConnectDialog } from "@/widgets/SentryConnectDialog";
+import { useSentry } from "@/shared/hooks";
 
 export const IntegrationsPage = () => {
   const [isGenerateLauncherDialogOpen, setIsGenerateLauncherDialogOpen] = useState(false);
@@ -11,6 +13,11 @@ export const IntegrationsPage = () => {
 
   const [isAuthenticationDialogOpen, setIsAuthenticationDialogOpen] = useState(false);
   const onAuthenticationDialogToggle = () => setIsAuthenticationDialogOpen((prev) => !prev);
+
+  const [isSentryConnectDialogOpen, setIsSentryConnectDialogOpen] = useState(false);
+  const onSentryConnectDialogToggle = () => setIsSentryConnectDialogOpen((prev) => !prev);
+
+  const { data: sentry, isLoading: isLoadingSentry } = useSentry();
 
   return (
     <>
@@ -28,6 +35,14 @@ export const IntegrationsPage = () => {
             title="Сборка лаунчера"
             description="Создайте лаунчер для платформ Windows, MacOS и Linux в пару кликов"
             action={onGenerateLauncherDialogToggle}
+          />
+          <IntegrationCard
+            title="Sentry"
+            description={"Подключение платформы для отслеживания ошибок и мониторинга приложений"}
+            action={onSentryConnectDialogToggle}
+            isDisabled={isLoadingSentry}
+            status={sentry?.url ? "CONNECTED" : "UNCONNECTED"}
+            buttonText={sentry?.url ? "Изменить" : "Подключить"}
           />
           <IntegrationCard
             isDisabled
@@ -51,6 +66,11 @@ export const IntegrationsPage = () => {
       <GenerateLauncherDialog
         open={isGenerateLauncherDialogOpen}
         onOpenChange={onGenerateLauncherDialogToggle}
+      />
+
+      <SentryConnectDialog
+        open={isSentryConnectDialogOpen}
+        onOpenChange={onSentryConnectDialogToggle}
       />
     </>
   );

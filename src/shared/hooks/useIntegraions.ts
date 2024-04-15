@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { isAxiosError } from "axios";
 
-import { AuthIntegrationBaseEntity, TPostAuthIntegrationsRequest } from "@/shared/api/contracts";
+import {
+  AuthIntegrationBaseEntity,
+  TPostAuthIntegrationsRequest,
+  TPutSentryConnectRequest,
+} from "@/shared/api/contracts";
 import { integrationService } from "@/shared/services/IntegrationService";
 import { useToast } from "@/shared/ui/use-toast";
 
@@ -69,4 +73,38 @@ export const useGithubLauncherVersions = () => {
   });
 
   return { data: data?.data, isLoading };
+};
+
+export const useSentry = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["get-sentry"],
+    queryFn: () => integrationService.getSentryConnect({}),
+  });
+
+  return { data: data?.data, isLoading };
+};
+
+export const useEditSentry = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["update-sentry"],
+    mutationFn: (data: TPutSentryConnectRequest) => integrationService.putSentryConnect(data),
+    onSuccess: async (data) => {
+      toast({
+        title: "Успешно",
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
 };

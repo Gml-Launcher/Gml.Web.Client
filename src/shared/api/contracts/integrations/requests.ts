@@ -1,5 +1,8 @@
-import { AuthIntegrationBaseEntity } from "@/shared/api/contracts";
-import { BranchBaseEntity } from "@/shared/api/contracts/integrations/BranchBaseEntity";
+import {
+  AuthIntegrationBaseEntity,
+  BranchBaseEntity,
+  SentryBaseEntity,
+} from "@/shared/api/contracts";
 import { ResponseBaseEntity } from "@/shared/api/schemas";
 
 // Получение списка серверов для авторизации
@@ -26,3 +29,13 @@ export type TPostAuthIntegrationsRequest = {
   endpoint: string;
 };
 export type TPostAuthIntegrationsResponse = ResponseBaseEntity & {};
+
+// Получение активного сервиса авторизации
+export type TGetSentryConnectRequest = {};
+export type TGetSentryConnectResponse = ResponseBaseEntity & {
+  data: SentryBaseEntity;
+};
+
+// Изменение сервера авторизации
+export type TPutSentryConnectRequest = { url: string };
+export type TPutSentryConnectResponse = ResponseBaseEntity & {};
