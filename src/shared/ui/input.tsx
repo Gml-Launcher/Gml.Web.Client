@@ -28,7 +28,7 @@ export const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
   ({ className, id, fileTypes, type = "file", ...props }, ref) => (
     <label
       htmlFor={id}
-      className="bg-white text-black text-base rounded w-full h-32 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed font-[sans-serif]"
+      className="bg-white text-black text-base rounded w-full h-32 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 dark:border-gray-800 border-dashed font-[sans-serif]"
     >
       <div className="flex justify-center items-center bg-gray-100 w-12 h-12 rounded-full mb-2">
         <UploadCloud size={24} />
