@@ -29,7 +29,7 @@ export const ProfileLoading = () => {
       <section className="flex flex-col gap-y-4 mb-8">
         <div className="flex flex-col gap-y-1">
           <h5 className="text-xl font-bold">Настройки профиля</h5>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
             Обновите фотографию профиля и подробную информацию здесь
           </p>
         </div>
@@ -39,7 +39,7 @@ export const ProfileLoading = () => {
       <section className="flex flex-col gap-y-4 mb-8">
         <div className="flex flex-col gap-y-1">
           <h5 className="text-xl font-bold">Загрузка клиента</h5>
-          <p className="text-sm text-gray-700">Необходимо для генерации клиента Minecraft</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">Необходимо для генерации клиента Minecraft</p>
         </div>
         <hr />
         <DownloadClientHub key="DownloadClientHub" isLoading />

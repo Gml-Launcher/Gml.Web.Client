@@ -16,6 +16,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
+import { ChangeTheme } from "@/features/change-theme";
 
 const menu = [
   {
@@ -114,14 +115,16 @@ export function Header() {
             ))}
           </div>
         ))}
-
-        <button
-          className="flex items-center gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted mt-auto"
-          onClick={destroySession}
-        >
-          <LogOutIcon className="h-4 w-4" />
-          Выйти из аккаунта
-        </button>
+        <div className="flex flex-col gap-y-4 mt-auto">
+          <ChangeTheme  />
+          <button
+            className="flex items-center gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted"
+            onClick={destroySession}
+          >
+            <LogOutIcon className="h-4 w-4" />
+            Выйти из аккаунта
+          </button>
+        </div>
       </nav>
       <nav className="lg:hidden flex items-center gap-x-4 p-6 border-b-2 border-gray-50">
         <h3 className="text-xl font-bold">GML Frontend</h3>
