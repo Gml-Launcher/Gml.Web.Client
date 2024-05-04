@@ -11,3 +11,7 @@ export type BranchBaseEntity = {
 export type SentryBaseEntity = {
   url: string;
 };
+
+export type TextureServiceBaseEntity = {
+  url: string;
+};
