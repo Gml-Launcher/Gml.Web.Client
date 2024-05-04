@@ -2,8 +2,10 @@ import {
   AuthIntegrationBaseEntity,
   BranchBaseEntity,
   SentryBaseEntity,
+  TextureServiceBaseEntity,
 } from "@/shared/api/contracts";
 import { ResponseBaseEntity } from "@/shared/api/schemas";
+import { TexturesServiceType } from "@/shared/enums";
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};
@@ -39,3 +41,13 @@ export type TGetSentryConnectResponse = ResponseBaseEntity & {
 // Изменение сервера авторизации
 export type TPutSentryConnectRequest = { url: string };
 export type TPutSentryConnectResponse = ResponseBaseEntity & {};
+
+// Получение сервиса текстур
+export type TGetConnectTexturesRequest = { type: TexturesServiceType };
+export type TGetConnectTexturesResponse = ResponseBaseEntity & {
+  data: TextureServiceBaseEntity;
+};
+
+// Изменение сервиса текстур
+export type TPutConnectTexturesRequest = { type: TexturesServiceType; url: string };
+export type TPutConnectTexturesResponse = ResponseBaseEntity & {};

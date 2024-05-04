@@ -5,10 +5,12 @@ import { isAxiosError } from "axios";
 import {
   TGetActiveAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
+  TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
 } from "@/shared/api/contracts";
 import { integrationService } from "@/shared/services/IntegrationService";
 import { useToast } from "@/shared/ui/use-toast";
+import { TexturesServiceType } from "@/shared/enums";
 
 export const useAuthIntegrations = () => {
   return useQuery({
@@ -83,11 +85,42 @@ export const useSentry = () => {
 
 export const useEditSentry = () => {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["update-sentry"],
     mutationFn: (data: TPutSentryConnectRequest) => integrationService.putSentryConnect(data),
+    onSuccess: async (data) => {
+      toast({
+        title: "Успешно",
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
+};
+
+export const useConnectTextures = (type: TexturesServiceType) => {
+  return useQuery({
+    queryKey: [`get-connect-textures-${type}`],
+    queryFn: () => integrationService.getConnectTextures({ type }),
+    select: ({ data }) => data,
+  });
+};
+
+export const useEditConnectTextures = () => {
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationKey: ["update-connect-textures"],
+    mutationFn: (data: TPutConnectTexturesRequest) => integrationService.putConnectTextures(data),
     onSuccess: async (data) => {
       toast({
         title: "Успешно",

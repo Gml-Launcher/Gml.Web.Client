@@ -6,8 +6,9 @@ import { IntegrationCard } from "@/widgets/IntegrationCard";
 import { GenerateLauncherDialog } from "@/widgets/GenerateLauncherDialog";
 import { AuthenticationMethodDialog } from "@/widgets/AuthenticationMethodDialog";
 import { SentryConnectDialog } from "@/widgets/SentryConnectDialog";
+import { ConnectTexturesDialog } from "@/widgets/ConnectTexturesDialog";
 
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { useSentry } from "@/shared/hooks";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 
@@ -20,6 +21,9 @@ export const IntegrationsPage = () => {
 
   const [isSentryConnectDialogOpen, setIsSentryConnectDialogOpen] = useState(false);
   const onSentryConnectDialogToggle = () => setIsSentryConnectDialogOpen((prev) => !prev);
+
+  const [isConnectTexturesDialogOpen, setIsConnectTexturesDialogOpen] = useState(false);
+  const onConnectTexturesDialogToggle = () => setIsConnectTexturesDialogOpen((prev) => !prev);
 
   const { data: sentry, isLoading: isLoadingSentry } = useSentry();
 
@@ -45,6 +49,13 @@ export const IntegrationsPage = () => {
             title="Сборка лаунчера"
             description="Создайте лаунчер для платформ Windows, MacOS и Linux в пару кликов"
             action={onGenerateLauncherDialogToggle}
+          />
+          <IntegrationCard
+            title="Сервис скинов"
+            description="Добавь интеграцию со сервисом скинов, для отображения скинов и плащей в игре"
+            action={onConnectTexturesDialogToggle}
+            status={"CONNECTED"}
+            buttonText={"Настроить"}
           />
           <IntegrationCard
             title="Sentry"
@@ -81,6 +92,11 @@ export const IntegrationsPage = () => {
       <SentryConnectDialog
         open={isSentryConnectDialogOpen}
         onOpenChange={onSentryConnectDialogToggle}
+      />
+
+      <ConnectTexturesDialog
+        open={isConnectTexturesDialogOpen}
+        onOpenChange={onConnectTexturesDialogToggle}
       />
     </>
   );
