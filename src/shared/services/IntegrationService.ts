@@ -6,11 +6,15 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
+  TGetConnectTexturesRequest,
+  TGetConnectTexturesResponse,
   TGetInstallClientBranchesResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
+  TPutConnectTexturesRequest,
+  TPutConnectTexturesResponse,
   TPutSentryConnectRequest,
   TPutSentryConnectResponse,
 } from "@/shared/api/contracts";
@@ -20,6 +24,7 @@ class IntegrationService {
   private BASE_URL_AUTH = `${this.BASE_URL}/auth`;
   private BASE_URL_GITHUB = `${this.BASE_URL}/github`;
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
+  private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<
@@ -63,6 +68,30 @@ class IntegrationService {
 
   async putSentryConnect(body: TPutSentryConnectRequest): Promise<TPutSentryConnectResponse> {
     const { data } = await $api.put<TPutSentryConnectResponse>(this.BASE_URL_SENTRY, body);
+
+    return data;
+  }
+
+  async getConnectTextures({
+    type,
+    ...params
+  }: TGetConnectTexturesRequest): Promise<TGetConnectTexturesResponse> {
+    const { data } = await $api.get<TGetConnectTexturesResponse>(
+      `${this.BASE_URL_TEXTURE}/${type}`,
+      { params },
+    );
+
+    return data;
+  }
+
+  async putConnectTextures({
+    type,
+    ...body
+  }: TPutConnectTexturesRequest): Promise<TPutConnectTexturesResponse> {
+    const { data } = await $api.put<TPutSentryConnectResponse>(
+      `${this.BASE_URL_TEXTURE}/${type}`,
+      body,
+    );
 
     return data;
   }
