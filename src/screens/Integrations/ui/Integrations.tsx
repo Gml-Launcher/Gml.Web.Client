@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
+
 import { IntegrationCard } from "@/widgets/IntegrationCard";
 import { GenerateLauncherDialog } from "@/widgets/GenerateLauncherDialog";
 import { AuthenticationMethodDialog } from "@/widgets/AuthenticationMethodDialog";
 import { SentryConnectDialog } from "@/widgets/SentryConnectDialog";
+
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
 import { useSentry } from "@/shared/hooks";
 import { DASHBOARD_PAGES } from "@/shared/routes";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
 
 export const IntegrationsPage = () => {
   const [isGenerateLauncherDialogOpen, setIsGenerateLauncherDialogOpen] = useState(false);

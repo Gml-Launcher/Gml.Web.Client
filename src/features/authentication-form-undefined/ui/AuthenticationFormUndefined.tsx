@@ -2,13 +2,14 @@
 
 import React from "react";
 
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+
 import { useEditIntegration } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Icons } from "@/shared/ui/icons";
 import { AuthenticationType } from "@/shared/enums";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;

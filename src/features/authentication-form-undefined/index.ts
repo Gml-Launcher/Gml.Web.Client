@@ -1,1 +1,1 @@
-export { AuthenticationFormAzuriom } from "@/features/authentication-form-azuriom/ui/AuthenticationFormAzuriom";
+export { AuthenticationFormUndefined } from "@/features/authentication-form-undefined/ui/AuthenticationFormUndefined";

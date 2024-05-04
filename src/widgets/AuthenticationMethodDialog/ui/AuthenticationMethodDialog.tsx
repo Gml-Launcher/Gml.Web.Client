@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 
 import { AuthenticationFormDle } from "@/features/authentication-form-dle";
 import { AuthenticationFormAzuriom } from "@/features/authentication-form-azuriom";
+import { AuthenticationFormUndefined } from "@/features/authentication-form-undefined";
+import { AuthenticationFormAny } from "@/features/authentication-form-any";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { AuthenticationType, AuthenticationTypeOption } from "@/shared/enums";
 import { useActiveAuthIntegrations, useAuthIntegrations } from "@/shared/hooks";
-import { AuthenticationFormUndefined } from "@/features/authentication-form-undefined/ui/AuthenticationFormUndefined";
-import { AuthenticationFormAny } from "@/features/authentication-form-any/ui/AuthenticationFormAny";
 
 interface AuthenticationMethodDialogProps {
   open: boolean;

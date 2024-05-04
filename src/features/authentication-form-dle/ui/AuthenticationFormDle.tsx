@@ -2,9 +2,11 @@
 
 import React from "react";
 
-import { SubmitHandler, useForm } from "react-hook-form";
+import Link from "next/link";
 
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useEditIntegration, useGetActiveAuthIntegrations } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -18,9 +20,9 @@ import {
 } from "@/shared/ui/form";
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
-import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 import { AuthenticationType } from "@/shared/enums";
-import Link from "next/link";
+
+import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -79,7 +81,11 @@ export function AuthenticationFormDle({ className, onOpenChange, ...props }: Sig
               </FormDescription>
             )}
           </FormItem>
-          <Button type="submit" className="w-fit ml-auto" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-fit ml-auto"
+            disabled={isPending || !form.formState.isDirty}
+          >
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Сохранить
           </Button>

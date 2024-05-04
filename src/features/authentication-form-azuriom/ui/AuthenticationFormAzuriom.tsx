@@ -12,8 +12,9 @@ import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
-import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 import { AuthenticationType } from "@/shared/enums";
+
+import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -60,7 +61,11 @@ export function AuthenticationFormAzuriom({ className, onOpenChange, ...props }:
             )}
           </FormItem>
 
-          <Button type="submit" className="w-fit ml-auto" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-fit ml-auto"
+            disabled={isPending || !form.formState.isDirty}
+          >
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Сохранить
           </Button>
