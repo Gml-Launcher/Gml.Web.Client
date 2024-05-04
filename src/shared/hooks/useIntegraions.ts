@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 
 import {
-  AuthIntegrationBaseEntity,
+  TGetActiveAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
   TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
@@ -12,30 +12,30 @@ import { integrationService } from "@/shared/services/IntegrationService";
 import { useToast } from "@/shared/ui/use-toast";
 import { TexturesServiceType } from "@/shared/enums";
 
-export const useCurrentIntegration = () => {
-  const { data } = useQuery<AuthIntegrationBaseEntity>({
-    queryKey: ["integration"],
+export const useAuthIntegrations = () => {
+  return useQuery({
+    queryKey: ["integrations/findAll"],
+    queryFn: () => integrationService.getAuthIntegrations(),
+    select: ({ data }) => data,
   });
+};
+
+export const useGetActiveAuthIntegrations = (): TGetActiveAuthIntegrationsResponse => {
+  const queryClient = useQueryClient();
+
+  const data = queryClient.getQueryData<TGetActiveAuthIntegrationsResponse>([
+    "integrations/findActive",
+  ]);
+  if (!data) return {} as TGetActiveAuthIntegrationsResponse;
 
   return data;
 };
-
-export const useAuthIntegrations = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["integrations/findAll"],
-    queryFn: () => integrationService.getAuthIntegrations(),
-  });
-
-  return { data, isLoading };
-};
-
 export const useActiveAuthIntegrations = () => {
-  const { data, isLoading } = useQuery({
+  return useQuery({
     queryKey: ["integrations/findActive"],
     queryFn: () => integrationService.getActiveAuthIntegration(),
+    select: ({ data }) => data,
   });
-
-  return { data, isLoading };
 };
 
 export const useEditIntegration = () => {
@@ -46,11 +46,8 @@ export const useEditIntegration = () => {
     mutationKey: ["update-integration"],
     mutationFn: (data: TPostAuthIntegrationsRequest) =>
       integrationService.putAuthIntegrations(data),
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["integrations/findAll"] });
-    },
     onSuccess: async (data) => {
-      await queryClient.setQueryData(["integration"], () => null);
+      await queryClient.invalidateQueries({ queryKey: ["integrations/findActive"] });
       toast({
         title: "Успешно",
         description: data.message,

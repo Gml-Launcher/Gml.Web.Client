@@ -6,30 +6,35 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  IntegrationFormSchemaType,
-  integrationSchema,
-} from "@/features/integration-form/lib/static";
-import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
+import { useEditIntegration, useGetActiveAuthIntegrations } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
+import { AuthenticationType } from "@/shared/enums";
+
+import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
 }
 
-export function IntegrationForm({ className, onOpenChange, ...props }: SignInFormProps) {
-  const currentIntegration = useCurrentIntegration();
+export function AuthenticationFormAzuriom({ className, onOpenChange, ...props }: SignInFormProps) {
+  const { data: integration } = useGetActiveAuthIntegrations();
 
   const { mutateAsync, isPending } = useEditIntegration();
 
   const form = useForm<IntegrationFormSchemaType>({
     values: {
-      endpoint: currentIntegration?.endpoint || "",
-      authType: currentIntegration?.authType || 1,
+      endpoint:
+        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM
+          ? String(integration.endpoint)
+          : "",
+      authType:
+        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM
+          ? integration.authType
+          : AuthenticationType.AUTHENTICATION_TYPE_AZURIOM,
     },
     resolver: zodResolver(integrationSchema),
   });
@@ -47,16 +52,20 @@ export function IntegrationForm({ className, onOpenChange, ...props }: SignInFor
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
-            <FormLabel>Введите эндпоинт</FormLabel>
+            <FormLabel>Введите ссылку на Ваш сайт</FormLabel>
             <FormControl>
-              <Input placeholder="Введите эндпоинт" {...form.register("endpoint")} />
+              <Input placeholder="Введите ссылку на Ваш сайт" {...form.register("endpoint")} />
             </FormControl>
             {form.formState.errors.endpoint && (
               <FormMessage>{form.formState.errors.endpoint.message}</FormMessage>
             )}
           </FormItem>
 
-          <Button type="submit" className="w-fit ml-auto" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-fit ml-auto"
+            disabled={isPending || !form.formState.isDirty}
+          >
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Сохранить
           </Button>

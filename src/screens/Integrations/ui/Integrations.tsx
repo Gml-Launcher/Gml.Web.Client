@@ -42,6 +42,8 @@ export const IntegrationsPage = () => {
             title="Аутентификация"
             description="Синхронизация и управление данными о пользователях на платформе"
             action={onAuthenticationDialogToggle}
+            status={"CONNECTED"}
+            buttonText={"Изменить"}
           />
           <IntegrationCard
             title="Сборка лаунчера"
