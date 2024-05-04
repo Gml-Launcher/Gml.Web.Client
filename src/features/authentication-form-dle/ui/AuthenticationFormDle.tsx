@@ -5,31 +5,42 @@ import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import {
-  IntegrationFormSchemaType,
-  integrationSchema,
-} from "@/features/integration-form/lib/static";
-import { useCurrentIntegration, useEditIntegration } from "@/shared/hooks";
+import { useEditIntegration, useGetActiveAuthIntegrations } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/ui/form";
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
+import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
+import { AuthenticationType } from "@/shared/enums";
+import Link from "next/link";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
 }
 
-export function IntegrationForm({ className, onOpenChange, ...props }: SignInFormProps) {
-  const currentIntegration = useCurrentIntegration();
+export function AuthenticationFormDle({ className, onOpenChange, ...props }: SignInFormProps) {
+  const { data: integration } = useGetActiveAuthIntegrations();
 
   const { mutateAsync, isPending } = useEditIntegration();
 
   const form = useForm<IntegrationFormSchemaType>({
     values: {
-      endpoint: currentIntegration?.endpoint || "",
-      authType: currentIntegration?.authType || 1,
+      endpoint:
+        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE
+          ? String(integration.endpoint)
+          : "",
+      authType:
+        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE
+          ? integration.authType
+          : AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE,
     },
     resolver: zodResolver(integrationSchema),
   });
@@ -51,11 +62,23 @@ export function IntegrationForm({ className, onOpenChange, ...props }: SignInFor
             <FormControl>
               <Input placeholder="Введите эндпоинт" {...form.register("endpoint")} />
             </FormControl>
-            {form.formState.errors.endpoint && (
+
+            {form.formState.errors.endpoint ? (
               <FormMessage>{form.formState.errors.endpoint.message}</FormMessage>
+            ) : (
+              <FormDescription>
+                Не знаете где взять файл auth.php?{" "}
+                <Link
+                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                  href="https://stackoverflow.com/"
+                  passHref={true}
+                  target="_blank"
+                >
+                  Скачайте по ссылке
+                </Link>
+              </FormDescription>
             )}
           </FormItem>
-
           <Button type="submit" className="w-fit ml-auto" disabled={isPending}>
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Сохранить
