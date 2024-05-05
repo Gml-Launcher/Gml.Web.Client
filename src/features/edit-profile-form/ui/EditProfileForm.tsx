@@ -52,7 +52,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Название</h6>
-              <p className="text-sm text-gray-700">Отображается на клиенте</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Отображается на клиенте</p>
             </div>
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <Input
@@ -68,7 +68,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Описание</h6>
-              <p className="text-sm text-gray-700">Отображается в лаунчере</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
             </div>
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <Textarea placeholder="Введите описание сервера" {...form.register("description")} />
@@ -80,7 +80,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Иконка</h6>
-              <p className="text-sm text-gray-700">Отображается в лаунчере</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
               {profile ? (
                 <Image
                   className="w-16 h-16 mt-2"

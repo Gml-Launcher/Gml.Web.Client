@@ -21,7 +21,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
       <div className="flex gap-x-8">
         <div className="flex flex-col gap-y-1 w-96">
           <h6 className="text-sm font-bold">Шаг первый</h6>
-          <p className="text-sm text-gray-700">Необходимо загрузить клиент</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">Необходимо загрузить клиент</p>
         </div>
         <div className="flex flex-col gap-y-1 w-[32rem]">
           <Button
@@ -36,7 +36,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
       <div className="flex gap-x-8">
         <div className="flex flex-col gap-y-1 w-96">
           <h6 className="text-sm font-bold">Шаг второй</h6>
-          <p className="text-sm text-gray-700">Необходимо собрать профиль</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">Необходимо собрать профиль</p>
         </div>
         <div className="flex flex-col gap-y-1 w-[32rem]">
           <Button
@@ -52,7 +52,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
         <div className="flex gap-x-8">
           <div className="flex flex-col gap-y-1 w-96">
             <h6 className="text-sm font-bold">Прогресс</h6>
-            <p className="text-sm text-gray-700">Выполнено на {progress}% из 100%</p>
+            <p className="text-sm text-gray-700 dark:text-gray-300">Выполнено на {progress}% из 100%</p>
           </div>
           <div className="flex flex-col gap-y-1 w-[32rem]">
             <Progress className="h-2" value={progress} />
