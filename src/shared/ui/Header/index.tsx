@@ -116,7 +116,7 @@ export function Header() {
           </div>
         ))}
         <div className="flex flex-col gap-y-4 mt-auto">
-          <ChangeTheme  />
+          <ChangeTheme />
           <button
             className="flex items-center gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted"
             onClick={destroySession}

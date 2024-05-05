@@ -6,6 +6,7 @@ import { MoonIcon, SunIcon } from "lucide-react"
 export const ChangeTheme = () => {
     const { setTheme, theme } = useTheme()
     const isDarkTheme = theme === 'dark'
+    console.log(theme)
     const onChangeTheme = () => {
         if (theme === 'light')
             return setTheme('dark')
@@ -19,7 +20,7 @@ export const ChangeTheme = () => {
                 {isDarkTheme ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
                 <Label className="cursor-pointer">Темная тема</Label>
             </div>
-            <Switch id="theme-mode" checked={isDarkTheme} />
+            <Switch checked={isDarkTheme} />
         </button>
     )
 }
