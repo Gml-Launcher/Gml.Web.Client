@@ -1,25 +1,30 @@
-import { useTheme } from "next-themes"
-import { Label } from "@/shared/ui/label"
-import { Switch } from "@/shared/ui/switch"
-import { MoonIcon, SunIcon } from "lucide-react"
+"use client";
+
+import { Label } from "@/shared/ui/label";
+import { Switch } from "@/shared/ui/switch";
+import { useTheme } from "next-themes";
 
 export const ChangeTheme = () => {
-    const { setTheme, theme } = useTheme()
-    const isDarkTheme = theme === 'dark'
-    const onChangeTheme = () => {
-        if (theme === 'light')
-            return setTheme('dark')
+  const { setTheme, systemTheme } = useTheme();
 
-        return setTheme('light')
-    }
+  const currentTheme: typeof systemTheme = localStorage.getItem("theme");
+  const isDarkTheme = currentTheme === "dark";
 
-    return (
-        <button className="flex justify-between items-center space-x-2 gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted cursor-pointer" onClick={onChangeTheme}>
-            <div className="flex items-center gap-x-2 cursor-pointer">
-                {isDarkTheme ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
-                <Label className="cursor-pointer">Темная тема</Label>
-            </div>
-            <Switch checked={isDarkTheme} />
-        </button>
-    )
-}
+  const onChangeTheme = () => {
+    if (currentTheme === "light") return setTheme("dark");
+
+    return setTheme("light");
+  };
+
+  return (
+    <div
+      className="flex justify-between items-center space-x-2 gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted cursor-pointer"
+      onClick={onChangeTheme}
+    >
+      <div className="flex items-center gap-x-2 cursor-pointer">
+        <Label className="cursor-pointer">Темная тема</Label>
+      </div>
+      <Switch checked={isDarkTheme} />
+    </div>
+  );
+};

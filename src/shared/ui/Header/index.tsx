@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
-
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { AUTH_PAGES, DASHBOARD_PAGES } from "@/shared/routes";
-import { cn } from "@/shared/lib/utils";
+
 import { BoxesIcon, LogOutIcon, PlusIcon } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
+
+import { ChangeTheme } from "@/features/change-theme";
+import { cn } from "@/shared/lib/utils";
+import { AUTH_PAGES, DASHBOARD_PAGES } from "@/shared/routes";
 import { removeStorageProfile, removeStorageTokens } from "@/shared/services";
 import {
   NavigationMenu,
@@ -16,7 +16,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
-import { ChangeTheme } from "@/features/change-theme";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const menu = [
   {

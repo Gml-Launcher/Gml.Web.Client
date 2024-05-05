@@ -119,7 +119,10 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
                 Сборка завершена на {percent.progressPercent}% из 100%
               </p>
             )}
-            <Button className="w-fit ml-auto" disabled={process.isProcessing}>
+            <Button
+              className="w-fit ml-auto"
+              disabled={process.isProcessing || !form.formState.isDirty}
+            >
               {process.isProcessing && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Скачать исходники
             </Button>
