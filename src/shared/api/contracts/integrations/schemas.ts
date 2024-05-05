@@ -1,6 +1,8 @@
+import { AuthenticationType } from "@/shared/enums";
+
 export type AuthIntegrationBaseEntity = {
   name: string;
-  authType: number;
+  authType: AuthenticationType;
   endpoint: string | null;
 };
 
@@ -9,5 +11,9 @@ export type BranchBaseEntity = {
 };
 
 export type SentryBaseEntity = {
+  url: string;
+};
+
+export type TextureServiceBaseEntity = {
   url: string;
 };

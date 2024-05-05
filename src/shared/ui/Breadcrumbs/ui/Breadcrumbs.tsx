@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/shared/ui/breadcrumb";
+import { Fragment } from "react";
 
 type BreadcrumbItemType = {
   value: string;
@@ -25,12 +26,12 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
       <BreadcrumbList>
         {breadcrumbs &&
           breadcrumbs.map(({ value, path }) => (
-            <>
+            <Fragment key={value}>
               <BreadcrumbItem>
                 <BreadcrumbLink href={path}>{value}</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-            </>
+            </Fragment>
           ))}
         <BreadcrumbItem>
           <BreadcrumbPage>{current}</BreadcrumbPage>

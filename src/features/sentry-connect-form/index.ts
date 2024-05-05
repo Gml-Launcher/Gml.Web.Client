@@ -1,1 +1,1 @@
-export { IntegrationForm } from '@/features/integration-form/ui/IntegrationForm';
+export { SentryConnectForm } from "@/features/sentry-connect-form/ui/SentryConnectForm";

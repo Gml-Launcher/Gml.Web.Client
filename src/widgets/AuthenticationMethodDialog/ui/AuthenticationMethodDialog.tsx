@@ -1,9 +1,14 @@
+import { useEffect, useState } from "react";
+
+import { AuthenticationFormDle } from "@/features/authentication-form-dle";
+import { AuthenticationFormAzuriom } from "@/features/authentication-form-azuriom";
+import { AuthenticationFormUndefined } from "@/features/authentication-form-undefined";
+import { AuthenticationFormAny } from "@/features/authentication-form-any";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Tabs, TabsContent } from "@/shared/ui/tabs";
-import { useAuthIntegrations } from "@/shared/hooks";
-import { useMemo, useState } from "react";
-import { IntegrationForm } from "@/features/integration-form";
+import { AuthenticationType, AuthenticationTypeOption } from "@/shared/enums";
+import { useActiveAuthIntegrations, useAuthIntegrations } from "@/shared/hooks";
 
 interface AuthenticationMethodDialogProps {
   open: boolean;
@@ -12,16 +17,22 @@ interface AuthenticationMethodDialogProps {
 
 export function AuthenticationMethodDialog(props: AuthenticationMethodDialogProps) {
   const { data: integrations } = useAuthIntegrations();
-  const [authenticationTab, setAuthenticationTab] = useState("DataLifeEngine");
+  const { data: activeIntegrations } = useActiveAuthIntegrations();
+
+  const [authenticationTab, setAuthenticationTab] = useState(String(activeIntegrations?.authType));
   const onAuthenticationTabToggle = (tab: string) => setAuthenticationTab(() => tab);
 
-  const TabsContentElement = useMemo(
-    (): { [index: string]: React.ReactElement } => ({
-      DataLifeEngine: <IntegrationForm onOpenChange={() => props.onOpenChange(false)} />,
-      Undefined: <h3>Метод авторизации в разработке</h3>,
-    }),
-    [],
-  );
+  useEffect(() => {
+    setAuthenticationTab(String(activeIntegrations?.authType));
+  }, [activeIntegrations]);
+
+  const isFormUndefined =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_UNDEFINED;
+  const isFormDatalife =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE;
+  const isFormAny = Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_ANY;
+  const isFormAzuriom =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM;
 
   return (
     <Dialog {...props}>
@@ -33,34 +44,36 @@ export function AuthenticationMethodDialog(props: AuthenticationMethodDialogProp
           <div className="flex gap-x-8 mb-8">
             <div className="flex flex-col gap-y-1 w-1/2">
               <h6 className="text-sm font-bold">Метод</h6>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Выберите метод аутентификации игроков в лаунчере
+              <p className="text-sm text-gray-700">
+                Текущий метод аутентификации игроков в лаунчере
               </p>
             </div>
             <div className="flex flex-col w-1/2">
               <Select defaultValue={authenticationTab} onValueChange={onAuthenticationTabToggle}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Выберите  vtnjl" />
+                  <SelectValue placeholder="Select a verified email to display" />
                 </SelectTrigger>
                 <SelectContent>
                   {integrations &&
-                    integrations.data.map(({ name }) => (
-                      <SelectItem key={name} value={name}>
-                        {name}
+                    integrations.map(({ authType }) => (
+                      <SelectItem key={authType} value={String(authType)}>
+                        {AuthenticationTypeOption[`OPTION_${authType}`]}
                       </SelectItem>
                     ))}
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <Tabs value={authenticationTab} defaultValue={authenticationTab}>
-            {integrations &&
-              integrations.data.map(({ name }) => (
-                <TabsContent key={name} value={name}>
-                  {TabsContentElement[name]}
-                </TabsContent>
-              ))}
-          </Tabs>
+          {isFormUndefined && (
+            <AuthenticationFormUndefined onOpenChange={() => props.onOpenChange(false)} />
+          )}
+          {isFormDatalife && (
+            <AuthenticationFormDle onOpenChange={() => props.onOpenChange(false)} />
+          )}
+          {isFormAny && <AuthenticationFormAny onOpenChange={() => props.onOpenChange(false)} />}
+          {isFormAzuriom && (
+            <AuthenticationFormAzuriom onOpenChange={() => props.onOpenChange(false)} />
+          )}
         </div>
       </DialogContent>
     </Dialog>
