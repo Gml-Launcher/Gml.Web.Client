@@ -49,6 +49,8 @@ export const IntegrationsPage = () => {
             title="Сборка лаунчера"
             description="Создайте лаунчер для платформ Windows, MacOS и Linux в пару кликов"
             action={onGenerateLauncherDialogToggle}
+            status={"CONNECTED"}
+            buttonText={"Собрать"}
           />
           <IntegrationCard
             title="Сервис скинов"

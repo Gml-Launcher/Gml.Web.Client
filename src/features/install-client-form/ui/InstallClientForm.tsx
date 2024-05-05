@@ -35,25 +35,18 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
     data: InstallClientFormSchemaType,
   ) => {
     process.onIsProcessingToggle();
-    connectionHub
-      ?.invoke("Download", data.branch, data.host, data.folder)
-      .then(() => {
-        toast({
-          title: "Успешно",
-          description: "Лаунчер успешно собран!",
-        });
-      })
-      .catch((error) => {
-        toast({
-          variant: "destructive",
-          title: "Ошибка!",
-          description: JSON.stringify(error),
-        });
-      })
-      .finally(() => {
-        process.onIsProcessingToggle();
-        percent.setProgressPercent(0);
+    try {
+      connectionHub?.invoke("Download", data.branch, data.host, data.folder);
+    } catch (error: unknown) {
+      toast({
+        variant: "destructive",
+        title: "Ошибка!",
+        description: JSON.stringify(error),
       });
+    } finally {
+      process.onIsProcessingToggle();
+      percent.setProgressPercent(0);
+    }
   };
 
   return (
@@ -121,19 +114,22 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
           />
 
           <div className="flex justify-between items-center">
-            {Boolean(percent.progressPercent) && (
+            {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
               <p className="text-gray-800 text-sm">
                 Сборка завершена на {percent.progressPercent}% из 100%
               </p>
             )}
-            <Button className="w-fit ml-auto" disabled={process.isProcessing}>
+            <Button
+              className="w-fit ml-auto"
+              disabled={process.isProcessing || !form.formState.isDirty}
+            >
               {process.isProcessing && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Скачать исходники
             </Button>
           </div>
         </form>
       </Form>
-      {Boolean(percent.progressPercent) && (
+      {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
         <Progress className="h-2" value={percent.progressPercent} />
       )}
     </div>

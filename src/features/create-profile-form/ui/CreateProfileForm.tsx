@@ -176,7 +176,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           />
 
           <div className="flex justify-end">
-            <Button disabled={isPending}>
+            <Button disabled={isPending || !form.formState.isDirty}>
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Создать
             </Button>

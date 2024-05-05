@@ -1,25 +1,34 @@
-import { useTheme } from "next-themes"
-import { Label } from "@/shared/ui/label"
-import { Switch } from "@/shared/ui/switch"
-import { MoonIcon, SunIcon } from "lucide-react"
+"use client";
+
+import { useTheme } from "next-themes";
+
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shared/ui/dropdown-menu";
+import { Button } from "@/shared/ui/button";
 
 export const ChangeTheme = () => {
-    const { setTheme, theme } = useTheme()
-    const isDarkTheme = theme === 'dark'
-    const onChangeTheme = () => {
-        if (theme === 'light')
-            return setTheme('dark')
+  const { setTheme } = useTheme();
 
-        return setTheme('light')
-    }
-
-    return (
-        <button className="flex justify-between items-center space-x-2 gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted cursor-pointer" onClick={onChangeTheme}>
-            <div className="flex items-center gap-x-2 cursor-pointer">
-                {isDarkTheme ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
-                <Label className="cursor-pointer">Темная тема</Label>
-            </div>
-            <Switch checked={isDarkTheme} />
-        </button>
-    )
-}
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="absolute right-8 bottom-8 z-10" variant="ghost" size="icon">
+          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Сменить тему</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};

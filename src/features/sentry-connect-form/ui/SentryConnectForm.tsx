@@ -49,7 +49,11 @@ export function SentryConnectForm({ className, onOpenChange, ...props }: SignInF
             )}
           </FormItem>
 
-          <Button type="submit" className="w-fit ml-auto" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-fit ml-auto"
+            disabled={isPending || !form.formState.isDirty}
+          >
             {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Сохранить
           </Button>
