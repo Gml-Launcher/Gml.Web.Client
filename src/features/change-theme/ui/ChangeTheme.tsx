@@ -5,9 +5,9 @@ import { Switch } from "@/shared/ui/switch";
 import { useTheme } from "next-themes";
 
 export const ChangeTheme = () => {
-  const { setTheme, systemTheme } = useTheme();
+  const { setTheme } = useTheme();
 
-  const currentTheme: typeof systemTheme = localStorage.getItem("theme");
+  const currentTheme = localStorage.getItem("theme");
   const isDarkTheme = currentTheme === "dark";
 
   const onChangeTheme = () => {
