@@ -6,7 +6,6 @@ import { MoonIcon, SunIcon } from "lucide-react"
 export const ChangeTheme = () => {
     const { setTheme, theme } = useTheme()
     const isDarkTheme = theme === 'dark'
-    console.log(theme)
     const onChangeTheme = () => {
         if (theme === 'light')
             return setTheme('dark')
