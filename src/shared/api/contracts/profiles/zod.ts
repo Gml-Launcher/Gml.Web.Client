@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const MAX_FILE_SIZE = 10_485_760;
+const MAX_FILE_SIZE = 1_000_000;
 const ACCEPTED_IMAGE_TYPES = ["image/png"];
 
 export const CreateProfileSchema = z.object({
@@ -20,14 +20,7 @@ export const CreateProfileSchema = z.object({
     }),
   }),
   gameLoader: z.string(),
-  icon: z
-    .any()
-    .refine((files) => files?.length == 1, "Выберите изображение")
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, "Максимальный размер файла 10мб")
-    .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-      "Расширение файла может быть только .png",
-    ),
+  icon: z.any(),
 });
 
 export const EditProfileSchema = z.object({

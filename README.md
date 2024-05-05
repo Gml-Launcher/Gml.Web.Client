@@ -1,7 +1,7 @@
 Добавить файл `.env`
 
 ```env
-BASE_URL=https://localhost.host
-PREFIX_API=api
-VERSION_API=v1
+NEXT_PUBLIC_BASE_URL=https://localhost
+NEXT_PUBLIC_PREFIX_API=api
+NEXT_PUBLIC_VERSION_API=v1
 ```
