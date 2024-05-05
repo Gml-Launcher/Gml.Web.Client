@@ -20,7 +20,7 @@ export const IntegrationCard = (props: IntegrationCardProps) => {
         <div className="flex justify-between">
           <h6 className="text-sm font-bold">{title}</h6>
         </div>
-        {description && <p className="text-sm text-gray-700">{description}</p>}
+        {description && <p className="text-sm text-gray-700 dark:text-gray-300">{description}</p>}
       </div>
       <Button size="sm" variant="outline" className="w-fit" onClick={action} disabled={isDisabled}>
         {status === "CONNECTED" && <Settings2 className="mr-2" size={16} />}

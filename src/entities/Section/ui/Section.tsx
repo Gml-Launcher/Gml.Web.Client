@@ -12,7 +12,7 @@ export const Section = (props: SectionProps) => {
     <section className="flex flex-col gap-y-4 mb-8" {...rest}>
       <div className="flex flex-col gap-y-1">
         {title && <h5 className="text-xl font-bold">{title}</h5>}
-        {subtitle && <p className="text-sm text-gray-700">{subtitle}</p>}
+        {subtitle && <p className="text-sm text-gray-700 dark:text-gray-300">{subtitle}</p>}
       </div>
       <hr />
       {children}

@@ -57,7 +57,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         </div>
         <div className="flex flex-col gap-y-2">
           <h2 className="text-4xl font-bold">Профиль {profile.profileName}</h2>
-          <p className="text-sm text-gray-700">{profile.clientVersion}</p>
+          <p className="text-sm text-gray-700 dark:text-gray-300">{profile.clientVersion}</p>
         </div>
       </div>
 
