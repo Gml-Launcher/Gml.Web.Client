@@ -1,5 +1,6 @@
-import { IntegrationsPage } from "@/screens/Integrations";
 import { Metadata } from "next";
+
+import { IntegrationsPage } from "@/screens/integrations";
 
 export const metadata: Metadata = {
   title: "Интеграции",

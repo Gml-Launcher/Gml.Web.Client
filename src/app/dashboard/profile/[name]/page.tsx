@@ -1,5 +1,6 @@
-import { ProfilePage } from "@/screens/Profile";
 import type { Metadata } from "next";
+
+import { ProfilePage } from "@/screens/profile";
 
 type PageProps = {
   params: { name: string };

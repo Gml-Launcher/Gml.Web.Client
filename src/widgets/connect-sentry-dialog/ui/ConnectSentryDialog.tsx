@@ -1,12 +1,12 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
-import { SentryConnectForm } from "@/features/sentry-connect-form/ui/SentryConnectForm";
+import { ConnectSentryForm } from "@/features/connect-sentry-form/ui/ConnectSentryForm";
 
 interface AuthenticationMethodDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function SentryConnectDialog(props: AuthenticationMethodDialogProps) {
+export function ConnectSentryDialog(props: AuthenticationMethodDialogProps) {
   return (
     <Dialog {...props}>
       <DialogContent className="sm:max-w-[800px]">
@@ -14,7 +14,7 @@ export function SentryConnectDialog(props: AuthenticationMethodDialogProps) {
           <DialogTitle>Подключение Sentry</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-x-8">
-          <SentryConnectForm onOpenChange={() => props.onOpenChange(false)} />
+          <ConnectSentryForm onOpenChange={() => props.onOpenChange(false)} />
         </div>
       </DialogContent>
     </Dialog>

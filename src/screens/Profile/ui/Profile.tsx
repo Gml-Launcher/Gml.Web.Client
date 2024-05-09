@@ -1,16 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
+
+import Image from "next/image";
+
+import { DownloadClientHub } from "@/widgets/client-hub";
+
+import { Section } from "@/entities/Section";
+
+import { EditProfileForm } from "@/features/edit-profile-form/ui/EditProfileForm";
+
+import { DASHBOARD_PAGES } from "@/shared/routes";
 import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
 import { useProfile } from "@/shared/hooks";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services/AuthTokenService";
-import { DownloadClientHub } from "@/widgets/client-hub";
-import Image from "next/image";
-import { Section } from "@/entities/Section";
-import { ProfileLoading } from "@/screens/Profile";
-import { EditProfileForm } from "@/features/edit-profile-form/ui/EditProfileForm";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
+
+import { ProfileLoading } from "./ProfileLoading";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();

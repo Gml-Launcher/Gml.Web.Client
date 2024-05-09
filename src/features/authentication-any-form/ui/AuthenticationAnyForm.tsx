@@ -15,7 +15,7 @@ interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
 }
 
-export function AuthenticationFormAny({ className, onOpenChange, ...props }: SignInFormProps) {
+export function AuthenticationAnyForm({ className, onOpenChange, ...props }: SignInFormProps) {
   const { mutateAsync, isPending } = useEditIntegration();
 
   const onSubmit = async () => {

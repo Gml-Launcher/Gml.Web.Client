@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { AuthenticationFormDle } from "@/features/authentication-form-dle";
-import { AuthenticationFormAzuriom } from "@/features/authentication-form-azuriom";
-import { AuthenticationFormUndefined } from "@/features/authentication-form-undefined";
-import { AuthenticationFormAny } from "@/features/authentication-form-any";
+import { AuthenticationFormDle } from "@/features/authentication-dle-form";
+import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-form";
+import { AuthenticationFormUndefined } from "@/features/authentication-undefined-form";
+import { AuthenticationAnyForm } from "@/features/authentication-any-form";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
@@ -15,7 +15,7 @@ interface AuthenticationMethodDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function AuthenticationMethodDialog(props: AuthenticationMethodDialogProps) {
+export function ChooseAuthenticationMethodDialog(props: AuthenticationMethodDialogProps) {
   const { data: integrations } = useAuthIntegrations();
   const { data: activeIntegrations } = useActiveAuthIntegrations();
 
@@ -70,7 +70,7 @@ export function AuthenticationMethodDialog(props: AuthenticationMethodDialogProp
           {isFormDatalife && (
             <AuthenticationFormDle onOpenChange={() => props.onOpenChange(false)} />
           )}
-          {isFormAny && <AuthenticationFormAny onOpenChange={() => props.onOpenChange(false)} />}
+          {isFormAny && <AuthenticationAnyForm onOpenChange={() => props.onOpenChange(false)} />}
           {isFormAzuriom && (
             <AuthenticationFormAzuriom onOpenChange={() => props.onOpenChange(false)} />
           )}

@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 
-import { IntegrationCard } from "@/widgets/IntegrationCard";
-import { GenerateLauncherDialog } from "@/widgets/GenerateLauncherDialog";
-import { AuthenticationMethodDialog } from "@/widgets/AuthenticationMethodDialog";
-import { SentryConnectDialog } from "@/widgets/SentryConnectDialog";
-import { ConnectTexturesDialog } from "@/widgets/ConnectTexturesDialog";
+import { GenerateLauncherDialog } from "@/widgets/generate-launcher-dialog";
+import { ChooseAuthenticationMethodDialog } from "@/widgets/choose-authentication-method-dialog";
+import { ConnectSentryDialog } from "@/widgets/connect-sentry-dialog";
+import { ConnectTexturesDialog } from "@/widgets/connect-textures-dialog";
+
+import { IntegrationCard } from "@/entities/IntegrationCard";
 
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { useSentry } from "@/shared/hooks";
@@ -81,7 +82,7 @@ export const IntegrationsPage = () => {
         </div>
       </div>
 
-      <AuthenticationMethodDialog
+      <ChooseAuthenticationMethodDialog
         open={isAuthenticationDialogOpen}
         onOpenChange={onAuthenticationDialogToggle}
       />
@@ -91,7 +92,7 @@ export const IntegrationsPage = () => {
         onOpenChange={onGenerateLauncherDialogToggle}
       />
 
-      <SentryConnectDialog
+      <ConnectSentryDialog
         open={isSentryConnectDialogOpen}
         onOpenChange={onSentryConnectDialogToggle}
       />

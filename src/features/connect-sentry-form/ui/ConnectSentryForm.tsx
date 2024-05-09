@@ -18,7 +18,7 @@ interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
 }
 
-export function SentryConnectForm({ className, onOpenChange, ...props }: SignInFormProps) {
+export function ConnectSentryForm({ className, onOpenChange, ...props }: SignInFormProps) {
   const { data } = useSentry();
   const { mutateAsync, isPending } = useEditSentry();
 
