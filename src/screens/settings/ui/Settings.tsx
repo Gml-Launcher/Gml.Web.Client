@@ -1,8 +1,9 @@
 "use client";
 
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
-import { DASHBOARD_PAGES } from "@/shared/routes";
 import { EditSettingsPlatformForm } from "@/features/edit-settings-platform-form";
+
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 export const SettingsPage = () => {
   return (
