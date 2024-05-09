@@ -6,6 +6,7 @@ export const AUTH_PAGES = {
 
 export const DASHBOARD_PAGES = {
   HOME: "/dashboard",
+  ACCOUNT: "/dashboard/account",
   SETTINGS: "/dashboard/settings",
   SERVERS: "/dashboard/servers",
   INTEGRATIONS: "/dashboard/integrations",

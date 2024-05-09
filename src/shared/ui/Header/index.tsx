@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { BoxesIcon, LogOutIcon, PlusIcon } from "lucide-react";
+import { BoxesIcon, LogOutIcon } from "lucide-react";
 
 import { ChangeTheme } from "@/features/change-theme";
 import { cn } from "@/shared/lib/utils";
@@ -16,43 +16,41 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 const menu = [
   {
     item: "Профили",
     paths: [
-      {
-        icon: <PlusIcon />,
-        path: "",
-        text: "Создать профиль",
-        isDisabled: true,
-      },
+      // {
+      //   icon: <PlusIcon />,
+      //   path: "",
+      //   text: "Создать профиль",
+      //   isDisabled: true,
+      // },
       {
         icon: <BoxesIcon />,
         path: DASHBOARD_PAGES.PROFILES,
         text: "Список профилей",
-        isDisabled: false,
       },
     ],
   },
-  {
-    item: "Сервера",
-    paths: [
-      {
-        icon: <PlusIcon />,
-        path: "",
-        text: "Создать сервер",
-        isDisabled: true,
-      },
-      {
-        icon: <BoxesIcon />,
-        path: DASHBOARD_PAGES.SERVERS,
-        text: "Список серверов",
-        isDisabled: true,
-      },
-    ],
-  },
+  // {
+  //   item: "Сервера",
+  //   paths: [
+  //     {
+  //       icon: <PlusIcon />,
+  //       path: "",
+  //       text: "Создать сервер",
+  //       isDisabled: true,
+  //     },
+  //     {
+  //       icon: <BoxesIcon />,
+  //       path: DASHBOARD_PAGES.SERVERS,
+  //       text: "Список серверов",
+  //       isDisabled: true,
+  //     },
+  //   ],
+  // },
   {
     item: "Интеграции",
     paths: [
@@ -60,7 +58,16 @@ const menu = [
         icon: <BoxesIcon />,
         path: DASHBOARD_PAGES.INTEGRATIONS,
         text: "Список интеграций",
-        isDisabled: false,
+      },
+    ],
+  },
+  {
+    item: "Настройки платформы",
+    paths: [
+      {
+        icon: <BoxesIcon />,
+        path: DASHBOARD_PAGES.SETTINGS,
+        text: "Настройки платформы",
       },
     ],
   },
@@ -84,33 +91,18 @@ export function Header() {
         {menu.map(({ item, paths }) => (
           <div key={item} className="flex flex-col gap-y-1">
             <h6 className="text-sm font-bold text-muted-foreground ml-3">{item}</h6>
-            {paths.map(({ icon, text, path, isDisabled }) => (
+            {paths.map(({ icon, text, path }) => (
               <div key={text} className="m-0.5">
-                <Tooltip>
-                  <TooltipTrigger className="w-full">
-                    <Link
-                      className={cn(
-                        "flex items-center gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted",
-                        pathname === path && "text-foreground bg-muted",
-                        isDisabled && "pointer-events-none text-muted-foreground",
-                      )}
-                      href={path}
-                    >
-                      {icon}
-                      {text}
-                    </Link>
-                  </TooltipTrigger>
-                  {isDisabled && (
-                    <TooltipContent className="bg-black w-fit" side="right">
-                      <div className="flex flex-col gap-y-1">
-                        <h6 className="text-sm font-bold text-white">
-                          Сервис временно не работает
-                        </h6>
-                        <p className="text-sm text-gray-200">Мы уже работаем над этой фичей</p>
-                      </div>
-                    </TooltipContent>
+                <Link
+                  className={cn(
+                    "flex items-center gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted",
+                    pathname === path && "text-foreground bg-muted",
                   )}
-                </Tooltip>
+                  href={path}
+                >
+                  {icon}
+                  {text}
+                </Link>
               </div>
             ))}
           </div>
@@ -126,6 +118,7 @@ export function Header() {
           </button>
         </div>
       </nav>
+
       <nav className="lg:hidden flex items-center gap-x-4 p-6 border-b-2 border-gray-50">
         <h3 className="text-xl font-bold">GML Frontend</h3>
         <NavigationMenu>
@@ -134,13 +127,12 @@ export function Header() {
               <NavigationMenuItem key={item}>
                 <NavigationMenuTrigger>{item}</NavigationMenuTrigger>
                 <NavigationMenuContent className="p-4 min-w-64">
-                  {paths.map(({ text, path, icon, isDisabled }) => (
+                  {paths.map(({ text, path, icon }) => (
                     <Link
                       key={text}
                       className={cn(
                         "flex items-center gap-x-3 text-base p-2.5 rounded-lg transition-colors hover:bg-muted",
                         pathname === path && "text-foreground bg-muted",
-                        isDisabled && "pointer-events-none text-muted-foreground",
                       )}
                       href={path}
                     >
