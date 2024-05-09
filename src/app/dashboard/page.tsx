@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs/ui/Breadcrumbs";
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Дашборд",
