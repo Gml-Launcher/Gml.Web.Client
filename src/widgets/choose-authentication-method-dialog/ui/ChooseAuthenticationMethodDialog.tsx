@@ -1,23 +1,34 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
-import { AuthenticationFormDle } from "@/features/authentication-dle-form";
-import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-form";
-import { AuthenticationFormUndefined } from "@/features/authentication-undefined-form";
-import { AuthenticationAnyForm } from "@/features/authentication-any-form";
+import { Settings2 } from "lucide-react";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/dialog";
+import { AuthenticationFormUndefined } from "@/features/authentication-undefined-form";
+import { AuthenticationFormDle } from "@/features/authentication-dle-form";
+import { AuthenticationAnyForm } from "@/features/authentication-any-form";
+import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-form";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/ui/dialog";
+
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { AuthenticationType, AuthenticationTypeOption } from "@/shared/enums";
 import { useActiveAuthIntegrations, useAuthIntegrations } from "@/shared/hooks";
+import { Button } from "@/shared/ui/button";
 
-interface AuthenticationMethodDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
+export function ChooseAuthenticationMethodDialog() {
+  const [open, setOpen] = useState(false);
+  const onOpenChange = () => setOpen((prev) => !prev);
 
-export function ChooseAuthenticationMethodDialog(props: AuthenticationMethodDialogProps) {
-  const { data: integrations } = useAuthIntegrations();
-  const { data: activeIntegrations } = useActiveAuthIntegrations();
+  const { data: integrations, isLoading: isLoadingIntegration } = useAuthIntegrations();
+  const { data: activeIntegrations, isLoading: isLoadingActiveIntegration } =
+    useActiveAuthIntegrations();
 
   const [authenticationTab, setAuthenticationTab] = useState(String(activeIntegrations?.authType));
   const onAuthenticationTabToggle = (tab: string) => setAuthenticationTab(() => tab);
@@ -35,7 +46,18 @@ export function ChooseAuthenticationMethodDialog(props: AuthenticationMethodDial
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM;
 
   return (
-    <Dialog {...props}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button
+          size="sm"
+          variant="outline"
+          className="w-fit"
+          disabled={isLoadingIntegration || isLoadingActiveIntegration}
+        >
+          <Settings2 className="mr-2" size={16} />
+          Изменить
+        </Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Метод аутентификации</DialogTitle>
@@ -64,16 +86,10 @@ export function ChooseAuthenticationMethodDialog(props: AuthenticationMethodDial
               </Select>
             </div>
           </div>
-          {isFormUndefined && (
-            <AuthenticationFormUndefined onOpenChange={() => props.onOpenChange(false)} />
-          )}
-          {isFormDatalife && (
-            <AuthenticationFormDle onOpenChange={() => props.onOpenChange(false)} />
-          )}
-          {isFormAny && <AuthenticationAnyForm onOpenChange={() => props.onOpenChange(false)} />}
-          {isFormAzuriom && (
-            <AuthenticationFormAzuriom onOpenChange={() => props.onOpenChange(false)} />
-          )}
+          {isFormUndefined && <AuthenticationFormUndefined onOpenChange={onOpenChange} />}
+          {isFormDatalife && <AuthenticationFormDle onOpenChange={onOpenChange} />}
+          {isFormAny && <AuthenticationAnyForm onOpenChange={onOpenChange} />}
+          {isFormAzuriom && <AuthenticationFormAzuriom onOpenChange={onOpenChange} />}
         </div>
       </DialogContent>
     </Dialog>

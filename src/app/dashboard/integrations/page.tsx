@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { IntegrationsPage } from "@/pages/integrations";
+import { IntegrationsPage } from "@/views/integrations";
 
 export const metadata: Metadata = {
   title: "Интеграции",

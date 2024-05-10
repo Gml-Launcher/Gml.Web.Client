@@ -1,14 +1,18 @@
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 export const metadata: Metadata = {
   title: "Настройки",
 };
 
 export default async function SettingsPage() {
+  redirect(DASHBOARD_PAGES.PROFILES);
+
   return (
     <div className="flex flex-col items-start py-4">
       <h1 className="text-xl font-bold mb-8">Управление аккаунтом</h1>
