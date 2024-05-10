@@ -2,8 +2,6 @@
 
 import React from "react";
 
-import Link from "next/link";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,6 +19,7 @@ import {
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { AuthenticationType } from "@/shared/enums";
+import { HREF_GET_DATALIFE_ENGINE_AUTH_PHP } from "@/shared/constants";
 
 import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 
@@ -70,14 +69,14 @@ export function AuthenticationFormDle({ className, onOpenChange, ...props }: Sig
             ) : (
               <FormDescription>
                 Не знаете где взять файл auth.php?{" "}
-                <Link
+                <a
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  href="https://stackoverflow.com/"
-                  passHref={true}
+                  href={HREF_GET_DATALIFE_ENGINE_AUTH_PHP}
                   target="_blank"
+                  download="auth.php"
                 >
                   Скачайте по ссылке
-                </Link>
+                </a>
               </FormDescription>
             )}
           </FormItem>
