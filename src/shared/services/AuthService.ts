@@ -1,14 +1,14 @@
-import { $api } from '@/core/api';
+import { $api } from "@/core/api";
 import {
   TPostSignInRequest,
   TPostSignInResponse,
   TPostSignUpRequest,
   TPostSignUpResponse,
-} from '@/shared/api/contracts';
-import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from '@/shared/services';
+} from "@/shared/api/contracts";
+import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from "@/shared/services";
 
 class AuthService {
-  private BASE_URL = '/users';
+  private BASE_URL = "/users";
 
   async signUp(body: TPostSignUpRequest): Promise<TPostSignUpResponse> {
     const { data } = await $api.post<TPostSignUpResponse>(`${this.BASE_URL}/signup`, body);

@@ -1,9 +1,11 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
-import { SettingsPage } from "@/screens/settings";
+import { SettingsPage } from "@/views/settings";
 
 export const metadata: Metadata = {
   title: "Настройки платформы",
 };
-
-export default SettingsPage;
+const Page = async () => {
+  return <SettingsPage />;
+};
+export default Page;

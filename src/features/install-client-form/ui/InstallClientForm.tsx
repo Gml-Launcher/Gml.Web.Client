@@ -1,7 +1,3 @@
-"use client";
-
-import React from "react";
-
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,9 +15,11 @@ import { useToast } from "@/shared/ui/use-toast";
 import { InstallClientFormSchemaType, InstallClientSchema } from "../lib/static";
 import { useConnectionHub } from "../lib/useConnectionHub";
 
-interface InstallClientFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface InstallClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  onOpenChange: () => void;
+}
 
-export function InstallClientForm({ className, ...props }: InstallClientFormProps) {
+export function InstallClientForm({ className, onOpenChange, ...props }: InstallClientFormProps) {
   const { connectionHub, process, percent } = useConnectionHub();
   const { data: branches } = useGithubLauncherVersions();
   const { toast } = useToast();
@@ -36,7 +34,9 @@ export function InstallClientForm({ className, ...props }: InstallClientFormProp
   ) => {
     process.onIsProcessingToggle();
     try {
-      connectionHub?.invoke("Download", data.branch, data.host, data.folder);
+      connectionHub?.invoke("Download", data.branch, data.host, data.folder).then(() => {
+        onOpenChange();
+      });
     } catch (error: unknown) {
       toast({
         variant: "destructive",

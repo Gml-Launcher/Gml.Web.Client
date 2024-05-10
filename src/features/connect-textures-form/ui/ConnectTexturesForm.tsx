@@ -4,35 +4,34 @@ import React from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
 import { TexturesServiceType } from "@/shared/enums";
-import { useConnectTextures, useEditConnectTextures } from "@/shared/hooks";
+import { useEditConnectTextures } from "@/shared/hooks";
 import { Icons } from "@/shared/ui/icons";
 
 import { ConnectTexturesFormSchemaType, ConnectTexturesSchema } from "../lib/static";
+import { TextureServiceBaseEntity } from "@/shared/api/contracts";
 
 interface ConnectTexturesFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  skins?: TextureServiceBaseEntity;
+  cloaks?: TextureServiceBaseEntity;
   onOpenChange: (open: boolean) => void;
 }
 
 export function ConnectTexturesForm({
-  className,
+  skins,
+  cloaks,
   onOpenChange,
   ...props
 }: ConnectTexturesFormProps) {
-  const { data: textures_skins } = useConnectTextures(TexturesServiceType.TEXTURES_SERVICE_SKINS);
-  const { data: textures_cloaks } = useConnectTextures(TexturesServiceType.TEXTURES_SERVICE_CLOAKS);
-
   const { mutateAsync, isPending } = useEditConnectTextures();
 
   const form = useForm<ConnectTexturesFormSchemaType>({
     values: {
-      url_skins: textures_skins?.url || "",
-      url_cloaks: textures_cloaks?.url || "",
+      url_skins: skins?.url || "",
+      url_cloaks: cloaks?.url || "",
     },
     resolver: zodResolver(ConnectTexturesSchema),
   });
@@ -58,7 +57,7 @@ export function ConnectTexturesForm({
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className="grid gap-4" {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller

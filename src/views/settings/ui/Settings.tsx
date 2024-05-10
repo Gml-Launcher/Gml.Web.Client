@@ -1,5 +1,3 @@
-"use client";
-
 import { EditSettingsPlatformForm } from "@/features/edit-settings-platform-form";
 
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
