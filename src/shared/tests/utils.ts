@@ -48,3 +48,7 @@ export const type_button_delete_server = async (locator_row: Locator, locator_bu
 export const inspect_toast = async (page: Page, description: string) => {
   await page.waitForSelector(`text="${description}"`);
 };
+
+export const inspect_request = async (page: Page, url: string) => {
+  await page.waitForResponse((response) => response.url().includes(url));
+};

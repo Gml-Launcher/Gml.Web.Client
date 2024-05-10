@@ -1,6 +1,7 @@
 import { test } from "@playwright/test";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import {
+  inspect_request,
   inspect_toast,
   mock_server_name,
   mock_server_name_edited,
@@ -36,14 +37,14 @@ test.describe("Profile", () => {
     const input_server_version = page.locator("button").filter({ hasText: locator_server_version });
     const input_server_loader = page.locator("button").filter({ hasText: locator_server_loader });
 
-    await page.waitForResponse((response) => response.url().includes(url_get_profiles));
+    await inspect_request(page, url_get_profiles);
     await button_create_profile.click();
     await type_input_server_name(input_server_name);
     await type_input_server_description(input_server_description);
     await type_input_server_version(page, input_server_version);
     await type_input_server_loader(page, input_server_loader);
     await button_confirm_create_profile.click();
-    await page.waitForResponse((response) => response.url().includes(url_create_profile));
+    await inspect_request(page, url_create_profile);
 
     await inspect_toast(page, `Профиль "${mock_server_name}" успешно создан`);
   });
@@ -56,15 +57,15 @@ test.describe("Profile", () => {
     const input_server_name = page.getByPlaceholder(locator_server_name);
     const button_edit_profile = page.getByRole("button", { name: "Сохранить" });
 
-    await page.waitForResponse((response) => response.url().includes(url_get_profiles));
+    await inspect_request(page, url_get_profiles);
     await type_button_edit_server(table_row_with_server(`Выбрать строку ${mock_server_name}`));
-    await page.waitForResponse((response) => response.url().includes(url_get_info_profile));
+    await inspect_request(page, url_get_info_profile);
     await type_input_server_name(input_server_name, mock_server_name_edited);
     await button_edit_profile.click();
-    await page.waitForResponse((response) => response.url().includes(url_edit_profile));
+    await inspect_request(page, url_edit_profile);
 
     await page.goto(`${baseURL}${DASHBOARD_PAGES.PROFILES}`);
-    await page.waitForResponse((response) => response.url().includes(url_get_profiles));
+    await inspect_request(page, url_get_profiles);
     await type_button_edit_server(
       table_row_with_server(`Выбрать строку ${mock_server_name_edited}`),
     );
@@ -77,9 +78,9 @@ test.describe("Profile", () => {
     const table_row_with_server = page.getByRole("row", { name: locator_server });
     const button_delete_profile = page.getByRole("button", { name: "Удалить" });
 
-    await page.waitForResponse((response) => response.url().includes(url_get_profiles));
+    await inspect_request(page, url_get_profiles);
     await type_button_delete_server(table_row_with_server, button_delete_profile);
-    await page.waitForResponse((response) => response.url().includes(url_delete_profile));
+    await inspect_request(page, url_delete_profile);
 
     await inspect_toast(page, "Операция выполнена");
   });
