@@ -1,4 +1,4 @@
-import { $api } from "@/core/api";
+import { $api } from "@/app/api";
 import {
   TGetSettingsPlatformRequest,
   TGetSettingsPlatformResponse,

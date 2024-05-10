@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 
 import "./globals.css";
-import { QueryProvider } from "@/core/providers/QueryProvider";
-import { ThemeProvider } from "@/core/providers/ThemeProvider";
-import { TooltipProvider } from "@/core/providers/TooltipProvider";
+import { QueryProvider } from "@/app/providers/QueryProvider";
+import { ThemeProvider } from "@/app/providers/ThemeProvider";
+import { TooltipProvider } from "@/app/providers/TooltipProvider";
 import { cn } from "@/shared/lib/utils";
 import { Toaster } from "@/shared/ui/toaster";
 

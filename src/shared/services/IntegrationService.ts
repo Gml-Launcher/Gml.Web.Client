@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import { $api } from "@/core/api";
+import { $api } from "@/app/api";
 import {
   TGetActiveAuthIntegrationsRequest,
   TGetActiveAuthIntegrationsResponse,
