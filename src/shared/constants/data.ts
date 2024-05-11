@@ -1,0 +1,1 @@
+export const DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD = "dialog_authentication_method";
