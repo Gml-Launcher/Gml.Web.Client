@@ -7,7 +7,12 @@ import { IntegrationCard } from "@/entities/IntegrationCard";
 
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
-import { DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD } from "@/shared/constants/data";
+import {
+  DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD,
+  DATA_TEST_ID_DIALOG_CONNECT_SENTRY,
+  DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
+  DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
+} from "@/shared/constants/data";
 
 export const IntegrationsPage = () => {
   return (
@@ -31,16 +36,19 @@ export const IntegrationsPage = () => {
             title="Сборка лаунчера"
             description="Создайте лаунчер для платформ Windows, MacOS и Linux в пару кликов"
             dialog={<GenerateLauncherDialog />}
+            testid={DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER}
           />
           <IntegrationCard
             title="Сервис скинов"
             description="Добавь интеграцию со сервисом скинов, для отображения скинов и плащей в игре"
             dialog={<ConnectTexturesDialog />}
+            testid={DATA_TEST_ID_DIALOG_CONNECT_TEXTURES}
           />
           <IntegrationCard
             title="Sentry"
             description={"Подключение платформы для отслеживания ошибок и мониторинга приложений"}
             dialog={<ConnectSentryDialog />}
+            testid={DATA_TEST_ID_DIALOG_CONNECT_SENTRY}
           />
           <IntegrationCard
             title="Discord"

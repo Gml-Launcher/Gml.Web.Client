@@ -4,8 +4,8 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD } from "@/shared/constants/data";
 import { inspect_toast } from "@/shared/tests/utils";
 
-const mock_endpoint_url_azuriom = `https://azuriom.autotest.com/date=${Date.now()}`;
-const mock_endpoint_url_datalife_engine = `https://datalife.autotest.com/date=${Date.now()}`;
+const mock_host_azuriom = `https://azuriom.recloud.tech/autotest=${Date.now()}`;
+const mock_host_datalife = `https://datalife.recloud.tech/autotest=${Date.now()}`;
 
 test.describe("ChooseAuthenticationMethodDialog", () => {
   test("choose undefined", async ({ page, baseURL }) => {
@@ -58,7 +58,7 @@ test.describe("ChooseAuthenticationMethodDialog", () => {
     await widget_action.click();
     await combobox_list_method.click();
     await label_azuriom.click();
-    await input_endpoint.fill(mock_endpoint_url_azuriom);
+    await input_endpoint.fill(mock_host_azuriom);
     await button_save.click();
 
     await inspect_toast(page, "Сервис авторизации успешно обновлен");
@@ -78,7 +78,7 @@ test.describe("ChooseAuthenticationMethodDialog", () => {
     await widget_action.click();
     await combobox_list_method.click();
     await label_datalife_engine.click();
-    await input_endpoint.fill(mock_endpoint_url_datalife_engine);
+    await input_endpoint.fill(mock_host_datalife);
     await button_save.click();
 
     await inspect_toast(page, "Сервис авторизации успешно обновлен");

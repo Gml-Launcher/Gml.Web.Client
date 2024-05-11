@@ -145,7 +145,11 @@ export const EditSettingsPlatformForm = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input type="text" placeholder="Введите логин к хранилищу" {...field} />
+                          <Input
+                            type="text"
+                            placeholder="Введите Access Key хранилища"
+                            {...field}
+                          />
                         </FormControl>
                         {form.formState.errors.storageLogin && (
                           <FormMessage>
@@ -171,7 +175,11 @@ export const EditSettingsPlatformForm = () => {
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input type="text" placeholder="Введите пароль к хранилищу" {...field} />
+                          <Input
+                            type="text"
+                            placeholder="Введите Secret Key хранилища"
+                            {...field}
+                          />
                         </FormControl>
                         {form.formState.errors.storagePassword && (
                           <FormMessage>
