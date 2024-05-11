@@ -7,6 +7,7 @@ import { IntegrationCard } from "@/entities/IntegrationCard";
 
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
+import { DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD } from "@/shared/constants/data";
 
 export const IntegrationsPage = () => {
   return (
@@ -24,6 +25,7 @@ export const IntegrationsPage = () => {
             title="Аутентификация"
             description="Синхронизация и управление данными о пользователях на платформе"
             dialog={<ChooseAuthenticationMethodDialog />}
+            testid={DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD}
           />
           <IntegrationCard
             title="Сборка лаунчера"
