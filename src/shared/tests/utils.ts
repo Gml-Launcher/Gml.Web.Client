@@ -4,9 +4,9 @@ const mock_created_login = "autotestuser";
 const mock_created_email = "autotestuser@email.ru";
 const mock_created_password = "autotestuser-AUTOTEST-000";
 
-export const mock_server_name = "ATServerMock";
-export const mock_server_name_edited = "ATServerMockEdited";
-export const mock_server_description = "Описание профиля ATServerMock";
+export const mock_server_name = "autotestserver";
+export const mock_server_name_edited = "autotestserveredited";
+export const mock_server_description = "Описание профиля autotestserver";
 export const mock_server_version = "1.7.10";
 export const mock_server_loader = "Forge";
 
