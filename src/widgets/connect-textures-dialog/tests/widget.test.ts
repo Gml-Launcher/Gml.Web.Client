@@ -4,8 +4,9 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { inspect_request } from "@/shared/tests/utils";
 import { DATA_TEST_ID_DIALOG_CONNECT_TEXTURES } from "@/shared/constants/data";
 
-const mock_skins_endpoint_url = `https://textures.recloud.tech/skin/{userName}?date=${Date.now()}`;
-const mock_cloaks_endpoint_url = `https://textures.recloud.tech/cloak/{userName}?date=${Date.now()}`;
+const mock_host_skins = `https://textures.recloud.tech/skin/{userName}?autotest=${Date.now()}`;
+const mock_host_cloaks = `https://textures.recloud.tech/cloak/{userName}?autotest=${Date.now()}`;
+
 const put_skins_api_endpoint_url = "/api/v1/integrations/texture/skins";
 const put_cloaks_api_endpoint_url = "/api/v1/integrations/texture/cloaks";
 
@@ -21,8 +22,8 @@ test.describe("ConnectTexturesDialog", () => {
     const button_save = page.getByRole("button", { name: "Сохранить" });
 
     await widget_action.click();
-    await input_skins.fill(mock_skins_endpoint_url);
-    await input_cloaks.fill(mock_cloaks_endpoint_url);
+    await input_skins.fill(mock_host_skins);
+    await input_cloaks.fill(mock_host_cloaks);
     await button_save.click();
 
     const response_skins_raw = await inspect_request(page, put_skins_api_endpoint_url);

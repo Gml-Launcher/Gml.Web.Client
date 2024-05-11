@@ -4,8 +4,8 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { inspect_toast } from "@/shared/tests/utils";
 import { DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER } from "@/shared/constants/data";
 
-const mock_endpoint_url = "https://gmlb.recloud.tech";
-const mock_folder_name = "launcher";
+const mock_host = `https://api.recloud.tech/autotest?=${Date.now()}`;
+const mock_folder = "launcher";
 
 test.describe("GenerateLauncherDialog", () => {
   test("generate launcher dev-new", async ({ page, baseURL }) => {
@@ -23,8 +23,8 @@ test.describe("GenerateLauncherDialog", () => {
     await widget_action.click();
     await combobox_list_method.click();
     await label_branch.click();
-    await input_endpoint.fill(mock_endpoint_url);
-    await input_folder.fill(mock_folder_name);
+    await input_endpoint.fill(mock_host);
+    await input_folder.fill(mock_folder);
     await button_generate.click();
 
     await inspect_toast(page, "Проект успешно создан");

@@ -4,7 +4,8 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { inspect_request } from "@/shared/tests/utils";
 import { DATA_TEST_ID_DIALOG_CONNECT_SENTRY } from "@/shared/constants/data";
 
-const mock_sentry_endpoint_url = `https://sentry.recloud.tech/info?date=${Date.now()}`;
+const mock_host = `https://sentry.recloud.tech/autotest?date=${Date.now()}`;
+
 const get_sentry_api_endpoint_url = "/api/v1/integrations/sentry/dsn";
 const put_sentry_api_endpoint_url = "/api/v1/integrations/sentry/dsn";
 
@@ -27,7 +28,7 @@ test.describe("ConnectSentryDialog", () => {
     } else {
       await widget_action_connect.click();
     }
-    await input_endpoint.fill(mock_sentry_endpoint_url);
+    await input_endpoint.fill(mock_host);
     await button_save.click();
 
     const response_put_sentry_raw = await inspect_request(page, put_sentry_api_endpoint_url);
