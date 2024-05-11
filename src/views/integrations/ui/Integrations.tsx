@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import {
   DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD,
+  DATA_TEST_ID_DIALOG_CONNECT_SENTRY,
   DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
   DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
 } from "@/shared/constants/data";
@@ -47,6 +48,7 @@ export const IntegrationsPage = () => {
             title="Sentry"
             description={"Подключение платформы для отслеживания ошибок и мониторинга приложений"}
             dialog={<ConnectSentryDialog />}
+            testid={DATA_TEST_ID_DIALOG_CONNECT_SENTRY}
           />
           <IntegrationCard
             title="Discord"

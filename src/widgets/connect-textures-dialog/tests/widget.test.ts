@@ -6,8 +6,8 @@ import { DATA_TEST_ID_DIALOG_CONNECT_TEXTURES } from "@/shared/constants/data";
 
 const mock_skins_endpoint_url = `https://textures.recloud.tech/skin/{userName}?date=${Date.now()}`;
 const mock_cloaks_endpoint_url = `https://textures.recloud.tech/cloak/{userName}?date=${Date.now()}`;
-const mock_skins_api_endpoint_url = "/api/v1/integrations/texture/skins";
-const mock_cloaks_api_endpoint_url = "/api/v1/integrations/texture/cloaks";
+const put_skins_api_endpoint_url = "/api/v1/integrations/texture/skins";
+const put_cloaks_api_endpoint_url = "/api/v1/integrations/texture/cloaks";
 
 test.describe("ConnectTexturesDialog", () => {
   test("connect textures skins and cloaks", async ({ page, baseURL, browser }) => {
@@ -25,13 +25,11 @@ test.describe("ConnectTexturesDialog", () => {
     await input_cloaks.fill(mock_cloaks_endpoint_url);
     await button_save.click();
 
-    const response_skins_raw = await inspect_request(page, mock_skins_api_endpoint_url);
-    const response_cloaks_raw = await inspect_request(page, mock_cloaks_api_endpoint_url);
-    const status_code_skins_json = await response_skins_raw.json();
-    const status_code_cloaks_json = await response_cloaks_raw.json();
-    const status_code_skins = status_code_skins_json;
-    const status_code_cloaks = status_code_cloaks_json;
-    expect(status_code_skins.statusCode).toBe(200);
-    expect(status_code_cloaks.statusCode).toBe(200);
+    const response_skins_raw = await inspect_request(page, put_skins_api_endpoint_url);
+    const response_cloaks_raw = await inspect_request(page, put_cloaks_api_endpoint_url);
+    const response_skins_json = await response_skins_raw.json();
+    const response_cloaks_json = await response_cloaks_raw.json();
+    expect(response_skins_json.statusCode).toBe(200);
+    expect(response_cloaks_json.statusCode).toBe(200);
   });
 });
