@@ -1,14 +1,16 @@
-import { ProfilePage } from "@/screens/Profile";
 import type { Metadata } from "next";
 
-type PageProps = {
+import { ProfilePage } from "@/views/profile";
+
+export async function generateMetadata({ params: { name } }: Props): Promise<Metadata> {
+  return { title: `Настройка профиля ${name}` };
+}
+
+type Props = {
   params: { name: string };
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  return {
-    title: `Редактирование профиля — ${params.name}`,
-  };
-}
-
-export default ProfilePage;
+const Page = async (props: Props) => {
+  return <ProfilePage {...props} />;
+};
+export default Page;

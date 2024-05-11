@@ -101,7 +101,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
             </div>
           </div>
           <div className="flex justify-end">
-            <Button disabled={isPending || form.formState.disabled}>
+            <Button disabled={isPending || form.formState.disabled || !form.formState.isDirty}>
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Сохранить
             </Button>

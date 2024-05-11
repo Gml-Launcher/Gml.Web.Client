@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { ReactElement } from "react";
+
+import Image from "next/image";
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
@@ -22,10 +23,28 @@ import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
 
+import loaderMinecraft from "@/assets/logos/minecraft.png";
+import loaderForge from "@/assets/logos/forge.png";
+import loaderFabric from "@/assets/logos/fabric.png";
+import loaderLiteLoader from "@/assets/logos/liteloader.png";
+
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
   onModalToggle: () => void;
 }
+
+const logoGameLoader: Record<GameLoaderType, ReactElement> = {
+  [GameLoaderType.VANILLA]: (
+    <Image src={loaderMinecraft} alt="Logotype Minecraft" width={24} height={24} />
+  ),
+  [GameLoaderType.FORGE]: <Image src={loaderForge} alt="Logotype Forge" width={24} height={24} />,
+  [GameLoaderType.FABRIC]: (
+    <Image src={loaderFabric} alt="Logotype Fabric" width={24} height={24} />
+  ),
+  [GameLoaderType.LITELOADER]: (
+    <Image src={loaderLiteLoader} alt="Logotype Liteloader" width={24} height={24} />
+  ),
+};
 
 const versions = [
   "1.5.2",
@@ -162,6 +181,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                     <SelectContent>
                       {enumValues(GameLoaderType).map(([loader, value]) => (
                         <SelectItem key={loader} value={String(value)}>
+                          {logoGameLoader[value as GameLoaderType]}
                           {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
                         </SelectItem>
                       ))}
@@ -176,7 +196,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           />
 
           <div className="flex justify-end">
-            <Button disabled={isPending}>
+            <Button disabled={isPending || !form.formState.isDirty}>
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Создать
             </Button>

@@ -40,7 +40,7 @@ export const useConnectionHub = () => {
 
         connection.on("Message", (message) => {
           toast({
-            title: message,
+            description: message,
           });
         });
       } catch (error) {

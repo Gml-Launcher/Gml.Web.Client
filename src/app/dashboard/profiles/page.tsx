@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { ProfilesPage } from "@/screens/Profiles";
+
+import { ProfilesPage } from "@/views/profiles";
 
 export const metadata: Metadata = {
   title: "Профили",
 };
-
-export default ProfilesPage;
+const Page = async () => {
+  return <ProfilesPage />;
+};
+export default Page;

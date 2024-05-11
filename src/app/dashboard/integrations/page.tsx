@@ -1,8 +1,11 @@
-import { IntegrationsPage } from "@/screens/Integrations";
-import { Metadata } from "next";
+import type { Metadata } from "next";
+
+import { IntegrationsPage } from "@/views/integrations";
 
 export const metadata: Metadata = {
   title: "Интеграции",
 };
-
-export default IntegrationsPage;
+const Page = async () => {
+  return <IntegrationsPage />;
+};
+export default Page;
