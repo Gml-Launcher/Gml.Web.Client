@@ -55,7 +55,7 @@ export const EditSettingsPlatformForm = () => {
                       Регистрация новых пользователей (
                       {watchRegistration ? "Разрешена" : "Запрещена"})
                     </h6>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
                       Позволяет регистрироваться новым пользователям на сайте
                     </p>
                   </div>
@@ -69,7 +69,7 @@ export const EditSettingsPlatformForm = () => {
           <div className="flex gap-x-8">
             <div className="flex flex-col gap-y-1 w-1/2">
               <h6 className="text-sm font-bold">Хранилище</h6>
-              <p className="text-sm text-gray-700">Текущее хранилище, где хранится лаунчер</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Текущее хранилище, где хранится лаунчер</p>
             </div>
             <div className="flex flex-col w-1/2">
               <FormField

@@ -66,7 +66,7 @@ export function ChooseAuthenticationMethodDialog() {
           <div className="flex gap-x-8 mb-8">
             <div className="flex flex-col gap-y-1 w-1/2">
               <h6 className="text-sm font-bold">Метод</h6>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
                 Текущий метод аутентификации игроков в лаунчере
               </p>
             </div>
