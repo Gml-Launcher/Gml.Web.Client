@@ -42,6 +42,10 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     formUpdate.append("description", body.description);
     formUpdate.append("icon", body.icon?.[0]);
 
+    if (body.background && body.background[0]) {
+      formUpdate.append("background", body.background[0]);
+    }
+
     await mutateAsync(formUpdate);
   };
 
@@ -97,6 +101,29 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
               {form.formState.errors.icon && (
                 <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <h6 className="text-sm font-bold">Задний фон</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
+              {profile ? (
+                <Image
+                  className="w-16 h-16 mt-2"
+                  src={`data:text/plain;base64,${profile.background}`}
+                  alt={profile.profileName}
+                  width={32}
+                  height={32}
+                />
+              ) : (
+                <Skeleton className="min-w-16 min-h-16 w-16 h-16 mt-2" />
+              )}
+            </div>
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
+              {form.formState.errors.background && (
+                <FormMessage>{form.formState.errors.background.message?.toString()}</FormMessage>
               )}
             </div>
           </div>

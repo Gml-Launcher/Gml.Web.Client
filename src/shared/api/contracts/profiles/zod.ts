@@ -35,6 +35,7 @@ export const EditProfileSchema = z.object({
       message: "Длина описания не должна быть больше 1000 символов",
     }),
   icon: z.any(),
+  background: z.any(),
 });
 
 export type CreateProfileFormSchemaType = z.infer<typeof CreateProfileSchema>;
