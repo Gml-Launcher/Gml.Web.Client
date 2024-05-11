@@ -1,4 +1,4 @@
-import type { Locator, Page } from "playwright-core";
+import type { Locator, Page, Response } from "playwright-core";
 
 const mock_created_login = "autotestuser";
 const mock_created_email = "autotestuser@email.ru";
@@ -49,6 +49,6 @@ export const inspect_toast = async (page: Page, description: string) => {
   await page.waitForSelector(`text="${description}"`);
 };
 
-export const inspect_request = async (page: Page, url: string) => {
-  await page.waitForResponse((response) => response.url().includes(url));
+export const inspect_request = async (page: Page, url: string): Promise<Response> => {
+  return await page.waitForResponse((response) => response.url().includes(url));
 };

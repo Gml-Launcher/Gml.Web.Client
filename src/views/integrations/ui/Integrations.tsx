@@ -9,6 +9,7 @@ import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import {
   DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD,
+  DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
   DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
 } from "@/shared/constants/data";
 
@@ -40,6 +41,7 @@ export const IntegrationsPage = () => {
             title="Сервис скинов"
             description="Добавь интеграцию со сервисом скинов, для отображения скинов и плащей в игре"
             dialog={<ConnectTexturesDialog />}
+            testid={DATA_TEST_ID_DIALOG_CONNECT_TEXTURES}
           />
           <IntegrationCard
             title="Sentry"
