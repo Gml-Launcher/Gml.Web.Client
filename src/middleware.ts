@@ -26,6 +26,7 @@ export async function middleware(request: NextRequest) {
   const accessToken = cookies.get("accessToken");
 
   if (isProtectedRoute && isTokenExpired(accessToken?.value)) {
+    cookies.delete("accessToken");
     return NextResponse.redirect(new URL(AUTH_PAGES.SIGN_IN, request.nextUrl));
   }
 

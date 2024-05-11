@@ -24,7 +24,7 @@ const getTokenExpiredTime = (token: string) => {
 };
 
 export const isTokenExpired = (token?: string): boolean => {
-  if (!token) throw new Error("Token is undefined");
+  if (!token) return true;
 
   if (!isValidToken(token)) throw new Error("Invalid token format");
 
