@@ -109,19 +109,17 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <h6 className="text-sm font-bold">Задний фон</h6>
               <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
               {profile ? (
-                <Image
+                <img
                   className="w-16 h-16 mt-2"
-                  src={`data:text/plain;base64,${profile.background}`}
+                  src={profile.background}
                   alt={profile.profileName}
-                  width={32}
-                  height={32}
                 />
               ) : (
                 <Skeleton className="min-w-16 min-h-16 w-16 h-16 mt-2" />
               )}
             </div>
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
-              <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
+              <InputFile fileTypes={["PNG"]} {...form.register("background")} />
               {form.formState.errors.background && (
                 <FormMessage>{form.formState.errors.background.message?.toString()}</FormMessage>
               )}
