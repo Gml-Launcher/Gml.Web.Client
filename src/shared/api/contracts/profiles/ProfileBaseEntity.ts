@@ -13,6 +13,7 @@ export type ProfileExtendedBaseEntity = {
   minecraftVersion: string;
   clientVersion: string;
   iconBase64: string;
+  background: string;
   description: string;
   arguments: string;
   hasUpdate: boolean;
