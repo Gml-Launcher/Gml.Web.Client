@@ -4,15 +4,19 @@ import React from "react";
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { InfoIcon } from "lucide-react";
+
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Input } from "@/shared/ui/input";
 import { TexturesServiceType } from "@/shared/enums";
 import { useEditConnectTextures } from "@/shared/hooks";
 import { Icons } from "@/shared/ui/icons";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { TextureServiceBaseEntity } from "@/shared/api/contracts";
 
 import { ConnectTexturesFormSchemaType, ConnectTexturesSchema } from "../lib/static";
-import { TextureServiceBaseEntity } from "@/shared/api/contracts";
 
 interface ConnectTexturesFormProps extends React.HTMLAttributes<HTMLDivElement> {
   skins?: TextureServiceBaseEntity;
@@ -91,6 +95,19 @@ export function ConnectTexturesForm({
               </FormItem>
             )}
           />
+
+          <Alert variant="warning">
+            <InfoIcon className="h-4 w-4" />
+            <AlertTitle>Обратите внимание</AlertTitle>
+            <AlertDescription className="mb-2">
+              Вы можете использовать директиву <b>{"{userName}"}</b>, которая будет заменена на
+              логин игрока.
+            </AlertDescription>
+            <AlertDescription>
+              Пример: <b>https://textures.recloud.tech/cloaks/{"{userName}"}</b> будет заменено на{" "}
+              <b>https://textures.recloud.tech/cloaks/GamerVII</b>
+            </AlertDescription>
+          </Alert>
 
           <div className="flex justify-between items-center">
             <Button className="w-fit ml-auto" disabled={isPending || !form.formState.isDirty}>
