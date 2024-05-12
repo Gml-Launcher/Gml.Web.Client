@@ -17,3 +17,12 @@ export type SentryBaseEntity = {
 export type TextureServiceBaseEntity = {
   url: string;
 };
+
+export type DiscordBaseEntity = {
+  clientId: string;
+  details: string;
+  largeImageKey: string;
+  largeImageText: string;
+  smallImageKey: string;
+  smallImageText: string;
+};

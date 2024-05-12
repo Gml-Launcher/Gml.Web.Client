@@ -2,6 +2,7 @@ import { GenerateLauncherDialog } from "@/widgets/generate-launcher-dialog";
 import { ChooseAuthenticationMethodDialog } from "@/widgets/choose-authentication-method-dialog";
 import { ConnectTexturesDialog } from "@/widgets/connect-textures-dialog";
 import { ConnectSentryDialog } from "@/widgets/connect-sentry-dialog";
+import { ConnectDiscordDialog } from "@/widgets/connect-discord-dialog";
 
 import { IntegrationCard } from "@/entities/IntegrationCard";
 
@@ -9,6 +10,7 @@ import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import {
   DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD,
+  DATA_TEST_ID_DIALOG_CONNECT_DISCORD,
   DATA_TEST_ID_DIALOG_CONNECT_SENTRY,
   DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
   DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
@@ -53,6 +55,8 @@ export const IntegrationsPage = () => {
           <IntegrationCard
             title="Discord"
             description="Синхронизация лаунчера и вашего Discord сервера"
+            dialog={<ConnectDiscordDialog />}
+            testid={DATA_TEST_ID_DIALOG_CONNECT_DISCORD}
           />
           <IntegrationCard
             title="Нужен сервис?"

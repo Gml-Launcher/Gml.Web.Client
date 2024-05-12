@@ -10,7 +10,7 @@ const get_sentry_api_endpoint_url = "/api/v1/integrations/sentry/dsn";
 const put_sentry_api_endpoint_url = "/api/v1/integrations/sentry/dsn";
 
 test.describe("ConnectSentryDialog", () => {
-  test("connect textures skins and cloaks", async ({ page, baseURL, browser }) => {
+  test("connect sentry", async ({ page, baseURL, browser }) => {
     await page.goto(`${baseURL}${DASHBOARD_PAGES.INTEGRATIONS}`);
 
     const widget = page.getByTestId(DATA_TEST_ID_DIALOG_CONNECT_SENTRY);

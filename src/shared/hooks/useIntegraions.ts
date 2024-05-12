@@ -5,6 +5,7 @@ import { isAxiosError } from "axios";
 import {
   TGetActiveAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
+  TPutConnectDiscordRequest,
   TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
 } from "@/shared/api/contracts";
@@ -121,6 +122,38 @@ export const useEditConnectTextures = () => {
   return useMutation({
     mutationKey: ["update-connect-textures"],
     mutationFn: (data: TPutConnectTexturesRequest) => integrationService.putConnectTextures(data),
+    onSuccess: async (data) => {
+      toast({
+        title: "Успешно",
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
+};
+
+export const useDiscord = () => {
+  return useQuery({
+    queryKey: ["get-discord"],
+    queryFn: () => integrationService.getConnectDiscord({}),
+    select: ({ data }) => data,
+  });
+};
+
+export const useEditDiscord = () => {
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationKey: ["update-discord"],
+    mutationFn: (data: TPutConnectDiscordRequest) => integrationService.putConnectDiscord(data),
     onSuccess: async (data) => {
       toast({
         title: "Успешно",

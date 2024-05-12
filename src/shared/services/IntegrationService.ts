@@ -6,6 +6,8 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
+  TGetConnectDiscordRequest,
+  TGetConnectDiscordResponse,
   TGetConnectTexturesRequest,
   TGetConnectTexturesResponse,
   TGetInstallClientBranchesResponse,
@@ -13,6 +15,8 @@ import {
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
+  TPutConnectDiscordRequest,
+  TPutConnectDiscordResponse,
   TPutConnectTexturesRequest,
   TPutConnectTexturesResponse,
   TPutSentryConnectRequest,
@@ -25,6 +29,7 @@ class IntegrationService {
   private BASE_URL_GITHUB = `${this.BASE_URL}/github`;
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
   private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
+  private BASE_URL_DISCORD = `${this.BASE_URL}/discord`;
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<
@@ -88,10 +93,26 @@ class IntegrationService {
     type,
     ...body
   }: TPutConnectTexturesRequest): Promise<TPutConnectTexturesResponse> {
-    const { data } = await $api.put<TPutSentryConnectResponse>(
+    const { data } = await $api.put<TPutConnectTexturesResponse>(
       `${this.BASE_URL_TEXTURE}/${type}`,
       body,
     );
+
+    return data;
+  }
+
+  async getConnectDiscord({
+    ...params
+  }: TGetConnectDiscordRequest): Promise<TGetConnectDiscordResponse> {
+    const { data } = await $api.get<TGetConnectDiscordResponse>(this.BASE_URL_DISCORD, { params });
+
+    return data;
+  }
+
+  async putConnectDiscord({
+    ...body
+  }: TPutConnectDiscordRequest): Promise<TPutConnectDiscordResponse> {
+    const { data } = await $api.put<TPutConnectDiscordResponse>(this.BASE_URL_DISCORD, body);
 
     return data;
   }
