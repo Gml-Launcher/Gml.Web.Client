@@ -8,8 +8,8 @@ const mock_client_id = `${Date.now()}`;
 const mock_details = `details-${Date.now()}`;
 const mock_large_Image_Key = `large-image-key-${Date.now()}`;
 const mock_large_Image_Text = `large-image-text-${Date.now()}`;
-const mock_small_Image_Key = `small-image-text${Date.now()}`;
-const mock_small_Image_Text = `small-image-text${Date.now()}`;
+const mock_small_Image_Key = `small-image-key-${Date.now()}`;
+const mock_small_Image_Text = `small-image-text-${Date.now()}`;
 
 const get_discord_api_endpoint_url = "/api/v1/integrations/discord";
 const put_discord_api_endpoint_url = "/api/v1/integrations/discord";
