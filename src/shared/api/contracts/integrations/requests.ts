@@ -1,6 +1,7 @@
 import {
   AuthIntegrationBaseEntity,
   BranchBaseEntity,
+  DiscordBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
 } from "@/shared/api/contracts";
@@ -51,3 +52,13 @@ export type TGetConnectTexturesResponse = ResponseBaseEntity & {
 // Изменение сервиса текстур
 export type TPutConnectTexturesRequest = { type: TexturesServiceType; url: string };
 export type TPutConnectTexturesResponse = ResponseBaseEntity & {};
+
+// Получение сервиса текстур
+export type TGetConnectDiscordRequest = {};
+export type TGetConnectDiscordResponse = ResponseBaseEntity & {
+  data: DiscordBaseEntity;
+};
+
+// Изменение сервиса текстур
+export type TPutConnectDiscordRequest = DiscordBaseEntity;
+export type TPutConnectDiscordResponse = ResponseBaseEntity & {};
