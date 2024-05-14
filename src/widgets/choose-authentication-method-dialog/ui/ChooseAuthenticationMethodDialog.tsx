@@ -8,6 +8,7 @@ import { AuthenticationFormUndefined } from "@/features/authentication-undefined
 import { AuthenticationFormDle } from "@/features/authentication-dle-form";
 import { AuthenticationAnyForm } from "@/features/authentication-any-form";
 import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-form";
+import { AuthenticationFormEasycabinet } from "@/features/authentication-easycabinet-form";
 
 import {
   Dialog,
@@ -16,7 +17,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { AuthenticationType, AuthenticationTypeOption } from "@/shared/enums";
 import { useActiveAuthIntegrations, useAuthIntegrations } from "@/shared/hooks";
@@ -37,13 +37,15 @@ export function ChooseAuthenticationMethodDialog() {
     setAuthenticationTab(String(activeIntegrations?.authType));
   }, [activeIntegrations]);
 
+  const isFormAny = Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_ANY;
   const isFormUndefined =
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_UNDEFINED;
   const isFormDatalife =
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE;
-  const isFormAny = Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_ANY;
   const isFormAzuriom =
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM;
+  const isFormEasyCabinet =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -90,6 +92,7 @@ export function ChooseAuthenticationMethodDialog() {
           {isFormDatalife && <AuthenticationFormDle onOpenChange={onOpenChange} />}
           {isFormAny && <AuthenticationAnyForm onOpenChange={onOpenChange} />}
           {isFormAzuriom && <AuthenticationFormAzuriom onOpenChange={onOpenChange} />}
+          {isFormEasyCabinet && <AuthenticationFormEasycabinet onOpenChange={onOpenChange} />}
         </div>
       </DialogContent>
     </Dialog>
