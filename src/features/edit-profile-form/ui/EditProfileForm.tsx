@@ -29,6 +29,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     values: {
       name: profile?.profileName || "",
       description: profile?.description || "",
+      jvmArguments: profile?.jvmArguments || "",
     },
     resolver: zodResolver(EditProfileSchema),
   });
@@ -44,6 +45,10 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
 
     if (body.background && body.background[0]) {
       formUpdate.append("background", body.background[0]);
+    }
+
+    if (body.jvmArguments) {
+      formUpdate.append("jvmArguments", body.jvmArguments);
     }
 
     await mutateAsync(formUpdate);
@@ -78,6 +83,22 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <Textarea placeholder="Введите описание сервера" {...form.register("description")} />
               {form.formState.errors.description && (
                 <FormMessage>{form.formState.errors.description.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <h6 className="text-sm font-bold">Jvm Аргументы</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Параметры запуска клиента</p>
+            </div>
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <Input
+                type="text"
+                placeholder="Введите ваши jvm аргументы"
+                {...form.register("jvmArguments")}
+              />
+              {form.formState.errors.jvmArguments && (
+                <FormMessage>{form.formState.errors.jvmArguments.message?.toString()}</FormMessage>
               )}
             </div>
           </div>

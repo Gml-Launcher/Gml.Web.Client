@@ -34,6 +34,7 @@ export const EditProfileSchema = z.object({
     .max(1000, {
       message: "Длина описания не должна быть больше 1000 символов",
     }),
+  jvmArguments: z.string().optional(),
   icon: z.any(),
   background: z.any(),
 });
