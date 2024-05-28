@@ -12,3 +12,7 @@ export * from "@/shared/api/contracts/integrations/requests";
 // Контракты настроек платформы
 export * from "@/shared/api/contracts/settings/platform/schemas";
 export * from "@/shared/api/contracts/settings/platform/requests";
+
+// Контракты для белого списка
+export * from "@/shared/api/contracts/whitelist/schemas";
+export * from "@/shared/api/contracts/whitelist/requests";
