@@ -23,7 +23,7 @@ export type TGetProfileRequest = {
   OsArchitecture: OsArchitectureEnum;
   OsType: string;
 
-  JvmArguments?: string;
+  jvmArguments?: string;
   WindowWidth?: number;
   WindowHeight?: number;
   GamePort?: number;

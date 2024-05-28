@@ -4,7 +4,7 @@ export type ProfileBaseEntity = {
   description: string;
   gameVersion: string;
   launchVersion: string;
-  JvmArguments: string;
+  jvmArguments: string;
   iconBase64: string;
 };
 
