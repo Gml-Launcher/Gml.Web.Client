@@ -1,28 +1,49 @@
 "use client";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import Image from "next/image";
 
+import { RowSelectionState } from "@tanstack/react-table";
+
 import { DownloadClientHub } from "@/widgets/client-hub";
+import { AddingFilesWhitelistDialog } from "@/widgets/adding-files-whitelist-dialog";
+import { FilesTable } from "@/widgets/files-table";
+
+import { EditProfileForm } from "@/features/edit-profile-form";
 
 import { Section } from "@/entities/Section";
-
-import { EditProfileForm } from "@/features/edit-profile-form/ui/EditProfileForm";
 
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
 import { useProfile } from "@/shared/hooks";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { getStorageAccessToken, getStorageProfile } from "@/shared/services/AuthTokenService";
+import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
 
 import { ProfileLoading } from "./ProfileLoading";
+import { WhitelistFileBaseEntity } from "@/shared/api/contracts";
+import { useDeleteFilesWhitelist } from "@/shared/hooks/useWhitelist";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/alert-dialog";
+import { Button } from "@/shared/ui/button";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
   const accessToken = getStorageAccessToken();
   const { data, mutate, isPending } = useProfile();
   const profile = data?.data;
+  const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
+
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   useEffect(() => {
     if (account && accessToken) {
@@ -38,6 +59,15 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   }, []);
 
   if (isPending || !profile) return <ProfileLoading />;
+
+  const onSubmit = () => {
+    const hashFiles = Object.entries(rowSelection).map(([hash, _]) => ({
+      profileName: profile.profileName,
+      hash,
+    })) as WhitelistFileBaseEntity[];
+
+    mutateDeleteFilesWhitelist(hashFiles);
+  };
 
   return (
     <>
@@ -77,6 +107,38 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       <Section title="Загрузка клиента" subtitle="Необходимо для генерации клиента Minecraft">
         <DownloadClientHub key="DownloadClientHub" profile={profile} />
       </Section>
+
+      <Section title="Белый список файлов">
+        <div className="flex items-center gap-x-4 ml-auto">
+          {!!Object.keys(rowSelection).length && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline">Удалить выбранные файлы</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Удаление файлов из белого списка</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} файлы(ов) из белого списка?`}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Отмена</AlertDialogCancel>
+                  <AlertDialogAction onClick={onSubmit}>Удалить</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+          <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
+        </div>
+        <FilesTable
+          files={profile.whiteListFiles}
+          rowSelection={rowSelection}
+          setRowSelection={setRowSelection}
+        />
+      </Section>
+
+      <div className="min-h-4" />
     </>
   );
 };
