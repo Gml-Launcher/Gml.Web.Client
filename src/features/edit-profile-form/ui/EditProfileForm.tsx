@@ -131,7 +131,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
               {profile ? (
                 <img
-                  className="w-16 h-16 mt-2"
+                  className="w-[600px] h-[300px] mt-2 rounded-md"
                   src={profile.background}
                   alt={profile.profileName}
                 />
