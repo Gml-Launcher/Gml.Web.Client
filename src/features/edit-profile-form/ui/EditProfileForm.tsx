@@ -131,12 +131,12 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
               {profile ? (
                 <img
-                  className="w-[600px] h-[300px] mt-2 rounded-md"
+                  className="w-[400px] h-[300px] mt-2 rounded-md object-cover"
                   src={profile.background}
                   alt={profile.profileName}
                 />
               ) : (
-                <Skeleton className="min-w-16 min-h-16 w-16 h-16 mt-2" />
+                <Skeleton className="w-[400px] h-[300px] mt-2 rounded-md" />
               )}
             </div>
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
