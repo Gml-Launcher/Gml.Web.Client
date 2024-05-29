@@ -10,6 +10,7 @@ import { AuthenticationAnyForm } from "@/features/authentication-any-form";
 import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-form";
 import { AuthenticationFormEasycabinet } from "@/features/authentication-easycabinet-form";
 import { AuthenticationFormUniCoreCMS } from "@/features/authentication-unicorecms-form";
+import { AuthenticationFormCustom } from "@/features/authentication-custom-form";
 
 import {
   Dialog,
@@ -49,6 +50,7 @@ export function ChooseAuthenticationMethodDialog() {
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET;
   const isFormUniCoreCMS =
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_UNICORECMS;
+  const isFormCustom = Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -97,6 +99,7 @@ export function ChooseAuthenticationMethodDialog() {
           {isFormAzuriom && <AuthenticationFormAzuriom onOpenChange={onOpenChange} />}
           {isFormEasyCabinet && <AuthenticationFormEasycabinet onOpenChange={onOpenChange} />}
           {isFormUniCoreCMS && <AuthenticationFormUniCoreCMS onOpenChange={onOpenChange} />}
+          {isFormCustom && <AuthenticationFormCustom onOpenChange={onOpenChange} />}
         </div>
       </DialogContent>
     </Dialog>

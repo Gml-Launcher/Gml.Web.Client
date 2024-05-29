@@ -5,6 +5,7 @@ export enum AuthenticationType {
   AUTHENTICATION_TYPE_AZURIOM = 3, // Разрешена авторизация под любым логином и паролем
   AUTHENTICATION_TYPE_EASY_CABINET = 4, //  Авторизация через EasyCabinet
   AUTHENTICATION_TYPE_UNICORECMS = 5, //  Авторизация через UniCoreCMS
+  AUTHENTICATION_TYPE_CUSTOM = 6, // Авторизация через свой endpoint
 }
 
 export enum AuthenticationTypeOption {
@@ -14,4 +15,5 @@ export enum AuthenticationTypeOption {
   "OPTION_3" = "Azuriom", // Разрешена авторизация под любым логином и паролем
   "OPTION_4" = "EasyCabinet", // Авторизация через EasyCabinet
   "OPTION_5" = "UniCoreCMS", // Авторизация через UniCoreCMS
+  "OPTION_6" = "Собственная Авторизация", // Авторизация через свой endpoint
 }
