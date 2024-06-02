@@ -15,6 +15,10 @@ import {
   DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
   DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
 } from "@/shared/constants/data";
+import { LinkIcon } from "lucide-react";
+import { Button } from "@/shared/ui/button";
+
+import Link from "next/link";
 
 export const IntegrationsPage = () => {
   return (
@@ -61,6 +65,14 @@ export const IntegrationsPage = () => {
           <IntegrationCard
             title="Нужен сервис?"
             description="Отправь заявку, а мы придумаем что-нибудь"
+            dialog={
+              <Link target="_blank" href={"https://discord.com/invite/b5xgqfWgNt"}>
+                <Button size="sm" variant="outline" className="w-fit">
+                  <LinkIcon className="mr-2" size={16} />
+                  Поддежка
+                </Button>
+              </Link>
+            }
           />
         </div>
       </div>
