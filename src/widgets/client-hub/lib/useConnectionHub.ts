@@ -47,14 +47,29 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
           setProgressPercent(percent);
         });
 
+        connection.on("Message", (msg) => {
+          toast({
+            title: "Ошибка!",
+            description: msg,
+          });
+        });
+
         connection.on("SuccessInstalled", () => {
           setIsRestoring(false);
           setProgressPercent(0);
+          toast({
+            title: "Успешно",
+            description: "Клиент успешно загружен",
+          });
         });
 
         connection.on("SuccessPacked", () => {
           setIsRestoring(false);
           setProgressPercent(0);
+          toast({
+            title: "Успешно",
+            description: "Клиент успешно собран",
+          });
         });
       } catch (error) {
         console.log(error);
@@ -72,12 +87,6 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     setIsRestoring(true);
     connectionHub
       ?.invoke("Restore", profile?.profileName)
-      .then(() => {
-        toast({
-          title: "Успешно",
-          description: "Клиент успешно загружен",
-        });
-      })
       .catch((error) => {
         toast({
           variant: "destructive",
@@ -94,12 +103,6 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     setIsRestoring(true);
     connectionHub
       ?.invoke("Build", profile?.profileName)
-      .then(() => {
-        toast({
-          title: "Успешно",
-          description: "Клиент успешно собран",
-        });
-      })
       .catch((error) => {
         toast({
           variant: "destructive",
