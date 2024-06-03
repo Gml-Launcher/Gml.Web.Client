@@ -98,14 +98,22 @@ export function ConnectTexturesForm({
 
           <Alert variant="warning">
             <InfoIcon className="h-4 w-4" />
-            <AlertTitle>Обратите внимание</AlertTitle>
+            <AlertTitle>Обратите внимание!</AlertTitle>
             <AlertDescription className="mb-2">
-              Вы можете использовать директиву <b>{"{userName}"}</b>, которая будет заменена на
-              логин игрока.
+              Вы можете использовать переменные, которые заменятся на соответствующие значения с
+              нашей стороны
+              <div className="grid">
+                <b className="py-1">{"{userName}"} - Ник пользователя</b>
+                <b className="py-1">{"{userUuid}"} - Uuid пользователя</b>
+              </div>
             </AlertDescription>
             <AlertDescription>
-              Пример: <b>https://textures.recloud.tech/cloaks/{"{userName}"}</b> будет заменено на{" "}
-              <b>https://textures.recloud.tech/cloaks/GamerVII</b>
+              Пример: https://textures.recloud.tech/cloaks/<b>{"{userName}"}</b> будет заменено на
+              https://textures.recloud.tech/cloaks/<b>{"GamerVII"}</b>
+              <div className="py-2">
+                https://textures.recloud.tech/cloaks/<b>{"{userUuid}"}</b> будет заменено на
+                https://textures.recloud.tech/cloaks/<b>{"c07a9841-2275-4ba0-8f1c-2e1599a1f22f"}</b>
+              </div>
             </AlertDescription>
           </Alert>
 

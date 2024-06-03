@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Settings2 } from "lucide-react";
+import { WallpaperIcon } from "lucide-react";
 
 import { ConnectTexturesForm } from "@/features/connect-textures-form";
 
@@ -37,7 +37,7 @@ export function ConnectTexturesDialog() {
           className="w-fit"
           disabled={isLoadingSkins || isLoadingCloaks}
         >
-          <Settings2 className="mr-2" size={16} />
+          <WallpaperIcon className="mr-2" size={16} />
           Настроить
         </Button>
       </DialogTrigger>
