@@ -1,6 +1,6 @@
 "use client";
 
-import { PlugIcon, Settings2 } from "lucide-react";
+import { PencilIcon, PlugIcon } from "lucide-react";
 
 import {
   Dialog,
@@ -22,7 +22,7 @@ export function ConnectSentryDialog() {
 
   const connectionText = Boolean(sentry?.url) ? "Изменить" : "Подключить";
   const connectionIcon = Boolean(sentry?.url) ? (
-    <Settings2 className="mr-2" size={16} />
+    <PencilIcon className="mr-2" size={16} />
   ) : (
     <PlugIcon className="mr-2" size={16} />
   );

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { BoxesIcon, LogOutIcon } from "lucide-react";
+import { ArrowUpDownIcon, BlocksIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 
 import { ChangeTheme } from "@/features/change-theme";
 import { cn } from "@/shared/lib/utils";
@@ -28,7 +28,7 @@ const menu = [
       //   isDisabled: true,
       // },
       {
-        icon: <BoxesIcon />,
+        icon: <BlocksIcon />,
         path: DASHBOARD_PAGES.PROFILES,
         text: "Список профилей",
       },
@@ -55,7 +55,7 @@ const menu = [
     item: "Интеграции",
     paths: [
       {
-        icon: <BoxesIcon />,
+        icon: <ArrowUpDownIcon />,
         path: DASHBOARD_PAGES.INTEGRATIONS,
         text: "Список интеграций",
       },
@@ -65,7 +65,7 @@ const menu = [
     item: "Настройки платформы",
     paths: [
       {
-        icon: <BoxesIcon />,
+        icon: <SettingsIcon />,
         path: DASHBOARD_PAGES.SETTINGS,
         text: "Настройки платформы",
       },
