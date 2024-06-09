@@ -94,7 +94,22 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
       ),
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue }) => {
+        // TODO Сделать локализацию для дат и проекта в целом @itzme1on
+
+        const date = new Date(getValue());
+        const formattedDate = new Intl.DateTimeFormat("ru-RU", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }).format(date);
+
+        return formattedDate;
+      },
     }),
     columnsHelper.display({
       size: 48,
