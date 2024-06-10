@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { PlugIcon, Settings2 } from "lucide-react";
+import { PencilIcon, PlugIcon } from "lucide-react";
 
 import { ConnectDiscordForm } from "@/features/connect-discord-form";
 
@@ -24,7 +24,7 @@ export function ConnectDiscordDialog() {
 
   const connectionText = Boolean(discord?.clientId) ? "Изменить" : "Подключить";
   const connectionIcon = Boolean(discord?.clientId) ? (
-    <Settings2 className="mr-2" size={16} />
+    <PencilIcon className="mr-2" size={16} />
   ) : (
     <PlugIcon className="mr-2" size={16} />
   );
