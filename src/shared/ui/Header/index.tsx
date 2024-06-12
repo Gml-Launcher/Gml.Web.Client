@@ -30,7 +30,7 @@ const menu = [
       {
         icon: <BlocksIcon />,
         path: DASHBOARD_PAGES.PROFILES,
-        text: "Список профилей",
+        text: "Профили",
       },
     ],
   },
@@ -57,7 +57,7 @@ const menu = [
       {
         icon: <ArrowUpDownIcon />,
         path: DASHBOARD_PAGES.INTEGRATIONS,
-        text: "Список интеграций",
+        text: "Интеграции",
       },
     ],
   },
@@ -67,7 +67,7 @@ const menu = [
       {
         icon: <SettingsIcon />,
         path: DASHBOARD_PAGES.SETTINGS,
-        text: "Настройки платформы",
+        text: "Настройки",
       },
     ],
   },
