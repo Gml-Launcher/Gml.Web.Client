@@ -33,7 +33,7 @@ export const IntegrationsPage = () => {
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
           <IntegrationCard
-            title="Аутентификация"
+            title="Аунтефикация"
             description="Синхронизация и управление данными о пользователях на платформе"
             dialog={<ChooseAuthenticationMethodDialog />}
             testid={DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD}
