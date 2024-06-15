@@ -19,9 +19,10 @@ enum ColumnHeader {
   ICON = "",
   NAME = "Название",
   CREATED_AT = "Дата создания",
-  VERSION_LAUNCHER = "Версия",
+  VERSION_LAUNCHER = "Запускаемая версия",
+  GAME_VERSION_LAUNCHER = "Версия",
+  PROFILE_STATE = "Статус",
 }
-
 interface UseColumnsProps {
   isPendingDelete: boolean;
   onProfileDeleteModalToggle: () => void;
@@ -83,16 +84,30 @@ export const useColumns = (props: UseColumnsProps) => {
       cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor("launchVersion", {
-      size: 500,
+      size: 250,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.VERSION_LAUNCHER} />
       ),
       cell: ({ getValue }) => getValue(),
     }),
+    columnsHelper.accessor("gameVersion", {
+      size: 100,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION_LAUNCHER} />
+      ),
+      cell: ({ getValue }) => getValue(),
+    }),
     columnsHelper.accessor("createDate", {
-      size: 500,
+      size: 200,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
+      ),
+      cell: ({ getValue }) => getValue(),
+    }),
+    columnsHelper.accessor("state", {
+      size: 50,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE} />
       ),
       cell: ({ getValue }) => getValue(),
     }),

@@ -6,6 +6,7 @@ export type ProfileBaseEntity = {
   launchVersion: string;
   jvmArguments: string;
   iconBase64: string;
+  state: string;
 };
 
 export type ProfileExtendedBaseEntity = {

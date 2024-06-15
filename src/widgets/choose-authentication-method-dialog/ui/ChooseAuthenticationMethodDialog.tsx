@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { Settings2 } from "lucide-react";
+import { KeyRound } from "lucide-react";
 
 import { AuthenticationFormUndefined } from "@/features/authentication-undefined-form";
 import { AuthenticationFormDle } from "@/features/authentication-dle-form";
@@ -61,7 +61,7 @@ export function ChooseAuthenticationMethodDialog() {
           className="w-fit"
           disabled={isLoadingIntegration || isLoadingActiveIntegration}
         >
-          <Settings2 className="mr-2" size={16} />
+          <KeyRound className="mr-2" size={16} />
           Изменить
         </Button>
       </DialogTrigger>

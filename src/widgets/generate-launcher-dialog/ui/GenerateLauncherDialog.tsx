@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { Settings2 } from "lucide-react";
+import { Hammer } from "lucide-react";
 
 import { InstallClientForm } from "@/features/install-client-form";
 
@@ -23,7 +23,7 @@ export function GenerateLauncherDialog() {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm" variant="outline" className="w-fit">
-          <Settings2 className="mr-2" size={16} />
+          <Hammer className="mr-2" size={16} />
           Собрать
         </Button>
       </DialogTrigger>
