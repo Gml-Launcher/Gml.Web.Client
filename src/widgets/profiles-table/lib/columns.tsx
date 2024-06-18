@@ -14,6 +14,7 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Icons } from "@/shared/ui/icons";
+import { getFormatDate } from "@/shared/lib/getFormatDate/getFormatDate";
 
 enum ColumnHeader {
   ICON = "",
@@ -94,7 +95,7 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
       ),
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue }) => getFormatDate(getValue()),
     }),
     columnsHelper.display({
       size: 48,
