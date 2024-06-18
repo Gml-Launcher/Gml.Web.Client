@@ -14,15 +14,17 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Icons } from "@/shared/ui/icons";
+import { ProfileStateOption } from "@/shared/enums/profileState";
 
 enum ColumnHeader {
   ICON = "",
   NAME = "Название",
   CREATED_AT = "Дата создания",
   VERSION_LAUNCHER = "Запускаемая версия",
-  GAME_VERSION_LAUNCHER = "Версия",
+  GAME_VERSION = "Версия",
   PROFILE_STATE = "Статус",
 }
+
 interface UseColumnsProps {
   isPendingDelete: boolean;
   onProfileDeleteModalToggle: () => void;
@@ -93,7 +95,7 @@ export const useColumns = (props: UseColumnsProps) => {
     columnsHelper.accessor("gameVersion", {
       size: 100,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION_LAUNCHER} />
+        <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION} />
       ),
       cell: ({ getValue }) => getValue(),
     }),
@@ -109,7 +111,8 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE} />
       ),
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue }) =>
+        `${ProfileStateOption[`OPTION_${getValue()}` as keyof typeof ProfileStateOption]}`,
     }),
     columnsHelper.display({
       size: 48,

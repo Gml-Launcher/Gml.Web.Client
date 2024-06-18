@@ -19,10 +19,14 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
-  const [progressPercent, setProgressPercent] = useState(0);
-  const [FullProgressPercent, setFullProgressPercent] = useState(0);
+
+  const [percentStage, setPercentStage] = useState(0);
+  const [percentAllStages, setPercentAllStages] = useState(0);
+
   const [isRestoring, setIsRestoring] = useState(false);
-  const [logs, setIsLogs] = useState([""]);
+
+  const [logs, setLogs] = useState<string[] | null>(null);
+
   const [isPacked, setIsPacked] = useState(false);
 
   useEffect(() => {
@@ -46,7 +50,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         connection.on("ChangeProgress", (profileName, percent) => {
           if (profileName == profile?.profileName) {
             setIsRestoring(true);
-            setProgressPercent(percent);
+            setPercentStage(percent);
           }
         });
 
@@ -54,16 +58,20 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
           if (profileName == profile?.profileName) {
             setIsRestoring(true);
             setIsPacked(true);
-            setFullProgressPercent(percent);
+            setPercentAllStages(percent);
           }
         });
 
         connection.on("OnException", (profileName, exception: string) => {
-          if (profileName == profile?.profileName) setIsLogs(["", exception]);
+          if (profileName == profile?.profileName) {
+            setLogs((prev) => (prev ? [...prev, exception] : [exception]));
+          }
         });
 
         connection.on("Log", (profileName, log: string) => {
-          if (profileName == profile?.profileName) setIsLogs([...logs, log]);
+          if (profileName == profile?.profileName) {
+            setLogs((prev) => (prev ? [...prev, log] : [log]));
+          }
         });
 
         connection.on("Message", (msg) => {
@@ -77,20 +85,20 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
           if (profileName == profile?.profileName) {
             setIsPacked(false);
             setIsRestoring(false);
-            setProgressPercent(0);
-            setFullProgressPercent(0);
-            setIsLogs([""]);
+            setPercentStage(0);
+            setPercentAllStages(0);
+            setLogs(null);
+            toast({
+              title: "Успешно",
+              description: `Профиль ${profileName} успешно загружен`,
+            });
           }
-          toast({
-            title: "Успешно",
-            description: `Профиль ${profileName} успешно загружен`,
-          });
         });
 
         connection.on("SuccessPacked", (profileName) => {
           if (profileName == profile?.profileName) {
             setIsRestoring(false);
-            setProgressPercent(0);
+            setPercentStage(0);
           }
           toast({
             title: "Успешно",
@@ -148,8 +156,8 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     onBuildDistributive,
     isDisable: isRestoring,
     isPacked,
-    progress: progressPercent,
-    fullProgress: FullProgressPercent,
+    percentStage,
+    percentAllStages,
     logs,
   };
 };

@@ -1,13 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
+import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
-
-import { useConnectionHub } from "../lib/useConnectionHub";
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { Textarea } from "@/shared/ui/textarea";
 import { Icons } from "@/shared/ui/icons";
+
+import { useConnectionHub } from "../lib/useConnectionHub";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -20,10 +21,17 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
     onBuildDistributive,
     isDisable,
     isPacked,
-    progress,
-    fullProgress,
+    percentStage,
+    percentAllStages,
     logs,
   } = useConnectionHub(props);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  }, [logs]);
 
   return (
     <>
@@ -65,27 +73,34 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
             <div className="flex flex-col gap-y-1 w-96">
               <h6 className="text-sm font-bold">Прогресс</h6>
               <p className="text-sm text-gray-700 dark:text-gray-300">
-                Выполнено на {progress}% из 100%
+                Выполнено на {percentStage}% из 100%
               </p>
             </div>
             <div className="flex flex-col gap-y-1 w-[32rem]">
-              <Progress className="h-2" value={progress} />
+              <Progress className="h-2" value={percentStage} />
             </div>
           </div>
-          {Boolean(isPacked) && (
+          {Boolean(isPacked) && logs && (
             <div>
               <div className="flex gap-x-8">
                 <div className="flex flex-col gap-y-1 w-96">
                   <h6 className="text-sm font-bold">Полный прогресс</h6>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Выполнено на {fullProgress}% из 100%
+                    Выполнено на {percentAllStages}% из 100%
                   </p>
                 </div>
                 <div className="flex flex-col gap-y-1 w-[32rem]">
-                  <Progress className="h-2" value={fullProgress} />
+                  <Progress className="h-2" value={percentAllStages} />
                 </div>
               </div>
-              <Textarea value={logs.join("\n")} className="h-64 max-h-64" readOnly />
+              <div className="my-4">
+                <Textarea
+                  ref={textareaRef}
+                  value={logs.join("\n")}
+                  className="h-64 max-h-64"
+                  readOnly
+                />
+              </div>
             </div>
           )}
         </div>
