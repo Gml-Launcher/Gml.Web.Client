@@ -9,12 +9,14 @@ import { createColumnHelper } from "@tanstack/table-core";
 import { Edit2Icon, Trash2Icon } from "lucide-react";
 
 import { DataTableColumnHeader } from "@/entities/Table";
-import { ProfileBaseEntity } from "@/shared/api/contracts";
-import { DASHBOARD_PAGES } from "@/shared/routes";
+
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
+import { ProfileBaseEntity } from "@/shared/api/contracts";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
-import { ProfileStateOption } from "@/shared/enums/profileState";
+import { getFormatDate } from "@/shared/lib/utils";
+import { ProfileStateOption } from "@/shared/enums";
 
 enum ColumnHeader {
   ICON = "",
@@ -86,7 +88,7 @@ export const useColumns = (props: UseColumnsProps) => {
       cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor("launchVersion", {
-      size: 250,
+      size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.VERSION_LAUNCHER} />
       ),
@@ -100,11 +102,11 @@ export const useColumns = (props: UseColumnsProps) => {
       cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor("createDate", {
-      size: 200,
+      size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
       ),
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue }) => getFormatDate(getValue()),
     }),
     columnsHelper.accessor("state", {
       size: 50,
