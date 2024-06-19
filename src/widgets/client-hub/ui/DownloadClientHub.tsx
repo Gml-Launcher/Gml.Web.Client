@@ -1,11 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
+import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
+import { Textarea } from "@/shared/ui/textarea";
+import { Icons } from "@/shared/ui/icons";
 
 import { useConnectionHub } from "../lib/useConnectionHub";
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -13,8 +16,22 @@ interface DownloadClientHubProps {
 }
 
 export function DownloadClientHub(props: DownloadClientHubProps) {
-  const { onDownloadDistributive, onBuildDistributive, isDisable, progress } =
-    useConnectionHub(props);
+  const {
+    onDownloadDistributive,
+    onBuildDistributive,
+    isDisable,
+    isPacked,
+    percentStage,
+    percentAllStages,
+    logs,
+  } = useConnectionHub(props);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  }, [logs]);
 
   return (
     <>
@@ -29,6 +46,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
             onClick={onDownloadDistributive}
             disabled={isDisable || !props.profile || !props.profile.hasUpdate}
           >
+            {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Загрузить
           </Button>
         </div>
@@ -44,19 +62,47 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
             onClick={onBuildDistributive}
             disabled={isDisable || !props.profile || !props.profile.hasUpdate}
           >
+            {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
             Собрать
           </Button>
         </div>
       </div>
-      {Boolean(progress) && (
-        <div className="flex gap-x-8">
-          <div className="flex flex-col gap-y-1 w-96">
-            <h6 className="text-sm font-bold">Прогресс</h6>
-            <p className="text-sm text-gray-700 dark:text-gray-300">Выполнено на {progress}% из 100%</p>
+      {Boolean(isDisable) && (
+        <div className="grid gap-y-4">
+          <div className="flex gap-x-8">
+            <div className="flex flex-col gap-y-1 w-96">
+              <h6 className="text-sm font-bold">Прогресс</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Выполнено на {percentStage}% из 100%
+              </p>
+            </div>
+            <div className="flex flex-col gap-y-1 w-[32rem]">
+              <Progress className="h-2" value={percentStage} />
+            </div>
           </div>
-          <div className="flex flex-col gap-y-1 w-[32rem]">
-            <Progress className="h-2" value={progress} />
-          </div>
+          {Boolean(isPacked) && logs && (
+            <div>
+              <div className="flex gap-x-8">
+                <div className="flex flex-col gap-y-1 w-96">
+                  <h6 className="text-sm font-bold">Полный прогресс</h6>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    Выполнено на {percentAllStages}% из 100%
+                  </p>
+                </div>
+                <div className="flex flex-col gap-y-1 w-[32rem]">
+                  <Progress className="h-2" value={percentAllStages} />
+                </div>
+              </div>
+              <div className="my-4">
+                <Textarea
+                  ref={textareaRef}
+                  value={logs.join("\n")}
+                  className="h-64 max-h-64"
+                  readOnly
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>

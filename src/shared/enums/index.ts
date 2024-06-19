@@ -3,3 +3,4 @@ export * from "./integration";
 export * from "./storages";
 export * from "./systems";
 export * from "./textures";
+export * from "./profileState";

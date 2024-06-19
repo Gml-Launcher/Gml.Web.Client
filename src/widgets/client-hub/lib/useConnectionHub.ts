@@ -19,8 +19,15 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
-  const [progressPercent, setProgressPercent] = useState(0);
+
+  const [percentStage, setPercentStage] = useState(0);
+  const [percentAllStages, setPercentAllStages] = useState(0);
+
   const [isRestoring, setIsRestoring] = useState(false);
+
+  const [logs, setLogs] = useState<string[] | null>(null);
+
+  const [isPacked, setIsPacked] = useState(false);
 
   useEffect(() => {
     if (isLoading || !accessToken) return;
@@ -38,13 +45,33 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
         await connection.start();
 
-        connection.on("BlockRestore", () => {
-          setIsRestoring(true);
+        if (profile?.hasUpdate == false) setIsRestoring(true);
+
+        connection.on("ChangeProgress", (profileName, percent) => {
+          if (profileName == profile?.profileName) {
+            setIsRestoring(true);
+            setPercentStage(percent);
+          }
         });
 
-        connection.on("ChangeProgress", (percent) => {
-          setIsRestoring(true);
-          setProgressPercent(percent);
+        connection.on("FullProgress", (profileName, percent) => {
+          if (profileName == profile?.profileName) {
+            setIsRestoring(true);
+            setIsPacked(true);
+            setPercentAllStages(percent);
+          }
+        });
+
+        connection.on("OnException", (profileName, exception: string) => {
+          if (profileName == profile?.profileName) {
+            setLogs((prev) => (prev ? [...prev, exception] : [exception]));
+          }
+        });
+
+        connection.on("Log", (profileName, log: string) => {
+          if (profileName == profile?.profileName) {
+            setLogs((prev) => (prev ? [...prev, log] : [log]));
+          }
         });
 
         connection.on("Message", (msg) => {
@@ -54,21 +81,28 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
           });
         });
 
-        connection.on("SuccessInstalled", () => {
-          setIsRestoring(false);
-          setProgressPercent(0);
-          toast({
-            title: "Успешно",
-            description: "Клиент успешно загружен",
-          });
+        connection.on("SuccessInstalled", (profileName) => {
+          if (profileName == profile?.profileName) {
+            setIsPacked(false);
+            setIsRestoring(false);
+            setPercentStage(0);
+            setPercentAllStages(0);
+            setLogs(null);
+            toast({
+              title: "Успешно",
+              description: `Профиль ${profileName} успешно загружен`,
+            });
+          }
         });
 
-        connection.on("SuccessPacked", () => {
-          setIsRestoring(false);
-          setProgressPercent(0);
+        connection.on("SuccessPacked", (profileName) => {
+          if (profileName == profile?.profileName) {
+            setIsRestoring(false);
+            setPercentStage(0);
+          }
           toast({
             title: "Успешно",
-            description: "Клиент успешно собран",
+            description: `Профиль ${profileName} успешно собран`,
           });
         });
       } catch (error) {
@@ -84,6 +118,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   }, []);
 
   const onDownloadDistributive = () => {
+    setIsPacked(true);
     setIsRestoring(true);
     connectionHub
       ?.invoke("Restore", profile?.profileName)
@@ -100,6 +135,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   };
 
   const onBuildDistributive = () => {
+    setIsPacked(false);
     setIsRestoring(true);
     connectionHub
       ?.invoke("Build", profile?.profileName)
@@ -119,6 +155,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     onDownloadDistributive,
     onBuildDistributive,
     isDisable: isRestoring,
-    progress: progressPercent,
+    isPacked,
+    percentStage,
+    percentAllStages,
+    logs,
   };
 };
