@@ -4,6 +4,8 @@ import {
   TDeleteProfileResponse,
   TDeleteProfilesRequest,
   TDeleteProfilesResponse,
+  TGameVersionsRequest,
+  TGameVersionsResponse,
   TGetProfileRequest,
   TGetProfileResponse,
   TGetProfilesResponse,
@@ -12,6 +14,7 @@ import {
   TPutProfileRequest,
   TPutProfileResponse,
 } from "@/shared/api/contracts";
+import { AxiosResponse } from "axios";
 
 class ProfileService {
   private BASE_URL = "/profiles";
@@ -62,6 +65,15 @@ class ProfileService {
     });
 
     return data;
+  }
+
+  async getGameVersions({
+    gameLoader,
+    minecraftVersion,
+  }: TGameVersionsRequest): Promise<AxiosResponse<TGameVersionsResponse, any>> {
+    return await $api.get<TGameVersionsResponse>(
+      `${this.BASE_URL}/versions/${gameLoader}/${minecraftVersion}`,
+    );
   }
 }
 

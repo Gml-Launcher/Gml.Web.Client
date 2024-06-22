@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 
 import Image from "next/image";
 
@@ -11,10 +11,9 @@ import {
   CreateProfileFormSchemaType,
   CreateProfileSchema,
   GameLoaderOption,
-  GameLoaderType,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
-import { useCreateProfile } from "@/shared/hooks";
+import { useCreateProfile, useGetGameVersions } from "@/shared/hooks";
 import { cn, enumValues } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
@@ -33,75 +32,18 @@ interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onModalToggle: () => void;
 }
 
-const logoGameLoader: Record<GameLoaderType, ReactElement> = {
-  [GameLoaderType.VANILLA]: (
+const logoGameLoader: Record<GameLoaderOption, ReactElement> = {
+  [GameLoaderOption.VANILLA]: (
     <Image src={loaderMinecraft} alt="Logotype Minecraft" width={24} height={24} />
   ),
-  [GameLoaderType.FORGE]: <Image src={loaderForge} alt="Logotype Forge" width={24} height={24} />,
-  [GameLoaderType.FABRIC]: (
+  [GameLoaderOption.FORGE]: <Image src={loaderForge} alt="Logotype Forge" width={24} height={24} />,
+  [GameLoaderOption.FABRIC]: (
     <Image src={loaderFabric} alt="Logotype Fabric" width={24} height={24} />
   ),
-  [GameLoaderType.LITELOADER]: (
+  [GameLoaderOption.LITELOADER]: (
     <Image src={loaderLiteLoader} alt="Logotype Liteloader" width={24} height={24} />
   ),
 };
-
-const versions = [
-  "1.5.2",
-  "1.6.4",
-  "1.7.2",
-  "1.7.10",
-  "1.8",
-  "1.8.9",
-  "1.9",
-  "1.9.1",
-  "1.9.2",
-  "1.9.3",
-  "1.9.4",
-  "1.10",
-  "1.10.1",
-  "1.10.2",
-  "1.11",
-  "1.11.1",
-  "1.11.2",
-  "1.12",
-  "1.12.1",
-  "1.12.2",
-  "1.13",
-  "1.13.1",
-  "1.13.2",
-  "1.14",
-  "1.14.1",
-  "1.14.2",
-  "1.14.3",
-  "1.14.4",
-  "1.15",
-  "1.15.1",
-  "1.15.2",
-  "1.16",
-  "1.16.1",
-  "1.16.2",
-  "1.16.3",
-  "1.16.4",
-  "1.16.5",
-  "1.17",
-  "1.17.1",
-  "1.18",
-  "1.18.1",
-  "1.18.2",
-  "1.19",
-  "1.19.1",
-  "1.19.2",
-  "1.19.3",
-  "1.19.4",
-  "1.20",
-  "1.20.1",
-  "1.20.2",
-  "1.20.3",
-  "1.20.4",
-  "1.20.5",
-  "1.20.6",
-];
 
 export function CreateProfileForm(props: CreateProfileFormProps) {
   const { profile, className, onModalToggle, ...rest } = props;
@@ -109,14 +51,36 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
   const { mutateAsync, isPending } = useCreateProfile();
 
   const form = useForm<CreateProfileFormSchemaType>({
-    values: {
+    defaultValues: {
       name: profile?.profileName || "",
       description: profile?.description || "",
-      gameLoader: profile?.minecraftVersion || "",
+      gameLoader: profile?.minecraftVersion || GameLoaderOption.VANILLA.toString(),
+      loaderVersion: "",
       version: profile?.clientVersion || "",
     },
     resolver: zodResolver(CreateProfileSchema),
   });
+
+  const versions = useGetGameVersions({
+    gameLoader: GameLoaderOption.VANILLA,
+    minecraftVersion: "0",
+  });
+
+  const loaderVersion = useGetGameVersions(
+    {
+      gameLoader: form.watch("gameLoader") as GameLoaderOption,
+      minecraftVersion: form.watch("version"),
+    },
+    {
+      enabled:
+        form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
+        form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString(),
+    },
+  );
+
+  useEffect(() => {
+    form.setValue("loaderVersion", loaderVersion.data?.[0]);
+  }, [loaderVersion.data]);
 
   const onSubmit: SubmitHandler<CreateProfileFormSchemaType> = async (
     data: CreateProfileFormSchemaType,
@@ -126,6 +90,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
     formCreate.append("description", data.description);
     formCreate.append("version", data.version);
     formCreate.append("gameLoader", data.gameLoader);
+    formCreate.append("loaderVersion", data.loaderVersion);
     formCreate.append("icon", data.icon[0]);
 
     await mutateAsync(formCreate).then(() => {
@@ -178,7 +143,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                       <SelectValue placeholder="Выберите версию игры" />
                     </SelectTrigger>
                     <SelectContent>
-                      {versions.map((version) => (
+                      {versions.data?.map((version: string) => (
                         <SelectItem key={version} value={version}>
                           {version}
                         </SelectItem>
@@ -199,14 +164,18 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               <FormItem className="flex-1">
                 <FormLabel>Выберите игровой загрузчик</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите игровой загрузчик" />
                     </SelectTrigger>
                     <SelectContent>
-                      {enumValues(GameLoaderType).map(([loader, value]) => (
+                      {enumValues(GameLoaderOption).map(([loader, value]) => (
                         <SelectItem key={loader} value={String(value)}>
-                          {logoGameLoader[value as GameLoaderType]}
+                          {logoGameLoader[value as GameLoaderOption]}
                           {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
                         </SelectItem>
                       ))}
@@ -219,6 +188,43 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               </FormItem>
             )}
           />
+
+          {(form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
+            form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString()) && (
+            <Controller
+              name="loaderVersion"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Выберите версию загрузчика</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={
+                        !form.getFieldState("version").isDirty ||
+                        loaderVersion.isFetching ||
+                        loaderVersion.isError
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите версию загрузчика" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {loaderVersion.data?.map((loader: string) => (
+                          <SelectItem key={loader} value={loader}>
+                            {loader}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  {form.formState.errors.gameLoader && (
+                    <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+          )}
 
           <div className="flex justify-end">
             <Button disabled={isPending || !form.formState.isDirty}>

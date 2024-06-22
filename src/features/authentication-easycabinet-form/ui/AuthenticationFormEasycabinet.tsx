@@ -30,11 +30,11 @@ export function AuthenticationFormEasycabinet({
   const form = useForm<IntegrationFormSchemaType>({
     values: {
       endpoint:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET
           ? String(integration.endpoint)
           : "",
       authType:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET
           ? integration.authType
           : AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET,
     },

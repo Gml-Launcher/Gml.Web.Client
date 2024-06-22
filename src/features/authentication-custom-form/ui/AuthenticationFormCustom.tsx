@@ -35,11 +35,11 @@ export function AuthenticationFormCustom({ className, onOpenChange, ...props }: 
   const form = useForm<IntegrationFormSchemaType>({
     values: {
       endpoint:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM
           ? String(integration.endpoint)
           : "",
       authType:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM
           ? integration.authType
           : AuthenticationType.AUTHENTICATION_TYPE_CUSTOM,
     },

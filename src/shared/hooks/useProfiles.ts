@@ -1,3 +1,4 @@
+import type { UseQueryOptions } from "@tanstack/react-query";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { isAxiosError } from "axios";
@@ -6,6 +7,7 @@ import {
   ProfileBaseEntity,
   TDeleteProfileRequest,
   TDeleteProfilesRequest,
+  TGameVersionsRequest,
   TGetProfileRequest,
   TPostProfilesRequest,
   TPutProfileRequest,
@@ -157,5 +159,20 @@ export const useDeleteProfiles = () => {
         });
       }
     },
+  });
+};
+
+export const useGetGameVersions = (
+  body: TGameVersionsRequest,
+  options?: Partial<UseQueryOptions>,
+) => {
+  return useQuery({
+    queryKey: [
+      "get-game-versions",
+      { gameLoader: body.gameLoader, minecraftVersion: body.minecraftVersion },
+    ],
+    queryFn: async () => await profileService.getGameVersions(body),
+    select: (data) => data.data.data,
+    ...options,
   });
 };

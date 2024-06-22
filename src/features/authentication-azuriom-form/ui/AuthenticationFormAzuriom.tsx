@@ -28,11 +28,11 @@ export function AuthenticationFormAzuriom({ className, onOpenChange, ...props }:
   const form = useForm<IntegrationFormSchemaType>({
     values: {
       endpoint:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM
           ? String(integration.endpoint)
           : "",
       authType:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM
           ? integration.authType
           : AuthenticationType.AUTHENTICATION_TYPE_AZURIOM,
     },

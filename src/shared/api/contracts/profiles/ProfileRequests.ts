@@ -1,6 +1,10 @@
-import { ProfileBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import {
+  GameLoaderOption,
+  ProfileBaseEntity,
+  ProfileExtendedBaseEntity,
+} from "@/shared/api/contracts";
 import { ResponseBaseEntity } from "@/shared/api/schemas";
-import { OsArchitectureEnum } from "@/shared/enums";
+import { OsArchitectureEnum } from "@/shared/enums"; // Получение профилей
 
 // Получение профилей
 export type TGetProfilesRequest = {};
@@ -54,3 +58,12 @@ export type TDeleteProfilesRequest = {
   removeFiles: boolean;
 };
 export type TDeleteProfilesResponse = ResponseBaseEntity & {};
+
+// Получение списка версий
+export type TGameVersionsRequest = {
+  gameLoader: GameLoaderOption;
+  minecraftVersion: string;
+};
+export type TGameVersionsResponse = ResponseBaseEntity & {
+  data: string[];
+};

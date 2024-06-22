@@ -35,11 +35,11 @@ export function AuthenticationFormDle({ className, onOpenChange, ...props }: Sig
   const form = useForm<IntegrationFormSchemaType>({
     values: {
       endpoint:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE
           ? String(integration.endpoint)
           : "",
       authType:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE
           ? integration.authType
           : AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE,
     },

@@ -32,11 +32,11 @@ export function AuthenticationFormUniCoreCMS({
   const form = useForm<IntegrationFormSchemaType>({
     values: {
       endpoint:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_UNICORECMS
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_UNICORECMS
           ? String(integration.endpoint)
           : "",
       authType:
-        integration.authType === AuthenticationType.AUTHENTICATION_TYPE_UNICORECMS
+        integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_UNICORECMS
           ? integration.authType
           : AuthenticationType.AUTHENTICATION_TYPE_UNICORECMS,
     },

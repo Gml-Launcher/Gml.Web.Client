@@ -6,6 +6,6 @@ export enum ProfileState {
 
 export enum ProfileStateOption {
   "OPTION_0" = "Создан", // Профиль создан
-  "OPTION_1" = "Загружается Engine", // Профиль загружается
+  "OPTION_1" = "Загружается", // Профиль загружается
   "OPTION_2" = "Активен", // Профиль активен
 }
