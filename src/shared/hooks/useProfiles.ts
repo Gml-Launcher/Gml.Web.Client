@@ -172,6 +172,7 @@ export const useGetGameVersions = (
       { gameLoader: body.gameLoader, minecraftVersion: body.minecraftVersion },
     ],
     queryFn: async () => await profileService.getGameVersions(body),
+    // @ts-ignore
     select: (data) => data.data.data,
     ...options,
   });
