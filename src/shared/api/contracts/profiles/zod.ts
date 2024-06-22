@@ -19,7 +19,7 @@ export const CreateProfileSchema = z.object({
       message: "Не выбрана версия игры",
     }),
   }),
-  loaderVersion: z.string(),
+  loaderVersion: z.string().optional(),
   gameLoader: z.string(),
   icon: z.any(),
 });
