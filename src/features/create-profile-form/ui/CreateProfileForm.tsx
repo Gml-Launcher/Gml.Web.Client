@@ -90,8 +90,11 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
     formCreate.append("description", data.description);
     formCreate.append("version", data.version);
     formCreate.append("gameLoader", data.gameLoader);
-    formCreate.append("loaderVersion", data.loaderVersion);
     formCreate.append("icon", data.icon[0]);
+
+    if (data.loaderVersion) {
+      formCreate.append("loaderVersion", data.loaderVersion);
+    }
 
     await mutateAsync(formCreate).then(() => {
       onModalToggle();
