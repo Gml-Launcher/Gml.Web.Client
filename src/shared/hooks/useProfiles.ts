@@ -173,6 +173,7 @@ export const useGetGameVersions = (
     ],
     queryFn: async () => await profileService.getGameVersions(body),
     // @ts-ignore
+    // TODO: Исправить типизацию
     select: (data) => data.data.data,
     ...options,
   });
