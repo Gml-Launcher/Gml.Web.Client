@@ -26,6 +26,7 @@ import loaderMinecraft from "@/assets/logos/minecraft.png";
 import loaderForge from "@/assets/logos/forge.png";
 import loaderFabric from "@/assets/logos/fabric.png";
 import loaderLiteLoader from "@/assets/logos/liteloader.png";
+import neoForgeLoader from "@/assets/logos/neoforge.png";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
@@ -42,6 +43,9 @@ const logoGameLoader: Record<GameLoaderOption, ReactElement> = {
   ),
   [GameLoaderOption.LITELOADER]: (
     <Image src={loaderLiteLoader} alt="Logotype Liteloader" width={24} height={24} />
+  ),
+  [GameLoaderOption.NEOFORGE]: (
+    <Image src={neoForgeLoader} alt="Logotype NeoForge" width={18} height={18} />
   ),
 };
 
@@ -74,7 +78,8 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
     {
       enabled:
         form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString(),
+        form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString() ||
+        form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString(),
     },
   );
 
@@ -193,6 +198,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           />
 
           {(form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
+            form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString() ||
             form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString()) && (
             <Controller
               name="loaderVersion"

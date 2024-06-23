@@ -3,6 +3,7 @@ export enum GameLoaderType {
   FORGE = 2,
   FABRIC = 3,
   LITELOADER = 4,
+  NEOFORGE = 5,
 }
 
 export enum GameLoaderOption {
@@ -10,4 +11,5 @@ export enum GameLoaderOption {
   FORGE = "Forge",
   FABRIC = "Fabric",
   LITELOADER = "LiteLoader",
+  NEOFORGE = "NeoForge",
 }
