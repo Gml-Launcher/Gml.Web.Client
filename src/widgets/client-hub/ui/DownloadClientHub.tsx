@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef } from "react";
 
+import { Ubuntu_Mono } from "next/font/google";
+
 import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
@@ -9,11 +11,18 @@ import { Textarea } from "@/shared/ui/textarea";
 import { Icons } from "@/shared/ui/icons";
 
 import { useConnectionHub } from "../lib/useConnectionHub";
+import { cn } from "@/shared/lib/utils";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
   isLoading?: boolean;
 }
+
+const ubuntuMono = Ubuntu_Mono({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: "400",
+});
 
 export function DownloadClientHub(props: DownloadClientHubProps) {
   const {
@@ -97,7 +106,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                 <Textarea
                   ref={textareaRef}
                   value={logs.join("\n")}
-                  className="h-64 max-h-64"
+                  className={cn("h-64 max-h-64 font-sans", ubuntuMono.variable)}
                   readOnly
                 />
               </div>
