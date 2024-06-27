@@ -12,11 +12,7 @@ export function QueryProvider({ children }: PropsWithChildren) {
       defaultOptions: {
         queries: {
           refetchOnWindowFocus: false,
-          retry: (failureCount, error) => {
-            return !(
-              isAxiosError(error) && error.response?.data.statusCode === HttpStatusCode.NotFound
-            );
-          },
+          retry: false,
         },
       },
     }),

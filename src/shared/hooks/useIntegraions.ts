@@ -113,8 +113,6 @@ export const useConnectTextures = (type: TexturesServiceType) => {
     queryKey: [`get-connect-textures-${type}`],
     queryFn: () => integrationService.getConnectTextures({ type }),
     select: ({ data }) => data,
-    retry: true,
-    staleTime: 1000,
   });
 };
 
