@@ -16,12 +16,11 @@ import { profileService } from "@/shared/services/ProfileService";
 import { useToast } from "@/shared/ui/use-toast";
 
 export const useProfiles = () => {
-  const { data, isLoading } = useQuery({
+  return useQuery({
     queryKey: ["profiles"],
     queryFn: () => profileService.getProfiles(),
+    select: (data) => data.data,
   });
-
-  return { data: data?.data, isLoading };
 };
 
 export const useProfile = () => {

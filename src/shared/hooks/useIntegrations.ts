@@ -118,11 +118,14 @@ export const useConnectTextures = (type: TexturesServiceType) => {
 
 export const useEditConnectTextures = () => {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["update-connect-textures"],
     mutationFn: (data: TPutConnectTexturesRequest) => integrationService.putConnectTextures(data),
     onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ["get-connect-textures-skins"] });
+      await queryClient.invalidateQueries({ queryKey: ["get-connect-textures-cloaks"] });
       toast({
         title: "Успешно",
         description: data.message,
