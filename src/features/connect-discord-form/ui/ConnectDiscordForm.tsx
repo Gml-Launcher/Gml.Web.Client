@@ -21,7 +21,7 @@ import { Card, CardContent, CardDescription, CardHeader } from "@/shared/ui/card
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 
-import discordHint from "@/assets/discord.webp";
+import discordHint from "@/assets/logos/discord.webp";
 
 import { DiscordFormSchemaType, integrationSchema } from "../lib/static";
 

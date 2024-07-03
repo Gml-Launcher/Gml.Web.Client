@@ -19,6 +19,7 @@ import { LinkIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 
 import Link from "next/link";
+import { HREF_DISCORD } from "@/shared/constants";
 
 export const IntegrationsPage = () => {
   return (
@@ -66,7 +67,7 @@ export const IntegrationsPage = () => {
             title="Нужен сервис?"
             description="Отправь заявку, а мы придумаем что-нибудь"
             dialog={
-              <Link target="_blank" href={"https://discord.com/invite/b5xgqfWgNt"}>
+              <Link target="_blank" href={HREF_DISCORD}>
                 <Button size="sm" variant="outline" className="w-fit">
                   <LinkIcon className="mr-2" size={16} />
                   Поддежка

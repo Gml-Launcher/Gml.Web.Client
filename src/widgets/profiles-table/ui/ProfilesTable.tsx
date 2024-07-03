@@ -74,11 +74,7 @@ export function ProfilesTable() {
       {isLoading && <ProfilesTableSkeleton />}
       {profiles && (
         <>
-          <DataTableToolbar
-            table={table}
-            rowSelection={rowSelection}
-            onOpenChange={onProfilesDrawerToggle}
-          />
+          <DataTableToolbar rowSelection={rowSelection} onOpenChange={onProfilesDrawerToggle} />
           <DataTable
             data={profiles}
             columns={columns}
