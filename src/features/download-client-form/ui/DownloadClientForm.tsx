@@ -2,6 +2,14 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Ubuntu_Mono } from "next/font/google";
+
+const ubuntuMono = Ubuntu_Mono({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: "400",
+});
+
 import { useGithubLauncherVersions } from "@/shared/hooks";
 import { cn, getApiBaseUrl } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -12,42 +20,29 @@ import { Progress } from "@/shared/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { useToast } from "@/shared/ui/use-toast";
 
-import { InstallClientFormSchemaType, InstallClientSchema } from "../lib/static";
-import { useConnectionHub } from "../lib/useConnectionHub";
+import { ClientDownloadFormSchemaType, ClientDownloadSchema } from "../lib/static";
+import { useConnectionHub } from "../lib/hooks/useConnectionHub";
+import { useOnSubmit } from "../lib/hooks/useOnSubmitDownload";
 
-interface InstallClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
+interface DownloadClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: () => void;
+  connectionState: ReturnType<typeof useConnectionHub>;
 }
 
-export function InstallClientForm({ className, onOpenChange, ...props }: InstallClientFormProps) {
-  const { connectionHub, process, percent } = useConnectionHub();
+export function DownloadClientForm({
+  className,
+  onOpenChange,
+  connectionState,
+  ...props
+}: DownloadClientFormProps) {
+  const { connectionHub, process, percent } = connectionState;
+  const { onSubmit } = useOnSubmit({ connectionHub, process, percent, onOpenChange });
   const { data: branches } = useGithubLauncherVersions();
   const { toast } = useToast();
-
-  const form = useForm<InstallClientFormSchemaType>({
+  const form = useForm<ClientDownloadFormSchemaType>({
     values: { branch: "", host: getApiBaseUrl() || "", folder: "" },
-    resolver: zodResolver(InstallClientSchema),
+    resolver: zodResolver(ClientDownloadSchema),
   });
-
-  const onSubmit: SubmitHandler<InstallClientFormSchemaType> = async (
-    data: InstallClientFormSchemaType,
-  ) => {
-    process.onIsProcessingToggle();
-    try {
-      connectionHub?.invoke("Download", data.branch, data.host, data.folder).then(() => {
-        onOpenChange();
-      });
-    } catch (error: unknown) {
-      toast({
-        variant: "destructive",
-        title: "Ошибка!",
-        description: JSON.stringify(error),
-      });
-    } finally {
-      process.onIsProcessingToggle();
-      percent.setProgressPercent(0);
-    }
-  };
 
   return (
     <div className={cn("grid gap-4", className)} {...props}>
@@ -60,7 +55,11 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={Boolean(percent.progressPercent)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите версию" />
                     </SelectTrigger>
@@ -88,7 +87,11 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
               <FormItem className="flex-1">
                 <FormLabel>Введите URL к API</FormLabel>
                 <FormControl>
-                  <Input placeholder="Введите URL к API" {...field} />
+                  <Input
+                    placeholder="Введите URL к API"
+                    {...field}
+                    disabled={Boolean(percent.progressPercent)}
+                  />
                 </FormControl>
                 {form.formState.errors.host && (
                   <FormMessage>{form.formState.errors.host.message}</FormMessage>
@@ -104,7 +107,11 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
               <FormItem className="flex-1">
                 <FormLabel>Введите название папки</FormLabel>
                 <FormControl>
-                  <Input placeholder="Введите название папки" {...field} />
+                  <Input
+                    placeholder="Введите название папки"
+                    {...field}
+                    disabled={Boolean(percent.progressPercent)}
+                  />
                 </FormControl>
                 {form.formState.errors.folder && (
                   <FormMessage>{form.formState.errors.folder.message}</FormMessage>
@@ -113,17 +120,19 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
             )}
           />
 
-          <div className="flex justify-between items-center">
+          <div className="flex justify-center items-center">
             {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
-              <p className="text-gray-800 text-sm">
+              <p className="text-gray-700 dark:text-gray-200 text-sm">
                 Сборка завершена на {percent.progressPercent}% из 100%
               </p>
             )}
             <Button
               className="w-fit ml-auto"
-              disabled={process.isProcessing || !form.formState.isDirty}
+              disabled={Boolean(percent.progressPercent) || !form.formState.isDirty}
             >
-              {process.isProcessing && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              {Boolean(percent.progressPercent) && (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Скачать исходники
             </Button>
           </div>
@@ -134,4 +143,7 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
       )}
     </div>
   );
+}
+function useRef<T>(arg0: null) {
+  throw new Error("Function not implemented.");
 }
