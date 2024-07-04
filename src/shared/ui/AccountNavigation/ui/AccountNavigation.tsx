@@ -34,7 +34,7 @@ export const AccountNavigation = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Мой акканут</DropdownMenuLabel>
+        <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={destroySession}>Выход</DropdownMenuItem>
       </DropdownMenuContent>

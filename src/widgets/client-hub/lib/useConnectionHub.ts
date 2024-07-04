@@ -25,7 +25,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
   const [isRestoring, setIsRestoring] = useState(false);
 
-  const [logs, setLogs] = useState<string[] | null>(null);
+  const [logs, setLogs] = useState<string[]>([]);
 
   const [isPacked, setIsPacked] = useState(false);
 
@@ -87,7 +87,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
             setIsRestoring(false);
             setPercentStage(0);
             setPercentAllStages(0);
-            setLogs(null);
+            setLogs([]);
             toast({
               title: "Успешно",
               description: `Профиль ${profileName} успешно загружен`,

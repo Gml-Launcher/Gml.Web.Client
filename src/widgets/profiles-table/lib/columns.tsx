@@ -17,6 +17,9 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
 import { getFormatDate } from "@/shared/lib/utils";
 import { ProfileStateOption } from "@/shared/enums";
+import defaultProfileIcon from "@/assets/logos/minecraft.png";
+import React from "react";
+import { ClientState } from "@/widgets/client-hub/ui/ClientState";
 
 enum ColumnHeader {
   ICON = "",
@@ -74,11 +77,15 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ColumnHeader.ICON,
       cell: ({ row }) => (
         <Image
-          className="min-w-8 min-h-8"
+          className="min-w-12 min-h-12 h-12 w-12"
           src={`data:text/plain;base64,${row.original.iconBase64}`}
           alt={row.original.name}
           width={32}
           height={32}
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = defaultProfileIcon.src;
+          }}
         />
       ),
     }),
@@ -113,8 +120,7 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE} />
       ),
-      cell: ({ getValue }) =>
-        `${ProfileStateOption[`OPTION_${getValue()}` as keyof typeof ProfileStateOption]}`,
+      cell: ({ getValue }) => <ClientState state={getValue()} />,
     }),
     columnsHelper.display({
       size: 48,

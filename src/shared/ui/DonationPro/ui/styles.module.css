@@ -1,9 +1,5 @@
 .promo__card {
-    @apply flex flex-col gap-y-6 rounded-lg border bg-card text-card-foreground shadow-sm p-4
-}
-
-.promo {
-    @apply flex flex-col space-y-1.5
+    @apply flex flex-col gap-y-3 rounded-lg border bg-card text-card-foreground shadow-sm p-4
 }
 
 .promo__title {

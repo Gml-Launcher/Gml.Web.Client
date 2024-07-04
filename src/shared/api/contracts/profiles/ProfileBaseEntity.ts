@@ -14,12 +14,14 @@ export type ProfileExtendedBaseEntity = {
   profileName: string;
   minecraftVersion: string;
   clientVersion: string;
+  launchVersion: string;
   iconBase64: string;
   background: string;
   description: string;
   arguments: string;
   jvmArguments: string;
   hasUpdate: boolean;
+  state: string;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
 };
