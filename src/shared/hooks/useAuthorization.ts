@@ -28,7 +28,9 @@ export const useRegistration = () => {
         toast({
           variant: "destructive",
           title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
+          description:
+            (error.response && error.response.data.errors?.[0]) ||
+            "Ошибка сервиса авторизации. Обратитесь к администратору платформы",
         });
       }
     },
@@ -54,7 +56,9 @@ export const useLogin = () => {
         toast({
           variant: "destructive",
           title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
+          description:
+            (error.response && error.response.data.errors?.[0]) ||
+            "Ошибка сервиса авторизации. Обратитесь к администратору платформы",
         });
       }
     },

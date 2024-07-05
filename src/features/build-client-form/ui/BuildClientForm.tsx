@@ -1,8 +1,25 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Ubuntu_Mono } from "next/font/google";
 
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Ubuntu_Mono } from "next/font/google";
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
+
+import { useGithubLauncherVersions } from "@/shared/hooks";
+import { cn } from "@/shared/lib/utils";
+import { Icons } from "@/shared/ui/icons";
+import { Button } from "@/shared/ui/button";
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Textarea } from "@/shared/ui/textarea";
+
+import { ClientBuildFormSchemaType, ClientBuildSchema } from "../lib/static";
+import { useOnSubmit } from "../lib/hooks/useOnSubmit";
+
+interface BuildClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
+  state: ReturnType<typeof useConnectionHub>["build"];
+}
 
 const ubuntuMono = Ubuntu_Mono({
   subsets: ["latin"],
@@ -10,46 +27,31 @@ const ubuntuMono = Ubuntu_Mono({
   weight: "400",
 });
 
-import { useGithubLauncherVersions } from "@/shared/hooks";
-import { cn, getApiBaseUrl } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-
-import { ClientBuildFormSchemaType, ClientBuildSchema } from "../lib/static";
-import { useConnectionHub } from "../lib/hooks/useConnectionHub";
-import { Textarea } from "@/shared/ui/textarea";
-import { useOnSubmitBuild } from "../lib/hooks/useOnSubmitBuild";
-
-interface BuildClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onOpenChange: () => void;
-  connectionState: ReturnType<typeof useConnectionHub>;
-}
-
 export function BuildClientForm({
   className,
-  onOpenChange,
-  connectionState,
+  connectionHub,
+  state,
   ...props
 }: BuildClientFormProps) {
-  const { connectionHub, process, percent, logs } = connectionState;
-  const { onSubmitBuild } = useOnSubmitBuild({
-    connectionHub,
-    process,
-    percent,
-    onOpenChange,
-  });
+  const { isBuilding, logs } = state;
+
   const { data: branches } = useGithubLauncherVersions();
+
+  const { onSubmit } = useOnSubmit({
+    connectionHub,
+    state,
+  });
+
   const form = useForm<ClientBuildFormSchemaType>({
     values: { branch: "" },
     resolver: zodResolver(ClientBuildSchema),
+    disabled: isBuilding,
   });
 
   return (
     <div className={cn("grid gap-4", className)} {...props}>
       <Form {...form}>
-        <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmitBuild)}>
+        <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller
             control={form.control}
             name="branch"
@@ -57,11 +59,7 @@ export function BuildClientForm({
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию</FormLabel>
                 <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={process.isBuild}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите версию" />
                     </SelectTrigger>
@@ -82,14 +80,14 @@ export function BuildClientForm({
             )}
           />
           <div className="flex gap-x-4 justify-end items-center">
-            <Button className="w-fit" disabled={process.isBuild || !form.formState.isDirty}>
-              {process.isBuild && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            <Button className="w-fit" disabled={isBuilding || !form.formState.isDirty}>
+              {isBuilding && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Собрать
             </Button>
           </div>
         </form>
       </Form>
-      {process.isBuild && logs && (
+      {isBuilding && logs && (
         <Textarea
           value={logs.join("\n")}
           className={cn("h-64 max-h-64 font-sans", ubuntuMono.variable)}
@@ -98,7 +96,4 @@ export function BuildClientForm({
       )}
     </div>
   );
-}
-function useRef<T>(arg0: null) {
-  throw new Error("Function not implemented.");
 }

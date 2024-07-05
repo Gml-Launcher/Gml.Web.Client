@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowUpDownIcon, BlocksIcon, SettingsIcon } from "lucide-react";
 
 import { ChangeTheme } from "@/features/change-theme";
+import { Notifications } from "@/features/notifications";
 
 import { DesktopNavigation } from "@/shared/ui/DesktopNavigation";
 import { MobileNavigation } from "@/shared/ui/MobileNavigation";
@@ -11,10 +12,10 @@ import { AccountNavigation } from "@/shared/ui/AccountNavigation";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { DonationPro } from "@/shared/ui/DonationPro";
 import { TMenuItem } from "@/shared/types";
+
 import logo from "@/assets/logos/logo.svg";
 
 import classes from "./styles.module.css";
-import { Notifications } from "@/features/notifications";
 
 const menu: TMenuItem[] = [
   {
@@ -46,7 +47,7 @@ export default function Page({ children }: React.PropsWithChildren) {
             </Link>
           </div>
           <DesktopNavigation menu={menu} />
-          <div className="mt-auto p-4">
+          <div className={classes.aside__pro}>
             <DonationPro />
           </div>
         </div>

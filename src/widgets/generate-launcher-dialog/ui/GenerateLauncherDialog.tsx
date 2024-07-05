@@ -4,8 +4,6 @@ import { useState } from "react";
 
 import { Hammer } from "lucide-react";
 
-import { useConnectionHub } from "../lib/hooks/useConnectionHub";
-
 import { DownloadClientForm } from "@/features/download-client-form";
 import { BuildClientForm } from "@/features/build-client-form";
 import { UpdateClientForm } from "@/features/update-client-form";
@@ -17,10 +15,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-
 import { Button } from "@/shared/ui/button";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+
+import { useConnectionHub } from "../lib/hooks/useConnectionHub";
 
 export function GenerateLauncherDialog() {
   const [open, setOpen] = useState(false);
@@ -47,10 +45,16 @@ export function GenerateLauncherDialog() {
             <TabsTrigger value="update">Обновление</TabsTrigger>
           </TabsList>
           <TabsContent value="download">
-            <DownloadClientForm onOpenChange={onOpenChange} connectionState={connectionState} />
+            <DownloadClientForm
+              connectionHub={connectionState.connectionHub}
+              state={connectionState.download}
+            />
           </TabsContent>
           <TabsContent value="build">
-            <BuildClientForm onOpenChange={onOpenChange} connectionState={connectionState} />
+            <BuildClientForm
+              connectionHub={connectionState.connectionHub}
+              state={connectionState.build}
+            />
           </TabsContent>
           <TabsContent value="update">
             <UpdateClientForm onOpenChange={onOpenChange} />

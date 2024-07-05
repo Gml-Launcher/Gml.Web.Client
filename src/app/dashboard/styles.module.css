@@ -1,39 +1,43 @@
 .layout {
-    @apply grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]
+    @apply grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr];
 }
 
 .aside {
-    @apply hidden border-r bg-muted/40 md:block
+    @apply hidden border-r bg-muted/40 md:block;
 }
 
 .aside__wrapper {
-    @apply flex h-full max-h-screen flex-col gap-2
+    @apply flex h-full max-h-screen flex-col gap-2;
 }
 
 .aside__wrapper-logo {
-    @apply flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6
+    @apply flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6;
 }
 
 .aside__logo {
-    @apply flex items-center gap-2 font-semibold
+    @apply flex items-center gap-2 font-semibold;
 }
 
 .aside__logo > img {
-    @apply w-8
+    @apply w-8;
+}
+
+.aside__pro {
+    @apply mt-auto p-4;
 }
 
 .main {
-    @apply flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6
+    @apply flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6;
 }
 
 .content {
-    @apply flex flex-col
+    @apply flex flex-col;
 }
 
 .header {
-    @apply flex h-14 items-center gap-5 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6
+    @apply flex h-14 items-center gap-5 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6;
 }
 
 .header__actions {
-    @apply flex items-center gap-x-6 ml-auto
+    @apply flex items-center gap-x-6 ml-auto;
 }

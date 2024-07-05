@@ -1,11 +1,11 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/shared/lib/utils";
 import { AUTH_PAGES } from "@/shared/routes";
 import { buttonVariants } from "@/shared/ui/button";
+
 import logo from "@/assets/logos/logo.svg";
-import classes from "@/app/dashboard/styles.module.css";
-import Image from "next/image";
 
 export default function Home() {
   return (

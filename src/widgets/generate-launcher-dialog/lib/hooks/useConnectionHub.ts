@@ -1,12 +1,15 @@
+"use client";
+
 import { useEffect, useState } from "react";
 
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getStorageAccessToken } from "@/shared/services";
 import { useToast } from "@/shared/ui/use-toast";
+import { getApiBaseUrl } from "@/shared/lib/utils";
 
 const CONNECTION_URL = (token: string) =>
-  `${process.env.NEXT_PUBLIC_BASE_URL}/ws/launcher/build?access_token=${token}`;
+  `${getApiBaseUrl()}/ws/launcher/build?access_token=${token}`;
 
 export const useConnectionHub = () => {
   const { toast } = useToast();
@@ -14,11 +17,12 @@ export const useConnectionHub = () => {
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
 
-  const [progressPercent, setProgressPercent] = useState(0);
-  const [logs, setLogs] = useState<string[] | null>(null);
-  const [isBuild, setIsBuild] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const onIsProcessingToggle = () => setIsProcessing((prev) => !prev);
+  const [logsBuilding, setLogsBuilding] = useState<string[] | null>(null);
+
+  const [percentDownload, setPercentDownload] = useState(0);
+
+  const [isDownload, setIsDownload] = useState(false);
+  const [isBuilding, setIsBuilding] = useState(false);
 
   useEffect(() => {
     if (!accessToken) return;
@@ -37,44 +41,59 @@ export const useConnectionHub = () => {
         await connection.start();
 
         connection.on("GitHubLauncherHubChangeProgress", (percent) => {
-          setProgressPercent(percent);
+          setPercentDownload(percent);
         });
 
         connection.on("Message", (message) => {
+          if (message === "Лаунчер уже существует в папке, удалите его перед сборкой") {
+            setIsDownload(false);
+          }
+
+          if (message === "Проект успешно создан") {
+            setIsDownload(false);
+          }
+
+          if (message === "Лаунчер успешно скомпилирован") {
+            setIsBuilding(false);
+          }
+
           toast({
             description: message,
           });
         });
 
         connection.on("Log", (log: string) => {
-          setLogs((prev) => (prev ? [...prev, log] : [log]));
-          setIsBuild(true);
+          setLogsBuilding((prev) => (prev ? [...prev, log] : [log]));
         });
       } catch (error) {
         console.log(error);
       }
     };
 
-    onConnectedHub().then(() => {});
+    onConnectedHub().then(() => {
+      console.log("Success starting connectionHub");
+    });
 
     return () => {
-      connectionHub?.stop().then(() => {});
+      connectionHub?.stop().then(() => {
+        console.log("Success stopping connectionHub");
+      });
     };
   }, []);
 
   return {
     connectionHub,
-    logs,
-    process: {
-      isProcessing,
-      isBuild,
-      setIsBuild,
-      setLogs,
-      onIsProcessingToggle,
+    download: {
+      isDownload,
+      setIsDownload,
+      percent: percentDownload,
+      setPercent: setPercentDownload,
     },
-    percent: {
-      progressPercent,
-      setProgressPercent,
+    build: {
+      isBuilding,
+      setIsBuilding,
+      logs: logsBuilding,
+      setLogs: setLogsBuilding,
     },
   };
 };

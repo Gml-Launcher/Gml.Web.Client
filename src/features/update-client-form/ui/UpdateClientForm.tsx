@@ -1,18 +1,18 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import React from "react";
 
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Icons } from "@/shared/ui/icons";
 import { useLauncherVersionsBuilds, useUpdateLauncher } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
+import { Textarea } from "@/shared/ui/textarea";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 
 import { ClientUpdateFormSchemaType, ClientUpdateSchema } from "../lib/static";
-import { Textarea } from "@/shared/ui/textarea";
-import React from "react";
 
 interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: () => void;
@@ -78,7 +78,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите версию обновления</FormLabel>
                 <FormControl>
-                  <Input placeholder="1.1.0.0" {...field} />
+                  <Input placeholder="1.0.0" {...field} />
                 </FormControl>
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
@@ -110,7 +110,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите описание обновление</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Введите описание обновлениz" {...field} />
+                  <Textarea placeholder="Введите описание обновления" {...field} />
                 </FormControl>
                 {form.formState.errors.description && (
                   <FormMessage>{form.formState.errors.description.message}</FormMessage>
@@ -129,7 +129,4 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
       </Form>
     </div>
   );
-}
-function useRef<T>(arg0: null) {
-  throw new Error("Function not implemented.");
 }

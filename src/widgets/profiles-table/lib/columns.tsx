@@ -16,7 +16,6 @@ import { ProfileBaseEntity } from "@/shared/api/contracts";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
 import { getFormatDate } from "@/shared/lib/utils";
-import { ProfileStateOption } from "@/shared/enums";
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
 import React from "react";
 import { ClientState } from "@/widgets/client-hub/ui/ClientState";
@@ -46,7 +45,7 @@ export const useColumns = (props: UseColumnsProps) => {
     router.push(`${DASHBOARD_PAGES.PROFILE}/${profileName}`);
   };
 
-  const columns = [
+  const columns: any = [
     columnsHelper.display({
       id: "checkbox",
       size: 48,
@@ -78,14 +77,14 @@ export const useColumns = (props: UseColumnsProps) => {
       cell: ({ row }) => (
         <Image
           className="min-w-12 min-h-12 h-12 w-12"
-          src={`data:text/plain;base64,${row.original.iconBase64}`}
+          src={
+            row.original.iconBase64
+              ? `data:text/plain;base64,${row.original.iconBase64}`
+              : defaultProfileIcon.src
+          }
           alt={row.original.name}
-          width={32}
-          height={32}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = defaultProfileIcon.src;
-          }}
+          width={48}
+          height={48}
         />
       ),
     }),

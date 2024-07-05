@@ -6,7 +6,7 @@ export type ProfileBaseEntity = {
   launchVersion: string;
   jvmArguments: string;
   iconBase64: string;
-  state: string;
+  state: number;
 };
 
 export type ProfileExtendedBaseEntity = {
@@ -21,7 +21,7 @@ export type ProfileExtendedBaseEntity = {
   arguments: string;
   jvmArguments: string;
   hasUpdate: boolean;
-  state: string;
+  state: number;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
 };

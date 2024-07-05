@@ -1,36 +1,38 @@
+import Image from "next/image";
 import Link from "next/link";
 
-import { SignInForm, SignUpForm } from "../../../features/auth-credentials-form";
-import { cn } from "../../../shared/lib/utils";
-import { AUTH_PAGES } from "../../../shared/routes";
-import { buttonVariants } from "@/shared/ui/button";
-import Image from "next/image";
+import { SignUpForm } from "@/features/auth-credentials-form";
+
+import { AUTH_PAGES } from "@/shared/routes";
+
 import logo from "@/assets/logos/logo.svg";
 
-export default function SignUPPage() {
+import classes from "./styles.module.css";
+
+export default function Page() {
   return (
     <>
-      <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
-        <div className="flex items-center justify-center py-12">
-          <div className="mx-auto grid w-[350px] gap-6">
-            <div className="grid gap-3">
-              <Image src={logo} className="w-12" alt="GML Frontend" />
-              <h1 className="text-3xl font-bold">Регистрация</h1>
-              <p className="text-balance text-muted-foreground">
+      <div className={classes.register}>
+        <div className={classes["register__main-content"]}>
+          <div className={classes.register__form}>
+            <div className={classes.register__details}>
+              <Image src={logo} className={classes.register__logo} alt="GML Frontend" />
+              <h1 className={classes.register__title}>Регистрация</h1>
+              <p className={classes.register__subtitle}>
                 Введите свой адрес электронной почты ниже, чтобы создать свою учетную запись
               </p>
             </div>
             <SignUpForm />
-            <div className="mt-4 text-center text-sm">
+            <div className={classes.register__login}>
               Уже есть аккаунт?{" "}
-              <Link href={AUTH_PAGES.SIGN_IN} className="underline">
+              <Link href={AUTH_PAGES.SIGN_IN} className={classes.register__link}>
                 Войти
               </Link>
             </div>
           </div>
         </div>
-        <div className="hidden bg-muted lg:flex items-center justify-center">
-          <Image src={logo} className="w-42 opacity-10" alt="GML Frontend" />
+        <div className={classes.register__banner}>
+          <Image src={logo} className={classes["register__banner-image"]} alt="GML Frontend" />
         </div>
       </div>
     </>

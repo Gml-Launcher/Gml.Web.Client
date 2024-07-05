@@ -1,0 +1,19 @@
+.profile {
+    @apply grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-6;
+}
+
+.tabs {
+    @apply flex gap-6 items-start;
+}
+
+.tabs__list {
+    @apply flex-col h-auto items-start min-w-44;
+}
+
+.tabs__content {
+    @apply w-full;
+}
+
+.tabs__whitelist {
+    @apply flex items-center gap-x-4 ml-auto;
+}

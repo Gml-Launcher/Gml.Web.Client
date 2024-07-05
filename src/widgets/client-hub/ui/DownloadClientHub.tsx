@@ -5,13 +5,13 @@ import React, { useEffect, useRef } from "react";
 import { Ubuntu_Mono } from "next/font/google";
 
 import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
 import { Textarea } from "@/shared/ui/textarea";
 import { Icons } from "@/shared/ui/icons";
 
 import { useConnectionHub } from "../lib/useConnectionHub";
-import { cn } from "@/shared/lib/utils";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -64,6 +64,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                 Загрузить
               </Button>
             </div>
+
             {/* Карточка 2 шаг */}
             <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3">
               <h6 className="text-xl font-bold">Шаг второй</h6>
@@ -83,7 +84,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           <h5 className="text-xl font-bold">Консоль</h5>
           <Textarea
             ref={textareaRef}
-            value={logs?.join("\n")}
+            value={logs ? logs.join("\n") : ""}
             className={cn("h-80 max-h-80 font-sans", ubuntuMono.variable)}
             readOnly
           />

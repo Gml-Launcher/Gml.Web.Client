@@ -3,13 +3,13 @@
 import { ProfileStateOption } from "@/shared/enums";
 
 interface ClientStateProps {
-  state: keyof typeof stateColorMap;
+  state: number;
 }
 
-const stateColorMap = {
-  "0": "bg-gray-600",
-  "1": "bg-orange-500",
-  "2": "bg-green-600",
+const stateColorMap: Record<ClientStateProps["state"], string> = {
+  0: "bg-gray-600",
+  1: "bg-orange-500",
+  2: "bg-green-600",
 };
 
 export function ClientState({ state }: ClientStateProps) {

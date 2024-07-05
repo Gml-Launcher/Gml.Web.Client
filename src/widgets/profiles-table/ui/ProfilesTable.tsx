@@ -28,7 +28,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/shared/ui/sheet"
 import { Switch } from "@/shared/ui/switch";
 
 import { useColumns } from "../lib/columns";
-import { useTable } from "../lib/table";
 
 import { ProfilesTableSkeleton } from "./ProfilesTableSkeleton";
 import { Icons } from "@/shared/ui/icons";
@@ -53,7 +52,6 @@ export function ProfilesTable() {
     onProfileDeleteModalToggle,
     isPendingDelete: deleteMutation.isPending,
   });
-  const { table } = useTable({ data: profiles, columns, rowSelection, setRowSelection });
 
   const onProfileDelete =
     ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>

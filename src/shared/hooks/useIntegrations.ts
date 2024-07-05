@@ -77,12 +77,11 @@ export const useGithubLauncherVersions = () => {
 };
 
 export const useLauncherVersionsBuilds = () => {
-  const { data, isLoading } = useQuery({
+  return useQuery({
     queryKey: ["clientBuilds"],
     queryFn: () => integrationService.getVersionBuilds(),
+    select: (data) => data.data,
   });
-
-  return { data: data?.data, isLoading };
 };
 
 export const useUpdateLauncher = () => {

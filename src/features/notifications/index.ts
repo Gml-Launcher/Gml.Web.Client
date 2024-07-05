@@ -1,1 +1,1 @@
-export { Notifications } from "@/features/notifications/ui/Notifications";
+export * from "./ui/Notifications";

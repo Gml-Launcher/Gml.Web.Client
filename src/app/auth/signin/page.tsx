@@ -1,39 +1,38 @@
+import Image from "next/image";
 import Link from "next/link";
 
-import { SignInForm } from "../../../features/auth-credentials-form";
-import { cn } from "../../../shared/lib/utils";
-import { AUTH_PAGES } from "../../../shared/routes";
-import { Button, buttonVariants } from "../../../shared/ui/button";
-import { Label } from "@/shared/ui/label";
-import { Input } from "@/shared/ui/input";
-import classes from "@/app/dashboard/styles.module.css";
-import Image from "next/image";
+import { SignInForm } from "@/features/auth-credentials-form";
+
+import { AUTH_PAGES } from "@/shared/routes";
+
 import logo from "@/assets/logos/logo.svg";
 
-export default function SignInPage() {
+import classes from "./styles.module.css";
+
+export default function Page() {
   return (
     <>
-      <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
-        <div className="flex items-center justify-center py-12">
-          <div className="mx-auto grid w-[350px] gap-6">
-            <div className="grid gap-3">
-              <Image src={logo} className="w-12" alt="GML Frontend" />
-              <h1 className="text-3xl font-bold">Авторизация</h1>
-              <p className="text-balance text-muted-foreground">
+      <div className={classes.login}>
+        <div className={classes["login__main-content"]}>
+          <div className={classes.login__form}>
+            <div className={classes.login__details}>
+              <Image src={logo} className={classes.login__logo} alt="GML Frontend" />
+              <h1 className={classes.login__title}>Авторизация</h1>
+              <p className={classes.login__subtitle}>
                 Введите свой логин и пароль ниже, чтобы войти в свою учетную запись
               </p>
             </div>
             <SignInForm />
-            <div className="mt-4 text-center text-sm">
+            <div className={classes.login__registration}>
               Нет аккаунта?{" "}
-              <Link href={AUTH_PAGES.SIGN_UP} className="underline">
+              <Link href={AUTH_PAGES.SIGN_UP} className={classes.login__link}>
                 Регистрация
               </Link>
             </div>
           </div>
         </div>
-        <div className="hidden bg-muted lg:flex items-center justify-center">
-          <Image src={logo} className="w-42 opacity-10" alt="GML Frontend" />
+        <div className={classes.login__banner}>
+          <Image src={logo} className={classes["login__banner-image"]} alt="GML Frontend" />
         </div>
       </div>
     </>

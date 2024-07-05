@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+
 import { getStorageAccessToken } from "@/shared/services";
 import { useToast } from "@/shared/ui/use-toast";
 import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { getApiBaseUrl } from "@/shared/lib/utils";
 
 interface ConnectionHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -10,7 +13,7 @@ interface ConnectionHubProps {
 }
 
 const CONNECTION_URL = (token: string) =>
-  `${process.env.NEXT_PUBLIC_BASE_URL}/ws/profiles/restore?access_token=${token}`;
+  `${getApiBaseUrl()}/ws/profiles/restore?access_token=${token}`;
 
 export const useConnectionHub = (props: ConnectionHubProps) => {
   const { profile, isLoading } = props;
@@ -25,7 +28,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
   const [isRestoring, setIsRestoring] = useState(false);
 
-  const [logs, setLogs] = useState<string[]>([]);
+  const [logs, setLogs] = useState<string[] | null>(null);
 
   const [isPacked, setIsPacked] = useState(false);
 
@@ -87,7 +90,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
             setIsRestoring(false);
             setPercentStage(0);
             setPercentAllStages(0);
-            setLogs([]);
+            setLogs(null);
             toast({
               title: "Успешно",
               description: `Профиль ${profileName} успешно загружен`,
@@ -99,7 +102,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
           if (profileName == profile?.profileName) {
             setIsRestoring(false);
             setPercentStage(0);
+            setLogs(null);
           }
+
           toast({
             title: "Успешно",
             description: `Профиль ${profileName} успешно собран`,

@@ -33,7 +33,7 @@ class IntegrationService {
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
   private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
   private BASE_URL_DISCORD = `${this.BASE_URL}/discord`;
-  private BASE_URL_LAUNCHER = `/launcher`;
+  private BASE_URL_LAUNCHER = "/launcher";
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<

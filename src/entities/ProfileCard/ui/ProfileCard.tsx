@@ -1,58 +1,72 @@
-import { Card, CardContent } from "@/shared/ui/card";
 import React from "react";
+
 import Image from "next/image";
+
+import { useTheme } from "next-themes";
+import { Edit2Icon } from "lucide-react";
+
+import { ClientState } from "@/widgets/client-hub/ui/ClientState";
+
 import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { Button } from "@/shared/ui/button";
-import { Edit2Icon } from "lucide-react";
+
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
-import { ClientState } from "@/widgets/client-hub/ui/ClientState";
+
+import classes from "./styles.module.css";
 
 interface ProfileCardParams {
   profile: ProfileExtendedBaseEntity;
 }
 
 export const ProfileCard = ({ profile }: ProfileCardParams) => {
+  const { theme } = useTheme();
+
   return (
     <div
-      className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[230px]"
+      className={classes["profile-card"]}
       style={{
-        backgroundImage: `linear-gradient(rgba(10, 10, 10, .6), rgba(10, 10, 10, 1)), url(${profile.background})`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        backgroundImage:
+          theme === "dark"
+            ? `linear-gradient(rgba(10, 10, 10, .6), rgba(10, 10, 10, 1)), url(${profile.background})`
+            : `linear-gradient(rgba(255, 255, 255, .6), rgba(255, 255, 255, 1)), url(${profile.background})`,
       }}
     >
       {/* Кнопка редактирования */}
-      <div className="flex justify-end w-full">
-        <Button variant="outline" size="icon" className="rounded-full">
+      <div className={classes["profile-card__edit-button"]}>
+        <Button variant="outline" size="icon" className={classes["profile-card__edit-button-full"]}>
           <Edit2Icon size={16} />
         </Button>
       </div>
 
       {/* Профиль */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2">
+      <div className={classes["profile-card__info"]}>
+        <div className={classes["profile-card__info-state"]}>
           <ClientState state={profile.state} />
         </div>
-        <div className="flex flex-wrap gap-x-5 items-center">
+        <div className={classes["profile-card__info-icon-wrapper"]}>
           <Image
-            className="h-16 w-16 min-w-16 min-h-16 object-cover rounded"
-            src={`data:text/plain;base64,${profile.iconBase64}`}
+            className={classes["profile-card__info-icon"]}
+            src={
+              profile.iconBase64
+                ? `data:text/plain;base64,${profile.iconBase64}`
+                : defaultProfileIcon
+            }
             alt={profile.profileName}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = defaultProfileIcon.src;
-            }}
-            width={32}
-            height={32}
+            width={64}
+            height={64}
           />
+
           {/* Текст профиля */}
-          <div className="flex flex-col gap-y-1 ">
-            <h3 className="truncate font-extrabold text-[28px]">{profile.profileName}</h3>
-            <p className="flex gap-2">
-              <span className="truncate font-bold">{profile.minecraftVersion}</span>
-              <span className="truncate font-medium">/</span>
-              <span className="truncate opacity-55">{profile.launchVersion}</span>
+          <div className={classes["profile-card__info-text"]}>
+            <h3 className={classes["profile-card__info-name"]}>{profile.profileName}</h3>
+            <p className={classes["profile-card__info-version"]}>
+              <span className={classes["profile-card__info-version-minecraft"]}>
+                {profile.minecraftVersion}
+              </span>
+              <span className={classes["profile-card__info-version-launch"]}>/</span>
+              <span className={classes["profile-card__info-version-launch-opacity"]}>
+                {profile.launchVersion}
+              </span>
             </p>
           </div>
         </div>

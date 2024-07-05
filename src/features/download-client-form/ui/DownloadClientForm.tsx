@@ -1,14 +1,8 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Ubuntu_Mono } from "next/font/google";
-
-const ubuntuMono = Ubuntu_Mono({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: "400",
-});
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
 import { useGithubLauncherVersions } from "@/shared/hooks";
 import { cn, getApiBaseUrl } from "@/shared/lib/utils";
@@ -18,30 +12,31 @@ import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { Progress } from "@/shared/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { useToast } from "@/shared/ui/use-toast";
 
 import { ClientDownloadFormSchemaType, ClientDownloadSchema } from "../lib/static";
-import { useConnectionHub } from "../lib/hooks/useConnectionHub";
-import { useOnSubmit } from "../lib/hooks/useOnSubmitDownload";
+import { useOnSubmit } from "../lib/hooks/useOnSubmit";
 
 interface DownloadClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onOpenChange: () => void;
-  connectionState: ReturnType<typeof useConnectionHub>;
+  connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
+  state: ReturnType<typeof useConnectionHub>["download"];
 }
 
 export function DownloadClientForm({
   className,
-  onOpenChange,
-  connectionState,
+  connectionHub,
+  state,
   ...props
 }: DownloadClientFormProps) {
-  const { connectionHub, process, percent } = connectionState;
-  const { onSubmit } = useOnSubmit({ connectionHub, process, percent, onOpenChange });
+  const { percent, isDownload } = state;
+
+  const { onSubmit } = useOnSubmit({ connectionHub, state });
+
   const { data: branches } = useGithubLauncherVersions();
-  const { toast } = useToast();
+
   const form = useForm<ClientDownloadFormSchemaType>({
     values: { branch: "", host: getApiBaseUrl() || "", folder: "" },
     resolver: zodResolver(ClientDownloadSchema),
+    disabled: isDownload,
   });
 
   return (
@@ -58,7 +53,7 @@ export function DownloadClientForm({
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    disabled={Boolean(percent.progressPercent)}
+                    disabled={field.disabled}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите версию" />
@@ -87,11 +82,7 @@ export function DownloadClientForm({
               <FormItem className="flex-1">
                 <FormLabel>Введите URL к API</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Введите URL к API"
-                    {...field}
-                    disabled={Boolean(percent.progressPercent)}
-                  />
+                  <Input placeholder="Введите URL к API" {...field} />
                 </FormControl>
                 {form.formState.errors.host && (
                   <FormMessage>{form.formState.errors.host.message}</FormMessage>
@@ -107,11 +98,7 @@ export function DownloadClientForm({
               <FormItem className="flex-1">
                 <FormLabel>Введите название папки</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Введите название папки"
-                    {...field}
-                    disabled={Boolean(percent.progressPercent)}
-                  />
+                  <Input placeholder="Введите название папки" {...field} />
                 </FormControl>
                 {form.formState.errors.folder && (
                   <FormMessage>{form.formState.errors.folder.message}</FormMessage>
@@ -120,30 +107,23 @@ export function DownloadClientForm({
             )}
           />
 
-          <div className="flex justify-center items-center">
-            {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
-              <p className="text-gray-700 dark:text-gray-200 text-sm">
-                Сборка завершена на {percent.progressPercent}% из 100%
-              </p>
+          <div className="flex justify-center items-center gap-x-4">
+            {isDownload && (
+              <div className="w-full flex flex-col gap-y-1">
+                <p className="text-gray-700 dark:text-gray-200 text-sm">
+                  Сборка завершена на {percent}% из 100%
+                </p>
+                <Progress className="h-2" value={percent} />
+              </div>
             )}
-            <Button
-              className="w-fit ml-auto"
-              disabled={Boolean(percent.progressPercent) || !form.formState.isDirty}
-            >
-              {Boolean(percent.progressPercent) && (
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-              )}
+
+            <Button className="w-fit ml-auto" disabled={isDownload || !form.formState.isDirty}>
+              {isDownload && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Скачать исходники
             </Button>
           </div>
         </form>
       </Form>
-      {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
-        <Progress className="h-2" value={percent.progressPercent} />
-      )}
     </div>
   );
-}
-function useRef<T>(arg0: null) {
-  throw new Error("Function not implemented.");
 }
