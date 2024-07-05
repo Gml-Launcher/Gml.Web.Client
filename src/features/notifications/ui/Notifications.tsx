@@ -1,34 +1,27 @@
 "use client";
 
-import { useTheme } from "next-themes";
-
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { BellIcon } from "lucide-react";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { Button } from "@/shared/ui/button";
-import { BellIcon } from "lucide-react";
 import { Badge } from "@/shared/ui/badge";
 
 export const Notifications = () => {
-  const { setTheme } = useTheme();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full relative">
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <BellIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <BellIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Уведомления</span>
           <Badge
             variant="default"
-            className="absolute py-1 px-2 font-semibold"
-            style={{ top: "-3px", right: "-8px" }}
+            className="absolute py-1 px-2 font-semibold top-[-3px] right-[-8px]"
           >
             0
           </Badge>

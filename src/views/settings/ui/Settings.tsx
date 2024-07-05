@@ -10,7 +10,7 @@ export const SettingsPage = () => {
   return (
     <>
       <Breadcrumbs
-        current="Настройки платформы"
+        current="Настройки"
         breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
       />
       <div className="mx-auto grid w-full gap-2">
