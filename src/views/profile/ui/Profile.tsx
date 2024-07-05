@@ -14,11 +14,25 @@ import { useProfile } from "@/shared/hooks";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
 
-import { ProfileLoading } from "./ProfileLoading";
+import { ProfileLoading } from "@/views/profile";
 import { WhitelistFileBaseEntity } from "@/shared/api/contracts";
 import { useDeleteFilesWhitelist } from "@/shared/hooks/useWhitelist";
 import { ProfileCard } from "@/entities/ProfileCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/shared/ui/alert-dialog";
+import { Button } from "@/shared/ui/button";
+import { AddingFilesWhitelistDialog } from "@/widgets/adding-files-whitelist-dialog";
+import { FilesTable } from "@/widgets/files-table";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -33,7 +47,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     if (account && accessToken) {
       mutate({
         UserName: account.login,
-        ProfileName: params.name.replaceAll("%20", " "),
+        ProfileName: decodeURIComponent(params.name),
         UserAccessToken: accessToken,
         UserUuid: "uuid",
         OsArchitecture: OsArchitectureEnum.X64,
@@ -101,7 +115,35 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </Section>
         </TabsContent>
         <TabsContent value="files" className="w-full">
-          Chang
+          <Section title="Белый список файлов">
+            <div className="flex items-center gap-x-4 ml-auto">
+              {!!Object.keys(rowSelection).length && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline">Удалить выбранные файлы</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Удаление файлов из белого списка</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} файлы(ов) из белого списка?`}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Отмена</AlertDialogCancel>
+                      <AlertDialogAction onClick={onSubmit}>Удалить</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+              <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
+            </div>
+            <FilesTable
+              files={profile.whiteListFiles}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
+            />
+          </Section>
         </TabsContent>
       </Tabs>
 
