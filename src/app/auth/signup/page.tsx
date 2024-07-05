@@ -1,32 +1,38 @@
+import Image from "next/image";
 import Link from "next/link";
 
-import { SignUpForm } from "../../../features/auth-credentials-form";
-import { cn } from "../../../shared/lib/utils";
-import { AUTH_PAGES } from "../../../shared/routes";
-import { buttonVariants } from "@/shared/ui/button";
+import { SignUpForm } from "@/features/auth-credentials-form";
 
-export default function SignUPPage() {
+import { AUTH_PAGES } from "@/shared/routes";
+
+import logo from "@/assets/logos/logo.svg";
+
+import classes from "./styles.module.css";
+
+export default function Page() {
   return (
     <>
-      <div className="container relative hidden h-[100vh] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-1 lg:px-0">
-        <Link
-          href={AUTH_PAGES.SIGN_IN}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "absolute right-4 top-4 md:right-8 md:top-8",
-          )}
-        >
-          Войти
-        </Link>
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Создайте учетную запись</h1>
-            <p className="text-sm text-muted-foreground">
-              Введите свой адрес электронной почты ниже, чтобы создать свою учетную запись
-            </p>
+      <div className={classes.register}>
+        <div className={classes["register__main-content"]}>
+          <div className={classes.register__form}>
+            <div className={classes.register__details}>
+              <Image src={logo} className={classes.register__logo} alt="GML Frontend" />
+              <h1 className={classes.register__title}>Регистрация</h1>
+              <p className={classes.register__subtitle}>
+                Введите свой адрес электронной почты ниже, чтобы создать свою учетную запись
+              </p>
+            </div>
+            <SignUpForm />
+            <div className={classes.register__login}>
+              Уже есть аккаунт?{" "}
+              <Link href={AUTH_PAGES.SIGN_IN} className={classes.register__link}>
+                Войти
+              </Link>
+            </div>
           </div>
-
-          <SignUpForm />
+        </div>
+        <div className={classes.register__banner}>
+          <Image src={logo} className={classes["register__banner-image"]} alt="GML Frontend" />
         </div>
       </div>
     </>

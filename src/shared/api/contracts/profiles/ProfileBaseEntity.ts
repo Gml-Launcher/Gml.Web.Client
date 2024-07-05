@@ -6,7 +6,7 @@ export type ProfileBaseEntity = {
   launchVersion: string;
   jvmArguments: string;
   iconBase64: string;
-  state: string;
+  state: number;
 };
 
 export type ProfileExtendedBaseEntity = {
@@ -14,12 +14,14 @@ export type ProfileExtendedBaseEntity = {
   profileName: string;
   minecraftVersion: string;
   clientVersion: string;
+  launchVersion: string;
   iconBase64: string;
   background: string;
   description: string;
   arguments: string;
   jvmArguments: string;
   hasUpdate: boolean;
+  state: number;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
 };

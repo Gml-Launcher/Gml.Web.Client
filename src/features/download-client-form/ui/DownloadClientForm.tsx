@@ -1,6 +1,8 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
 import { useGithubLauncherVersions } from "@/shared/hooks";
 import { cn, getApiBaseUrl } from "@/shared/lib/utils";
@@ -10,44 +12,32 @@ import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { Progress } from "@/shared/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { useToast } from "@/shared/ui/use-toast";
 
-import { InstallClientFormSchemaType, InstallClientSchema } from "../lib/static";
-import { useConnectionHub } from "../lib/useConnectionHub";
+import { ClientDownloadFormSchemaType, ClientDownloadSchema } from "../lib/static";
+import { useOnSubmit } from "../lib/hooks/useOnSubmit";
 
-interface InstallClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  onOpenChange: () => void;
+interface DownloadClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
+  connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
+  state: ReturnType<typeof useConnectionHub>["download"];
 }
 
-export function InstallClientForm({ className, onOpenChange, ...props }: InstallClientFormProps) {
-  const { connectionHub, process, percent } = useConnectionHub();
+export function DownloadClientForm({
+  className,
+  connectionHub,
+  state,
+  ...props
+}: DownloadClientFormProps) {
+  const { percent, isDownload } = state;
+
+  const { onSubmit } = useOnSubmit({ connectionHub, state });
+
   const { data: branches } = useGithubLauncherVersions();
-  const { toast } = useToast();
 
-  const form = useForm<InstallClientFormSchemaType>({
+  const form = useForm<ClientDownloadFormSchemaType>({
     values: { branch: "", host: getApiBaseUrl() || "", folder: "" },
-    resolver: zodResolver(InstallClientSchema),
+    resolver: zodResolver(ClientDownloadSchema),
+    disabled: isDownload,
   });
-
-  const onSubmit: SubmitHandler<InstallClientFormSchemaType> = async (
-    data: InstallClientFormSchemaType,
-  ) => {
-    process.onIsProcessingToggle();
-    try {
-      connectionHub?.invoke("Download", data.branch, data.host, data.folder).then(() => {
-        onOpenChange();
-      });
-    } catch (error: unknown) {
-      toast({
-        variant: "destructive",
-        title: "Ошибка!",
-        description: JSON.stringify(error),
-      });
-    } finally {
-      process.onIsProcessingToggle();
-      percent.setProgressPercent(0);
-    }
-  };
 
   return (
     <div className={cn("grid gap-4", className)} {...props}>
@@ -60,7 +50,11 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={field.disabled}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите версию" />
                     </SelectTrigger>
@@ -113,25 +107,23 @@ export function InstallClientForm({ className, onOpenChange, ...props }: Install
             )}
           />
 
-          <div className="flex justify-between items-center">
-            {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
-              <p className="text-gray-800 text-sm">
-                Сборка завершена на {percent.progressPercent}% из 100%
-              </p>
+          <div className="flex justify-center items-center gap-x-4">
+            {isDownload && (
+              <div className="w-full flex flex-col gap-y-1">
+                <p className="text-gray-700 dark:text-gray-200 text-sm">
+                  Сборка завершена на {percent}% из 100%
+                </p>
+                <Progress className="h-2" value={percent} />
+              </div>
             )}
-            <Button
-              className="w-fit ml-auto"
-              disabled={process.isProcessing || !form.formState.isDirty}
-            >
-              {process.isProcessing && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+
+            <Button className="w-fit ml-auto" disabled={isDownload || !form.formState.isDirty}>
+              {isDownload && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Скачать исходники
             </Button>
           </div>
         </form>
       </Form>
-      {Boolean(percent.progressPercent) && percent.progressPercent !== 100 && (
-        <Progress className="h-2" value={percent.progressPercent} />
-      )}
     </div>
   );
 }

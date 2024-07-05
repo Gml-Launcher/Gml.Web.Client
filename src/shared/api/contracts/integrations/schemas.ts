@@ -10,6 +10,11 @@ export type BranchBaseEntity = {
   version: string;
 };
 
+export type LauncherBuildsBaseEntity = {
+  name: string;
+  dateTime: string;
+};
+
 export type SentryBaseEntity = {
   url: string;
 };

@@ -1,1 +1,2 @@
-export { GenerateLauncherDialog } from "./ui/GenerateLauncherDialog";
+export * from "./ui/GenerateLauncherDialog";
+export * from "./lib/hooks/useConnectionHub";

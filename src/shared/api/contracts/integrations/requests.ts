@@ -2,6 +2,7 @@ import {
   AuthIntegrationBaseEntity,
   BranchBaseEntity,
   DiscordBaseEntity,
+  LauncherBuildsBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
 } from "@/shared/api/contracts";
@@ -25,6 +26,16 @@ export type TGetInstallClientBranchesRequest = {};
 export type TGetInstallClientBranchesResponse = ResponseBaseEntity & {
   data: BranchBaseEntity[];
 };
+
+// Получение списка билдов лаунчера
+export type TGetLauncherVersionBuildsRequest = {};
+export type TGetLauncherVersionBuildsResponse = ResponseBaseEntity & {
+  data: LauncherBuildsBaseEntity[];
+};
+
+// Обновление лаунчера
+export type TPostLauncherUpdateRequest = FormData;
+export type TPostLauncherUpdateResponse = ResponseBaseEntity & {};
 
 // Изменение сервера авторизации
 export type TPostAuthIntegrationsRequest = {

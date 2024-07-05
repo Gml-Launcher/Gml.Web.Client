@@ -1,0 +1,43 @@
+.register {
+    @apply w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]
+}
+
+.register__main-content {
+    @apply flex items-center justify-center py-12
+}
+
+.register__form {
+    @apply mx-auto grid w-[350px] gap-6;
+}
+
+.register__details {
+    @apply grid gap-3;
+}
+
+.register__logo {
+    @apply w-12;
+}
+
+.register__title {
+    @apply text-3xl font-bold;
+}
+
+.register__subtitle {
+    @apply text-balance text-muted-foreground;
+}
+
+.register__login {
+    @apply mt-4 text-center text-sm;
+}
+
+.register__link {
+    @apply underline;
+}
+
+.register__banner {
+    @apply hidden bg-muted lg:flex items-center justify-center;
+}
+
+.register__banner-image {
+    @apply w-48 opacity-10;
+}
