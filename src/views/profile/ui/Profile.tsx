@@ -33,7 +33,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     if (account && accessToken) {
       mutate({
         UserName: account.login,
-        ProfileName: params.name,
+        ProfileName: params.name.replaceAll("%20", " "),
         UserAccessToken: accessToken,
         UserUuid: "uuid",
         OsArchitecture: OsArchitectureEnum.X64,
@@ -71,7 +71,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       </div>
 
       <Tabs
-        defaultValue="account"
+        defaultValue="main"
         aria-orientation={"vertical"}
         orientation={"vertical"}
         className="flex gap-6 items-start"
