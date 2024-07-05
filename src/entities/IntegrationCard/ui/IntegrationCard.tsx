@@ -14,7 +14,7 @@ export const IntegrationCard = (props: IntegrationCardProps) => {
   const { title, description, dialog } = props;
 
   return (
-    <Card className="flex flex-col justify-between gap-y-8 p-6" data-testid={props.testid}>
+    <Card className="flex flex-col justify-between gap-y-4 p-6" data-testid={props.testid}>
       <div className="flex flex-col gap-y-1">
         <div className="flex justify-between">
           <h6 className="text-sm font-bold">{title}</h6>
