@@ -56,7 +56,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
                     </SelectTrigger>
                     <SelectContent>
                       {versions &&
-                        versions.map(({ name, dateTime }) => (
+                        versions.map(({ name }) => (
                           <SelectItem key={name} value={name}>
                             {name}
                           </SelectItem>
