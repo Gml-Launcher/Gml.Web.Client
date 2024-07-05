@@ -13,11 +13,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import { removeStorageProfile, removeStorageTokens } from "@/shared/services";
+import { getStorageProfile, removeStorageProfile, removeStorageTokens } from "@/shared/services";
 import { AUTH_PAGES } from "@/shared/routes";
 
 export const AccountNavigation = () => {
   const router = useRouter();
+  const profile = getStorageProfile();
 
   const destroySession = () => {
     removeStorageProfile();
@@ -33,8 +34,13 @@ export const AccountNavigation = () => {
           <span className="sr-only">Открыть меню пользователя</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Мой аккаунт</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="min-w-48">
+        <div className="px-2 py-1.5 text-sm font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{profile?.login}</p>
+            <p className="text-xs leading-none text-muted-foreground">{profile?.email}</p>
+          </div>
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={destroySession}>Выход</DropdownMenuItem>
       </DropdownMenuContent>
