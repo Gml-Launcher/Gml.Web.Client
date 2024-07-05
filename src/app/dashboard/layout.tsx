@@ -14,6 +14,7 @@ import { TMenuItem } from "@/shared/types";
 import logo from "@/assets/logos/logo.svg";
 
 import classes from "./styles.module.css";
+import { Notifications } from "@/features/notifications";
 
 const menu: TMenuItem[] = [
   {
@@ -54,6 +55,7 @@ export default function Page({ children }: React.PropsWithChildren) {
         <header className={classes.header}>
           <MobileNavigation menu={menu} />
           <div className={classes.header__actions}>
+            <Notifications />
             <ChangeTheme />
             <AccountNavigation />
           </div>

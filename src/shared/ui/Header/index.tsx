@@ -16,6 +16,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/shared/ui/navigation-menu";
+import { Notifications } from "@/features/notifications";
 
 const menu = [
   {

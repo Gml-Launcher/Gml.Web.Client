@@ -31,9 +31,9 @@
 }
 
 .header {
-    @apply flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6
+    @apply flex h-14 items-center gap-5 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6
 }
 
 .header__actions {
-    @apply flex items-center gap-x-4 ml-auto
+    @apply flex items-center gap-x-6 ml-auto
 }
