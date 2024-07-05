@@ -11,6 +11,8 @@ import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 
 import { ClientUpdateFormSchemaType, ClientUpdateSchema } from "../lib/static";
+import { Textarea } from "@/shared/ui/textarea";
+import React from "react";
 
 interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: () => void;
@@ -76,7 +78,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите версию обновления</FormLabel>
                 <FormControl>
-                  <Input placeholder="Введите версию обновления" {...field} />
+                  <Input placeholder="1.1.0.0" {...field} />
                 </FormControl>
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
@@ -92,7 +94,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите название обновление</FormLabel>
                 <FormControl>
-                  <Input placeholder="Введите название обновление" {...field} />
+                  <Input placeholder="Ого! Вышло обновление!" {...field} />
                 </FormControl>
                 {form.formState.errors.title && (
                   <FormMessage>{form.formState.errors.title.message}</FormMessage>
@@ -108,7 +110,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите описание обновление</FormLabel>
                 <FormControl>
-                  <Input placeholder="Введите описание обновление" {...field} />
+                  <Textarea placeholder="Введите описание обновлениz" {...field} />
                 </FormControl>
                 {form.formState.errors.description && (
                   <FormMessage>{form.formState.errors.description.message}</FormMessage>
@@ -120,7 +122,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
           <div className="flex gap-x-4 justify-end items-center">
             <Button className="w-fit" disabled={isPending || !form.formState.isDirty}>
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              Обновнить
+              Обновить
             </Button>
           </div>
         </form>
