@@ -11,10 +11,13 @@ import {
   TGetConnectTexturesRequest,
   TGetConnectTexturesResponse,
   TGetInstallClientBranchesResponse,
+  TGetLauncherVersionBuildsResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
+  TPostLauncherUpdateRequest,
+  TPostLauncherUpdateResponse,
   TPutConnectDiscordRequest,
   TPutConnectDiscordResponse,
   TPutConnectTexturesRequest,
@@ -30,6 +33,7 @@ class IntegrationService {
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
   private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
   private BASE_URL_DISCORD = `${this.BASE_URL}/discord`;
+  private BASE_URL_LAUNCHER = `/launcher`;
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<
@@ -60,6 +64,23 @@ class IntegrationService {
   async getInstallClientBranches(): Promise<TGetInstallClientBranchesResponse> {
     const { data } = await $api.get<TGetInstallClientBranchesResponse>(
       `${this.BASE_URL_GITHUB}/launcher/versions`,
+    );
+
+    return data;
+  }
+
+  async getVersionBuilds(): Promise<TGetLauncherVersionBuildsResponse> {
+    const { data } = await $api.get<TGetLauncherVersionBuildsResponse>(
+      `${this.BASE_URL_LAUNCHER}/builds`,
+    );
+
+    return data;
+  }
+
+  async postUpdateLauncher(body: TPostLauncherUpdateRequest): Promise<TPostLauncherUpdateResponse> {
+    const { data } = await $api.post<TPostLauncherUpdateResponse>(
+      `${this.BASE_URL_LAUNCHER}/upload`,
+      body,
     );
 
     return data;

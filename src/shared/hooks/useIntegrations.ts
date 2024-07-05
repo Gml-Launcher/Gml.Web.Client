@@ -5,6 +5,7 @@ import { isAxiosError } from "axios";
 import {
   TGetActiveAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
+  TPostLauncherUpdateRequest,
   TPutConnectDiscordRequest,
   TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
@@ -73,6 +74,39 @@ export const useGithubLauncherVersions = () => {
   });
 
   return { data: data?.data, isLoading };
+};
+
+export const useLauncherVersionsBuilds = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["clientBuilds"],
+    queryFn: () => integrationService.getVersionBuilds(),
+  });
+
+  return { data: data?.data, isLoading };
+};
+
+export const useUpdateLauncher = () => {
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationKey: ["update-launcher"],
+    mutationFn: (data: TPostLauncherUpdateRequest) => integrationService.postUpdateLauncher(data),
+    onSuccess: async (data) => {
+      toast({
+        title: "Успешно",
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: (error.response && error.response.data.message) || "Ошибка!",
+          description: error.response && error.response.data.errors[0],
+        });
+      }
+    },
+  });
 };
 
 export const useSentry = () => {
