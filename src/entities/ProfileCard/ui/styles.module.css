@@ -27,7 +27,7 @@
 }
 
 .profile-card__info-text {
-    @apply flex flex-col gap-y-1;
+    @apply flex flex-col gap-y-1 w-full;
 }
 
 .profile-card__info-name {
@@ -43,9 +43,5 @@
 }
 
 .profile-card__info-version-launch {
-    @apply truncate font-medium;
-}
-
-.profile-card__info-version-launch-opacity {
-    @apply truncate opacity-55;
+    @apply truncate font-medium opacity-55;
 }

@@ -1,29 +1,25 @@
 import React from "react";
 
 import Image from "next/image";
-
-import { DASHBOARD_PAGES } from "@/shared/routes";
 import { useRouter } from "next/navigation";
 
 import { useTheme } from "next-themes";
 import { Edit2Icon } from "lucide-react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ClientState } from "@/widgets/client-hub/ui/ClientState";
+import { ClientState } from "@/widgets/client-hub";
 
 import { InputFile } from "@/shared/ui/input";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { Form, FormMessage } from "@/shared/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEditProfile } from "@/shared/hooks";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 import {
   EditImageProfileSchema,
   EditImageProfileSchemaType,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
-
-import defaultProfileIcon from "@/assets/logos/minecraft.png";
-
 import { Separator } from "@/shared/ui/separator";
 import { Icons } from "@/shared/ui/icons";
 import { Button } from "@/shared/ui/button";
@@ -31,32 +27,30 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
 
+import defaultProfileIcon from "@/assets/logos/minecraft.png";
+
 import classes from "./styles.module.css";
 
 interface ProfileCardParams {
   profile: ProfileExtendedBaseEntity;
-  isLoading?: boolean;
 }
 
-export const ProfileCard = ({ profile, isLoading }: ProfileCardParams) => {
+export const ProfileCard = ({ profile }: ProfileCardParams) => {
+  const { push } = useRouter();
   const { theme } = useTheme();
 
   const { mutateAsync, isPending } = useEditProfile();
 
-  const { push } = useRouter();
-
   const form = useForm<EditImageProfileSchemaType>({
-    disabled: isLoading,
     resolver: zodResolver(EditImageProfileSchema),
   });
 
-  const OnSubmit: SubmitHandler<EditImageProfileSchemaType> = async (
+  const onSubmit: SubmitHandler<EditImageProfileSchemaType> = async (
     body: EditImageProfileSchemaType,
   ) => {
     const formUpdate = new FormData();
@@ -64,7 +58,10 @@ export const ProfileCard = ({ profile, isLoading }: ProfileCardParams) => {
     formUpdate.append("name", profile?.profileName);
     formUpdate.append("originalName", profile?.profileName || "");
     formUpdate.append("description", profile?.description);
-    formUpdate.append("icon", body.icon?.[0]);
+
+    if (body.icon && body.icon[0]) {
+      formUpdate.append("icon", body.icon[0]);
+    }
 
     if (body.background && body.background[0]) {
       formUpdate.append("background", body.background[0]);
@@ -104,7 +101,7 @@ export const ProfileCard = ({ profile, isLoading }: ProfileCardParams) => {
             </DialogHeader>
             <Separator className="my-20px" />
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(OnSubmit)}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-3">
                   <h6 className="text-sm font-bold">Иконка</h6>
                   <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
@@ -158,14 +155,9 @@ export const ProfileCard = ({ profile, isLoading }: ProfileCardParams) => {
               <span className={classes["profile-card__info-version-minecraft"]}>
                 {profile.minecraftVersion}
               </span>
-              {profile.launchVersion && (
-                <>
-                  <span className={classes["profile-card__info-version-launch"]}>/</span>
-                  <span className={classes["profile-card__info-version-launch-opacity"]}>
-                    {profile.launchVersion}
-                  </span>
-                </>
-              )}
+              <span className={classes["profile-card__info-version-launch"]}>
+                / {profile.launchVersion ? profile.launchVersion : "Профиль не загружен"}
+              </span>
             </p>
           </div>
         </div>

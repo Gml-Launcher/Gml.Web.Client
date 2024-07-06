@@ -1,1 +1,2 @@
-export { DownloadClientHub } from "@/widgets/client-hub/ui/DownloadClientHub";
+export * from "./ui/DownloadClientHub";
+export * from "./ui/ClientState";

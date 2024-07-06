@@ -21,7 +21,6 @@ import { useProfile } from "@/shared/hooks";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
 import { WhitelistFileBaseEntity } from "@/shared/api/contracts";
 import { useDeleteFilesWhitelist } from "@/shared/hooks/useWhitelist";
-
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Button } from "@/shared/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";

@@ -1,9 +1,9 @@
 import React from "react";
 
-import { DASHBOARD_PAGES } from "@/shared/routes";
 import { useRouter } from "next/navigation";
 
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useEditProfile } from "@/shared/hooks";
 import {
@@ -11,27 +11,24 @@ import {
   EditProfileSchema,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormMessage } from "@/shared/ui/form";
-
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Button } from "@/shared/ui/button";
 import { Icons } from "@/shared/ui/icons";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 interface EditProfileFormProps {
   profile?: ProfileExtendedBaseEntity;
-  isLoading?: boolean;
 }
 
 export const EditProfileForm = (props: EditProfileFormProps) => {
-  const { profile, isLoading } = props;
+  const { profile } = props;
 
   const { push } = useRouter();
 
   const { mutateAsync, isPending } = useEditProfile();
   const form = useForm<EditProfileFormSchemaType>({
-    disabled: isLoading,
     values: {
       name: profile?.profileName || "",
       description: profile?.description || "",
