@@ -1,14 +1,36 @@
 import React from "react";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { useTheme } from "next-themes";
 import { Edit2Icon } from "lucide-react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ClientState } from "@/widgets/client-hub/ui/ClientState";
+import { ClientState } from "@/widgets/client-hub";
 
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { InputFile } from "@/shared/ui/input";
+import { Form, FormMessage } from "@/shared/ui/form";
+import { useEditProfile } from "@/shared/hooks";
+import { DASHBOARD_PAGES } from "@/shared/routes";
+
+import {
+  EditImageProfileSchema,
+  EditImageProfileSchemaType,
+  ProfileExtendedBaseEntity,
+} from "@/shared/api/contracts";
+import { Separator } from "@/shared/ui/separator";
+import { Icons } from "@/shared/ui/icons";
 import { Button } from "@/shared/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/ui/dialog";
 
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
 
@@ -19,7 +41,36 @@ interface ProfileCardParams {
 }
 
 export const ProfileCard = ({ profile }: ProfileCardParams) => {
+  const { push } = useRouter();
   const { theme } = useTheme();
+
+  const { mutateAsync, isPending } = useEditProfile();
+
+  const form = useForm<EditImageProfileSchemaType>({
+    resolver: zodResolver(EditImageProfileSchema),
+  });
+
+  const onSubmit: SubmitHandler<EditImageProfileSchemaType> = async (
+    body: EditImageProfileSchemaType,
+  ) => {
+    const formUpdate = new FormData();
+
+    formUpdate.append("name", profile?.profileName);
+    formUpdate.append("originalName", profile?.profileName || "");
+    formUpdate.append("description", profile?.description);
+
+    if (body.icon && body.icon[0]) {
+      formUpdate.append("icon", body.icon[0]);
+    }
+
+    if (body.background && body.background[0]) {
+      formUpdate.append("background", body.background[0]);
+    }
+
+    await mutateAsync(formUpdate);
+
+    return push(`${DASHBOARD_PAGES.PROFILE}/${profile.profileName}`);
+  };
 
   return (
     <div
@@ -33,9 +84,50 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     >
       {/* Кнопка редактирования */}
       <div className={classes["profile-card__edit-button"]}>
-        <Button variant="outline" size="icon" className={classes["profile-card__edit-button-full"]}>
-          <Edit2Icon size={16} />
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className={classes["profile-card__edit-button-full"]}
+            >
+              <Edit2Icon size={16} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[625px]">
+            <DialogHeader>
+              <DialogTitle>Изображения</DialogTitle>
+              <DialogDescription>Загрузите иконку и изображение профиля</DialogDescription>
+            </DialogHeader>
+            <Separator className="my-20px" />
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="grid gap-3">
+                  <h6 className="text-sm font-bold">Иконка</h6>
+                  <InputFile fileTypes={["PNG"]} {...form.register("icon")} />
+                  {form.formState.errors.icon && (
+                    <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
+                  )}
+                  <h6 className="text-sm font-bold">Задний фон</h6>
+                  <InputFile fileTypes={["PNG"]} {...form.register("background")} />
+                  {form.formState.errors.background && (
+                    <FormMessage>
+                      {form.formState.errors.background.message?.toString()}
+                    </FormMessage>
+                  )}
+
+                  <Button
+                    disabled={isPending || form.formState.disabled || !form.formState.isDirty}
+                    className="w-fit ml-auto"
+                  >
+                    {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                    Сохранить
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Профиль */}
@@ -63,9 +155,8 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
               <span className={classes["profile-card__info-version-minecraft"]}>
                 {profile.minecraftVersion}
               </span>
-              <span className={classes["profile-card__info-version-launch"]}>/</span>
-              <span className={classes["profile-card__info-version-launch-opacity"]}>
-                {profile.launchVersion}
+              <span className={classes["profile-card__info-version-launch"]}>
+                / {profile.launchVersion ? profile.launchVersion : "Профиль не загружен"}
               </span>
             </p>
           </div>

@@ -40,5 +40,11 @@ export const EditProfileSchema = z.object({
   background: z.any(),
 });
 
+export const EditImageProfileSchema = z.object({
+  icon: z.any(),
+  background: z.any(),
+});
+
+export type EditImageProfileSchemaType = z.infer<typeof EditImageProfileSchema>;
 export type CreateProfileFormSchemaType = z.infer<typeof CreateProfileSchema>;
 export type EditProfileFormSchemaType = z.infer<typeof EditProfileSchema>;

@@ -19,6 +19,9 @@ export function ClientState({ state }: ClientStateProps) {
         <span
           className={`flex items-center justify-center w-3 h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 ${stateColorMap[state]} after:opacity-30 after:${stateColorMap[state]}`}
         ></span>
+        <span
+          className={`absolute items-center justify-center w-3 h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 ${stateColorMap[state]} animate-ping after:opacity-30 after:${stateColorMap[state]}`}
+        ></span>
         <span className="font-medium">
           {ProfileStateOption[`OPTION_${state}` as keyof typeof ProfileStateOption]}
         </span>

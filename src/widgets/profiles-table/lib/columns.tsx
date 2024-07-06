@@ -1,12 +1,15 @@
 "use client";
 
+import React from "react";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/table-core";
-
 import { Edit2Icon, Trash2Icon } from "lucide-react";
+
+import { ClientState } from "@/widgets/client-hub";
 
 import { DataTableColumnHeader } from "@/entities/Table";
 
@@ -16,9 +19,8 @@ import { ProfileBaseEntity } from "@/shared/api/contracts";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
 import { getFormatDate } from "@/shared/lib/utils";
+
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
-import React from "react";
-import { ClientState } from "@/widgets/client-hub/ui/ClientState";
 
 enum ColumnHeader {
   ICON = "",
@@ -98,7 +100,7 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.VERSION_LAUNCHER} />
       ),
-      cell: ({ getValue }) => getValue(),
+      cell: ({ getValue }) => (getValue() ? getValue() : "Не загружен"),
     }),
     columnsHelper.accessor("gameVersion", {
       size: 100,
