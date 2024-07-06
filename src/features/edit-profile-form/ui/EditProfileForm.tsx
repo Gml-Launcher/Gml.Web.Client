@@ -1,5 +1,6 @@
 import React from "react";
 
+import { DASHBOARD_PAGES } from "@/shared/routes";
 import { useRouter } from "next/navigation";
 
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -12,11 +13,11 @@ import {
 } from "@/shared/api/contracts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormMessage } from "@/shared/ui/form";
+
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
 import { Button } from "@/shared/ui/button";
 import { Icons } from "@/shared/ui/icons";
-import { DASHBOARD_PAGES } from "@/shared/routes";
 
 interface EditProfileFormProps {
   profile?: ProfileExtendedBaseEntity;
@@ -35,6 +36,8 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
       name: profile?.profileName || "",
       description: profile?.description || "",
       jvmArguments: profile?.jvmArguments || "",
+      icon: profile?.iconBase64 || "",
+      background: profile?.background || "",
     },
     resolver: zodResolver(EditProfileSchema),
   });

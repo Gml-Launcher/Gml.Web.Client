@@ -18,11 +18,12 @@ import { ProfileCard } from "@/entities/ProfileCard";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
 import { useProfile } from "@/shared/hooks";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { Button } from "@/shared/ui/button";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
 import { WhitelistFileBaseEntity } from "@/shared/api/contracts";
 import { useDeleteFilesWhitelist } from "@/shared/hooks/useWhitelist";
+
+import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
+import { Button } from "@/shared/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import {
   AlertDialog,
