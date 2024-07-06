@@ -70,7 +70,7 @@ export const IntegrationsPage = () => {
               <Link target="_blank" href={HREF_DISCORD}>
                 <Button size="sm" variant="outline" className="w-fit">
                   <LinkIcon className="mr-2" size={16} />
-                  Поддежка
+                  Поддержка
                 </Button>
               </Link>
             }

@@ -19,7 +19,7 @@
 }
 
 .profile-card__info-icon-wrapper {
-    @apply flex flex-wrap gap-x-5 items-center;
+    @apply flex gap-x-5 items-center;
 }
 
 .profile-card__info-icon {
@@ -27,7 +27,7 @@
 }
 
 .profile-card__info-text {
-    @apply flex flex-col gap-y-1 w-full;
+    @apply flex flex-col gap-y-1 w-[calc(100%-20px-64px)];
 }
 
 .profile-card__info-name {

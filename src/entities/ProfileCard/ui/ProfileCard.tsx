@@ -41,7 +41,7 @@ interface ProfileCardParams {
 }
 
 export const ProfileCard = ({ profile }: ProfileCardParams) => {
-  const { push } = useRouter();
+  const router = useRouter();
   const { theme } = useTheme();
 
   const { mutateAsync, isPending } = useEditProfile();
@@ -56,7 +56,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     const formUpdate = new FormData();
 
     formUpdate.append("name", profile?.profileName);
-    formUpdate.append("originalName", profile?.profileName || "");
+    formUpdate.append("originalName", profile?.profileName);
     formUpdate.append("description", profile?.description);
 
     if (body.icon && body.icon[0]) {
@@ -69,7 +69,8 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
 
     await mutateAsync(formUpdate);
 
-    return push(`${DASHBOARD_PAGES.PROFILE}/${profile.profileName}`);
+    // TODO: исправить кастыль
+    window.location.reload();
   };
 
   return (
