@@ -57,7 +57,9 @@ export const useDeleteGameServer = ({ profileName }: { profileName?: string }) =
     mutationKey: ["delete-gameserver"],
     mutationFn: (data: TDeleteGameServersRequest) => gameServerService.deleteServer(data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["get-gameserver", { profileName }] });
+      await queryClient.invalidateQueries({
+        queryKey: ["get-gameservers", { profileName }],
+      });
       toast({
         title: "Успешно",
         description: "Сервер успешно удален",

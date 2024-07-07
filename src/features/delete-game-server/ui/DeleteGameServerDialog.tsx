@@ -1,4 +1,4 @@
-import { GameServerBaseEntity } from "@/shared/api/contracts";
+import { GameServerBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,12 +11,20 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { Trash2Icon } from "lucide-react";
+import { useDeleteGameServer } from "@/shared/hooks/useServers";
 
 type DeleteGameServerDialogParams = {
   server: GameServerBaseEntity;
+  profile?: ProfileExtendedBaseEntity;
 };
 
-export const DeleteGameServerDialog = ({}: DeleteGameServerDialogParams) => {
+export const DeleteGameServerDialog = ({ server, profile }: DeleteGameServerDialogParams) => {
+  const { mutateAsync, isPending } = useDeleteGameServer({ profileName: profile?.profileName });
+
+  const onSubmit = async () => {
+    await mutateAsync({ profileName: profile?.profileName, serverName: server.name });
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger>
@@ -24,15 +32,16 @@ export const DeleteGameServerDialog = ({}: DeleteGameServerDialogParams) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Удаление сервера</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your account and remove your
-            data from our servers.
+            {`Вы уверены что хотите безвозвратно удалить сервер "${server.name}" в профиле "${profile?.profileName}"?`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogCancel disabled={isPending}>Отмена</AlertDialogCancel>
+          <AlertDialogAction disabled={isPending} onClick={() => onSubmit()}>
+            Удалить
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

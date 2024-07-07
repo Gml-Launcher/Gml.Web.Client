@@ -18,7 +18,7 @@ export type TPostGameServersResponse = ResponseBaseEntity & {
 };
 
 export type TDeleteGameServersRequest = {
-  profileName: string;
-  serverName: string;
+  profileName?: string;
+  serverName?: string;
 };
 export type TDeleteGameServersResponse = ResponseBaseEntity & {};

@@ -21,7 +21,7 @@ export const GameServers = ({ profile }: GameServersParams) => {
       </div>
       <div className="flex flex-col gap-y-2">
         {data?.map((server, index) => (
-          <GameServerCard key={`${server.name}-${index}`} server={server} />
+          <GameServerCard key={`${server.name}-${index}`} server={server} profile={profile} />
         ))}
       </div>
     </div>

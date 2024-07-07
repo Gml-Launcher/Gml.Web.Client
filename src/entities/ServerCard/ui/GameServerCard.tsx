@@ -1,4 +1,4 @@
-import { GameServerBaseEntity } from "@/shared/api/contracts";
+import { GameServerBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { DeleteGameServerDialog } from "@/features/delete-game-server";
 import { Card } from "@/shared/ui/card";
 import { ClientState } from "@/widgets/client-hub";
@@ -9,9 +9,10 @@ import React from "react";
 
 interface GameServerCardParams {
   server: GameServerBaseEntity;
+  profile?: ProfileExtendedBaseEntity;
 }
 
-export const GameServerCard = ({ server }: GameServerCardParams) => {
+export const GameServerCard = ({ server, profile }: GameServerCardParams) => {
   const progressValue = (server.online * 100) / server.maxOnline;
   const colorRanges = [
     { max: 10, color: "bg-green-600" },
@@ -67,7 +68,7 @@ export const GameServerCard = ({ server }: GameServerCardParams) => {
       {/* eslint-disable-next-line react/jsx-no-undef */}
       <div className="flex items-center gap-x-8">
         {server.isOnline ? <ClientState state={2} /> : <ClientState state={3} />}
-        <DeleteGameServerDialog server={server} />
+        <DeleteGameServerDialog server={server} profile={profile} />
       </div>
     </Card>
   );
