@@ -60,7 +60,6 @@ export const useCreateProfile = () => {
   return useMutation({
     mutationKey: ["create-profile"],
     mutationFn: (data: TPostProfilesRequest) => profileService.createProfile(data),
-
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: ["profiles"] });
       toast({
