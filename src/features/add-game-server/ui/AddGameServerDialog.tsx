@@ -1,4 +1,7 @@
+import React, { useState } from "react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Dialog,
@@ -9,17 +12,13 @@ import {
 } from "@/shared/ui/dialog";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Button } from "@/shared/ui/button";
-
+import { Input } from "@/shared/ui/input";
 import { useGameServer } from "@/shared/hooks/useServers";
-
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/shared/ui/input";
-import React from "react";
 import { Icons } from "@/shared/ui/icons";
 
 type AddGameServerDialogParams = {
@@ -27,6 +26,9 @@ type AddGameServerDialogParams = {
 };
 
 export const AddGameServerDialog = ({ profile }: AddGameServerDialogParams) => {
+  const [open, setOpen] = useState(false);
+  const onOpenChange = () => setOpen((prev) => !prev);
+
   const form = useForm<AddGameServerSchemeType>({
     resolver: zodResolver(AddGameServerScheme),
   });
@@ -37,10 +39,13 @@ export const AddGameServerDialog = ({ profile }: AddGameServerDialogParams) => {
     body: AddGameServerSchemeType,
   ) => {
     await mutateAsync(body);
+
+    form.reset();
+    onOpenChange();
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button className="w-fit">Добавить сервер</Button>
       </DialogTrigger>

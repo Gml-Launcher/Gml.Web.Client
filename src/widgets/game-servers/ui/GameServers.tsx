@@ -6,11 +6,11 @@ import { GameServerCard } from "@/entities/ServerCard";
 import { AddGameServerDialog } from "@/features/add-game-server/ui/AddGameServerDialog";
 
 interface GameServersParams {
-  profile?: ProfileExtendedBaseEntity;
+  profile: ProfileExtendedBaseEntity;
 }
 
 export const GameServers = ({ profile }: GameServersParams) => {
-  const { data, isLoading } = useGameServers({ profileName: profile?.profileName });
+  const { data, isLoading } = useGameServers({ profileName: profile.profileName });
 
   if (isLoading) return <GameServersSkeleton />;
 
@@ -21,7 +21,11 @@ export const GameServers = ({ profile }: GameServersParams) => {
       </div>
       <div className="flex flex-col gap-y-2">
         {data?.map((server, index) => (
-          <GameServerCard key={`${server.name}-${index}`} server={server} profile={profile} />
+          <GameServerCard
+            key={`${server.name}-${index}`}
+            server={server}
+            profileName={profile.profileName}
+          />
         ))}
       </div>
     </div>

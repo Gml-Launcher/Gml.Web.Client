@@ -50,7 +50,7 @@ export const useGameServer = ({ profileName }: { profileName?: string }) => {
   });
 };
 
-export const useDeleteGameServer = ({ profileName }: { profileName?: string }) => {
+export const useDeleteGameServer = ({ profileName }: useGameServersParams) => {
   const queryClient = useQueryClient();
 
   return useMutation({

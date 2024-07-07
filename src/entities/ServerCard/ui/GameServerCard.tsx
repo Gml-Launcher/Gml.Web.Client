@@ -1,39 +1,26 @@
-import { GameServerBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
-import { DeleteGameServerDialog } from "@/features/delete-game-server";
-import { Card } from "@/shared/ui/card";
-import { ClientState } from "@/widgets/client-hub";
-import minecraftLogo from "@/assets/logos/minecraft.png";
-import Image from "next/image";
-import { Progress } from "@/shared/ui/progress";
 import React from "react";
 
+import Image from "next/image";
+
+import { ClientState } from "@/widgets/client-hub";
+
+import { DeleteGameServerDialog } from "@/features/delete-game-server";
+
+import { GameServerBaseEntity } from "@/shared/api/contracts";
+import { Card } from "@/shared/ui/card";
+import { Progress } from "@/shared/ui/progress";
+import { getProgressColor } from "@/shared/lib/utils";
+import { EntityState } from "@/shared/enums";
+
+import minecraftLogo from "@/assets/logos/minecraft.png";
+
 interface GameServerCardParams {
+  profileName: string;
   server: GameServerBaseEntity;
-  profile?: ProfileExtendedBaseEntity;
 }
 
-export const GameServerCard = ({ server, profile }: GameServerCardParams) => {
+export const GameServerCard = ({ server, profileName }: GameServerCardParams) => {
   const progressValue = (server.online * 100) / server.maxOnline;
-  const colorRanges = [
-    { max: 10, color: "bg-green-600" },
-    { max: 20, color: "bg-green-500" },
-    { max: 30, color: "bg-green-400" },
-    { max: 40, color: "bg-yellow-600" },
-    { max: 50, color: "bg-yellow-500" },
-    { max: 60, color: "bg-yellow-400" },
-    { max: 70, color: "bg-orange-600" },
-    { max: 80, color: "bg-orange-500" },
-    { max: 90, color: "bg-red-600" },
-    { max: 100, color: "bg-red-500" },
-  ];
-
-  const getProgressColor = (value: number) => {
-    for (let range of colorRanges) {
-      if (value < range.max) {
-        return range.color;
-      }
-    }
-  };
 
   return (
     <Card className="flex flex-row items-center justify-between gap-y-4 p-3 pr-8">
@@ -65,10 +52,13 @@ export const GameServerCard = ({ server, profile }: GameServerCardParams) => {
           </div>
         )}
       </div>
-      {/* eslint-disable-next-line react/jsx-no-undef */}
       <div className="flex items-center gap-x-8">
-        {server.isOnline ? <ClientState state={2} /> : <ClientState state={3} />}
-        <DeleteGameServerDialog server={server} profile={profile} />
+        {server.isOnline ? (
+          <ClientState state={EntityState.ENTITY_STATE_ACTIVE} />
+        ) : (
+          <ClientState state={EntityState.ENTITY_STATE_DISABLED} />
+        )}
+        <DeleteGameServerDialog serverName={server.name} profileName={profileName} />
       </div>
     </Card>
   );
