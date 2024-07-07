@@ -10,6 +10,7 @@ const stateColorMap: Record<ClientStateProps["state"], string> = {
   0: "bg-gray-600",
   1: "bg-orange-500",
   2: "bg-green-600",
+  3: "bg-red-500",
 };
 
 export function ClientState({ state }: ClientStateProps) {
