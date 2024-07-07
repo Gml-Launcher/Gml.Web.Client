@@ -13,7 +13,6 @@ import { ClientState } from "@/widgets/client-hub";
 import { InputFile } from "@/shared/ui/input";
 import { Form, FormMessage } from "@/shared/ui/form";
 import { useEditProfile } from "@/shared/hooks";
-import { DASHBOARD_PAGES } from "@/shared/routes";
 
 import {
   EditImageProfileSchema,
