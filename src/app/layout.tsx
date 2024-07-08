@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/core/providers/ThemeProvider";
 import { TooltipProvider } from "@/core/providers/TooltipProvider";
 import { cn } from "@/shared/lib/utils";
 import { Toaster } from "@/shared/ui/toaster";
+import { Toaster as Sonner } from "@/shared/ui/sonner";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default function RootLayout({
             <TooltipProvider>{children}</TooltipProvider>
           </ThemeProvider>
           <Toaster />
+          <Sonner position="top-right" />
         </QueryProvider>
       </body>
     </html>

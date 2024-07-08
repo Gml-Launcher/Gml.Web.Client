@@ -21,3 +21,7 @@ export * from "@/shared/api/contracts/whitelist/requests";
 export * from "@/shared/api/contracts/gameservers/schemas";
 export * from "@/shared/api/contracts/gameservers/requests";
 export * from "@/shared/api/contracts/gameservers/zod";
+
+// Контракты для уведомлений
+export * from "@/shared/api/contracts/notification/schemas";
+export * from "@/shared/api/contracts/notification/requests";
