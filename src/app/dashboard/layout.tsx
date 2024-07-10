@@ -3,6 +3,8 @@ import Image from "next/image";
 
 import { ArrowUpDownIcon, BlocksIcon, SettingsIcon } from "lucide-react";
 
+import { config } from "@/core/configs";
+
 import { ChangeTheme } from "@/features/change-theme";
 import { Notifications } from "@/features/notifications";
 
@@ -43,7 +45,7 @@ export default function Page({ children }: React.PropsWithChildren) {
           <div className={classes["aside__wrapper-logo"]}>
             <Link href="/" className={classes.aside__logo}>
               <Image src={logo} alt="GML Frontend" />
-              GML Frontend
+              {config.name}
             </Link>
           </div>
           <DesktopNavigation menu={menu} />
