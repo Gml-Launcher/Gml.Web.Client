@@ -3,6 +3,8 @@ import { NotificationBaseEntity } from "@/shared/api/contracts/notification/sche
 
 export type TGetNotificationRequest = {};
 export type TGetNotificationResponse = ResponseBaseEntity & {
-  notifications: NotificationBaseEntity[];
-  amount: number;
+  data: {
+    notifications: NotificationBaseEntity[];
+    amount: number;
+  };
 };

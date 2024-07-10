@@ -1,6 +1,8 @@
+import { NotificationStatus } from "@/shared/enums/notificationType";
+
 export type NotificationBaseEntity = {
   message: string;
   details: string;
-  type: number;
+  type: NotificationStatus;
   date: string;
 };
