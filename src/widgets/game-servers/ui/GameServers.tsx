@@ -1,9 +1,11 @@
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { CreateGameServerDialog } from "@/features/create-game-server";
+
+import { GameServerCard } from "@/entities/ServerCard";
 
 import { useGameServers } from "@/shared/hooks/useServers";
+import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+
 import { GameServersSkeleton } from "./GameServersSkeleton";
-import { GameServerCard } from "@/entities/ServerCard";
-import { AddGameServerDialog } from "@/features/add-game-server/ui/AddGameServerDialog";
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -17,7 +19,7 @@ export const GameServers = ({ profile }: GameServersParams) => {
   return (
     <div className="grid gap-y-4">
       <div className="flex flex-col gap-x-2">
-        <AddGameServerDialog profile={profile} />
+        <CreateGameServerDialog profile={profile} />
       </div>
       <div className="flex flex-col gap-y-2">
         {data?.map((server, index) => (

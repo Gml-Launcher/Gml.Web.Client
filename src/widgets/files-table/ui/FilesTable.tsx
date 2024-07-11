@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 
 import {
   Column,
@@ -41,8 +41,8 @@ function Filter({ column }: { column: Column<ProfileFileBaseEntity, unknown> }) 
 }
 
 export function FilesTable({ files, rowSelection, setRowSelection }: FilesTableProps) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const { columns } = useColumns();
   const table = useReactTable({

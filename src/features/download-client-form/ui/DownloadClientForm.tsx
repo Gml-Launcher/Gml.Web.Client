@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
-import { useGithubLauncherVersions } from "@/shared/hooks";
+import { useLauncherGithubBranches } from "@/shared/hooks";
 import { cn, getApiBaseUrl } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
@@ -31,7 +31,7 @@ export function DownloadClientForm({
 
   const { onSubmit } = useOnSubmit({ connectionHub, state });
 
-  const { data: branches } = useGithubLauncherVersions();
+  const { data: branches } = useLauncherGithubBranches();
 
   const form = useForm<ClientDownloadFormSchemaType>({
     values: { branch: "", host: getApiBaseUrl() || "", folder: "" },

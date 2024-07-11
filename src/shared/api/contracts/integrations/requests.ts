@@ -6,8 +6,8 @@ import {
   SentryBaseEntity,
   TextureServiceBaseEntity,
 } from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
 import { TexturesServiceType } from "@/shared/enums";
+import { ResponseBaseEntity } from "@/shared/api/schemas"; // Получение списка серверов для авторизации
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};
@@ -34,8 +34,8 @@ export type TGetLauncherVersionBuildsResponse = ResponseBaseEntity & {
 };
 
 // Обновление лаунчера
-export type TPostLauncherUpdateRequest = FormData;
-export type TPostLauncherUpdateResponse = ResponseBaseEntity & {};
+export type TPostLauncherUploadRequest = FormData;
+export type TPostLauncherUploadResponse = ResponseBaseEntity & {};
 
 // Изменение сервера авторизации
 export type TPostAuthIntegrationsRequest = {

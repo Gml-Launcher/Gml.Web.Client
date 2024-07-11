@@ -17,10 +17,10 @@ class GameServerService {
     return data;
   }
 
-  async addServer(
-    body: TPostGameServersRequest,
-    profileName?: string,
-  ): Promise<TPostGameServersResponse> {
+  async addServer({
+    profileName,
+    ...body
+  }: TPostGameServersRequest): Promise<TPostGameServersResponse> {
     const { data } = await $api.post<TPostGameServersResponse>(
       `${this.BASE_URL}/${profileName}`,
       body,

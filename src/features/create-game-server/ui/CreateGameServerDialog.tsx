@@ -13,7 +13,7 @@ import {
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
-import { useGameServer } from "@/shared/hooks/useServers";
+import { useCreateGameServer } from "@/shared/hooks/useServers";
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,
@@ -25,7 +25,7 @@ type AddGameServerDialogParams = {
   profile?: ProfileExtendedBaseEntity;
 };
 
-export const AddGameServerDialog = ({ profile }: AddGameServerDialogParams) => {
+export const CreateGameServerDialog = ({ profile }: AddGameServerDialogParams) => {
   const [open, setOpen] = useState(false);
   const onOpenChange = () => setOpen((prev) => !prev);
 
@@ -33,12 +33,15 @@ export const AddGameServerDialog = ({ profile }: AddGameServerDialogParams) => {
     resolver: zodResolver(AddGameServerScheme),
   });
 
-  const { mutateAsync, isPending } = useGameServer({ profileName: profile?.profileName });
+  const { mutateAsync, isPending } = useCreateGameServer();
 
   const onSubmit: SubmitHandler<AddGameServerSchemeType> = async (
     body: AddGameServerSchemeType,
   ) => {
-    await mutateAsync(body);
+    await mutateAsync({
+      profileName: profile?.profileName || "",
+      ...body,
+    });
 
     form.reset();
     onOpenChange();

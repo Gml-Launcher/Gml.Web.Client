@@ -16,8 +16,8 @@ import {
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
-  TPostLauncherUpdateRequest,
-  TPostLauncherUpdateResponse,
+  TPostLauncherUploadRequest,
+  TPostLauncherUploadResponse,
   TPutConnectDiscordRequest,
   TPutConnectDiscordResponse,
   TPutConnectTexturesRequest,
@@ -61,7 +61,7 @@ class IntegrationService {
     return data;
   }
 
-  async getInstallClientBranches(): Promise<TGetInstallClientBranchesResponse> {
+  async getGithubLauncherBranches(): Promise<TGetInstallClientBranchesResponse> {
     const { data } = await $api.get<TGetInstallClientBranchesResponse>(
       `${this.BASE_URL_GITHUB}/launcher/versions`,
     );
@@ -69,7 +69,7 @@ class IntegrationService {
     return data;
   }
 
-  async getVersionBuilds(): Promise<TGetLauncherVersionBuildsResponse> {
+  async getLauncherBuildVersions(): Promise<TGetLauncherVersionBuildsResponse> {
     const { data } = await $api.get<TGetLauncherVersionBuildsResponse>(
       `${this.BASE_URL_LAUNCHER}/builds`,
     );
@@ -77,8 +77,8 @@ class IntegrationService {
     return data;
   }
 
-  async postUpdateLauncher(body: TPostLauncherUpdateRequest): Promise<TPostLauncherUpdateResponse> {
-    const { data } = await $api.post<TPostLauncherUpdateResponse>(
+  async postLauncherUpload(body: TPostLauncherUploadRequest): Promise<TPostLauncherUploadResponse> {
+    const { data } = await $api.post<TPostLauncherUploadResponse>(
       `${this.BASE_URL_LAUNCHER}/upload`,
       body,
     );
@@ -86,7 +86,7 @@ class IntegrationService {
     return data;
   }
 
-  async getSentryConnect(params: TGetSentryConnectRequest): Promise<TGetSentryConnectResponse> {
+  async getSentryConnect(params?: TGetSentryConnectRequest): Promise<TGetSentryConnectResponse> {
     const { data } = await $api.get<TGetSentryConnectResponse>(this.BASE_URL_SENTRY, { params });
 
     return data;
@@ -122,9 +122,7 @@ class IntegrationService {
     return data;
   }
 
-  async getConnectDiscord({
-    ...params
-  }: TGetConnectDiscordRequest): Promise<TGetConnectDiscordResponse> {
+  async getConnectDiscord(params?: TGetConnectDiscordRequest): Promise<TGetConnectDiscordResponse> {
     const { data } = await $api.get<TGetConnectDiscordResponse>(this.BASE_URL_DISCORD, { params });
 
     return data;

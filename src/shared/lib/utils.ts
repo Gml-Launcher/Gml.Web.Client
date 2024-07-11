@@ -38,3 +38,4 @@ export const isTokenExpired = (token?: string): boolean => {
 
 export * from "./getFormatDate/getFormatDate";
 export * from "./getProgressColor/getProgressColor";
+export * from "./isAxiosError/isAxiosError";
