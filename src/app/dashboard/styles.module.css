@@ -3,7 +3,7 @@
 }
 
 .aside {
-    @apply hidden border-r bg-muted/40 md:block;
+    @apply max-h-[100vh] sticky top-0 bottom-0 hidden border-r bg-muted/40 md:block;
 }
 
 .aside__wrapper {
