@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { toast as sonner } from "sonner";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
-import { toast as sonner } from "sonner";
-import { useToast } from "@/shared/ui/use-toast";
 import { getApiBaseUrl } from "@/shared/lib/utils";
 import { getStorageAccessToken } from "@/shared/services";
 
@@ -11,7 +10,6 @@ const CONNECTION_URL = (token: string) =>
   `${getApiBaseUrl()}/ws/notifications?access_token=${token}`;
 
 export const useConnectionHub = () => {
-  const { toast } = useToast();
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);

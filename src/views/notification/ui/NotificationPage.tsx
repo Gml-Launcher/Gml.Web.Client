@@ -1,30 +1,29 @@
 "use client";
 
+import { NotificationCard } from "@/entities/NotificationCard";
+
 import { DASHBOARD_PAGES } from "@/shared/routes";
+import { NotificationStatus } from "@/shared/enums";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Badge } from "@/shared/ui/badge";
 import { useNotifications } from "@/shared/hooks";
-import { NotificationLoadingPage } from "@/views/notification/ui/NotificationLoadingPage";
-import { Card } from "@/shared/ui/card";
-import { cn } from "@/shared/lib/utils";
-import { NotificationStatus, NotificationTextOption } from "@/shared/enums/notificationType";
-import { Button } from "@/shared/ui/button";
-import { toast as sonner } from "sonner";
 
-interface NotificationPage {}
+export const NotificationPage = () => {
+  const { data } = useNotifications();
 
-const notificationColor: Record<NotificationStatus, string> = {
-  [NotificationStatus.FATAL]: "bg-red-500",
-  [NotificationStatus.ERROR]: "bg-red-700",
-  [NotificationStatus.WARNING]: "bg-orange-400",
-  [NotificationStatus.INFORMATION]: "bg-blue-500",
-  [NotificationStatus.DEBUG]: "bg-stone-50",
-  [NotificationStatus.TRACE]: "bg-stone-500",
-};
-
-export const NotificationPage = ({}: NotificationPage) => {
-  const { data, isLoading } = useNotifications();
-
-  if (isLoading) return <NotificationLoadingPage />;
+  const notificationsFatal =
+    data && data.notifications.filter(({ type }) => type === NotificationStatus.FATAL);
+  const notificationsError =
+    data && data.notifications.filter(({ type }) => type === NotificationStatus.ERROR);
+  const notificationsWarning =
+    data && data.notifications.filter(({ type }) => type === NotificationStatus.WARNING);
+  const notificationsInformation =
+    data && data.notifications.filter(({ type }) => type === NotificationStatus.INFORMATION);
+  const notificationsDebug =
+    data && data.notifications.filter(({ type }) => type === NotificationStatus.DEBUG);
+  const notificationsTrace =
+    data && data.notifications.filter(({ type }) => type === NotificationStatus.TRACE);
 
   return (
     <>
@@ -32,55 +31,153 @@ export const NotificationPage = ({}: NotificationPage) => {
         current={"Уведомления"}
         breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
       />
-      <div className="grid items-start py-4 gap-y-2">
-        {data &&
-          data.notifications.map((data, i) => (
-            <Card
-              key={i}
-              className={cn("flex flex-row items-center justify-between gap-y-4 p-3 pr-8")}
-            >
-              <div className="grid gap-x-5 gap-y-2 max-w-[700px] items-center">
-                <span>{data.message}</span>
-                <span className="text-[12px]">{data.details}</span>
-              </div>
-              <div className="grid ">
-                <Button
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(data.details);
-                    sonner("Текст успешно скопирован", {
-                      duration: 1500,
-                      onAutoClose: () => true,
-                    });
-                  }}
-                >
-                  Скопировать ошибку
-                </Button>
-                <div className="flex items-center space-x-1">
-                  <span>
-                    Статус:{" "}
-                    {
-                      NotificationTextOption[
-                        `OPTION_${data.type}` as keyof typeof NotificationTextOption
-                      ]
-                    }
-                  </span>
-                  <div className="grid">
-                    <span
-                      className={`flex items-center justify-center w-3 h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 ${
-                        notificationColor[data.type]
-                      } after:opacity-30 after:${notificationColor[data.type]}`}
-                    ></span>
-                    <span
-                      className={`absolute items-center justify-center w-3 h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 ${
-                        notificationColor[data.type]
-                      } animate-ping after:opacity-30 after:${notificationColor[data.type]}`}
-                    ></span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-      </div>
+      <Tabs
+        className="flex gap-6 items-start"
+        defaultValue="fatal"
+        aria-orientation="vertical"
+        orientation="vertical"
+      >
+        <TabsList
+          defaultValue="fatal"
+          className="sticky top-5 flex-col h-auto items-start min-w-64"
+        >
+          <h3 className="p-2 pb-1 text-sm font-bold">Логи</h3>
+          <TabsTrigger
+            className="flex justify-between items-center gap-x-2 w-full h-10"
+            value="fatal"
+          >
+            <span>Фатальные</span>
+            <Badge variant="secondary">{notificationsFatal && notificationsFatal.length}</Badge>
+          </TabsTrigger>
+          <TabsTrigger
+            className="flex justify-between items-center gap-x-2 w-full h-10"
+            value="error"
+          >
+            <span>Ошибки</span>
+            <Badge variant="secondary">{notificationsError && notificationsError.length}</Badge>
+          </TabsTrigger>
+          <TabsTrigger
+            className="flex justify-between items-center gap-x-2 w-full h-10"
+            value="warning"
+          >
+            <span>Предупреждения</span>
+            <Badge variant="secondary">{notificationsWarning && notificationsWarning.length}</Badge>
+          </TabsTrigger>
+          <TabsTrigger
+            className="flex justify-between items-center gap-x-2 w-full h-10"
+            value="information"
+          >
+            <span>Информационные</span>
+            <Badge variant="secondary">
+              {notificationsInformation && notificationsInformation.length}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger
+            className="flex justify-between items-center gap-x-2 w-full h-10"
+            value="debug"
+          >
+            <span>Дебаг</span>
+            <Badge variant="secondary">{notificationsDebug && notificationsDebug.length}</Badge>
+          </TabsTrigger>
+          <TabsTrigger
+            className="flex justify-between items-center gap-x-2 w-full h-10"
+            value="trace"
+          >
+            <span>Трейс</span>
+            <Badge variant="secondary">{notificationsTrace && notificationsTrace.length}</Badge>
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="fatal" className="w-full">
+          {notificationsFatal && !notificationsFatal.length && (
+            <section className="flex flex-col justify-center items-center gap-y-2 bg-muted/80 min-h-[300px] rounded-md">
+              <h3 className="text-xl font-bold">Ошибки типа: Fatal не найдены</h3>
+            </section>
+          )}
+
+          <div className="flex flex-col gap-y-4">
+            {notificationsFatal &&
+              Boolean(notificationsFatal.length) &&
+              notificationsFatal.map((card, index) => (
+                <NotificationCard key={`${card.date}-${index}`} card={card} />
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="error" className="w-full">
+          {notificationsError && !notificationsError.length && (
+            <section className="flex flex-col justify-center items-center gap-y-2 bg-muted/80 min-h-[300px] rounded-md">
+              <h3 className="text-xl font-bold">Ошибки типа: Error не найдены</h3>
+            </section>
+          )}
+
+          <div className="flex flex-col gap-y-4">
+            {notificationsError &&
+              Boolean(notificationsError.length) &&
+              notificationsError.map((card, index) => (
+                <NotificationCard key={`${card.date}-${index}`} card={card} />
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="warning" className="w-full">
+          {notificationsWarning && !notificationsWarning.length && (
+            <section className="flex flex-col justify-center items-center gap-y-2 bg-muted/80 min-h-[300px] rounded-md">
+              <h3 className="text-xl font-bold">Ошибки типа: Warning не найдены</h3>
+            </section>
+          )}
+
+          <div className="flex flex-col gap-y-4">
+            {notificationsWarning &&
+              Boolean(notificationsWarning.length) &&
+              notificationsWarning.map((card, index) => (
+                <NotificationCard key={`${card.date}-${index}`} card={card} />
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="information" className="w-full">
+          {notificationsInformation && !notificationsInformation.length && (
+            <section className="flex flex-col justify-center items-center gap-y-2 bg-muted/80 min-h-[300px] rounded-md">
+              <h3 className="text-xl font-bold">Ошибки типа: Information не найдены</h3>
+            </section>
+          )}
+
+          <div className="flex flex-col gap-y-4">
+            {notificationsInformation &&
+              Boolean(notificationsInformation.length) &&
+              notificationsInformation.map((card, index) => (
+                <NotificationCard key={`${card.date}-${index}`} card={card} />
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="debug" className="w-full">
+          {notificationsDebug && !notificationsDebug.length && (
+            <section className="flex flex-col justify-center items-center gap-y-2 bg-muted/80 min-h-[300px] rounded-md">
+              <h3 className="text-xl font-bold">Ошибки типа: Debug не найдены</h3>
+            </section>
+          )}
+
+          <div className="flex flex-col gap-y-4">
+            {notificationsDebug &&
+              Boolean(notificationsDebug.length) &&
+              notificationsDebug.map((card, index) => (
+                <NotificationCard key={`${card.date}-${index}`} card={card} />
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="trace" className="w-full">
+          {notificationsTrace && !notificationsTrace.length && (
+            <section className="flex flex-col justify-center items-center gap-y-2 bg-muted/80 min-h-[300px] rounded-md">
+              <h3 className="text-xl font-bold">Ошибки типа: Trace не найдены</h3>
+            </section>
+          )}
+
+          <div className="flex flex-col gap-y-4">
+            {notificationsTrace &&
+              Boolean(notificationsTrace.length) &&
+              notificationsTrace.map((card, index) => (
+                <NotificationCard key={`${card.date}-${index}`} card={card} />
+              ))}
+          </div>
+        </TabsContent>
+      </Tabs>
     </>
   );
 };

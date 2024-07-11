@@ -1,12 +1,15 @@
-import { isAxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { notificationService } from "@/shared/services/NotifiactionService";
+
+export const notificationsKeys = {
+  all: ["integrations"] as const,
+};
 
 export const useNotifications = () => {
   return useQuery({
-    queryKey: ["get-notifications"],
+    queryKey: notificationsKeys.all,
     queryFn: () => notificationService.getNotification(),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };

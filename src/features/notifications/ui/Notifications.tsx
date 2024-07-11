@@ -1,6 +1,12 @@
 "use client";
 
+import React from "react";
+
+import { useRouter } from "next/navigation";
+
 import { BellIcon } from "lucide-react";
+
+import { useConnectionHub } from "@/widgets/notifications-hub";
 
 import {
   DropdownMenu,
@@ -10,19 +16,28 @@ import {
 } from "@/shared/ui/dropdown-menu";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
-import { useConnectionHub } from "@/widgets/notifications-hub/lib/useConnectionHub";
-import { useRouter } from "next/navigation";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { useNotifications } from "@/shared/hooks";
-import { Card } from "@/shared/ui/card";
-import { getFormatDate } from "@/shared/lib/getFormatDate/getFormatDate";
+import { getFormatDate } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
-import React from "react";
+import { NotificationStatus } from "@/shared/enums";
+
+const statusColor: Record<NotificationStatus, string> = {
+  [NotificationStatus.TRACE]: "bg-neutral-200",
+  [NotificationStatus.DEBUG]: "bg-white border-solid border-1 border-neutral-200",
+  [NotificationStatus.INFORMATION]: "bg-sky-500",
+  [NotificationStatus.WARNING]: "bg-amber-500",
+  [NotificationStatus.ERROR]: "bg-red-600",
+  [NotificationStatus.FATAL]: "bg-red-900",
+};
 
 export const Notifications = () => {
-  const router = useRouter();
   useConnectionHub();
+
+  const router = useRouter();
+
   const { data, isLoading } = useNotifications();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -44,7 +59,7 @@ export const Notifications = () => {
           <div className="flex flex-col space-y-2">
             <p className="flex items-center gap-x-2 text-sm font-medium leading-none">
               Уведомления
-              <Badge variant="secondary">{data?.amount}</Badge>
+              <Badge variant="secondary">{data && data.amount}</Badge>
             </p>
             <p className="text-sm leading-none text-muted-foreground">Список уведомлений системы</p>
           </div>
@@ -52,12 +67,17 @@ export const Notifications = () => {
         <DropdownMenuSeparator />
         <div className="flex flex-col gap-y-4 p-5">
           {data && data.notifications ? (
-            data.notifications.slice(0, 3).map(({ message, details, date }, index) => (
-              <Card key={`${message}-${index}`} className="flex flex-col items-start gap-y-4 p-3">
-                <span className="text-lg font-semibold">{message}</span>
-                <span className="truncate h-12 text-wrap w-[calc(100%-24px)]">{details}</span>
+            data.notifications.slice(0, 3).map(({ message, details, date, type }, index) => (
+              <div key={`${message}-${index}`} className="flex flex-col items-start gap-y-1">
+                <div className="flex items-center gap-x-2">
+                  <span className={`w-2 h-2 ${statusColor[type]} rounded-full`} />
+                  <span className="text-base font-semibold">{message}</span>
+                </div>
+                <span className="text-sm truncate h-10 text-wrap w-[calc(100%-24px)]">
+                  {details}
+                </span>
                 <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
-              </Card>
+              </div>
             ))
           ) : (
             <p className="text-sm text-center leading-none text-muted-foreground">
