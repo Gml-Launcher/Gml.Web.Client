@@ -27,6 +27,12 @@ export type TGetInstallClientBranchesResponse = ResponseBaseEntity & {
   data: BranchBaseEntity[];
 };
 
+// Получение списка платформ
+export type TGetBuildClientPlatformRequest = {};
+export type TGetBuildClientPlatformResponse = ResponseBaseEntity & {
+  data: string[];
+};
+
 // Получение списка билдов лаунчера
 export type TGetLauncherVersionBuildsRequest = {};
 export type TGetLauncherVersionBuildsResponse = ResponseBaseEntity & {

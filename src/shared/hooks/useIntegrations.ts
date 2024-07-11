@@ -19,9 +19,10 @@ export const integrationsKeys = {
   auth: () => [...integrationsKeys.all, "auth"] as const,
   authEditing: () => [...integrationsKeys.auth(), "editing"] as const,
 
-  launcherGithubBranches: () => [...integrationsKeys.all, "github-branches"] as const,
+  launcherGithubVersions: () => [...integrationsKeys.all, "github-branches"] as const,
   launcherBuildVersions: () => [...integrationsKeys.all, "build-versions"] as const,
   launcherUpload: () => [...integrationsKeys.all, "launcher-upload"] as const,
+  launcherPlatforms: () => [...integrationsKeys.all, "launcher-platforms"] as const,
 
   sentry: () => [...integrationsKeys.all, "sentry"] as const,
   sentryEditing: () => [...integrationsKeys.sentry(), "editing"] as const,
@@ -82,11 +83,19 @@ export const useEditIntegration = () => {
   });
 };
 
-export const useLauncherGithubBranches = () => {
+export const useLauncherGithubVersions = () => {
   return useQuery({
-    queryKey: integrationsKeys.launcherGithubBranches(),
-    queryFn: () => integrationService.getGithubLauncherBranches(),
-    select: (data) => data.data,
+    queryKey: integrationsKeys.launcherGithubVersions(),
+    queryFn: () => integrationService.getGithubLauncherVersions(),
+    select: (data) => data.data.data,
+  });
+};
+
+export const useLauncherPlatforms = () => {
+  return useQuery({
+    queryKey: integrationsKeys.launcherPlatforms(),
+    queryFn: () => integrationService.getBuildClientPlatforms(),
+    select: (data) => data.data.data,
   });
 };
 
@@ -94,7 +103,7 @@ export const useLauncherBuildVersions = () => {
   return useQuery({
     queryKey: integrationsKeys.launcherBuildVersions(),
     queryFn: () => integrationService.getLauncherBuildVersions(),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };
 

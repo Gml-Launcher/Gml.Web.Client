@@ -6,6 +6,7 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
+  TGetBuildClientPlatformResponse,
   TGetConnectDiscordRequest,
   TGetConnectDiscordResponse,
   TGetConnectTexturesRequest,
@@ -61,20 +62,18 @@ class IntegrationService {
     return data;
   }
 
-  async getGithubLauncherBranches(): Promise<TGetInstallClientBranchesResponse> {
-    const { data } = await $api.get<TGetInstallClientBranchesResponse>(
+  async getGithubLauncherVersions(): Promise<AxiosResponse<TGetInstallClientBranchesResponse>> {
+    return await $api.get<TGetInstallClientBranchesResponse>(
       `${this.BASE_URL_GITHUB}/launcher/versions`,
     );
-
-    return data;
   }
 
-  async getLauncherBuildVersions(): Promise<TGetLauncherVersionBuildsResponse> {
-    const { data } = await $api.get<TGetLauncherVersionBuildsResponse>(
-      `${this.BASE_URL_LAUNCHER}/builds`,
-    );
+  async getLauncherBuildVersions(): Promise<AxiosResponse<TGetLauncherVersionBuildsResponse>> {
+    return await $api.get<TGetLauncherVersionBuildsResponse>(`${this.BASE_URL_LAUNCHER}/builds`);
+  }
 
-    return data;
+  async getBuildClientPlatforms(): Promise<AxiosResponse<TGetBuildClientPlatformResponse>> {
+    return await $api.get<TGetBuildClientPlatformResponse>(`${this.BASE_URL_LAUNCHER}/platforms`);
   }
 
   async postLauncherUpload(body: TPostLauncherUploadRequest): Promise<TPostLauncherUploadResponse> {
