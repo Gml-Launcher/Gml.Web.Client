@@ -80,7 +80,7 @@ export function ChooseAuthenticationMethodDialog() {
             <div className="flex flex-col w-1/2">
               <Select defaultValue={authenticationTab} onValueChange={onAuthenticationTabToggle}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a verified email to display" />
+                  <SelectValue placeholder="Выберите метод аутентификации" />
                 </SelectTrigger>
                 <SelectContent>
                   {integrations &&

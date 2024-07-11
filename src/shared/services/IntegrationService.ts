@@ -38,8 +38,8 @@ class IntegrationService {
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<
-      TGetAuthIntegrationsRequest,
-      AxiosResponse<TGetAuthIntegrationsResponse>
+        TGetAuthIntegrationsRequest,
+        AxiosResponse<TGetAuthIntegrationsResponse>
     >(this.BASE_URL_AUTH);
 
     return data;
@@ -47,8 +47,8 @@ class IntegrationService {
 
   async getActiveAuthIntegration(): Promise<TGetActiveAuthIntegrationsResponse> {
     const { data } = await $api.get<
-      TGetActiveAuthIntegrationsRequest,
-      AxiosResponse<TGetActiveAuthIntegrationsResponse>
+        TGetActiveAuthIntegrationsRequest,
+        AxiosResponse<TGetActiveAuthIntegrationsResponse>
     >(`${this.BASE_URL_AUTH}/active`);
 
     return data;
