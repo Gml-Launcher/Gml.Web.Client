@@ -10,8 +10,13 @@ import {
 } from "@/shared/ui/dropdown-menu";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
+import { useConnectionHub } from "@/widgets/notifications-hub/lib/useConnectionHub";
+import { useRouter } from "next/navigation";
+import { DASHBOARD_PAGES } from "@/shared/routes";
 
 export const Notifications = () => {
+  const router = useRouter();
+  useConnectionHub();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -43,6 +48,10 @@ export const Notifications = () => {
             У вас нет уведомлений
           </p>
         </div>
+        <DropdownMenuSeparator />
+        <Button className="w-full" onClick={() => router.push(DASHBOARD_PAGES.NOTIFICATION)}>
+          Все уведомления
+        </Button>
       </DropdownMenuContent>
     </DropdownMenu>
   );
