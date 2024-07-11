@@ -20,10 +20,6 @@ export const serversKeys = {
   entities: () => [...serversKeys.all, "entities"] as const,
 };
 
-type useGameServersParams = {
-  profileName?: string;
-};
-
 export const useGameServers = (profile: TGetGameServersRequest) => {
   return useQuery({
     queryKey: serversKeys.entities(),
