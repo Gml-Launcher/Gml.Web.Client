@@ -9,6 +9,7 @@ export type TGetGameServersResponse = ResponseBaseEntity & {
 };
 
 export type TPostGameServersRequest = {
+  profileName: string;
   name: string;
   address: string;
   port: number;

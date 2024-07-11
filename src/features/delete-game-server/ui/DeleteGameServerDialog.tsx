@@ -23,7 +23,7 @@ export const DeleteGameServerDialog = ({
   profileName,
   serverName,
 }: DeleteGameServerDialogParams) => {
-  const { mutateAsync, isPending } = useDeleteGameServer({ profileName });
+  const { mutateAsync, isPending } = useDeleteGameServer();
 
   const onSubmit = async () => {
     await mutateAsync({ profileName, serverName });
@@ -46,7 +46,7 @@ export const DeleteGameServerDialog = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Отмена</AlertDialogCancel>
-          <AlertDialogAction disabled={isPending} onClick={() => onSubmit()}>
+          <AlertDialogAction disabled={isPending} onClick={onSubmit}>
             Удалить
           </AlertDialogAction>
         </AlertDialogFooter>

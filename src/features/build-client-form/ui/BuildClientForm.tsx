@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
-import { useGithubLauncherVersions } from "@/shared/hooks";
+import { useLauncherGithubBranches } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 import { Button } from "@/shared/ui/button";
@@ -35,7 +35,7 @@ export function BuildClientForm({
 }: BuildClientFormProps) {
   const { isBuilding, logs } = state;
 
-  const { data: branches } = useGithubLauncherVersions();
+  const { data: branches } = useLauncherGithubBranches();
 
   const { onSubmit } = useOnSubmit({
     connectionHub,

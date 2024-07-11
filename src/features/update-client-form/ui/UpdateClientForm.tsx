@@ -4,7 +4,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Icons } from "@/shared/ui/icons";
-import { useLauncherVersionsBuilds, useUpdateLauncher } from "@/shared/hooks";
+import { useLauncherBuildVersions, useLauncherUpload } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
@@ -19,9 +19,9 @@ interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateClientFormProps) {
-  const { data: versions } = useLauncherVersionsBuilds();
+  const { data: versions } = useLauncherBuildVersions();
 
-  const { mutateAsync, isPending } = useUpdateLauncher();
+  const { mutateAsync, isPending } = useLauncherUpload();
 
   const form = useForm<ClientUpdateFormSchemaType>({
     values: { version: "", title: "", description: "", launcherBuild: "" },
