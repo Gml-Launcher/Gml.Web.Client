@@ -26,13 +26,13 @@ export const GameServerCard = ({ server, profileName }: GameServerCardParams) =>
     <Card className="flex flex-row items-center justify-between gap-y-4 p-3 pr-8">
       <div className="flex flex-row gap-x-5 items-center">
         <Image src={minecraftLogo} className="w-16" alt="GML Frontend" />
-        <div className="flex flex-col">
+        <div className="flex flex-col min-w-[350px]">
           <span className="text-lg font-bold">{server.name}</span>
           <span className="text-gray-600 dark:text-gray-400 font-medium text-sm">
             {server.version ?? "Нет информации"}
           </span>
         </div>
-        {Boolean(server.isOnline) && (
+        {server.isOnline && (
           <div>
             <div className="flex flex-row items-center justify-between gap-x-3 ml-3 relative">
               <Progress
@@ -40,11 +40,11 @@ export const GameServerCard = ({ server, profileName }: GameServerCardParams) =>
                 className={`absolute w-full h-1 bottom-0 rounded ${getProgressColor(progressValue)}`}
               />
               <div className="flex flex-row items-center justify-between gap-x-3 relative z-2 mb-3">
-                <div className="z-1 inline-flex opacity-30 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                <div className="flex items-center justify-center text-sm font-medium text-muted-foreground rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition h-10 w-10">
                   {server.online}
                 </div>
                 из
-                <div className="z-1 inline-flex opacity-30 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10">
+                <div className="flex items-center justify-center text-sm font-medium text-muted-foreground rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground transition h-10 w-10">
                   {server.maxOnline}
                 </div>
               </div>

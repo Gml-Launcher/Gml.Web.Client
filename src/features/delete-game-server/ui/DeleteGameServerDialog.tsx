@@ -12,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { useDeleteGameServer } from "@/shared/hooks/useServers";
+import { Button } from "@/shared/ui/button";
 
 type DeleteGameServerDialogParams = {
   serverName: string;
@@ -31,7 +32,10 @@ export const DeleteGameServerDialog = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Trash2Icon />
+        <Button variant="ghost" size="icon">
+          <Trash2Icon className="h-5 w-5" />
+          <span className="sr-only">Удалить сервер</span>
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

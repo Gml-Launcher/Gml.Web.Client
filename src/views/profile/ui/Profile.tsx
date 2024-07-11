@@ -128,6 +128,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             subtitle="Белый список необходим для того чтобы исключить выбранные файлы из автоматического удаления"
           >
             <div className={classes.tabs__whitelist}>
+              <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
               {!!Object.keys(rowSelection).length && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -147,7 +148,6 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
                   </AlertDialogContent>
                 </AlertDialog>
               )}
-              <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
             </div>
             <FilesTable
               files={profile.whiteListFiles}

@@ -28,7 +28,7 @@ export const ProfileLoading = () => {
 
       <div className={classes.tabs}>
         <div className={classes.tabs__list}>
-          <Skeleton className="w-[178px] h-[128px]" />
+          <Skeleton className="w-[178px] h-[168px]" />
         </div>
         <div className={classes.tabs__content}>
           <Skeleton className="h-[600px]" />
