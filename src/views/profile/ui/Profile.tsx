@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { RowSelectionState } from "@tanstack/react-table";
 
@@ -46,7 +46,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const profile = data?.data;
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
 
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   useEffect(() => {
     if (account && accessToken) {

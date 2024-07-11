@@ -37,7 +37,7 @@ export function AddingFilesWhitelistDialog({
   const [tab, setTab] = useState("files");
   const onChangeTab = (currentTab: string) => () => setTab(currentTab);
 
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const onSubmit = () => {
     const hashFiles = Object.entries(rowSelection).map(([hash, _]) => ({
