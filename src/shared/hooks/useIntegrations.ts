@@ -19,7 +19,7 @@ export const integrationsKeys = {
   auth: () => [...integrationsKeys.all, "auth"] as const,
   authEditing: () => [...integrationsKeys.auth(), "editing"] as const,
 
-  launcherGithubVersions: () => [...integrationsKeys.all, "github-branches"] as const,
+  launcherGithubVersions: () => [...integrationsKeys.all, "github-versions"] as const,
   launcherBuildVersions: () => [...integrationsKeys.all, "build-versions"] as const,
   launcherUpload: () => [...integrationsKeys.all, "launcher-upload"] as const,
   launcherPlatforms: () => [...integrationsKeys.all, "launcher-platforms"] as const,
