@@ -28,8 +28,8 @@ export type TGetLauncherGithubVersionsResponse = ResponseBaseEntity & {
 };
 
 // Получение списка платформ
-export type TGetBuildClientPlatformsRequest = {};
-export type TGetBuildClientPlatformsResponse = ResponseBaseEntity & {
+export type TGetLauncherBuildPlatformsRequest = {};
+export type TGetLauncherBuildPlatformsResponse = ResponseBaseEntity & {
   data: string[];
 };
 

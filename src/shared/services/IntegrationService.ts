@@ -6,7 +6,7 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
-  TGetBuildClientPlatformsResponse,
+  TGetLauncherBuildPlatformsResponse,
   TGetConnectDiscordRequest,
   TGetConnectDiscordResponse,
   TGetConnectTexturesRequest,
@@ -72,8 +72,10 @@ class IntegrationService {
     return await $api.get<TGetLauncherBuildVersionsResponse>(`${this.BASE_URL_LAUNCHER}/builds`);
   }
 
-  async getLauncherPlatforms(): Promise<AxiosResponse<TGetBuildClientPlatformsResponse>> {
-    return await $api.get<TGetBuildClientPlatformsResponse>(`${this.BASE_URL_LAUNCHER}/platforms`);
+  async getLauncherBuildPlatforms(): Promise<AxiosResponse<TGetLauncherBuildPlatformsResponse>> {
+    return await $api.get<TGetLauncherBuildPlatformsResponse>(
+      `${this.BASE_URL_LAUNCHER}/platforms`,
+    );
   }
 
   async postLauncherUpload(body: TPostLauncherUploadRequest): Promise<TPostLauncherUploadResponse> {

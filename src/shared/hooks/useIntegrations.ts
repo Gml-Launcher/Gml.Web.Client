@@ -94,7 +94,7 @@ export const useLauncherGithubVersions = () => {
 export const useLauncherPlatforms = () => {
   return useQuery({
     queryKey: integrationsKeys.launcherPlatforms(),
-    queryFn: () => integrationService.getLauncherPlatforms(),
+    queryFn: () => integrationService.getLauncherBuildPlatforms(),
     select: (data) => data.data.data,
   });
 };
