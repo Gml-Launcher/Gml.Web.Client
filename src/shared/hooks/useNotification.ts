@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { notificationService } from "@/shared/services/NotifiactionService";
 
 export const notificationsKeys = {
-  all: ["integrations"] as const,
+  all: ["notifications"] as const,
 };
 
 export const useNotifications = () => {

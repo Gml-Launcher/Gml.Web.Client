@@ -24,6 +24,14 @@ export const useConnectionHub = () => {
   const [isDownload, setIsDownload] = useState(false);
   const [isBuilding, setIsBuilding] = useState(false);
 
+  const handleDownloadEnded = () => {
+    setIsDownload(false);
+  };
+
+  const handleBuildingEnded = () => {
+    setIsBuilding(false);
+  };
+
   useEffect(() => {
     if (!accessToken) return;
 
@@ -45,22 +53,14 @@ export const useConnectionHub = () => {
         });
 
         connection.on("Message", (message) => {
-          if (message === "Лаунчер уже существует в папке, удалите его перед сборкой") {
-            setIsDownload(false);
-          }
-
-          if (message === "Проект успешно создан") {
-            setIsDownload(false);
-          }
-
-          if (message === "Лаунчер успешно скомпилирован") {
-            setIsBuilding(false);
-          }
-
           toast({
             description: message,
           });
         });
+
+        connection.on("LauncherDownloadEnded", handleDownloadEnded);
+        connection.on("LauncherBuildEnded", handleBuildingEnded);
+        connection.on("LauncherPublishEnded", handleDownloadEnded);
 
         connection.on("Log", (log: string) => {
           setLogsBuilding((prev) => (prev ? [...prev, log] : [log]));

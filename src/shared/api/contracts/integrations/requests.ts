@@ -22,14 +22,20 @@ export type TGetActiveAuthIntegrationsResponse = ResponseBaseEntity & {
 };
 
 // Получение списка веток
-export type TGetInstallClientBranchesRequest = {};
-export type TGetInstallClientBranchesResponse = ResponseBaseEntity & {
+export type TGetLauncherGithubVersionsRequest = {};
+export type TGetLauncherGithubVersionsResponse = ResponseBaseEntity & {
   data: BranchBaseEntity[];
 };
 
+// Получение списка платформ
+export type TGetLauncherBuildPlatformsRequest = {};
+export type TGetLauncherBuildPlatformsResponse = ResponseBaseEntity & {
+  data: string[];
+};
+
 // Получение списка билдов лаунчера
-export type TGetLauncherVersionBuildsRequest = {};
-export type TGetLauncherVersionBuildsResponse = ResponseBaseEntity & {
+export type TGetLauncherBuildVersionsRequest = {};
+export type TGetLauncherBuildVersionsResponse = ResponseBaseEntity & {
   data: LauncherBuildsBaseEntity[];
 };
 

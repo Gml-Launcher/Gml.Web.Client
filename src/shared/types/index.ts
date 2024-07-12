@@ -3,3 +3,8 @@ export type TMenuItem = {
   text: string;
   path: string;
 };
+
+export type SelectOption = {
+  label: string;
+  value: string;
+};

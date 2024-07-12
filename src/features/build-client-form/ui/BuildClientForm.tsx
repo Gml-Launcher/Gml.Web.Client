@@ -2,16 +2,27 @@ import { Ubuntu_Mono } from "next/font/google";
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
-import { useLauncherGithubBranches } from "@/shared/hooks";
+import { useLauncherGithubVersions, useLauncherPlatforms } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
+import { SelectOption } from "@/shared/types";
+import { MultiSelect } from "@/shared/ui/multi-select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/shared/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 
 import { ClientBuildFormSchemaType, ClientBuildSchema } from "../lib/static";
 import { useOnSubmit } from "../lib/hooks/useOnSubmit";
@@ -35,17 +46,36 @@ export function BuildClientForm({
 }: BuildClientFormProps) {
   const { isBuilding, logs } = state;
 
-  const { data: branches } = useLauncherGithubBranches();
+  const versions = useLauncherGithubVersions();
+  const platforms = useLauncherPlatforms();
+
+  const versionsOptions = ((versions.data &&
+    versions.data.map(({ version }) => ({
+      label: version,
+      value: version,
+    }))) ||
+    []) as SelectOption[];
+
+  const platformsOptions =
+    platforms.data &&
+    ((platforms.data.map((name) => ({
+      label: name,
+      value: name,
+    })) || []) as SelectOption[]);
+
+  const form = useForm<ClientBuildFormSchemaType>({
+    defaultValues: {
+      version: "",
+      operatingSystem: [],
+    },
+    resolver: zodResolver(ClientBuildSchema),
+    disabled: isBuilding,
+  });
 
   const { onSubmit } = useOnSubmit({
     connectionHub,
     state,
-  });
-
-  const form = useForm<ClientBuildFormSchemaType>({
-    values: { branch: "" },
-    resolver: zodResolver(ClientBuildSchema),
-    disabled: isBuilding,
+    version: form.getValues("version"),
   });
 
   return (
@@ -54,27 +84,85 @@ export function BuildClientForm({
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller
             control={form.control}
-            name="branch"
+            name="version"
             render={({ field }) => (
-              <FormItem className="flex-1">
+              <FormItem className="space-y-2 flex-1">
                 <FormLabel>Выберите версию</FormLabel>
                 <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите версию" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {branches &&
-                        branches.map(({ version }) => (
-                          <SelectItem key={version} value={version}>
-                            {version}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground",
+                          )}
+                        >
+                          {field.value
+                            ? versionsOptions &&
+                              versionsOptions.find((version) => version.value === field.value)
+                                ?.label
+                            : "Выберите версию"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Поиск..." />
+                        <CommandEmpty>Версия не найдена</CommandEmpty>
+                        <CommandGroup>
+                          <CommandList>
+                            {versionsOptions.map((option) => (
+                              <CommandItem
+                                key={option.value}
+                                value={option.value}
+                                onSelect={(currentValue) => {
+                                  form.setValue("version", currentValue);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    option.value === field.value ? "opacity-100" : "opacity-0",
+                                  )}
+                                />
+                                {option.label}
+                              </CommandItem>
+                            ))}
+                          </CommandList>
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                 </FormControl>
-                {form.formState.errors.branch && (
-                  <FormMessage>{form.formState.errors.branch.message}</FormMessage>
+                {form.formState.errors.version && (
+                  <FormMessage>{form.formState.errors.version.message}</FormMessage>
+                )}
+              </FormItem>
+            )}
+          />
+
+          <Controller
+            control={form.control}
+            name="operatingSystem"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Выбери операционную систему</FormLabel>
+                <FormControl>
+                  <MultiSelect
+                    options={platformsOptions}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    placeholder="Выбери операционную систему"
+                    variant="inverted"
+                    maxCount={3}
+                  />
+                </FormControl>
+                {form.formState.errors.operatingSystem && (
+                  <FormMessage>{form.formState.errors.operatingSystem.message}</FormMessage>
                 )}
               </FormItem>
             )}

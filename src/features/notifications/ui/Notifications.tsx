@@ -74,7 +74,7 @@ export const Notifications = () => {
                   <span className="text-base font-semibold">{message}</span>
                 </div>
                 <span className="text-sm truncate h-10 text-wrap w-[calc(100%-24px)]">
-                  {details}
+                  {details ? details : "Детали отсутствуют"}
                 </span>
                 <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
               </div>
