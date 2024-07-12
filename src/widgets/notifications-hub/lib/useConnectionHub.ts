@@ -5,6 +5,7 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getApiBaseUrl } from "@/shared/lib/utils";
 import { getStorageAccessToken } from "@/shared/services";
+import { NotificationsParams } from "@/shared/types";
 
 const CONNECTION_URL = (token: string) =>
   `${getApiBaseUrl()}/ws/notifications?access_token=${token}`;
@@ -29,21 +30,18 @@ export const useConnectionHub = () => {
 
         await connection.start();
 
-        connection.on(
-          "Notifications",
-          ({ message, details }: { message: string; details?: string }) => {
-            sonner(message, {
-              description: details && `${details?.substring(0, 50)}...`,
-              action: {
-                label: "Cкопировать",
-                onClick: async () => {
-                  await navigator.clipboard.writeText(details ? details : message);
-                  sonner("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });
-                },
+        connection.on("Notifications", ({ message, details }: NotificationsParams) => {
+          sonner(message, {
+            description: details && `${details?.substring(0, 50)}...`,
+            action: {
+              label: "Cкопировать",
+              onClick: async () => {
+                await navigator.clipboard.writeText(details ? details : message);
+                sonner("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });
               },
-            });
-          },
-        );
+            },
+          });
+        });
       } catch (error) {
         console.log(error);
       }
