@@ -28,6 +28,10 @@ export const useConnectionHub = () => {
     setIsDownload(false);
   };
 
+  const handleBuildEnded = () => {
+    setIsBuilding(false);
+  };
+
   useEffect(() => {
     if (!accessToken) return;
 
@@ -55,7 +59,7 @@ export const useConnectionHub = () => {
         });
 
         connection.on("LauncherDownloadEnded", handleDownloadEnded);
-        connection.on("LauncherBuildEnded", handleDownloadEnded);
+        connection.on("LauncherBuildEnded", handleBuildEnded);
         connection.on("LauncherPublishEnded", handleDownloadEnded);
 
         connection.on("Log", (log: string) => {

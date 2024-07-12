@@ -31,13 +31,13 @@ export const useConnectionHub = () => {
 
         connection.on(
           "Notifications",
-          ({ message, details }: { message: string; details: string }) => {
+          ({ message, details }: { message: string; details?: string }) => {
             sonner(message, {
-              description: `${details.substring(0, 50)}...`,
+              description: details && `${details?.substring(0, 50)}...`,
               action: {
                 label: "Cкопировать",
                 onClick: async () => {
-                  await navigator.clipboard.writeText(details);
+                  await navigator.clipboard.writeText(details ? details : message);
                   sonner("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });
                 },
               },

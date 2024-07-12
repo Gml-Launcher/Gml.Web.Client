@@ -17,14 +17,16 @@ export const NotificationCard = ({ card }: ProfileCardParams) => {
         <span className="text-base font-semibold">{card.message}</span>
         <span className="text-sm text-muted-foreground">{getFormatDate(card.date)}</span>
       </div>
-      <div className="max-h-20 overflow-hidden">
-        <span className="text-sm text-muted-foreground ">{card.details}</span>
-      </div>
+      {card.details && (
+        <div className="max-h-20 overflow-hidden">
+          <span className="text-sm text-muted-foreground ">{card.details}</span>
+        </div>
+      )}
       <Button
         variant="secondary"
         className="w-fit"
         onClick={async () => {
-          await navigator.clipboard.writeText(card.details);
+          await navigator.clipboard.writeText(card.details ? card.details : card.message);
           sonner("Текст успешно скопирован", {
             duration: 1500,
             onAutoClose: () => true,
