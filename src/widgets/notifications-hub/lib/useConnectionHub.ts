@@ -5,7 +5,11 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getApiBaseUrl } from "@/shared/lib/utils";
 import { getStorageAccessToken } from "@/shared/services";
-import { NotificationsParams } from "@/shared/types";
+
+type NotificationsParams = {
+  message: string;
+  details: Nullable<string>;
+};
 
 const CONNECTION_URL = (token: string) =>
   `${getApiBaseUrl()}/ws/notifications?access_token=${token}`;
