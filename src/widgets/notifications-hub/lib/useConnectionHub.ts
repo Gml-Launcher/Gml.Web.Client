@@ -38,7 +38,7 @@ export const useConnectionHub = () => {
           sonner(message, {
             description: details && `${details?.substring(0, 50)}...`,
             action: {
-              label: "Cкопировать",
+              label: "Копировать",
               onClick: async () => {
                 await navigator.clipboard.writeText(details ? details : message);
                 sonner("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });

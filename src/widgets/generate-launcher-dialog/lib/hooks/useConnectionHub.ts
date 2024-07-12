@@ -28,7 +28,7 @@ export const useConnectionHub = () => {
     setIsDownload(false);
   };
 
-  const handleBuildEnded = () => {
+  const handleBuildingEnded = () => {
     setIsBuilding(false);
   };
 
@@ -59,7 +59,7 @@ export const useConnectionHub = () => {
         });
 
         connection.on("LauncherDownloadEnded", handleDownloadEnded);
-        connection.on("LauncherBuildEnded", handleBuildEnded);
+        connection.on("LauncherBuildEnded", handleBuildingEnded);
         connection.on("LauncherPublishEnded", handleDownloadEnded);
 
         connection.on("Log", (log: string) => {

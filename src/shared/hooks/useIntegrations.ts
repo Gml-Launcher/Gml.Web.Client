@@ -86,7 +86,7 @@ export const useEditIntegration = () => {
 export const useLauncherGithubVersions = () => {
   return useQuery({
     queryKey: integrationsKeys.launcherGithubVersions(),
-    queryFn: () => integrationService.getGithubLauncherVersions(),
+    queryFn: () => integrationService.getLauncherGithubVersions(),
     select: (data) => data.data.data,
   });
 };
@@ -94,7 +94,7 @@ export const useLauncherGithubVersions = () => {
 export const useLauncherPlatforms = () => {
   return useQuery({
     queryKey: integrationsKeys.launcherPlatforms(),
-    queryFn: () => integrationService.getBuildClientPlatforms(),
+    queryFn: () => integrationService.getLauncherPlatforms(),
     select: (data) => data.data.data,
   });
 };
