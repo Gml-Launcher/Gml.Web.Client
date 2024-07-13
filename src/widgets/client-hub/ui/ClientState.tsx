@@ -1,15 +1,16 @@
 "use client";
 
-import { ProfileStateOption } from "@/shared/enums";
+import { EntityState, EntityStateOption } from "@/shared/enums";
 
 interface ClientStateProps {
-  state: number;
+  state: EntityState;
 }
 
 const stateColorMap: Record<ClientStateProps["state"], string> = {
-  0: "bg-gray-600",
-  1: "bg-orange-500",
-  2: "bg-green-600",
+  [EntityState.ENTITY_STATE_CREATED]: "bg-gray-600",
+  [EntityState.ENTITY_STATE_LOADING]: "bg-orange-500",
+  [EntityState.ENTITY_STATE_ACTIVE]: "bg-green-600",
+  [EntityState.ENTITY_STATE_DISABLED]: "bg-red-500",
 };
 
 export function ClientState({ state }: ClientStateProps) {
@@ -23,7 +24,7 @@ export function ClientState({ state }: ClientStateProps) {
           className={`absolute items-center justify-center w-3 h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 ${stateColorMap[state]} animate-ping after:opacity-30 after:${stateColorMap[state]}`}
         ></span>
         <span className="font-medium">
-          {ProfileStateOption[`OPTION_${state}` as keyof typeof ProfileStateOption]}
+          {EntityStateOption[`OPTION_${state}` as keyof typeof EntityStateOption]}
         </span>
       </div>
     </>

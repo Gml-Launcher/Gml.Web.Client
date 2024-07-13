@@ -1,11 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { isAxiosError } from "axios";
-
 import {
   TGetActiveAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
-  TPostLauncherUpdateRequest,
+  TPostLauncherUploadRequest,
   TPutConnectDiscordRequest,
   TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
@@ -13,10 +11,33 @@ import {
 import { integrationService } from "@/shared/services/IntegrationService";
 import { useToast } from "@/shared/ui/use-toast";
 import { TexturesServiceType } from "@/shared/enums";
+import { isAxiosError } from "@/shared/lib/utils";
+
+export const integrationsKeys = {
+  all: ["integrations"] as const,
+
+  auth: () => [...integrationsKeys.all, "auth"] as const,
+  authEditing: () => [...integrationsKeys.auth(), "editing"] as const,
+
+  launcherGithubVersions: () => [...integrationsKeys.all, "github-versions"] as const,
+  launcherBuildVersions: () => [...integrationsKeys.all, "build-versions"] as const,
+  launcherUpload: () => [...integrationsKeys.all, "launcher-upload"] as const,
+  launcherPlatforms: () => [...integrationsKeys.all, "launcher-platforms"] as const,
+
+  sentry: () => [...integrationsKeys.all, "sentry"] as const,
+  sentryEditing: () => [...integrationsKeys.sentry(), "editing"] as const,
+
+  textures: () => [...integrationsKeys.all, "textures"] as const,
+  texturesEditing: (type: TexturesServiceType) =>
+    [...integrationsKeys.textures(), `editing-${type}`] as const,
+
+  discord: () => [...integrationsKeys.all, "discord"] as const,
+  discordEditing: () => [...integrationsKeys.discord(), "editing"] as const,
+};
 
 export const useAuthIntegrations = () => {
   return useQuery({
-    queryKey: ["integrations/findAll"],
+    queryKey: integrationsKeys.all,
     queryFn: () => integrationService.getAuthIntegrations(),
     select: ({ data }) => data,
   });
@@ -25,16 +46,17 @@ export const useAuthIntegrations = () => {
 export const useGetActiveAuthIntegrations = (): TGetActiveAuthIntegrationsResponse => {
   const queryClient = useQueryClient();
 
-  const data = queryClient.getQueryData<TGetActiveAuthIntegrationsResponse>([
-    "integrations/findActive",
-  ]);
+  const data = queryClient.getQueryData<TGetActiveAuthIntegrationsResponse>(
+    integrationsKeys.auth(),
+  );
   if (!data) return {} as TGetActiveAuthIntegrationsResponse;
 
   return data;
 };
+
 export const useActiveAuthIntegrations = () => {
   return useQuery({
-    queryKey: ["integrations/findActive"],
+    queryKey: integrationsKeys.auth(),
     queryFn: () => integrationService.getActiveAuthIntegration(),
     select: ({ data }) => data,
   });
@@ -45,51 +67,52 @@ export const useEditIntegration = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["update-integration"],
+    mutationKey: integrationsKeys.authEditing(),
     mutationFn: (data: TPostAuthIntegrationsRequest) =>
       integrationService.putAuthIntegrations(data),
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ["integrations/findActive"] });
+      await queryClient.invalidateQueries({ queryKey: integrationsKeys.auth() });
       toast({
         title: "Успешно",
         description: data.message,
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        toast({
-          variant: "destructive",
-          title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
-        });
-      }
+      isAxiosError({ toast, error });
     },
   });
 };
 
-export const useGithubLauncherVersions = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["clientBranches"],
-    queryFn: () => integrationService.getInstallClientBranches(),
-  });
-
-  return { data: data?.data, isLoading };
-};
-
-export const useLauncherVersionsBuilds = () => {
+export const useLauncherGithubVersions = () => {
   return useQuery({
-    queryKey: ["clientBuilds"],
-    queryFn: () => integrationService.getVersionBuilds(),
-    select: (data) => data.data,
+    queryKey: integrationsKeys.launcherGithubVersions(),
+    queryFn: () => integrationService.getLauncherGithubVersions(),
+    select: (data) => data.data.data,
   });
 };
 
-export const useUpdateLauncher = () => {
+export const useLauncherPlatforms = () => {
+  return useQuery({
+    queryKey: integrationsKeys.launcherPlatforms(),
+    queryFn: () => integrationService.getLauncherBuildPlatforms(),
+    select: (data) => data.data.data,
+  });
+};
+
+export const useLauncherBuildVersions = () => {
+  return useQuery({
+    queryKey: integrationsKeys.launcherBuildVersions(),
+    queryFn: () => integrationService.getLauncherBuildVersions(),
+    select: (data) => data.data.data,
+  });
+};
+
+export const useLauncherUpload = () => {
   const { toast } = useToast();
 
   return useMutation({
-    mutationKey: ["update-launcher"],
-    mutationFn: (data: TPostLauncherUpdateRequest) => integrationService.postUpdateLauncher(data),
+    mutationKey: integrationsKeys.launcherUpload(),
+    mutationFn: (data: TPostLauncherUploadRequest) => integrationService.postLauncherUpload(data),
     onSuccess: async (data) => {
       toast({
         title: "Успешно",
@@ -97,31 +120,24 @@ export const useUpdateLauncher = () => {
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        toast({
-          variant: "destructive",
-          title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
-        });
-      }
+      isAxiosError({ toast, error });
     },
   });
 };
 
 export const useSentry = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["get-sentry"],
-    queryFn: () => integrationService.getSentryConnect({}),
+  return useQuery({
+    queryKey: integrationsKeys.sentry(),
+    queryFn: () => integrationService.getSentryConnect(),
+    select: (data) => data.data,
   });
-
-  return { data: data?.data, isLoading };
 };
 
 export const useEditSentry = () => {
   const { toast } = useToast();
 
   return useMutation({
-    mutationKey: ["update-sentry"],
+    mutationKey: integrationsKeys.sentryEditing(),
     mutationFn: (data: TPutSentryConnectRequest) => integrationService.putSentryConnect(data),
     onSuccess: async (data) => {
       toast({
@@ -130,20 +146,14 @@ export const useEditSentry = () => {
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        toast({
-          variant: "destructive",
-          title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
-        });
-      }
+      isAxiosError({ toast, error });
     },
   });
 };
 
 export const useConnectTextures = (type: TexturesServiceType) => {
   return useQuery({
-    queryKey: [`get-connect-textures-${type}`],
+    queryKey: integrationsKeys.texturesEditing(type),
     queryFn: () => integrationService.getConnectTextures({ type }),
     select: ({ data }) => data,
   });
@@ -154,32 +164,32 @@ export const useEditConnectTextures = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["update-connect-textures"],
+    mutationKey: integrationsKeys.textures(),
     mutationFn: (data: TPutConnectTexturesRequest) => integrationService.putConnectTextures(data),
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({ queryKey: ["get-connect-textures-skins"] });
-      await queryClient.invalidateQueries({ queryKey: ["get-connect-textures-cloaks"] });
+    onSuccess: async (data, variables) => {
+      if (variables.type === TexturesServiceType.TEXTURES_SERVICE_SKINS)
+        await queryClient.invalidateQueries({
+          queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_SKINS),
+        });
+      if (variables.type === TexturesServiceType.TEXTURES_SERVICE_CLOAKS)
+        await queryClient.invalidateQueries({
+          queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_CLOAKS),
+        });
       toast({
         title: "Успешно",
         description: data.message,
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        toast({
-          variant: "destructive",
-          title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
-        });
-      }
+      isAxiosError({ toast, error });
     },
   });
 };
 
 export const useDiscord = () => {
   return useQuery({
-    queryKey: ["get-discord"],
-    queryFn: () => integrationService.getConnectDiscord({}),
+    queryKey: integrationsKeys.discord(),
+    queryFn: () => integrationService.getConnectDiscord(),
     select: ({ data }) => data,
   });
 };
@@ -188,7 +198,7 @@ export const useEditDiscord = () => {
   const { toast } = useToast();
 
   return useMutation({
-    mutationKey: ["update-discord"],
+    mutationKey: integrationsKeys.discordEditing(),
     mutationFn: (data: TPutConnectDiscordRequest) => integrationService.putConnectDiscord(data),
     onSuccess: async (data) => {
       toast({
@@ -197,13 +207,7 @@ export const useEditDiscord = () => {
       });
     },
     onError: (error) => {
-      if (isAxiosError(error)) {
-        toast({
-          variant: "destructive",
-          title: (error.response && error.response.data.message) || "Ошибка!",
-          description: error.response && error.response.data.errors[0],
-        });
-      }
+      isAxiosError({ toast, error });
     },
   });
 };

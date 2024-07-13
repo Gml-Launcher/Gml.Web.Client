@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { RowSelectionState } from "@tanstack/react-table";
 
@@ -9,6 +9,7 @@ import { ProfileLoading } from "@/views/profile";
 import { FilesTable } from "@/widgets/files-table";
 import { DownloadClientHub } from "@/widgets/client-hub";
 import { AddingFilesWhitelistDialog } from "@/widgets/adding-files-whitelist-dialog";
+import { GameServers } from "@/widgets/game-servers";
 
 import { EditProfileForm } from "@/features/edit-profile-form";
 
@@ -45,7 +46,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const profile = data?.data;
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
 
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   useEffect(() => {
     if (account && accessToken) {
@@ -104,6 +105,9 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           <TabsTrigger className="w-full h-10" value="files">
             Файлы
           </TabsTrigger>
+          <TabsTrigger className="w-full h-10" value="servers">
+            Сервера
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>
           <Section
@@ -124,6 +128,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             subtitle="Белый список необходим для того чтобы исключить выбранные файлы из автоматического удаления"
           >
             <div className={classes.tabs__whitelist}>
+              <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
               {!!Object.keys(rowSelection).length && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -143,13 +148,17 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
                   </AlertDialogContent>
                 </AlertDialog>
               )}
-              <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
             </div>
             <FilesTable
               files={profile.whiteListFiles}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
             />
+          </Section>
+        </TabsContent>
+        <TabsContent value="servers" className={classes.tabs__content}>
+          <Section title="Сервера" subtitle="Управление серверами">
+            <GameServers profile={profile} />
           </Section>
         </TabsContent>
       </Tabs>

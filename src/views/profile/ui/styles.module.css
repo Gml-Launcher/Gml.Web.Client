@@ -15,5 +15,5 @@
 }
 
 .tabs__whitelist {
-    @apply flex items-center gap-x-4 ml-auto;
+    @apply flex items-center gap-x-4;
 }

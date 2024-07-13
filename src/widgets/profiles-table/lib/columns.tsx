@@ -19,6 +19,7 @@ import { ProfileBaseEntity } from "@/shared/api/contracts";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
 import { getFormatDate } from "@/shared/lib/utils";
+import { profileKeys } from "@/shared/hooks";
 
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
 
@@ -137,7 +138,7 @@ export const useColumns = (props: UseColumnsProps) => {
       id: "delete",
       cell: ({ row }) => {
         const onClickDeleteProfile = () => {
-          queryClient.setQueryData(["profile"], () => row.original);
+          queryClient.setQueryData(profileKeys.reading(), () => row.original);
           onProfileDeleteModalToggle();
         };
 

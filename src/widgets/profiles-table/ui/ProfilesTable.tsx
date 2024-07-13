@@ -34,7 +34,7 @@ import { Icons } from "@/shared/ui/icons";
 
 export function ProfilesTable() {
   const { data: profiles, isLoading } = useProfiles();
-  const currentProfile = useCurrentProfile();
+  const { data: currentProfile } = useCurrentProfile();
   const deleteMutation = useDeleteProfile();
   const deleteAllMutation = useDeleteProfiles();
 

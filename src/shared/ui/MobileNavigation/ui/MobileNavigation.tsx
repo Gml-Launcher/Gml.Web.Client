@@ -6,10 +6,13 @@ import Image from "next/image";
 
 import { Menu } from "lucide-react";
 
+import { config } from "@/core/configs";
+
 import { cn } from "@/shared/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/shared/ui/sheet";
 import { Button } from "@/shared/ui/button";
 import { TMenuItem } from "@/shared/types";
+
 import logo from "@/assets/logos/logo.svg";
 
 import classes from "./styles.module.css";
@@ -33,7 +36,7 @@ export const MobileNavigation = ({ menu }: MobileNavigationParams) => {
         <nav className={classes.sheet__navigation}>
           <Link href="/" className={classes.sheet__logo}>
             <Image src={logo} alt="GML Frontend" />
-            GML Frontend
+            {config.name}
           </Link>
           {menu.map(({ icon, path, text }) => (
             <Link

@@ -1,7 +1,4 @@
-import React from "react";
-
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import { useTheme } from "next-themes";
 import { Edit2Icon } from "lucide-react";
@@ -13,7 +10,6 @@ import { ClientState } from "@/widgets/client-hub";
 import { InputFile } from "@/shared/ui/input";
 import { Form, FormMessage } from "@/shared/ui/form";
 import { useEditProfile } from "@/shared/hooks";
-import { DASHBOARD_PAGES } from "@/shared/routes";
 
 import {
   EditImageProfileSchema,
@@ -41,7 +37,6 @@ interface ProfileCardParams {
 }
 
 export const ProfileCard = ({ profile }: ProfileCardParams) => {
-  const router = useRouter();
   const { theme } = useTheme();
 
   const { mutateAsync, isPending } = useEditProfile();

@@ -9,15 +9,16 @@ import { ClientBuildFormSchemaType } from "../static";
 interface UseOnSubmitBuildParams {
   connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
   state: ReturnType<typeof useConnectionHub>["build"];
+  version: string;
 }
 
-export const useOnSubmit = ({ connectionHub, state }: UseOnSubmitBuildParams) => {
+export const useOnSubmit = ({ connectionHub, state, version }: UseOnSubmitBuildParams) => {
   const onSubmit: SubmitHandler<ClientBuildFormSchemaType> = async (
     data: ClientBuildFormSchemaType,
   ) => {
     try {
       state.setIsBuilding(() => true);
-      connectionHub?.invoke("Compile", data.branch).then(() => {});
+      connectionHub?.invoke("Compile", version, data.operatingSystem).then(() => {});
     } catch (error: unknown) {
       toast({
         variant: "destructive",
@@ -28,6 +29,5 @@ export const useOnSubmit = ({ connectionHub, state }: UseOnSubmitBuildParams) =>
       state.setLogs(null);
     }
   };
-
   return { onSubmit };
 };

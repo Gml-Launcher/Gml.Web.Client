@@ -6,18 +6,19 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
+  TGetLauncherBuildPlatformsResponse,
   TGetConnectDiscordRequest,
   TGetConnectDiscordResponse,
   TGetConnectTexturesRequest,
   TGetConnectTexturesResponse,
-  TGetInstallClientBranchesResponse,
-  TGetLauncherVersionBuildsResponse,
+  TGetLauncherGithubVersionsResponse,
+  TGetLauncherBuildVersionsResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
-  TPostLauncherUpdateRequest,
-  TPostLauncherUpdateResponse,
+  TPostLauncherUploadRequest,
+  TPostLauncherUploadResponse,
   TPutConnectDiscordRequest,
   TPutConnectDiscordResponse,
   TPutConnectTexturesRequest,
@@ -61,24 +62,24 @@ class IntegrationService {
     return data;
   }
 
-  async getInstallClientBranches(): Promise<TGetInstallClientBranchesResponse> {
-    const { data } = await $api.get<TGetInstallClientBranchesResponse>(
+  async getLauncherGithubVersions(): Promise<AxiosResponse<TGetLauncherGithubVersionsResponse>> {
+    return await $api.get<TGetLauncherGithubVersionsResponse>(
       `${this.BASE_URL_GITHUB}/launcher/versions`,
     );
-
-    return data;
   }
 
-  async getVersionBuilds(): Promise<TGetLauncherVersionBuildsResponse> {
-    const { data } = await $api.get<TGetLauncherVersionBuildsResponse>(
-      `${this.BASE_URL_LAUNCHER}/builds`,
+  async getLauncherBuildVersions(): Promise<AxiosResponse<TGetLauncherBuildVersionsResponse>> {
+    return await $api.get<TGetLauncherBuildVersionsResponse>(`${this.BASE_URL_LAUNCHER}/builds`);
+  }
+
+  async getLauncherBuildPlatforms(): Promise<AxiosResponse<TGetLauncherBuildPlatformsResponse>> {
+    return await $api.get<TGetLauncherBuildPlatformsResponse>(
+      `${this.BASE_URL_LAUNCHER}/platforms`,
     );
-
-    return data;
   }
 
-  async postUpdateLauncher(body: TPostLauncherUpdateRequest): Promise<TPostLauncherUpdateResponse> {
-    const { data } = await $api.post<TPostLauncherUpdateResponse>(
+  async postLauncherUpload(body: TPostLauncherUploadRequest): Promise<TPostLauncherUploadResponse> {
+    const { data } = await $api.post<TPostLauncherUploadResponse>(
       `${this.BASE_URL_LAUNCHER}/upload`,
       body,
     );
@@ -86,7 +87,7 @@ class IntegrationService {
     return data;
   }
 
-  async getSentryConnect(params: TGetSentryConnectRequest): Promise<TGetSentryConnectResponse> {
+  async getSentryConnect(params?: TGetSentryConnectRequest): Promise<TGetSentryConnectResponse> {
     const { data } = await $api.get<TGetSentryConnectResponse>(this.BASE_URL_SENTRY, { params });
 
     return data;
@@ -122,9 +123,7 @@ class IntegrationService {
     return data;
   }
 
-  async getConnectDiscord({
-    ...params
-  }: TGetConnectDiscordRequest): Promise<TGetConnectDiscordResponse> {
+  async getConnectDiscord(params?: TGetConnectDiscordRequest): Promise<TGetConnectDiscordResponse> {
     const { data } = await $api.get<TGetConnectDiscordResponse>(this.BASE_URL_DISCORD, { params });
 
     return data;
