@@ -41,15 +41,19 @@ export function ConnectTexturesForm({
   });
 
   const onSubmit = async (data: ConnectTexturesFormSchemaType) => {
-    await mutateAsync({
-      type: TexturesServiceType.TEXTURES_SERVICE_SKINS,
-      url: data.url_skins,
-    });
+    if (form.getFieldState("url_skins").isDirty) {
+      await mutateAsync({
+        type: TexturesServiceType.TEXTURES_SERVICE_SKINS,
+        url: data.url_skins,
+      });
+    }
 
-    await mutateAsync({
-      type: TexturesServiceType.TEXTURES_SERVICE_CLOAKS,
-      url: data.url_cloaks,
-    });
+    if (form.getFieldState("url_cloaks").isDirty) {
+      await mutateAsync({
+        type: TexturesServiceType.TEXTURES_SERVICE_CLOAKS,
+        url: data.url_cloaks,
+      });
+    }
 
     onOpenChange(false);
   };
