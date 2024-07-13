@@ -21,6 +21,8 @@ import { useNotifications } from "@/shared/hooks";
 import { getFormatDate } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
 import { NotificationStatus } from "@/shared/enums";
+import Link from "next/link";
+import { Separator } from "@/shared/ui/separator";
 
 const statusColor: Record<NotificationStatus, string> = {
   [NotificationStatus.TRACE]: "bg-neutral-200",
@@ -65,19 +67,22 @@ export const Notifications = () => {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <div className="flex flex-col gap-y-4 p-5">
+        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-y-none">
           {data && data.notifications ? (
-            data.notifications.slice(0, 3).map(({ message, details, date, type }, index) => (
-              <div key={`${message}-${index}`} className="flex flex-col items-start gap-y-1">
-                <div className="flex items-center gap-x-2">
-                  <span className={`w-2 h-2 ${statusColor[type]} rounded-full`} />
-                  <span className="text-base font-semibold">{message}</span>
+            data.notifications.slice(0, 10).map(({ message, details, date, type }, index) => (
+              <Link href={DASHBOARD_PAGES.NOTIFICATION} key={`${message}-${index}`}>
+                <div className="flex flex-col items-start gap-y-1 px-3 transition hover:dark:bg-neutral-900 hover:bg-gray-100 rounded-md py-3">
+                  <div className="flex items-center gap-x-3">
+                    <span className={`min-w-2 min-h-2 w-2 h-2 ${statusColor[type]} rounded-full`} />
+                    <span className="text-base font-semibold">{message}</span>
+                  </div>
+                  <span className="text-sm text-gray-400 truncate h-10 text-wrap w-[calc(100%-24px)]">
+                    {details ? details : "Детали отсутствуют"}
+                  </span>
+                  <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
                 </div>
-                <span className="text-sm truncate h-10 text-wrap w-[calc(100%-24px)]">
-                  {details ? details : "Детали отсутствуют"}
-                </span>
-                <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
-              </div>
+                <Separator />
+              </Link>
             ))
           ) : (
             <p className="text-sm text-center leading-none text-muted-foreground">
@@ -85,10 +90,12 @@ export const Notifications = () => {
             </p>
           )}
         </div>
-        <DropdownMenuSeparator />
-        <Button className="w-full" onClick={() => router.push(DASHBOARD_PAGES.NOTIFICATION)}>
-          Все уведомления
-        </Button>
+        <Link
+          className="flex items-center justify-center w-full min-h-14 underline dark:text-gray-300 text-gray-600"
+          href={DASHBOARD_PAGES.NOTIFICATION}
+        >
+          Показать все
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );
