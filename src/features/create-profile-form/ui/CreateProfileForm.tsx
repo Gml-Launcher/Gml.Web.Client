@@ -27,6 +27,10 @@ import loaderForge from "@/assets/logos/forge.png";
 import loaderFabric from "@/assets/logos/fabric.png";
 import loaderLiteLoader from "@/assets/logos/liteloader.png";
 import neoForgeLoader from "@/assets/logos/neoforge.png";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Command, CommandEmpty, CommandInput } from "@/shared/ui/command";
+import { CommandGroup, CommandItem } from "cmdk";
+import { FormCombobox } from "@/shared/ui/FormCombobox";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
@@ -146,20 +150,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию игры</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите версию игры" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {versions.data?.map((version: string) => (
-                        <SelectItem key={version} value={version}>
-                          {version}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                <FormCombobox field={field} data={versions.data!} />
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
