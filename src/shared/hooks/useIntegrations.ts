@@ -166,13 +166,15 @@ export const useEditConnectTextures = () => {
   return useMutation({
     mutationKey: integrationsKeys.textures(),
     mutationFn: (data: TPutConnectTexturesRequest) => integrationService.putConnectTextures(data),
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_SKINS),
-      });
-      await queryClient.invalidateQueries({
-        queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_CLOAKS),
-      });
+    onSuccess: async (data, variables) => {
+      if (variables.type === TexturesServiceType.TEXTURES_SERVICE_SKINS)
+        await queryClient.invalidateQueries({
+          queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_SKINS),
+        });
+      if (variables.type === TexturesServiceType.TEXTURES_SERVICE_CLOAKS)
+        await queryClient.invalidateQueries({
+          queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_CLOAKS),
+        });
       toast({
         title: "Успешно",
         description: data.message,
