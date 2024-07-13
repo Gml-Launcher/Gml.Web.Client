@@ -79,6 +79,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
       enabled:
         form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
         form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString() ||
+        form.watch("gameLoader") === GameLoaderOption.FABRIC.toString() ||
         form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString(),
     },
   );
@@ -199,6 +200,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
 
           {(form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
             form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString() ||
+            form.watch("gameLoader") === GameLoaderOption.FABRIC.toString() ||
             form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString()) && (
             <Controller
               name="loaderVersion"
