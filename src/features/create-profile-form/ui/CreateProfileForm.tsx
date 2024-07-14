@@ -70,7 +70,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
     resolver: zodResolver(CreateProfileSchema),
   });
 
-  const { data: versions, isLoading: isLoadingGameVersion } = useGetGameVersions({
+  const versions = useGetGameVersions({
     gameLoader: GameLoaderOption.VANILLA,
     minecraftVersion: "0",
   });
@@ -151,13 +151,12 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию игры</FormLabel>
                 <FormCombobox
-                  field={field}
-                  data={{
-                    text_button: "Выберите версию игры",
-                    text_search: "Поиск версий",
-                    data: versions!,
-                  }}
-                  isLoading={isLoadingGameVersion}
+                  name={field.name}
+                  value={field.value}
+                  placeholder="Выберите версию игры"
+                  placeholderInputSearch="Поиск версий"
+                  options={versions && versions.data}
+                  isLoading={versions.isLoading}
                   setValue={form.setValue}
                 />
                 {form.formState.errors.version && (
@@ -208,16 +207,13 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Выберите версию загрузчика</FormLabel>
                   <FormCombobox
-                    field={field}
-                    data={{
-                      text_button: "Выберите версию загрузчика",
-                      text_search: "Поиск версии загрузчика",
-                      data: loaderVersion.data!,
-                    }}
-                    error={{
-                      text: "Данная версия игры не поддерживается загрузчиком",
-                      isError: loaderVersion.isError,
-                    }}
+                    name={field.name}
+                    value={field.value}
+                    placeholder="Выберите версию загрузчика"
+                    placeholderInputSearch="Поиск версии загрузчика"
+                    options={loaderVersion && loaderVersion.data}
+                    description="Данная версия игры не поддерживается загрузчиком"
+                    isError={loaderVersion.isError}
                     isLoading={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
                     setValue={form.setValue}
                   />

@@ -13,28 +13,34 @@ import {
 import React from "react";
 import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
 
-type Error = {
-  text: string;
-  isError: boolean;
-};
-
-type Data = {
-  text_button: string;
-  text_search: string;
-  data: string[];
-};
-
 type FormComboboxParams = {
-  field: ControllerRenderProps;
+  value: string;
+  name: string;
   setValue: UseFormSetValue<any>;
-  data: Data;
-  isLoading: boolean;
-  error?: Error;
+  options?: string[];
+  placeholder: string;
+  placeholderInputSearch: string;
+  description?: string;
+  isLoading?: boolean;
+  isError?: boolean;
 };
 
-export const FormCombobox = ({ field, data, isLoading, setValue, error }: FormComboboxParams) => {
+// TODO: Добавить Disabled: boolean
+// TODO: Провести рефакторинг и отказаться от Textera
+
+export const FormCombobox = ({
+  value,
+  name,
+  options = [],
+  placeholderInputSearch,
+  placeholder,
+  isLoading,
+  isError,
+  setValue,
+  description,
+}: FormComboboxParams) => {
   if (isLoading) return <Textera text="Загрузка" />;
-  if (error && error.isError) return <Textera text={error.text} />;
+  if (isError && description) return <Textera text={description} />;
 
   return (
     <>
@@ -48,23 +54,23 @@ export const FormCombobox = ({ field, data, isLoading, setValue, error }: FormCo
             <Button
               role="combobox"
               variant="ghost"
-              className={cn("text-white", !field.value && "text-muted-foreground")}
+              className={cn("text-white", !value && "text-muted-foreground")}
             >
-              {field.value ? data.data.find((info) => info === field.value) : data.text_button}
+              {value ? options.find((info) => info === value) : placeholder}
             </Button>
           </FormControl>
         </PopoverTrigger>
         <PopoverContent>
           <Command>
-            <CommandInput placeholder={data.text_search} />
-            <CommandEmpty>Не найдено</CommandEmpty>
+            <CommandInput placeholder={placeholderInputSearch} />
+            <CommandEmpty>Ничего не найдено</CommandEmpty>
             <CommandList>
               <CommandGroup>
-                {data.data.map((info) => (
+                {options.map((info) => (
                   <CommandItem
                     key={info}
                     value={info}
-                    onSelect={() => setValue(field.name, info, { shouldDirty: true })}
+                    onSelect={() => setValue(name, info, { shouldDirty: true })}
                   >
                     {info}
                   </CommandItem>
