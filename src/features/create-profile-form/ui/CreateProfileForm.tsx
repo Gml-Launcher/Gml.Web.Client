@@ -215,7 +215,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                       data: loaderVersion.data!,
                     }}
                     error={{
-                      text: "Данная версия игры загрузчиком не поддерживается",
+                      text: "Данная версия игры не поддерживается загрузчиком",
                       isError: loaderVersion.isError,
                     }}
                     isLoading={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
