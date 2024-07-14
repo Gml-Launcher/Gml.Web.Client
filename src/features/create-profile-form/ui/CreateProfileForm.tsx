@@ -31,6 +31,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { Command, CommandEmpty, CommandInput } from "@/shared/ui/command";
 import { CommandGroup, CommandItem } from "cmdk";
 import { FormCombobox } from "@/shared/ui/FormCombobox";
+import { isError } from "node:util";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
@@ -69,7 +70,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
     resolver: zodResolver(CreateProfileSchema),
   });
 
-  const versions = useGetGameVersions({
+  const { data: versions, isLoading: isLoadingGameVersion } = useGetGameVersions({
     gameLoader: GameLoaderOption.VANILLA,
     minecraftVersion: "0",
   });
@@ -134,7 +135,6 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               <FormMessage>{form.formState.errors.name.message}</FormMessage>
             )}
           </FormItem>
-
           <FormItem>
             <FormLabel>Введите описание сервера</FormLabel>
             <FormControl>
@@ -150,7 +150,16 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию игры</FormLabel>
-                <FormCombobox field={field} data={versions.data!} />
+                <FormCombobox
+                  field={field}
+                  data={{
+                    text_button: "Выберите версию игры",
+                    text_search: "Поиск версий",
+                    data: versions!,
+                  }}
+                  isLoading={isLoadingGameVersion}
+                  setValue={form.setValue}
+                />
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
@@ -198,28 +207,20 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>Выберите версию загрузчика</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={
-                        !form.getFieldState("version").isDirty ||
-                        loaderVersion.isFetching ||
-                        loaderVersion.isError
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите версию загрузчика" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {loaderVersion.data?.map((loader: string) => (
-                          <SelectItem key={loader} value={loader}>
-                            {loader}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
+                  <FormCombobox
+                    field={field}
+                    data={{
+                      text_button: "Выберите версию загрузчика",
+                      text_search: "Поиск версии загрузчика",
+                      data: loaderVersion.data!,
+                    }}
+                    error={{
+                      text: "Данная версия игры загрузчиком не поддерживается",
+                      isError: loaderVersion.isError,
+                    }}
+                    isLoading={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
+                    setValue={form.setValue}
+                  />
                   {form.formState.errors.gameLoader && (
                     <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
                   )}
@@ -229,7 +230,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           )}
 
           <div className="flex justify-end">
-            <Button disabled={isPending || !form.formState.isDirty}>
+            <Button disabled={isPending || !form.formState.isDirty || loaderVersion.isError}>
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Создать
             </Button>
