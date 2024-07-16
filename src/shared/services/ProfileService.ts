@@ -9,6 +9,7 @@ import {
   TGetProfileRequest,
   TGetProfileResponse,
   TGetProfilesResponse,
+  TJavaVersionsResponse,
   TPostProfilesRequest,
   TPostProfilesResponse,
   TPutProfileRequest,
@@ -74,6 +75,10 @@ class ProfileService {
     return await $api.get<TGameVersionsResponse>(
       `${this.BASE_URL}/versions/${gameLoader}/${minecraftVersion}`,
     );
+  }
+
+  async getJavaVersions(): Promise<AxiosResponse<TJavaVersionsResponse, any>> {
+    return await $api.get<TJavaVersionsResponse>(`${this.BASE_URL}/versions/java`);
   }
 }
 

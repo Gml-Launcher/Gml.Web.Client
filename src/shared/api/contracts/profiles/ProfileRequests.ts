@@ -67,3 +67,8 @@ export type TGameVersionsRequest = {
 export type TGameVersionsResponse = ResponseBaseEntity & {
   data: string[];
 };
+
+export type TJavaVersionsRequest = {};
+export type TJavaVersionsResponse = ResponseBaseEntity & {
+  data: string[];
+};
