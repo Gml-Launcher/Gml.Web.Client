@@ -4,14 +4,18 @@ import React, { useEffect, useRef } from "react";
 
 import { Ubuntu_Mono } from "next/font/google";
 
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { ProfileExtendedBaseEntity, RestoreProfileSchemaType } from "@/shared/api/contracts";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
 import { Textarea } from "@/shared/ui/textarea";
 import { Icons } from "@/shared/ui/icons";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 
 import { useConnectionHub } from "../lib/useConnectionHub";
+import { useGetJavaVersions } from "@/shared/hooks";
+import { useForm } from "react-hook-form";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -35,6 +39,14 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
     logs,
   } = useConnectionHub(props);
 
+  const javaVersions = useGetJavaVersions();
+
+  const form = useForm<RestoreProfileSchemaType>({
+    defaultValues: {
+      javaVersion: "",
+    },
+  });
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
     if (textareaRef.current) {
@@ -50,20 +62,23 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           <h5 className="text-xl font-bold">Управление</h5>
           <div className="grid lg:grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Карточка 1 шаг */}
-            <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3">
-              <h6 className="text-xl font-bold">Шаг первый</h6>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                Необходимо загрузить клиент
-              </p>
-              <Button
-                className="w-fit font-semibold"
-                onClick={onDownloadDistributive}
-                disabled={isDisable || !props.profile || !props.profile.hasUpdate}
-              >
-                {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                Загрузить
-              </Button>
-            </div>
+            <Form {...form}>
+              <form>
+                <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3">
+                  <h6 className="text-xl font-bold">Шаг первый</h6>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    Необходимо загрузить клиент
+                  </p>
+                  <Button
+                    className="w-fit font-semibold"
+                    disabled={isDisable || !props.profile || !props.profile.hasUpdate}
+                  >
+                    {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                    Загрузить
+                  </Button>
+                </div>
+              </form>
+            </Form>
 
             {/* Карточка 2 шаг */}
             <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3">

@@ -139,6 +139,23 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       });
   };
 
+  const onDownloadJavaDistributive = () => {
+    setIsPacked(true);
+    setIsRestoring(true);
+    connectionHub
+      ?.invoke("RestoreAndChangeBootstrapVersion", profile?.profileName)
+      .catch((error) => {
+        toast({
+          variant: "destructive",
+          title: "Ошибка!",
+          description: JSON.stringify(error),
+        });
+      })
+      .finally(() => {
+        setIsRestoring(false);
+      });
+  };
+
   const onBuildDistributive = () => {
     setIsPacked(false);
     setIsRestoring(true);

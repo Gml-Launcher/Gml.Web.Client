@@ -1,5 +1,6 @@
 import {
   GameLoaderOption,
+  JavaVersionBaseEntity,
   ProfileBaseEntity,
   ProfileExtendedBaseEntity,
 } from "@/shared/api/contracts";
@@ -70,5 +71,5 @@ export type TGameVersionsResponse = ResponseBaseEntity & {
 
 export type TJavaVersionsRequest = {};
 export type TJavaVersionsResponse = ResponseBaseEntity & {
-  data: string[];
+  data: JavaVersionBaseEntity[];
 };
