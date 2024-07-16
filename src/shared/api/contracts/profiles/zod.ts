@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { JavaVersionBaseEntity } from "@/shared/api/contracts";
 
 const MAX_FILE_SIZE = 1_000_000;
 const ACCEPTED_IMAGE_TYPES = ["image/png"];
@@ -41,7 +42,7 @@ export const EditProfileSchema = z.object({
 });
 
 export const RestoreProfileSchema = z.object({
-  javaVersion: z.string(),
+  javaVersion: z.custom<JavaVersionBaseEntity>(),
 });
 
 export const EditImageProfileSchema = z.object({

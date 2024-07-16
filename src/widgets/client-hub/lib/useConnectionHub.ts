@@ -4,7 +4,7 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getStorageAccessToken } from "@/shared/services";
 import { useToast } from "@/shared/ui/use-toast";
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { JavaVersionBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { getApiBaseUrl } from "@/shared/lib/utils";
 
 interface ConnectionHubProps {
@@ -139,11 +139,11 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       });
   };
 
-  const onDownloadJavaDistributive = () => {
+  const onDownloadJavaDistributive = (javaVersion: JavaVersionBaseEntity) => {
     setIsPacked(true);
     setIsRestoring(true);
     connectionHub
-      ?.invoke("RestoreAndChangeBootstrapVersion", profile?.profileName)
+      ?.invoke("RestoreAndChangeBootstrapVersion", profile?.profileName, javaVersion)
       .catch((error) => {
         toast({
           variant: "destructive",
@@ -175,6 +175,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
   return {
     onDownloadDistributive,
+    onDownloadJavaDistributive,
     onBuildDistributive,
     isDisable: isRestoring,
     isPacked,

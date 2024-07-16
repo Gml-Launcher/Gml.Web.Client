@@ -11,11 +11,19 @@ import { Progress } from "@/shared/ui/progress";
 import { Textarea } from "@/shared/ui/textarea";
 import { Icons } from "@/shared/ui/icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/ui/form";
 
 import { useConnectionHub } from "../lib/useConnectionHub";
 import { useGetJavaVersions } from "@/shared/hooks";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -41,11 +49,23 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
 
   const javaVersions = useGetJavaVersions();
 
+  javaVersions.data?.data.sort((a, b) => b.majorVersion - a.majorVersion);
+
   const form = useForm<RestoreProfileSchemaType>({
     defaultValues: {
-      javaVersion: "",
+      javaVersion: {
+        name: "По умолчанию",
+        version: "По умолчанию",
+        majorVersion: 30,
+      },
     },
   });
+
+  const onSubmit: SubmitHandler<RestoreProfileSchemaType> = async (
+    data: RestoreProfileSchemaType,
+  ) => {
+    console.log(data.javaVersion);
+  };
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -63,12 +83,39 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           <div className="grid lg:grid-cols-1 xl:grid-cols-2 gap-6">
             {/* Карточка 1 шаг */}
             <Form {...form}>
-              <form>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3">
                   <h6 className="text-xl font-bold">Шаг первый</h6>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     Необходимо загрузить клиент
                   </p>
+                  <FormField
+                    control={form.control}
+                    name="javaVersion"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Выберите версию Java*</FormLabel>
+                        <FormControl>
+                          <Select defaultValue="По умолчанию">
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Выберите версию java" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {javaVersions.data &&
+                                javaVersions.data.data.map(({ version }, i) => (
+                                  <SelectItem key={i} value={version}>
+                                    Java: {version}
+                                  </SelectItem>
+                                ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <Button
                     className="w-fit font-semibold"
                     disabled={isDisable || !props.profile || !props.profile.hasUpdate}
