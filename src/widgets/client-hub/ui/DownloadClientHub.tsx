@@ -24,6 +24,17 @@ import {
 import { useConnectionHub } from "../lib/useConnectionHub";
 import { useGetJavaVersions } from "@/shared/hooks";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { FormCombobox } from "@/shared/ui/FormCombobox";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/shared/ui/command";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -39,6 +50,7 @@ const ubuntuMono = Ubuntu_Mono({
 export function DownloadClientHub(props: DownloadClientHubProps) {
   const {
     onDownloadDistributive,
+    onDownloadJavaDistributive,
     onBuildDistributive,
     isDisable,
     isPacked,
@@ -49,16 +61,17 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
 
   const javaVersions = useGetJavaVersions();
 
+  if (!javaVersions.isLoading) {
+    javaVersions.data?.data.push({
+      name: "По умолчанию",
+      version: "По умолчанию",
+      majorVersion: 30,
+    });
+  }
   javaVersions.data?.data.sort((a, b) => b.majorVersion - a.majorVersion);
 
   const form = useForm<RestoreProfileSchemaType>({
-    defaultValues: {
-      javaVersion: {
-        name: "По умолчанию",
-        version: "По умолчанию",
-        majorVersion: 30,
-      },
-    },
+    defaultValues: {},
   });
 
   const onSubmit: SubmitHandler<RestoreProfileSchemaType> = async (
@@ -96,21 +109,52 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                       <FormItem>
                         <FormLabel>Выберите версию Java*</FormLabel>
                         <FormControl>
-                          <Select defaultValue="По умолчанию">
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Выберите версию java" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {javaVersions.data &&
-                                javaVersions.data.data.map(({ version }, i) => (
-                                  <SelectItem key={i} value={version}>
-                                    Java: {version}
-                                  </SelectItem>
-                                ))}
-                            </SelectContent>
-                          </Select>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <Button
+                                variant="outline"
+                                role="combobox"
+                                className="w-[200px] justify-between"
+                              >
+                                {field.value
+                                  ? `Java: ${
+                                      javaVersions.data?.data.find(
+                                        (version) => version.version === field.value.version,
+                                      )?.version
+                                    }`
+                                  : "Выберите версию Java"}
+                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <Command>
+                                <CommandInput placeholder="Поиск версий..." />
+                                <CommandList>
+                                  <CommandEmpty>No language found.</CommandEmpty>
+                                  <CommandGroup>
+                                    {javaVersions.data &&
+                                      javaVersions.data.data.map((version, i) => (
+                                        <CommandItem
+                                          value={`Java: ${version.version}`}
+                                          key={`${version.name}-${i}`}
+                                          onSelect={() => {
+                                            form.setValue("javaVersion", version);
+                                          }}
+                                        >
+                                          <Check
+                                            className={cn(
+                                              "mr-2 h-4 w-4",
+                                              version === field.value ? "opacity-100" : "opacity-0",
+                                            )}
+                                          />
+                                          Java: {version.version}
+                                        </CommandItem>
+                                      ))}
+                                  </CommandGroup>
+                                </CommandList>
+                              </Command>
+                            </PopoverContent>
+                          </Popover>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
