@@ -61,13 +61,12 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
 
   const javaVersions = useGetJavaVersions();
 
-  if (!javaVersions.isLoading) {
-    javaVersions.data?.data.push({
-      name: "По умолчанию",
-      version: "по выбору сервер",
-      majorVersion: 30,
-    });
-  }
+  javaVersions.data?.data.push({
+    name: "По умолчанию",
+    version: "по выбору сервер",
+    majorVersion: 30,
+  });
+
   javaVersions.data?.data.sort((a, b) => b.majorVersion - a.majorVersion);
 
   const form = useForm<RestoreProfileSchemaType>({
