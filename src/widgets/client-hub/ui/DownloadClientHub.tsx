@@ -64,7 +64,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
   if (!javaVersions.isLoading) {
     javaVersions.data?.data.push({
       name: "По умолчанию",
-      version: "По умолчанию",
+      version: "по выбору сервер",
       majorVersion: 30,
     });
   }
@@ -77,7 +77,8 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
   const onSubmit: SubmitHandler<RestoreProfileSchemaType> = async (
     data: RestoreProfileSchemaType,
   ) => {
-    console.log(data.javaVersion);
+    if (data.javaVersion.majorVersion === 30) onDownloadDistributive();
+    else onDownloadJavaDistributive(data.javaVersion);
   };
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -114,10 +115,14 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                               <Button
                                 variant="outline"
                                 role="combobox"
-                                className="w-[200px] justify-between"
+                                className="flex max-w-[300px] justify-between"
                               >
                                 {field.value
-                                  ? `Java: ${
+                                  ? `${
+                                      javaVersions.data?.data.find(
+                                        (version) => version.version === field.value.version,
+                                      )?.name
+                                    }: ${
                                       javaVersions.data?.data.find(
                                         (version) => version.version === field.value.version,
                                       )?.version
@@ -135,8 +140,8 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                                     {javaVersions.data &&
                                       javaVersions.data.data.map((version, i) => (
                                         <CommandItem
-                                          value={`Java: ${version.version}`}
-                                          key={`${version.name}-${i}`}
+                                          value={`Java: ${version.name}-${version.version}`}
+                                          key={`${version.name}-${version.version}-${i}`}
                                           onSelect={() => {
                                             form.setValue("javaVersion", version);
                                           }}
@@ -147,7 +152,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                                               version === field.value ? "opacity-100" : "opacity-0",
                                             )}
                                           />
-                                          Java: {version.version}
+                                          {version.name}: {version.version}
                                         </CommandItem>
                                       ))}
                                   </CommandGroup>
