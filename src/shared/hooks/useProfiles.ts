@@ -26,6 +26,7 @@ export const profileKeys = {
 
   entities: () => [...profileKeys.all, "entities"] as const,
 
+  javaVerison: () => [...profileKeys.all, "javaVerison"] as const,
   gameVersions: (version: string) => [...profileKeys.entities(), version, "versions"] as const,
 };
 
@@ -153,5 +154,13 @@ export const useGetGameVersions = (
     queryFn: async () => await profileService.getGameVersions(body),
     select: (data) => data.data.data,
     ...options,
+  });
+};
+
+export const useGetJavaVersions = () => {
+  return useQuery({
+    queryKey: profileKeys.javaVerison(),
+    queryFn: () => profileService.getJavaVersions(),
+    select: (data) => data.data.data,
   });
 };

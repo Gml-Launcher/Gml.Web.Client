@@ -32,3 +32,9 @@ export type ProfileFileBaseEntity = {
   size: number;
   hash: string;
 };
+
+export type JavaVersionBaseEntity = {
+  name: string;
+  version: string;
+  majorVersion: number;
+};

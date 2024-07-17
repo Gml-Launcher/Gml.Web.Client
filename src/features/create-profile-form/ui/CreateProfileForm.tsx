@@ -21,17 +21,13 @@ import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
+import { FormCombobox } from "@/shared/ui/FormCombobox";
 
 import loaderMinecraft from "@/assets/logos/minecraft.png";
 import loaderForge from "@/assets/logos/forge.png";
 import loaderFabric from "@/assets/logos/fabric.png";
 import loaderLiteLoader from "@/assets/logos/liteloader.png";
 import neoForgeLoader from "@/assets/logos/neoforge.png";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { Command, CommandEmpty, CommandInput } from "@/shared/ui/command";
-import { CommandGroup, CommandItem } from "cmdk";
-import { FormCombobox } from "@/shared/ui/FormCombobox";
-import { isError } from "node:util";
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
