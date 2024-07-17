@@ -22,6 +22,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const [percentStage, setPercentStage] = useState(0);
   const [percentAllStages, setPercentAllStages] = useState(0);
@@ -48,9 +49,12 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
         await connection.start();
 
+        if (connection.state == "Connected") setIsConnected(true);
+
         if (profile?.hasUpdate == false) setIsRestoring(true);
 
         connection.on("ChangeProgress", (profileName, percent) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setIsRestoring(true);
             setPercentStage(percent);
@@ -58,6 +62,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("FullProgress", (profileName, percent) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setIsRestoring(true);
             setIsPacked(true);
@@ -66,18 +71,21 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("OnException", (profileName, exception: string) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setLogs((prev) => (prev ? [...prev, exception] : [exception]));
           }
         });
 
         connection.on("Log", (profileName, log: string) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setLogs((prev) => (prev ? [...prev, log] : [log]));
           }
         });
 
         connection.on("Message", (msg) => {
+          setIsConnected(true);
           toast({
             title: "Ошибка!",
             description: msg,
@@ -85,6 +93,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("SuccessInstalled", (profileName) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setIsPacked(false);
             setIsRestoring(false);
@@ -99,6 +108,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("SuccessPacked", (profileName) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setIsRestoring(false);
             setPercentStage(0);
@@ -178,6 +188,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     onDownloadJavaDistributive,
     onBuildDistributive,
     isDisable: isRestoring,
+    isConnected,
     isPacked,
     percentStage,
     percentAllStages,

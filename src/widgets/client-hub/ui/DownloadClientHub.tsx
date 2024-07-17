@@ -52,6 +52,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
     onBuildDistributive,
     isDisable,
     isPacked,
+    isConnected,
     percentStage,
     percentAllStages,
     logs,
@@ -175,7 +176,9 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                   <div className="flex gap-x-2">
                     <Button
                       className="w-fit font-semibold"
-                      disabled={isDisable || !props.profile || !props.profile.hasUpdate}
+                      disabled={
+                        !isConnected || isDisable || !props.profile || !props.profile.hasUpdate
+                      }
                     >
                       {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                       Загрузить
@@ -192,7 +195,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
               <Button
                 className="w-fit"
                 onClick={onBuildDistributive}
-                disabled={isDisable || !props.profile || !props.profile.hasUpdate}
+                disabled={!isConnected || isDisable || !props.profile || !props.profile.hasUpdate}
               >
                 {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Собрать
@@ -209,7 +212,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
             readOnly
           />
 
-          {isDisable && !isPacked && (
+          {!isConnected && (
             <div className="flex gap-x-2 items-center">
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               <span>Подключение к консоли...</span>
