@@ -1,32 +1,22 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Ubuntu_Mono } from "next/font/google";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ChevronsUpDown } from "lucide-react";
 
-import { ProfileExtendedBaseEntity, RestoreProfileSchemaType } from "@/shared/api/contracts";
+import {
+  JavaVersionBaseEntity,
+  ProfileExtendedBaseEntity,
+  RestoreProfileSchemaType,
+} from "@/shared/api/contracts";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Progress } from "@/shared/ui/progress";
 import { Textarea } from "@/shared/ui/textarea";
 import { Icons } from "@/shared/ui/icons";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/shared/ui/form";
-
-import { useConnectionHub } from "../lib/useConnectionHub";
-import { useGetJavaVersions } from "@/shared/hooks";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { FormCombobox } from "@/shared/ui/FormCombobox";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import {
   Command,
   CommandEmpty,
@@ -35,6 +25,11 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
+import { Separator } from "@/shared/ui/separator";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { useGetJavaVersions } from "@/shared/hooks";
+
+import { useConnectionHub } from "../lib/useConnectionHub";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -48,6 +43,9 @@ const ubuntuMono = Ubuntu_Mono({
 });
 
 export function DownloadClientHub(props: DownloadClientHubProps) {
+  const [javaVersionsOpen, setJavaVersionsOpen] = useState(false);
+  const onOpenJavaVersionsChange = () => setJavaVersionsOpen((prev) => !prev);
+
   const {
     onDownloadDistributive,
     onDownloadJavaDistributive,
@@ -61,23 +59,18 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
 
   const javaVersions = useGetJavaVersions();
 
-  javaVersions.data?.data.push({
-    name: "По умолчанию",
-    version: "по выбору сервер",
-    majorVersion: 30,
-  });
-
-  javaVersions.data?.data.sort((a, b) => b.majorVersion - a.majorVersion);
-
-  const form = useForm<RestoreProfileSchemaType>({
-    defaultValues: {},
-  });
+  const form = useForm<RestoreProfileSchemaType>();
 
   const onSubmit: SubmitHandler<RestoreProfileSchemaType> = async (
     data: RestoreProfileSchemaType,
   ) => {
-    if (data.javaVersion.majorVersion === 30) onDownloadDistributive();
-    else onDownloadJavaDistributive(data.javaVersion);
+    if (!data.javaVersion) {
+      onDownloadDistributive();
+      return;
+    }
+
+    const selectedJavaVersion = JSON.parse(data.javaVersion) as JavaVersionBaseEntity;
+    onDownloadJavaDistributive(selectedJavaVersion);
   };
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -107,26 +100,20 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                     name="javaVersion"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Выберите версию Java*</FormLabel>
+                        <FormLabel>Выберите версию Java</FormLabel>
                         <FormControl>
-                          <Popover>
+                          <Popover open={javaVersionsOpen} onOpenChange={onOpenJavaVersionsChange}>
                             <PopoverTrigger asChild>
                               <Button
                                 variant="outline"
                                 role="combobox"
-                                className="flex max-w-[300px] justify-between"
+                                className="w-full flex justify-between items-center"
                               >
-                                {field.value
-                                  ? `${
-                                      javaVersions.data?.data.find(
-                                        (version) => version.version === field.value.version,
-                                      )?.name
-                                    }: ${
-                                      javaVersions.data?.data.find(
-                                        (version) => version.version === field.value.version,
-                                      )?.version
-                                    }`
-                                  : "Выберите версию Java"}
+                                <span className="truncate grow mr-2 text-start">
+                                  {field.value && (JSON.parse(field.value) as JavaVersionBaseEntity)
+                                    ? `${(JSON.parse(field.value) as JavaVersionBaseEntity).name}@${(JSON.parse(field.value) as JavaVersionBaseEntity).version}`
+                                    : "По умолчанию"}
+                                </span>
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                               </Button>
                             </PopoverTrigger>
@@ -134,24 +121,45 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                               <Command>
                                 <CommandInput placeholder="Поиск версий..." />
                                 <CommandList>
-                                  <CommandEmpty>No language found.</CommandEmpty>
+                                  <CommandEmpty>Версия не найдена</CommandEmpty>
                                   <CommandGroup>
+                                    <CommandItem
+                                      onSelect={() => {
+                                        form.resetField("javaVersion");
+                                        onOpenJavaVersionsChange();
+                                      }}
+                                    >
+                                      <div className="flex items-center gap-x-5">
+                                        <div className="flex flex-col gap-y-1">
+                                          <span className="font-bold">По умолчанию</span>
+                                          <span className="text-muted-foreground">
+                                            На выбор сервера
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </CommandItem>
+                                    <Separator className="my-2" />
                                     {javaVersions.data &&
-                                      javaVersions.data.data.map((version, i) => (
+                                      javaVersions.data.map((version, i) => (
                                         <CommandItem
-                                          value={`Java: ${version.name}-${version.version}`}
+                                          value={JSON.stringify(version)}
                                           key={`${version.name}-${version.version}-${i}`}
                                           onSelect={() => {
-                                            form.setValue("javaVersion", version);
+                                            field.onChange(JSON.stringify(version));
+                                            onOpenJavaVersionsChange();
                                           }}
                                         >
-                                          <Check
-                                            className={cn(
-                                              "mr-2 h-4 w-4",
-                                              version === field.value ? "opacity-100" : "opacity-0",
-                                            )}
-                                          />
-                                          {version.name}: {version.version}
+                                          <div className="flex items-center gap-x-5">
+                                            <span className="font-extrabold text-md">
+                                              {version.majorVersion}
+                                            </span>
+                                            <div className="flex flex-col gap-y-1">
+                                              <span className="font-bold">{version.name}</span>
+                                              <span className="text-muted-foreground">
+                                                {version.version}
+                                              </span>
+                                            </div>
+                                          </div>
                                         </CommandItem>
                                       ))}
                                   </CommandGroup>
@@ -164,13 +172,15 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                       </FormItem>
                     )}
                   />
-                  <Button
-                    className="w-fit font-semibold"
-                    disabled={isDisable || !props.profile || !props.profile.hasUpdate}
-                  >
-                    {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                    Загрузить
-                  </Button>
+                  <div className="flex gap-x-2">
+                    <Button
+                      className="w-fit font-semibold"
+                      disabled={isDisable || !props.profile || !props.profile.hasUpdate}
+                    >
+                      {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                      Загрузить
+                    </Button>
+                  </div>
                 </div>
               </form>
             </Form>

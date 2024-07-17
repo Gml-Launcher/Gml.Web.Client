@@ -161,6 +161,6 @@ export const useGetJavaVersions = () => {
   return useQuery({
     queryKey: profileKeys.javaVerison(),
     queryFn: () => profileService.getJavaVersions(),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };
