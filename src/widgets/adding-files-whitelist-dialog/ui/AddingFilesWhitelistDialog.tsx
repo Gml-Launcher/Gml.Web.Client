@@ -53,11 +53,11 @@ export function AddingFilesWhitelistDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="w-fit">Добавить файлы</Button>
+        <Button className="w-fit">Добавить папки</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Выбор файлов в «Белый список»</DialogTitle>
+          <DialogTitle>Выбор папок в «Белый список»</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="files" value={tab}>
           <TabsContent value="files">
@@ -72,7 +72,7 @@ export function AddingFilesWhitelistDialog({
               <ExclamationTriangleIcon className="h-4 w-4" />
               <AlertTitle>Внимание!</AlertTitle>
               <AlertDescription>
-                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> файлов, которые будут
+                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> папок, которые будут
                 добавлены в WhiteList
               </AlertDescription>
             </Alert>
