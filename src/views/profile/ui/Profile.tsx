@@ -38,6 +38,7 @@ import {
 } from "@/shared/ui/alert-dialog";
 
 import classes from "./styles.module.css";
+import { FolderTable } from "@/widgets/folder-table";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -105,6 +106,9 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           <TabsTrigger className="w-full h-10" value="files">
             Файлы
           </TabsTrigger>
+          <TabsTrigger className="w-full h-10" value="folders">
+            Папки
+          </TabsTrigger>
           <TabsTrigger className="w-full h-10" value="servers">
             Сервера
           </TabsTrigger>
@@ -151,6 +155,43 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             </div>
             <FilesTable
               files={profile.whiteListFiles}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
+            />
+          </Section>
+        </TabsContent>
+        <TabsContent value="folders" className={classes.tabs__content}>
+          <Section
+            title="Белый список папок"
+            subtitle="Белый список необходим для того чтобы исключить выбранные папки из автоматического удаления"
+          >
+            <div className={classes.tabs__whitelist}>
+              <AddingFilesWhitelistDialog
+                profileName={profile.profileName}
+                files={profile.whiteListFiles}
+              />
+              {!!Object.keys(rowSelection).length && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline">Удалить выбранные папки</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Удаление папок из белого списка</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} папку(и) из белого списка?`}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Отмена</AlertDialogCancel>
+                      <AlertDialogAction onClick={onSubmit}>Удалить</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
+            <FolderTable
+              folders={profile.whiteListFolders}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
             />
