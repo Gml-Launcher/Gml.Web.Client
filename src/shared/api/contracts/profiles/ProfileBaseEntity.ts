@@ -20,6 +20,7 @@ export type ProfileExtendedBaseEntity = {
   description: string;
   arguments: string;
   jvmArguments: string;
+  gameArguments: string;
   hasUpdate: boolean;
   state: number;
   files: ProfileFileBaseEntity[];
