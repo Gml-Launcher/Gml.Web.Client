@@ -38,12 +38,14 @@ import {
 } from "@/shared/ui/alert-dialog";
 
 import classes from "./styles.module.css";
+import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
   const accessToken = getStorageAccessToken();
   const { data, mutate, isPending } = useProfile();
   const profile = data?.data;
+
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});

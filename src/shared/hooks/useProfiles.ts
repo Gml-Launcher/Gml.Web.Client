@@ -15,6 +15,7 @@ import {
 import { profileService } from "@/shared/services/ProfileService";
 import { useToast } from "@/shared/ui/use-toast";
 import { isAxiosError } from "@/shared/lib/utils";
+import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
 export const profileKeys = {
   all: ["profiles"] as const,
@@ -40,6 +41,8 @@ export const useProfiles = () => {
 
 export const useProfile = () => {
   const { toast } = useToast();
+  const { setState } = useProfileCardStore();
+
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -47,6 +50,9 @@ export const useProfile = () => {
     mutationFn: (data: TGetProfileRequest) => profileService.getProfile(data),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
+    },
+    onSuccess: async (data) => {
+      setState(data.data.state);
     },
     onError: (error) => {
       isAxiosError({ toast, error });

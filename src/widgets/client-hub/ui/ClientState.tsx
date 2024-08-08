@@ -6,7 +6,7 @@ interface ClientStateProps {
   state: EntityState;
 }
 
-const stateColorMap: Record<ClientStateProps["state"], string> = {
+const stateColorMap: Record<EntityState, string> = {
   [EntityState.ENTITY_STATE_CREATED]: "bg-gray-600",
   [EntityState.ENTITY_STATE_LOADING]: "bg-orange-500",
   [EntityState.ENTITY_STATE_ACTIVE]: "bg-green-600",
