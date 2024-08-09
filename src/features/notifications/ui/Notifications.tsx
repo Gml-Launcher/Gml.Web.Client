@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
-
-import { useRouter } from "next/navigation";
+import React from "react";
+import { getFormatDate } from "@/shared/lib/utils";
+import Link from "next/link";
 
 import { BellIcon } from "lucide-react";
 
 import { useConnectionHub } from "@/widgets/notifications-hub";
+import { ClearNotificationModel } from "@/widgets/clear-notifications";
 
 import {
   DropdownMenu,
@@ -14,19 +15,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
+import { Separator } from "@/shared/ui/separator";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { useNotifications } from "@/shared/hooks";
-import { getFormatDate } from "@/shared/lib/utils";
-import { Icons } from "@/shared/ui/icons";
+
 import { NotificationStatus } from "@/shared/enums";
-import Link from "next/link";
-import { Separator } from "@/shared/ui/separator";
+
+import { DASHBOARD_PAGES } from "@/shared/routes";
+
 import { useNotificationsState } from "@/views/notification/lib/store";
-import { ClearNotificationModel } from "@/widgets/clear-notifications";
-import { NotificationBaseEntity } from "@/shared/api/contracts";
-import { isArray } from "node:util";
 
 const statusColor: Record<NotificationStatus, string> = {
   [NotificationStatus.TRACE]: "bg-neutral-200",
