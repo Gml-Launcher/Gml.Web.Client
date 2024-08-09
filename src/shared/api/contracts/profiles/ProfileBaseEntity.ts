@@ -1,3 +1,5 @@
+import { EntityState } from "@/shared/enums";
+
 export type ProfileBaseEntity = {
   name: string;
   createDate: string;
@@ -22,7 +24,7 @@ export type ProfileExtendedBaseEntity = {
   jvmArguments: string;
   gameArguments: string;
   hasUpdate: boolean;
-  state: number;
+  state: EntityState;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
 };
