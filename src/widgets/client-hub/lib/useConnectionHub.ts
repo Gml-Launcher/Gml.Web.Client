@@ -159,6 +159,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
@@ -183,6 +184,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
@@ -203,6 +205,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
         if (profile) {
           setProfileCardState(profile.state);
+          setProfileCardState(EntityState.ENTITY_STATE_LOADING);
         }
       })
       .finally(() => {

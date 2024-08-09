@@ -10,12 +10,19 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { Button } from "@/shared/ui/button";
+import { useClearNotifications } from "@/shared/hooks";
 
 interface ClearNotificationModelParams {
   description: string;
 }
 
 export const ClearNotificationModel = ({ description }: ClearNotificationModelParams) => {
+  const { mutateAsync, isPending } = useClearNotifications();
+
+  const onSubmit = () => {
+    mutateAsync();
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -30,8 +37,12 @@ export const ClearNotificationModel = ({ description }: ClearNotificationModelPa
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Отменить</AlertDialogCancel>
-          <AlertDialogAction>Продолжить</AlertDialogAction>
+          <AlertDialogCancel disabled={isPending}>
+            {isPending ? <></> : <>Отменить</>}
+          </AlertDialogCancel>
+          <AlertDialogAction onClick={onSubmit} disabled={isPending}>
+            Продолжить
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
