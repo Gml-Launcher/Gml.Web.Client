@@ -24,6 +24,9 @@ import { NotificationStatus } from "@/shared/enums";
 import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
 import { useNotificationsState } from "@/views/notification/lib/store";
+import { ClearNotificationModel } from "@/widgets/clear-notifications";
+import { NotificationBaseEntity } from "@/shared/api/contracts";
+import { isArray } from "node:util";
 
 const statusColor: Record<NotificationStatus, string> = {
   [NotificationStatus.TRACE]: "bg-neutral-200",
@@ -54,7 +57,7 @@ export const Notifications = () => {
           </Badge>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="max-w-[450px]">
+      <DropdownMenuContent align="end" className="min-w-[450px] max-w-[450px]">
         <div className="flex items-center">
           <div className="px-3 py-3 text-sm font-normal">
             <div className="flex flex-col space-y-2">
@@ -67,14 +70,16 @@ export const Notifications = () => {
               </p>
             </div>
           </div>
-          <Button className="absolute top-auto right-4">Прочитать все</Button>
+          <div className="absolute top-auto right-4">
+            <ClearNotificationModel description={"Прочитать все"} />
+          </div>
         </div>
         <DropdownMenuSeparator />
-        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-x-none">
-          {notifications ? (
+        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-y-none">
+          {count !== 0 ? (
             notifications
-              .slice(0, 10)
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .slice(0, 10)
               .map(({ message, details, date, type }, index) => (
                 <Link href={DASHBOARD_PAGES.NOTIFICATION} key={`${message}-${index}`}>
                   <div className="flex flex-col items-start gap-y-1 px-3 transition hover:dark:bg-neutral-900 hover:bg-gray-100 rounded-md py-3">
