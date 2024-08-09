@@ -75,7 +75,7 @@ export const Notifications = () => {
           </div>
         </div>
         <DropdownMenuSeparator />
-        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-y-none">
+        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-y-none overflow-x-hidden">
           {count !== 0 ? (
             notifications
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
