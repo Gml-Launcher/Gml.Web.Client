@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Badge } from "@/shared/ui/badge";
 import { useNotifications } from "@/shared/hooks";
+import { ClearNotificationModel } from "@/widgets/clear-notifications";
 
 export const NotificationPage = () => {
   const { data } = useNotifications();
@@ -86,6 +87,7 @@ export const NotificationPage = () => {
             <span>Трейс</span>
             <Badge variant="secondary">{notificationsTrace && notificationsTrace.length}</Badge>
           </TabsTrigger>
+          <ClearNotificationModel className="w-full" description={"Очистить все"} />
         </TabsList>
         <TabsContent value="fatal" className="w-full">
           {notificationsFatal && !notificationsFatal.length && (
