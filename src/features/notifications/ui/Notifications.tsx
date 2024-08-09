@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -23,6 +23,7 @@ import { Icons } from "@/shared/ui/icons";
 import { NotificationStatus } from "@/shared/enums";
 import Link from "next/link";
 import { Separator } from "@/shared/ui/separator";
+import { useNotificationsState } from "@/views/notification/lib/store";
 
 const statusColor: Record<NotificationStatus, string> = {
   [NotificationStatus.TRACE]: "bg-neutral-200",
@@ -36,9 +37,7 @@ const statusColor: Record<NotificationStatus, string> = {
 export const Notifications = () => {
   useConnectionHub();
 
-  const router = useRouter();
-
-  const { data, isLoading } = useNotifications();
+  const { notifications, count } = useNotificationsState();
 
   return (
     <DropdownMenu>
@@ -51,39 +50,48 @@ export const Notifications = () => {
             variant="default"
             className="absolute py-1 px-2 font-semibold top-[-3px] right-[-8px] min-h-[26px]"
           >
-            {isLoading && <Icons.spinner className="h-3 w-3 animate-spin" />}
-            {data && data.amount}
+            {count}
           </Badge>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-[450px]">
-        <div className="px-3 py-3 text-sm font-normal">
-          <div className="flex flex-col space-y-2">
-            <p className="flex items-center gap-x-2 text-sm font-medium leading-none">
-              Уведомления
-              <Badge variant="secondary">{data && data.amount}</Badge>
-            </p>
-            <p className="text-sm leading-none text-muted-foreground">Список уведомлений системы</p>
+        <div className="flex items-center">
+          <div className="px-3 py-3 text-sm font-normal">
+            <div className="flex flex-col space-y-2">
+              <p className="flex items-center gap-x-2 text-sm font-medium leading-none">
+                Уведомления
+                <Badge variant="secondary">{count}</Badge>
+              </p>
+              <p className="text-sm leading-none text-muted-foreground">
+                Список уведомлений системы
+              </p>
+            </div>
           </div>
+          <Button className="absolute top-auto right-4">Прочитать все</Button>
         </div>
         <DropdownMenuSeparator />
-        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-y-none">
-          {data && data.notifications ? (
-            data.notifications.slice(0, 10).map(({ message, details, date, type }, index) => (
-              <Link href={DASHBOARD_PAGES.NOTIFICATION} key={`${message}-${index}`}>
-                <div className="flex flex-col items-start gap-y-1 px-3 transition hover:dark:bg-neutral-900 hover:bg-gray-100 rounded-md py-3">
-                  <div className="flex items-center gap-x-3">
-                    <span className={`min-w-2 min-h-2 w-2 h-2 ${statusColor[type]} rounded-full`} />
-                    <span className="text-base font-semibold">{message}</span>
+        <div className="flex flex-col max-h-96 overflow-y-auto overscroll-x-none">
+          {notifications ? (
+            notifications
+              .slice(0, 10)
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+              .map(({ message, details, date, type }, index) => (
+                <Link href={DASHBOARD_PAGES.NOTIFICATION} key={`${message}-${index}`}>
+                  <div className="flex flex-col items-start gap-y-1 px-3 transition hover:dark:bg-neutral-900 hover:bg-gray-100 rounded-md py-3">
+                    <div className="flex items-center gap-x-3">
+                      <span
+                        className={`min-w-2 min-h-2 w-2 h-2 ${statusColor[type]} rounded-full`}
+                      />
+                      <span className="text-base font-semibold">{message}</span>
+                    </div>
+                    <span className="text-sm text-gray-400 truncate h-10 text-wrap w-[calc(100%-24px)]">
+                      {details ? details : "Детали отсутствуют"}
+                    </span>
+                    <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
                   </div>
-                  <span className="text-sm text-gray-400 truncate h-10 text-wrap w-[calc(100%-24px)]">
-                    {details ? details : "Детали отсутствуют"}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
-                </div>
-                <Separator />
-              </Link>
-            ))
+                  <Separator />
+                </Link>
+              ))
           ) : (
             <p className="text-sm text-center leading-none text-muted-foreground">
               У вас нет уведомлений
