@@ -5,16 +5,25 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getApiBaseUrl } from "@/shared/lib/utils";
 import { getStorageAccessToken } from "@/shared/services";
-
-type NotificationsParams = {
-  message: string;
-  details: Nullable<string>;
-};
+import { useNotificationsState } from "@/views/notification/lib/store";
+import { NotificationBaseEntity } from "@/shared/api/contracts";
+import { useNotifications } from "@/shared/hooks";
 
 const CONNECTION_URL = (token: string) =>
   `${getApiBaseUrl()}/ws/notifications?access_token=${token}`;
 
 export const useConnectionHub = () => {
+  const { addNotification, addCount, setNotifications, setCount } = useNotificationsState();
+
+  const { data, isLoading } = useNotifications();
+
+  useEffect(() => {
+    if (data) {
+      setCount(data.amount);
+      setNotifications(data.notifications);
+    }
+  }, [data]);
+
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
@@ -34,7 +43,10 @@ export const useConnectionHub = () => {
 
         await connection.start();
 
-        connection.on("Notifications", ({ message, details }: NotificationsParams) => {
+        connection.on("Notifications", (notification: NotificationBaseEntity) => {
+          const { details, message } = notification;
+          addCount();
+          addNotification(notification);
           sonner(message, {
             description: details && `${details?.substring(0, 50)}...`,
             action: {

@@ -2,7 +2,11 @@ import { AxiosResponse } from "axios";
 
 import { $api } from "@/core/api";
 
-import { TGetNotificationRequest, TGetNotificationResponse } from "@/shared/api/contracts";
+import {
+  TDeleteNotificationResponse,
+  TGetNotificationRequest,
+  TGetNotificationResponse,
+} from "@/shared/api/contracts";
 
 class NotificationService {
   private BASE_URL = "/notifications";
@@ -11,6 +15,10 @@ class NotificationService {
     params?: TGetNotificationRequest,
   ): Promise<AxiosResponse<TGetNotificationResponse>> {
     return await $api.get<TGetNotificationResponse>(this.BASE_URL, { params });
+  }
+
+  async clearNotification(): Promise<AxiosResponse<TDeleteNotificationResponse>> {
+    return await $api.delete<TDeleteNotificationResponse>(this.BASE_URL);
   }
 }
 

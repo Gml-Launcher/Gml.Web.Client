@@ -8,3 +8,6 @@ export type TGetNotificationResponse = ResponseBaseEntity & {
     amount: number;
   };
 };
+
+export type TDeleteNotificationRequest = {};
+export type TDeleteNotificationResponse = ResponseBaseEntity & {};
