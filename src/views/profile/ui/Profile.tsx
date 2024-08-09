@@ -38,7 +38,6 @@ import {
 } from "@/shared/ui/alert-dialog";
 
 import classes from "./styles.module.css";
-import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
