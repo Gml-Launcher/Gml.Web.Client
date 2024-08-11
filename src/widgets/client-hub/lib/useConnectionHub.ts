@@ -144,6 +144,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     setProfileCardState(EntityState.ENTITY_STATE_LOADING);
     connectionHub
       ?.invoke("Restore", profile?.profileName)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
@@ -156,6 +159,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
@@ -165,6 +169,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     setProfileCardState(EntityState.ENTITY_STATE_LOADING);
     connectionHub
       ?.invoke("RestoreAndChangeBootstrapVersion", profile?.profileName, javaVersion)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
@@ -177,6 +184,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
@@ -186,6 +194,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
     setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
     connectionHub
       ?.invoke("Build", profile?.profileName)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
@@ -194,6 +205,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
         if (profile) {
           setProfileCardState(profile.state);
+          setProfileCardState(EntityState.ENTITY_STATE_LOADING);
         }
       })
       .finally(() => {
