@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
-import { getFormatDate } from "@/shared/lib/utils";
-import Link from "next/link";
 
+import Link from "next/link";
 import { BellIcon } from "lucide-react";
 
 import { useConnectionHub } from "@/widgets/notifications-hub";
 import { ClearNotificationModel } from "@/widgets/clear-notifications";
+
+import { useNotificationsState } from "@/views/notification";
 
 import {
   DropdownMenu,
@@ -18,12 +19,9 @@ import {
 import { Separator } from "@/shared/ui/separator";
 import { Button } from "@/shared/ui/button";
 import { Badge } from "@/shared/ui/badge";
-
 import { NotificationStatus } from "@/shared/enums";
-
 import { DASHBOARD_PAGES } from "@/shared/routes";
-
-import { useNotificationsState } from "@/views/notification/lib/store";
+import { getFormatDate } from "@/shared/lib/utils";
 
 const statusColor: Record<NotificationStatus, string> = {
   [NotificationStatus.TRACE]: "bg-neutral-200",

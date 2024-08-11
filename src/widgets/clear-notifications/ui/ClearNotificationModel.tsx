@@ -11,11 +11,10 @@ import {
 } from "@/shared/ui/alert-dialog";
 import { Button } from "@/shared/ui/button";
 import { useClearNotifications } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
 
 interface ClearNotificationModelParams {
   description: string;
-  className: string;
+  className?: string;
 }
 
 export const ClearNotificationModel = ({
@@ -31,7 +30,7 @@ export const ClearNotificationModel = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" className={cn(className)}>
+        <Button variant="ghost" className={className}>
           {description}
         </Button>
       </AlertDialogTrigger>
