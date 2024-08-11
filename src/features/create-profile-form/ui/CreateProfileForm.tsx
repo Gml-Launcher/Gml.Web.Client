@@ -21,6 +21,7 @@ import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
+import { FormCombobox } from "@/shared/ui/FormCombobox";
 
 import loaderMinecraft from "@/assets/logos/minecraft.png";
 import loaderForge from "@/assets/logos/forge.png";
@@ -130,7 +131,6 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               <FormMessage>{form.formState.errors.name.message}</FormMessage>
             )}
           </FormItem>
-
           <FormItem>
             <FormLabel>Введите описание сервера</FormLabel>
             <FormControl>
@@ -146,20 +146,15 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormLabel>Выберите версию игры</FormLabel>
-                <FormControl>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите версию игры" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {versions.data?.map((version: string) => (
-                        <SelectItem key={version} value={version}>
-                          {version}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
+                <FormCombobox
+                  name={field.name}
+                  value={field.value}
+                  placeholder="Выберите версию игры"
+                  placeholderInputSearch="Поиск версий"
+                  options={versions && versions.data}
+                  isLoading={versions.isLoading}
+                  setValue={form.setValue}
+                />
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
@@ -207,28 +202,17 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>Выберите версию загрузчика</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={
-                        !form.getFieldState("version").isDirty ||
-                        loaderVersion.isFetching ||
-                        loaderVersion.isError
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите версию загрузчика" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {loaderVersion.data?.map((loader: string) => (
-                          <SelectItem key={loader} value={loader}>
-                            {loader}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
+                  <FormCombobox
+                    name={field.name}
+                    value={field.value}
+                    placeholder="Выберите версию загрузчика"
+                    placeholderInputSearch="Поиск версии загрузчика"
+                    options={loaderVersion && loaderVersion.data}
+                    description="Данная версия игры не поддерживается загрузчиком"
+                    isError={loaderVersion.isError}
+                    isLoading={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
+                    setValue={form.setValue}
+                  />
                   {form.formState.errors.gameLoader && (
                     <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
                   )}
@@ -238,7 +222,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           )}
 
           <div className="flex justify-end">
-            <Button disabled={isPending || !form.formState.isDirty}>
+            <Button disabled={isPending || !form.formState.isDirty || loaderVersion.isError}>
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Создать
             </Button>

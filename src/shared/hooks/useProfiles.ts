@@ -15,6 +15,7 @@ import {
 import { profileService } from "@/shared/services/ProfileService";
 import { useToast } from "@/shared/ui/use-toast";
 import { isAxiosError } from "@/shared/lib/utils";
+import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
 export const profileKeys = {
   all: ["profiles"] as const,
@@ -26,6 +27,7 @@ export const profileKeys = {
 
   entities: () => [...profileKeys.all, "entities"] as const,
 
+  javaVerison: () => [...profileKeys.all, "javaVerison"] as const,
   gameVersions: (version: string) => [...profileKeys.entities(), version, "versions"] as const,
 };
 
@@ -39,6 +41,8 @@ export const useProfiles = () => {
 
 export const useProfile = () => {
   const { toast } = useToast();
+  const { setState } = useProfileCardStore();
+
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -46,6 +50,9 @@ export const useProfile = () => {
     mutationFn: (data: TGetProfileRequest) => profileService.getProfile(data),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
+    },
+    onSuccess: async (data) => {
+      setState(data.data.state);
     },
     onError: (error) => {
       isAxiosError({ toast, error });
@@ -153,5 +160,13 @@ export const useGetGameVersions = (
     queryFn: async () => await profileService.getGameVersions(body),
     select: (data) => data.data.data,
     ...options,
+  });
+};
+
+export const useGetJavaVersions = () => {
+  return useQuery({
+    queryKey: profileKeys.javaVerison(),
+    queryFn: () => profileService.getJavaVersions(),
+    select: (data) => data.data.data,
   });
 };

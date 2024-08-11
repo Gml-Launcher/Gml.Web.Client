@@ -36,8 +36,13 @@ export const EditProfileSchema = z.object({
       message: "Длина описания не должна быть больше 1000 символов",
     }),
   jvmArguments: z.string().optional(),
+  gameArguments: z.string().optional(),
   icon: z.any(),
   background: z.any(),
+});
+
+export const RestoreProfileSchema = z.object({
+  javaVersion: z.string().optional(),
 });
 
 export const EditImageProfileSchema = z.object({
@@ -48,3 +53,4 @@ export const EditImageProfileSchema = z.object({
 export type EditImageProfileSchemaType = z.infer<typeof EditImageProfileSchema>;
 export type CreateProfileFormSchemaType = z.infer<typeof CreateProfileSchema>;
 export type EditProfileFormSchemaType = z.infer<typeof EditProfileSchema>;
+export type RestoreProfileSchemaType = z.infer<typeof RestoreProfileSchema>;

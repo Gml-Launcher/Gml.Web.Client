@@ -31,6 +31,7 @@ import {
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
 
 import classes from "./styles.module.css";
+import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
 interface ProfileCardParams {
   profile: ProfileExtendedBaseEntity;
@@ -67,6 +68,8 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     // TODO: исправить кастыль
     window.location.reload();
   };
+
+  const { state } = useProfileCardStore();
 
   return (
     <div
@@ -129,7 +132,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
       {/* Профиль */}
       <div className={classes["profile-card__info"]}>
         <div className={classes["profile-card__info-state"]}>
-          <ClientState state={profile.state} />
+          <ClientState state={state || profile.state} />
         </div>
         <div className={classes["profile-card__info-icon-wrapper"]}>
           <Image

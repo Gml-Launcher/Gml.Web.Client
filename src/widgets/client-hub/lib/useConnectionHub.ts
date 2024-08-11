@@ -4,8 +4,10 @@ import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getStorageAccessToken } from "@/shared/services";
 import { useToast } from "@/shared/ui/use-toast";
-import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
+import { JavaVersionBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { getApiBaseUrl } from "@/shared/lib/utils";
+import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
+import { EntityState } from "@/shared/enums";
 
 interface ConnectionHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -22,6 +24,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   const [percentStage, setPercentStage] = useState(0);
   const [percentAllStages, setPercentAllStages] = useState(0);
@@ -31,6 +34,8 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const [logs, setLogs] = useState<string[] | null>(null);
 
   const [isPacked, setIsPacked] = useState(false);
+
+  const { setState: setProfileCardState } = useProfileCardStore();
 
   useEffect(() => {
     if (isLoading || !accessToken) return;
@@ -48,9 +53,12 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
         await connection.start();
 
+        if (connection.state == "Connected") setIsConnected(true);
+
         if (profile?.hasUpdate == false) setIsRestoring(true);
 
         connection.on("ChangeProgress", (profileName, percent) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setIsRestoring(true);
             setPercentStage(percent);
@@ -58,6 +66,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("FullProgress", (profileName, percent) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setIsRestoring(true);
             setIsPacked(true);
@@ -66,18 +75,21 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("OnException", (profileName, exception: string) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setLogs((prev) => (prev ? [...prev, exception] : [exception]));
           }
         });
 
         connection.on("Log", (profileName, log: string) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
             setLogs((prev) => (prev ? [...prev, log] : [log]));
           }
         });
 
         connection.on("Message", (msg) => {
+          setIsConnected(true);
           toast({
             title: "Ошибка!",
             description: msg,
@@ -85,7 +97,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("SuccessInstalled", (profileName) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
+            setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
             setIsPacked(false);
             setIsRestoring(false);
             setPercentStage(0);
@@ -99,7 +113,9 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         });
 
         connection.on("SuccessPacked", (profileName) => {
+          setIsConnected(true);
           if (profileName == profile?.profileName) {
+            setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
             setIsRestoring(false);
             setPercentStage(0);
             setLogs(null);
@@ -125,31 +141,72 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const onDownloadDistributive = () => {
     setIsPacked(true);
     setIsRestoring(true);
+    setProfileCardState(EntityState.ENTITY_STATE_LOADING);
     connectionHub
       ?.invoke("Restore", profile?.profileName)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
         });
+        if (profile) {
+          setProfileCardState(profile.state);
+        }
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
+      });
+  };
+
+  const onDownloadJavaDistributive = (javaVersion: JavaVersionBaseEntity) => {
+    setIsPacked(true);
+    setIsRestoring(true);
+    setProfileCardState(EntityState.ENTITY_STATE_LOADING);
+    connectionHub
+      ?.invoke("RestoreAndChangeBootstrapVersion", profile?.profileName, javaVersion)
+      .then(() => {
+        setIsConnected(true);
+      })
+      .catch((error) => {
+        toast({
+          variant: "destructive",
+          title: "Ошибка!",
+          description: JSON.stringify(error),
+        });
+        if (profile) {
+          setProfileCardState(profile.state);
+        }
+      })
+      .finally(() => {
+        setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
   const onBuildDistributive = () => {
     setIsPacked(false);
     setIsRestoring(true);
+    setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
     connectionHub
       ?.invoke("Build", profile?.profileName)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
         });
+        if (profile) {
+          setProfileCardState(profile.state);
+          setProfileCardState(EntityState.ENTITY_STATE_LOADING);
+        }
       })
       .finally(() => {
         setIsRestoring(false);
@@ -158,8 +215,10 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
   return {
     onDownloadDistributive,
+    onDownloadJavaDistributive,
     onBuildDistributive,
     isDisable: isRestoring,
+    isConnected,
     isPacked,
     percentStage,
     percentAllStages,
