@@ -9,6 +9,7 @@ import { ProfileLoading } from "@/views/profile";
 import { FilesTable } from "@/widgets/files-table";
 import { DownloadClientHub } from "@/widgets/client-hub";
 import { AddingFilesWhitelistDialog } from "@/widgets/adding-files-whitelist-dialog";
+import { AddingFoldersWhitelistDialog } from "@/widgets/adding-folders-whitelist-dialog";
 import { GameServers } from "@/widgets/game-servers";
 
 import { EditProfileForm } from "@/features/edit-profile-form";
@@ -167,10 +168,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             subtitle="Белый список необходим для того чтобы исключить выбранные папки из автоматического удаления"
           >
             <div className={classes.tabs__whitelist}>
-              <AddingFilesWhitelistDialog
-                profileName={profile.profileName}
-                files={profile.whiteListFiles}
-              />
+              <AddingFoldersWhitelistDialog profileName={profile.profileName} />
               {!!Object.keys(rowSelection).length && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>

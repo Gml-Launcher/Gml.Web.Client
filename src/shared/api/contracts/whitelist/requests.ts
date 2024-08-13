@@ -8,3 +8,11 @@ export type TPostWhitelistFileResponse = ResponseBaseEntity & {};
 // Удаление файлов в whitelist
 export type TDeleteWhitelistFileRequest = WhitelistFileBaseEntity[];
 export type TDeleteWhitelistFileResponse = ResponseBaseEntity & {};
+
+// Добавление папок в whitelist
+export type TPostWhitelistFolderRequest = WhitelistFileBaseEntity[];
+export type TPostWhitelistFolderResponse = ResponseBaseEntity & {};
+
+// Удаление папок в whitelist
+export type TDeleteWhitelistFolderRequest = WhitelistFileBaseEntity[];
+export type TDeleteWhitelistFolderResponse = ResponseBaseEntity & {};

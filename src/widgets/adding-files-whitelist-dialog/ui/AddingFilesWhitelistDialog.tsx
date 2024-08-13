@@ -72,7 +72,7 @@ export function AddingFilesWhitelistDialog({
               <ExclamationTriangleIcon className="h-4 w-4" />
               <AlertTitle>Внимание!</AlertTitle>
               <AlertDescription>
-                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> папок, которые будут
+                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> файлов, которые будут
                 добавлены в WhiteList
               </AlertDescription>
             </Alert>
