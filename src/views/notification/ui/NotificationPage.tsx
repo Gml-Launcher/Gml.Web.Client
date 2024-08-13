@@ -1,5 +1,7 @@
 "use client";
 
+import { ClearNotificationModel } from "@/widgets/clear-notifications";
+
 import { NotificationCard } from "@/entities/NotificationCard";
 
 import { DASHBOARD_PAGES } from "@/shared/routes";
@@ -86,6 +88,7 @@ export const NotificationPage = () => {
             <span>Трейс</span>
             <Badge variant="secondary">{notificationsTrace && notificationsTrace.length}</Badge>
           </TabsTrigger>
+          <ClearNotificationModel className="w-full" description="Очистить все" />
         </TabsList>
         <TabsContent value="fatal" className="w-full">
           {notificationsFatal && !notificationsFatal.length && (

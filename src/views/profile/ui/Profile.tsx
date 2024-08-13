@@ -45,6 +45,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const accessToken = getStorageAccessToken();
   const { data, mutate, isPending } = useProfile();
   const profile = data?.data;
+
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});

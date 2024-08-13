@@ -6,6 +6,8 @@ import { getStorageAccessToken } from "@/shared/services";
 import { useToast } from "@/shared/ui/use-toast";
 import { JavaVersionBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { getApiBaseUrl } from "@/shared/lib/utils";
+import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
+import { EntityState } from "@/shared/enums";
 
 interface ConnectionHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -32,6 +34,8 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const [logs, setLogs] = useState<string[] | null>(null);
 
   const [isPacked, setIsPacked] = useState(false);
+
+  const { setState: setProfileCardState } = useProfileCardStore();
 
   useEffect(() => {
     if (isLoading || !accessToken) return;
@@ -95,6 +99,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         connection.on("SuccessInstalled", (profileName) => {
           setIsConnected(true);
           if (profileName == profile?.profileName) {
+            setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
             setIsPacked(false);
             setIsRestoring(false);
             setPercentStage(0);
@@ -110,6 +115,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         connection.on("SuccessPacked", (profileName) => {
           setIsConnected(true);
           if (profileName == profile?.profileName) {
+            setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
             setIsRestoring(false);
             setPercentStage(0);
             setLogs(null);
@@ -135,48 +141,72 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const onDownloadDistributive = () => {
     setIsPacked(true);
     setIsRestoring(true);
+    setProfileCardState(EntityState.ENTITY_STATE_LOADING);
     connectionHub
       ?.invoke("Restore", profile?.profileName)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
         });
+        if (profile) {
+          setProfileCardState(profile.state);
+        }
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
   const onDownloadJavaDistributive = (javaVersion: JavaVersionBaseEntity) => {
     setIsPacked(true);
     setIsRestoring(true);
+    setProfileCardState(EntityState.ENTITY_STATE_LOADING);
     connectionHub
       ?.invoke("RestoreAndChangeBootstrapVersion", profile?.profileName, javaVersion)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
         });
+        if (profile) {
+          setProfileCardState(profile.state);
+        }
       })
       .finally(() => {
         setIsRestoring(false);
+        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
       });
   };
 
   const onBuildDistributive = () => {
     setIsPacked(false);
     setIsRestoring(true);
+    setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
     connectionHub
       ?.invoke("Build", profile?.profileName)
+      .then(() => {
+        setIsConnected(true);
+      })
       .catch((error) => {
         toast({
           variant: "destructive",
           title: "Ошибка!",
           description: JSON.stringify(error),
         });
+        if (profile) {
+          setProfileCardState(profile.state);
+          setProfileCardState(EntityState.ENTITY_STATE_LOADING);
+        }
       })
       .finally(() => {
         setIsRestoring(false);
