@@ -30,7 +30,7 @@ class WhitelistService {
   async appendFolder(
     params: TPostWhitelistFolderRequest,
   ): Promise<AxiosResponse<TPostWhitelistFolderResponse>> {
-    return await $api.post<TPostWhitelistFolderResponse>(this.BASE_URL_FOLDER, { data: params });
+    return await $api.post<TPostWhitelistFolderResponse>(this.BASE_URL_FOLDER, params);
   }
 
   async deleteFolder(

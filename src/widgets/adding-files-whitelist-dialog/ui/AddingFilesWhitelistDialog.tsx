@@ -53,7 +53,7 @@ export function AddingFilesWhitelistDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="w-fit">Добавить папки</Button>
+        <Button className="w-fit">Добавить файлов</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>

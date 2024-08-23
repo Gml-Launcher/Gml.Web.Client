@@ -5,5 +5,5 @@ export type WhitelistFileBaseEntity = {
 
 export type WhitelistFolderBaseEntity = {
   profileName: string;
-  hash: string;
+  path: string;
 };

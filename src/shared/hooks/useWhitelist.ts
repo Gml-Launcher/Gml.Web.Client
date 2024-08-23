@@ -2,7 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 
 import { isAxiosError } from "axios";
 
-import { TDeleteWhitelistFileRequest, TPostWhitelistFileRequest } from "@/shared/api/contracts";
+import {
+  TDeleteWhitelistFileRequest,
+  TDeleteWhitelistFolderRequest,
+  TPostWhitelistFileRequest,
+  TPostWhitelistFolderRequest,
+} from "@/shared/api/contracts";
 import { useToast } from "@/shared/ui/use-toast";
 import { whitelistService } from "@/shared/services/WhitelistService";
 
@@ -68,7 +73,7 @@ export const useAddingFolderWhitelist = () => {
 
   return useMutation({
     mutationKey: whitelistKeys.addingFoldersWhitelist,
-    mutationFn: (data: TPostWhitelistFileRequest) => whitelistService.appendFiles(data),
+    mutationFn: (data: TPostWhitelistFolderRequest) => whitelistService.appendFolder(data),
     onSuccess: (data) => {
       toast({
         title: "Успешно",
@@ -93,7 +98,7 @@ export const useDeleteFolderWhitelist = () => {
 
   return useMutation({
     mutationKey: whitelistKeys.deleteFoldersWhitelist,
-    mutationFn: (body: TDeleteWhitelistFileRequest) => whitelistService.deleteFiles(body),
+    mutationFn: (body: TDeleteWhitelistFolderRequest) => whitelistService.deleteFolder(body),
     onSuccess: async (data) => {
       toast({
         title: "Успешно",

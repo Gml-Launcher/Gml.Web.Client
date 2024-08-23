@@ -11,6 +11,8 @@ import { Tabs, TabsContent } from "@/shared/ui/tabs";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Input } from "@/shared/ui/input";
+import { useAddingFolderWhitelist } from "@/shared/hooks/useWhitelist";
+import { WhitelistFolderBaseEntity } from "@/shared/api/contracts";
 
 interface AddingFoldersWhitelistDialogProps {
   profileName: string;
@@ -19,6 +21,8 @@ interface AddingFoldersWhitelistDialogProps {
 export const AddingFoldersWhitelistDialog = ({
   profileName,
 }: AddingFoldersWhitelistDialogProps) => {
+  const { mutate } = useAddingFolderWhitelist();
+
   const [open, setOpen] = useState(false);
   const onOpenChange = () => setOpen((prev) => !prev);
 
@@ -42,6 +46,17 @@ export const AddingFoldersWhitelistDialog = ({
 
   const onSubmit = () => {
     // folders.map((folder) => ({ profileName: profileName, path: folder }))
+
+    const folderPaths = folders.map((folder) => ({
+      profileName,
+      path: folder,
+    })) as WhitelistFolderBaseEntity[];
+
+    mutate(folderPaths);
+
+    setFolders([]);
+    setFolder("");
+
     onOpenChange();
   };
 
@@ -57,7 +72,10 @@ export const AddingFoldersWhitelistDialog = ({
         <Tabs defaultValue="folders" value={tab}>
           <TabsContent value="folders">
             <div className="flex gap-x-4">
-              <Input onChange={(event) => handleChangeFolder(event.target.value)}></Input>
+              <Input
+                placeholder="Введите путь до папки"
+                onChange={(event) => handleChangeFolder(event.target.value)}
+              ></Input>
               <Button onClick={() => handleAppendFolder(folder)}>Добавить</Button>
             </div>
             <ul className="max-h-[200px] overflow-y-scroll">

@@ -21,8 +21,8 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
 import { useProfile } from "@/shared/hooks";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
-import { WhitelistFileBaseEntity } from "@/shared/api/contracts";
-import { useDeleteFilesWhitelist } from "@/shared/hooks/useWhitelist";
+import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from "@/shared/api/contracts";
+import { useDeleteFilesWhitelist, useDeleteFolderWhitelist } from "@/shared/hooks/useWhitelist";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Button } from "@/shared/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -48,6 +48,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const profile = data?.data;
 
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
+  const { mutate: mutateDeleteFoldersWhitelist } = useDeleteFolderWhitelist();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
@@ -66,13 +67,22 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
 
   if (isPending || !profile) return <ProfileLoading />;
 
-  const onSubmit = () => {
+  const onSubmitDeleteFiles = () => {
     const hashFiles = Object.entries(rowSelection).map(([hash, _]) => ({
       profileName: profile.profileName,
       hash,
     })) as WhitelistFileBaseEntity[];
 
     mutateDeleteFilesWhitelist(hashFiles);
+  };
+
+  const onSubmitDeleteFolders = () => {
+    const folders = Object.entries(rowSelection).map(([path, _]) => ({
+      profileName: profile.profileName,
+      path,
+    })) as WhitelistFolderBaseEntity[];
+
+    mutateDeleteFoldersWhitelist(folders);
   };
 
   return (
@@ -149,7 +159,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Отмена</AlertDialogCancel>
-                      <AlertDialogAction onClick={onSubmit}>Удалить</AlertDialogAction>
+                      <AlertDialogAction onClick={onSubmitDeleteFiles}>Удалить</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
@@ -183,7 +193,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Отмена</AlertDialogCancel>
-                      <AlertDialogAction onClick={onSubmit}>Удалить</AlertDialogAction>
+                      <AlertDialogAction onClick={onSubmitDeleteFolders}>Удалить</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
