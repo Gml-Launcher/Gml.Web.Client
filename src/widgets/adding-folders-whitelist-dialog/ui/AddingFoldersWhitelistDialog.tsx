@@ -121,7 +121,11 @@ export const AddingFoldersWhitelistDialog = ({
             Назад
           </Button>
           {tab === "folders" && (
-            <Button className="w-fit" onClick={onChangeTab("checkout")}>
+            <Button
+              className="w-fit"
+              onClick={onChangeTab("checkout")}
+              disabled={folders.length == 0}
+            >
               Далее
             </Button>
           )}
