@@ -13,6 +13,8 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { Input } from "@/shared/ui/input";
 import { useAddingFolderWhitelist } from "@/shared/hooks/useWhitelist";
 import { WhitelistFolderBaseEntity } from "@/shared/api/contracts";
+import { Trash2Icon } from "lucide-react";
+import { Card } from "@/shared/ui/card";
 
 interface AddingFoldersWhitelistDialogProps {
   profileName: string;
@@ -67,25 +69,41 @@ export const AddingFoldersWhitelistDialog = ({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Выбор папок в «Белый список»</DialogTitle>
+          <DialogTitle>Добавление папок в «Белый список»</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="folders" value={tab}>
-          <TabsContent value="folders">
+          <TabsContent value="folders" className="grid gap-y-2">
             <div className="flex gap-x-4">
               <Input
                 placeholder="Введите путь до папки"
                 onChange={(event) => handleChangeFolder(event.target.value)}
-              ></Input>
-              <Button onClick={() => handleAppendFolder(folder)}>Добавить</Button>
+              />
+              <Button onClick={() => handleAppendFolder(folder)} disabled={folder == ""}>
+                Добавить
+              </Button>
             </div>
-            <ul className="max-h-[200px] overflow-y-scroll">
-              {folders.map((folder) => (
-                <li key={folder}>
-                  <span>{folder}</span>
-                  <Button onClick={() => handleDeleteFolder(folder)}>x</Button>
-                </li>
-              ))}
-            </ul>
+            <Card className="rounded-md">
+              <ul className="max-h-[200px] overflow-y-scroll">
+                {folders.map((folder) => (
+                  <li key={folder} className="flex gap-x-2 py-2 px-2 items-center">
+                    <span>{folder}</span>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="py-2 px-2"
+                      onClick={() => handleDeleteFolder(folder)}
+                    >
+                      <Trash2Icon size={16} />
+                    </Button>
+                  </li>
+                ))}
+                {folders.length == 0 && (
+                  <li className="flex gap-x-2 py-2 px-2 justify-center">
+                    <span>Данный список пуст</span>
+                  </li>
+                )}
+              </ul>
+            </Card>
           </TabsContent>
           <TabsContent value="checkout">
             <Alert variant="destructive">
