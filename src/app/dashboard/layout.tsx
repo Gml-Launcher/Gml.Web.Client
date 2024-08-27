@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { ArrowUpDownIcon, BlocksIcon, SettingsIcon } from "lucide-react";
+import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon } from "lucide-react";
 
 import { config } from "@/core/configs";
 
@@ -34,6 +34,11 @@ const menu: TMenuItem[] = [
     icon: <SettingsIcon size={16} />,
     path: DASHBOARD_PAGES.SETTINGS,
     text: "Настройки",
+  },
+  {
+    icon: <PieChartIcon size={16} />,
+    path: DASHBOARD_PAGES.SENTRY,
+    text: "Sentry",
   },
 ];
 
