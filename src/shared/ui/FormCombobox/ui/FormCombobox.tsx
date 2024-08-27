@@ -5,13 +5,13 @@ import { cn } from "@/shared/lib/utils";
 import {
   Command,
   CommandEmpty,
-  CommandInput,
-  CommandList,
   CommandGroup,
+  CommandInput,
   CommandItem,
+  CommandList,
 } from "@/shared/ui/command";
 import React from "react";
-import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
+import { UseFormSetValue } from "react-hook-form";
 
 type FormComboboxParams = {
   value: string;
@@ -54,7 +54,7 @@ export const FormCombobox = ({
             <Button
               role="combobox"
               variant="ghost"
-              className={cn("text-white", !value && "text-muted-foreground")}
+              className={cn("text-black dark:text-white", !value && "text-muted-foreground")}
             >
               {value ? options.find((info) => info === value) : placeholder}
             </Button>
