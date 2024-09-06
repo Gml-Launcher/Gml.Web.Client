@@ -14,19 +14,19 @@ export type BaseSentryException = {
 
 // Sentry
 
-type SentryError = {
+export type SentryError = {
   exception: string;
   countUsers: number;
   count: number;
   graphics: SentryGraphic[]
 }
 
-type SentryGraphic = {
+export type SentryGraphic = {
+  month: string;
   count: number;
-  date: string;
 }
 
-type SentryOperationSystem = {
+export type SentryOperationSystem = {
   count: number;
   osType: string;
 }
