@@ -1,8 +1,12 @@
+"use client"
+
 import {SentryGraphic} from "@/shared/api/contracts/sentry/schemas";
 
 import {Area, AreaChart, CartesianGrid, XAxis} from "recharts"
 
 import {ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent,} from "@/shared/ui/chart"
+import {useEffect} from "react";
+import {getFormatDate} from "@/shared/lib/getFormatDate/getFormatDate";
 
 interface SentryChartParams {
   graphics: SentryGraphic[];
@@ -23,7 +27,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export const SentryChart = ({}: SentryChartParams) => {
+export const SentryChart = ({graphics}: SentryChartParams) => {
+  useEffect(() => {
+    graphics.map(({month, count}) => (console.log(getFormatDate(month).replace(", 00:00:00", "").replaceAll(".", "-"))))
+  })
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <AreaChart
