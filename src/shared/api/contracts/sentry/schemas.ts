@@ -2,7 +2,7 @@ export type BaseSentryError = {
   bugs: SentryError[];
   countUsers: number;
   count: number;
-}
+};
 
 export type BaseSentryException = {
   exception: string;
@@ -10,7 +10,23 @@ export type BaseSentryException = {
   count: number;
   operationSystems: SentryOperationSystem[];
   bugInfo: BugInfo;
-}
+};
+
+export type BaseSentryStats = {
+  date: string;
+  launcher: number;
+  backend: number;
+};
+
+export type BaseSentrySummary = {
+  totalBugs: number;
+  bugsThisMonth: number;
+  percentageChangeMonth: number;
+  bugsToday: number;
+  percentageChangeDay: number;
+  fixBugs: number;
+  percentageChangeDayFixBugs: number;
+};
 
 // Sentry
 
@@ -18,18 +34,18 @@ export type SentryError = {
   exception: string;
   countUsers: number;
   count: number;
-  graphics: SentryGraphic[]
-}
+  graphics: SentryGraphic[];
+};
 
 export type SentryGraphic = {
   month: string;
   count: number;
-}
+};
 
 export type SentryOperationSystem = {
   count: number;
   osType: string;
-}
+};
 
 // Sentry BUG INFO
 interface BugInfo {
