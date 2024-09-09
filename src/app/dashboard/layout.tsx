@@ -38,7 +38,7 @@ const menu: TMenuItem[] = [
   {
     icon: <PieChartIcon size={16} />,
     path: DASHBOARD_PAGES.SENTRY,
-    text: "Sentry",
+    text: "Ошибки",
   },
 ];
 
