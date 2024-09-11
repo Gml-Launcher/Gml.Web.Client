@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { SentryPage } from "@/views/sentry";
 
 export const metadata: Metadata = {
-  title: "Sentry",
+  title: "Ошибки",
 };
 const Page = async () => {
   return <SentryPage />;
