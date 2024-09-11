@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import {HTMLAttributes, useState} from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -11,7 +11,7 @@ import { Calendar } from "@/shared/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 
 interface CalendarDateRangePickerProps {
-  className?: React.HTMLAttributes<HTMLDivElement>;
+  className?: HTMLAttributes<HTMLDivElement>;
   fromDate: Date;
   toDate: Date;
 }
@@ -21,7 +21,7 @@ export function CalendarDateRangePicker({
   fromDate,
   toDate,
 }: CalendarDateRangePickerProps) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
+  const [date, setDate] = useState<DateRange | undefined>({
     from: fromDate,
     to: toDate,
   });

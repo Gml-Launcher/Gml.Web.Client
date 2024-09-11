@@ -10,8 +10,7 @@ import {
   CommandGroup,
   CommandItem,
 } from "@/shared/ui/command";
-import React from "react";
-import { ControllerRenderProps, UseFormSetValue } from "react-hook-form";
+import {UseFormSetValue} from "react-hook-form";
 
 type FormComboboxParams = {
   value: string;
