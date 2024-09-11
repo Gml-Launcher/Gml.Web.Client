@@ -4,8 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { BarChart2, Bug } from "lucide-react";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { useSentryStats, useSentrySummary } from "@/shared/hooks";
-import { SentryStatsLoading } from "./SentryStatsLoading";
+import { BaseSentryStats, BaseSentrySummary } from "@/shared/api/contracts/sentry/schemas";
 
 const chartConfig = {
   views: {
@@ -21,11 +20,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export const SentryStats = () => {
-  const { data: chartData, isLoading } = useSentryStats();
+interface SentryStatsProps {
+  chartData: BaseSentryStats[];
+  summaryData: BaseSentrySummary;
+}
 
-  const { data: summaryData, isLoading: summaryIsLoading } = useSentrySummary();
-
+export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
   const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("launcher");
 
   const getPercent = (num: number) => {
@@ -42,8 +42,6 @@ export const SentryStats = () => {
       backend: chartData.reduce((acc, curr) => acc + (curr.backend || 0), 0),
     };
   }, [chartData]);
-
-  if (isLoading || summaryIsLoading) return <SentryStatsLoading />;
 
   return (
     <div className="flex flex-col gap-4 md:gap-8">

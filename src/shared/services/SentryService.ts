@@ -2,7 +2,8 @@ import { AxiosResponse } from "axios";
 
 import { $api } from "@/core/api";
 import {
-  TGetSentryErrorsResponse,
+  TPostSentryErrorsRequest,
+  TPostSentryErrorsResponse,
   TGetSentryExceptionResponse,
   TGetSentryStatsResponse,
   TGetSentrySummaryResponse,
@@ -11,8 +12,10 @@ import {
 class SentryService {
   private BASE_URL = "/sentry";
 
-  async getSentryErrors(): Promise<AxiosResponse<TGetSentryErrorsResponse>> {
-    return await $api.get<TGetSentryErrorsResponse>(this.BASE_URL);
+  async getSentryErrors(
+    data: TPostSentryErrorsRequest,
+  ): Promise<AxiosResponse<TPostSentryErrorsResponse>> {
+    return await $api.post<TPostSentryErrorsResponse>(this.BASE_URL, data);
   }
 
   async getSentryException({

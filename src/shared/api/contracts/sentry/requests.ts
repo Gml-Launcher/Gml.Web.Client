@@ -5,9 +5,14 @@ import {
   BaseSentryStats,
   BaseSentrySummary,
 } from "@/shared/api/contracts/sentry/schemas";
+import { ProjectTypeEnum } from "@/shared/enums/projectType";
 
-export type TGetSentryErrorsRequest = {};
-export type TGetSentryErrorsResponse = ResponseBaseEntity & {
+export type TPostSentryErrorsRequest = {
+  projectType: ProjectTypeEnum;
+  dataFrom: string;
+  dataTo: string;
+};
+export type TPostSentryErrorsResponse = ResponseBaseEntity & {
   data: BaseSentryError;
 };
 

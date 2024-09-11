@@ -1,5 +1,7 @@
 "use client";
 
+import { useSentryStats, useSentrySummary } from "@/shared/hooks";
+
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 
@@ -10,6 +12,10 @@ import { SentryStats } from "@/widgets/sentry-stats";
 import { SentryAnalytics } from "@/widgets/sentry-analytics";
 
 export const SentryPage = () => {
+  const { data: chartData, isLoading } = useSentryStats();
+
+  const { data: summaryData, isLoading: summaryIsLoading } = useSentrySummary();
+
   return (
     <>
       <Breadcrumbs
