@@ -1,10 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { toast as sonner } from "sonner";
 import { notificationService } from "@/shared/services/NotifiactionService";
-import { TPostGameServersRequest } from "@/shared/api/contracts";
-import { gameServerService } from "@/shared/services/GameServerService";
-import { isAxiosError } from "@/shared/lib/isAxiosError/isAxiosError";
 import { serversKeys } from "@/shared/hooks/useServers";
 import { useNotificationsState } from "@/views/notification/lib/store";
 
@@ -24,12 +21,15 @@ export const useNotifications = () => {
 export const useClearNotifications = () => {
   const { clearNotifications, clearCount } = useNotificationsState();
 
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: serversKeys.creating(),
     mutationFn: () => notificationService.clearNotification(),
     onSuccess: async (data) => {
       clearNotifications();
       clearCount();
+      queryClient.removeQueries({ queryKey: notificationsKeys.all });
       sonner("Успешно", {
         description: `Все уведомления были очищены`,
       });
@@ -39,3 +39,4 @@ export const useClearNotifications = () => {
     },
   });
 };
+

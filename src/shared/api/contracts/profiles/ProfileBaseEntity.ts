@@ -27,6 +27,7 @@ export type ProfileExtendedBaseEntity = {
   state: EntityState;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
+  whiteListFolders: ProfileFolderBaseEntity[];
 };
 
 export type ProfileFileBaseEntity = {
@@ -40,4 +41,8 @@ export type JavaVersionBaseEntity = {
   name: string;
   version: string;
   majorVersion: number;
+};
+
+export type ProfileFolderBaseEntity = {
+  path: string;
 };
