@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 import { SentryStats } from "@/widgets/sentry-stats";
 import { SentryAnalytics } from "@/widgets/sentry-analytics";
+import {useEffect} from "react";
 
 export const SentryPage = () => {
   const { data: chartData, isLoading } = useSentryStats();
