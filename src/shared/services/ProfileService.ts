@@ -27,7 +27,7 @@ class ProfileService {
   }
 
   async getProfile(body: TGetProfileRequest): Promise<TGetProfileResponse> {
-    const { data } = await $api.post<TGetProfileResponse>(`${this.BASE_URL}/info`, body);
+    const { data } = await $api.post<TGetProfileResponse>(`${this.BASE_URL}/details`, body);
 
     return data;
   }
