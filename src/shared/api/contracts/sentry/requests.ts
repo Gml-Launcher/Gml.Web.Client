@@ -16,12 +16,21 @@ export type TPostSentryErrorsResponse = ResponseBaseEntity & {
   data: BaseSentryError;
 };
 
+export type TPostSentryFilterErrorsListRequest = {
+  projectType: ProjectTypeEnum;
+  dataFrom: string;
+  dataTo: string;
+};
+export type TPostSentryFilterErrorsListResponse = ResponseBaseEntity & {
+  data: BaseSentryError;
+};
+
 export type TPostSentryFilterErrorsRequest = {
   projectType: ProjectTypeEnum;
   dataFrom: string;
   dataTo: string;
 };
-export type TPostSentryFilterResponse = ResponseBaseEntity & {
+export type TPostSentryFilterErrorsResponse = ResponseBaseEntity & {
   data: BaseSentryError;
 };
 

@@ -4,6 +4,7 @@ import { isAxiosError } from "@/shared/lib/isAxiosError/isAxiosError";
 import { useToast } from "@/shared/ui/use-toast";
 import {
   TPostSentryErrorsRequest,
+  TPostSentryFilterErrorsListRequest,
   TPostSentryFilterErrorsRequest,
 } from "@/shared/api/contracts/sentry/requests";
 
@@ -12,6 +13,8 @@ export const sentryKeys = {
   exception: () => [...sentryKeys.all, "exception"] as const,
   stats: () => [...sentryKeys.all, "stats"] as const,
   summary: () => [...sentryKeys.all, "summary"] as const,
+  filterErrors: () => [...sentryKeys.all, "filter", "errors"] as const,
+  filterErrorsList: () => [...sentryKeys.all, "filter", "errors", "list"] as const,
 };
 
 export const useSentryErrors = () => {
@@ -22,11 +25,24 @@ export const useSentryErrors = () => {
   });
 };
 
+export const useSentryFilterErrorsList = () => {
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationKey: sentryKeys.filterErrors(),
+    mutationFn: (data: TPostSentryFilterErrorsListRequest) =>
+      sentryService.getSentryFilterErrorsList(data),
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
 export const useSentryFilterErrors = () => {
   const { toast } = useToast();
 
   return useMutation({
-    mutationKey: sentryKeys.all,
+    mutationKey: sentryKeys.filterErrors(),
     mutationFn: (data: TPostSentryFilterErrorsRequest) => sentryService.getSentryFilterErrors(data),
     onError: (error) => {
       isAxiosError({ toast, error });

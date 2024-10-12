@@ -12,16 +12,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/shared/ui/badge";
 import { Separator } from "@/shared/ui/separator";
 import { CalendarDateRangePicker } from "@/shared/ui/data-range-picker";
-import { useSentryFilterErrors } from "@/shared/hooks";
+import { useSentryFilterErrors, useSentryFilterErrorsList } from "@/shared/hooks";
 import { useEffect, useState } from "react";
 
 export const SentryAnalytics = () => {
-  const { data, mutate, isPending } = useSentryFilterErrors();
+  const { data, mutate, isPending } = useSentryFilterErrorsList();
 
   const [tab, SetTab] = useState<string>("week");
 
   useEffect(() => {
     const date = new Date(Date.now());
+
     switch (tab) {
       case "week":
         mutate({ projectType: 7, dataFrom: Date.now.toString(), dataTo: Date.now().toString() });
@@ -56,7 +57,7 @@ export const SentryAnalytics = () => {
               <TabsTrigger value="gap">Промежуток</TabsTrigger>
             </TabsList>
           </div>
-          <TabsContent value="week">
+          {tab === ("week" | "month" | "year") && (
             <Card x-chunk="dashboard-05-chunk-3">
               <CardHeader className="px-7">
                 <CardTitle>Проблемы</CardTitle>
@@ -95,7 +96,7 @@ export const SentryAnalytics = () => {
                 </Table>
               </CardContent>
             </Card>
-          </TabsContent>
+          )}
 
           <TabsContent value="gap">
             <CalendarDateRangePicker fromDate={new Date()} toDate={new Date(2024, 9, 10)} />
