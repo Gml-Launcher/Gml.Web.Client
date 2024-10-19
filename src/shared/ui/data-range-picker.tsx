@@ -1,31 +1,18 @@
-"use client";
-
-import {HTMLAttributes, useState} from "react";
+import { DateRange } from "react-day-picker";
+import { Dispatch, SetStateAction } from "react";
+import { cn } from "@/shared/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Button } from "@/shared/ui/button";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
-import { DateRange } from "react-day-picker";
-
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
 import { Calendar } from "@/shared/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 
-interface CalendarDateRangePickerProps {
-  className?: HTMLAttributes<HTMLDivElement>;
-  fromDate: Date;
-  toDate: Date;
-}
+type DatePickerWithRangeProps = React.HTMLAttributes<HTMLDivElement> & {
+  date: DateRange | undefined;
+  setDate: Dispatch<SetStateAction<DateRange | undefined>>;
+};
 
-export function CalendarDateRangePicker({
-  className,
-  fromDate,
-  toDate,
-}: CalendarDateRangePickerProps) {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: fromDate,
-    to: toDate,
-  });
-
+export const DatePickerWithRange = ({ className, date, setDate }: DatePickerWithRangeProps) => {
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -34,25 +21,25 @@ export function CalendarDateRangePicker({
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[260px] justify-start text-left font-normal",
+              "w-[300px] justify-start text-left font-normal",
               !date && "text-muted-foreground",
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon />
             {date?.from ? (
               date.to ? (
-                <>
+                <span className="ml-2">
                   {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
-                </>
+                </span>
               ) : (
-                format(date.from, "LLL dd, y")
+                <span className="ml-2">{format(date.from, "LLL dd, y")}</span>
               )
             ) : (
-              <span>Pick a date</span>
+              <span className="ml-2">Выберите дату</span>
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
+        <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             initialFocus
             mode="range"
@@ -65,4 +52,4 @@ export function CalendarDateRangePicker({
       </Popover>
     </div>
   );
-}
+};

@@ -5,12 +5,12 @@ import {
   BaseSentryStats,
   BaseSentrySummary,
 } from "@/shared/api/contracts/sentry/schemas";
-import { ProjectTypeEnum } from "@/shared/enums/projectType";
+import { ProjectTypeEnum } from "@/shared/enums";
 
 export type TPostSentryErrorsRequest = {
   projectType: ProjectTypeEnum;
-  dataFrom: string;
-  dataTo: string;
+  dateFrom: string;
+  dateTo: string;
 };
 export type TPostSentryErrorsResponse = ResponseBaseEntity & {
   data: BaseSentryError;
@@ -18,17 +18,17 @@ export type TPostSentryErrorsResponse = ResponseBaseEntity & {
 
 export type TPostSentryFilterErrorsListRequest = {
   projectType: ProjectTypeEnum;
-  dataFrom: string;
-  dataTo: string;
+  dateFrom: string;
+  dateTo: string;
 };
 export type TPostSentryFilterErrorsListResponse = ResponseBaseEntity & {
-  data: BaseSentryError;
+  data: BaseSentryError[];
 };
 
 export type TPostSentryFilterErrorsRequest = {
   projectType: ProjectTypeEnum;
-  dataFrom: string;
-  dataTo: string;
+  dateFrom: string;
+  dateTo: string;
 };
 export type TPostSentryFilterErrorsResponse = ResponseBaseEntity & {
   data: BaseSentryError;

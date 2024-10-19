@@ -1,7 +1,32 @@
+export interface SentryBug {
+  id: string;
+  pcName: string;
+  username: string;
+  memoryInfo: MemoryInfo;
+  exceptions: Exception[];
+  sendAt: string;
+  ipAddress: string;
+  osVersion: string;
+  osIdentifier: string;
+}
+
+export interface Graphic {
+  month: string;
+  count: number;
+}
+
+export interface OperationSystem {
+  count: number;
+  osType: string;
+}
+
 export type BaseSentryError = {
-  bugs: SentryError[];
   countUsers: number;
   count: number;
+  exception: string;
+  graphic: Graphic[];
+  operationSystems: OperationSystem[];
+  bugInfo: SentryBug;
 };
 
 export type BaseSentryException = {
@@ -9,7 +34,7 @@ export type BaseSentryException = {
   countUsers: number;
   count: number;
   operationSystems: SentryOperationSystem[];
-  bugInfo: BugInfo;
+  bugInfo: SentryBug;
 };
 
 export type BaseSentryStats = {
@@ -48,17 +73,6 @@ export type SentryOperationSystem = {
 };
 
 // Sentry BUG INFO
-interface BugInfo {
-  id: string;
-  pcName: string;
-  username: string;
-  memoryInfo: MemoryInfo;
-  exceptions: Exception[];
-  sendAt: string;
-  ipAddress: string;
-  osVeriosn: string;
-  osIdentifier: string;
-}
 
 interface Exception {
   type: string;
