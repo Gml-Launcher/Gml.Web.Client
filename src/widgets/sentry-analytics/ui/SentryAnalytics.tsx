@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Separator } from "@/shared/ui/separator";
 import { useSentryFilterErrorsList } from "@/shared/hooks";
 import { useEffect, useState } from "react";
-import { AnalyticsInterval, ProjectTypeEnum } from "@/shared/enums";
+import { AnalyticsInterval, EntityProjectTypeOption, ProjectTypeEnum } from "@/shared/enums";
 import {
   endOfMonth,
   endOfWeek,
@@ -17,9 +17,12 @@ import {
 import { DateRange } from "react-day-picker";
 import { cn } from "@/shared/lib/utils";
 import { DatePickerWithRange } from "@/shared/ui/data-range-picker";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 
 export const SentryAnalytics = () => {
   const [date, setDate] = useState<DateRange | undefined>(undefined);
+
+  const [projectType, setProjectType] = useState<ProjectTypeEnum>(ProjectTypeEnum.All);
 
   const { data, mutate, isPending } = useSentryFilterErrorsList();
 
@@ -44,21 +47,21 @@ export const SentryAnalytics = () => {
     switch (tab) {
       case AnalyticsInterval.ANALYTICS_INTERVAL_WEAK:
         mutate({
-          projectType: ProjectTypeEnum.All,
+          projectType: projectType,
           dateFrom: format(dataFromWeak, "yyyy-MM-dd"),
           dateTo: format(dataToWeak, "yyyy-MM-dd"),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_MONTH:
         mutate({
-          projectType: ProjectTypeEnum.All,
+          projectType: projectType,
           dateFrom: format(dataFromMonth, "yyyy-MM-dd"),
           dateTo: format(dataToMonth, "yyyy-MM-dd"),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_YEAR:
         mutate({
-          projectType: ProjectTypeEnum.All,
+          projectType: projectType,
           dateFrom: format(dataFromYear, "yyyy-MM-dd"),
           dateTo: format(dataToYear, "yyyy-MM-dd"),
         });
@@ -66,36 +69,62 @@ export const SentryAnalytics = () => {
       case AnalyticsInterval.ANALYTICS_INTERVAL_GAP:
         if (date?.from && date.to) {
           mutate({
-            projectType: ProjectTypeEnum.All,
+            projectType: projectType,
             dateFrom: format(date.from, "yyyy-MM-dd"),
             dateTo: format(date.to, "yyyy-MM-dd"),
           });
         }
         break;
     }
-  }, [mutate, tab, date]);
+  }, [mutate, tab, date, projectType]);
 
   return (
     <>
       <div className="grid auto-rows-max items-start gap-4 md:gap-8 lg:col-span-2">
         <Tabs defaultValue={tab} onValueChange={handleChangeTab}>
-          <div className="flex items-center mb-4">
-            <TabsList>
-              <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_WEAK}>Неделя</TabsTrigger>
-              <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_MONTH}>Месяц</TabsTrigger>
-              <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_YEAR}>Год</TabsTrigger>
-              <Separator orientation="vertical" className="mx-3 bg-primary h-1/2" />
-              <TabsTrigger className="relative" value={AnalyticsInterval.ANALYTICS_INTERVAL_GAP}>
-                Промежуток
-                <DatePickerWithRange
-                  className={cn("absolute left-32", {
-                    hidden: tab !== AnalyticsInterval.ANALYTICS_INTERVAL_GAP,
-                  })}
-                  date={date}
-                  setDate={setDate}
-                />
-              </TabsTrigger>
-            </TabsList>
+          <div className="flex justify-between">
+            <div className="flex items-center mb-4">
+              <TabsList>
+                <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_WEAK}>Неделя</TabsTrigger>
+                <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_MONTH}>Месяц</TabsTrigger>
+                <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_YEAR}>Год</TabsTrigger>
+                <Separator orientation="vertical" className="mx-3 bg-primary h-1/2" />
+                <TabsTrigger className="relative" value={AnalyticsInterval.ANALYTICS_INTERVAL_GAP}>
+                  Промежуток
+                  <DatePickerWithRange
+                    className={cn("absolute left-32", {
+                      hidden: tab !== AnalyticsInterval.ANALYTICS_INTERVAL_GAP,
+                    })}
+                    date={date}
+                    setDate={setDate}
+                  />
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <Select defaultValue={projectType} onValueChange={(type) => setProjectType(type)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                {(
+                  [
+                    ProjectTypeEnum.Launcher,
+                    ProjectTypeEnum.Profiles,
+                    ProjectTypeEnum.Backend,
+                    ProjectTypeEnum.All,
+                  ] as Array<ProjectTypeEnum>
+                ).map((key) => (
+                  <SelectItem value={key}>
+                    {
+                      EntityProjectTypeOption[
+                        `OPTION_${key}` as keyof typeof EntityProjectTypeOption
+                      ]
+                    }
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {data && !data.data.data.length && (
