@@ -3,8 +3,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { Separator } from "@/shared/ui/separator";
 import { useSentryFilterErrorsList } from "@/shared/hooks";
-import { useEffect, useState } from "react";
-import { AnalyticsInterval, EntityProjectTypeOption, ProjectTypeEnum } from "@/shared/enums";
+import React, { useEffect, useState } from "react";
+import { AnalyticsInterval, ProjectTypeEnum, ProjectTypeOption } from "@/shared/enums";
 import {
   endOfMonth,
   endOfWeek,
@@ -15,7 +15,7 @@ import {
   startOfYear,
 } from "date-fns";
 import { DateRange } from "react-day-picker";
-import { cn } from "@/shared/lib/utils";
+import { cn, enumValues } from "@/shared/lib/utils";
 import { DatePickerWithRange } from "@/shared/ui/data-range-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Skeleton } from "@/shared/ui/skeleton";
@@ -45,21 +45,21 @@ export const SentryAnalytics = () => {
     switch (tab) {
       case AnalyticsInterval.ANALYTICS_INTERVAL_WEAK:
         mutate({
-          projectType: projectType,
+          projectType: Number(projectType) as ProjectTypeEnum,
           dateFrom: format(dataFromWeak, "yyyy-MM-dd"),
           dateTo: format(dataToWeak, "yyyy-MM-dd"),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_MONTH:
         mutate({
-          projectType: projectType,
+          projectType: Number(projectType) as ProjectTypeEnum,
           dateFrom: format(dataFromMonth, "yyyy-MM-dd"),
           dateTo: format(dataToMonth, "yyyy-MM-dd"),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_YEAR:
         mutate({
-          projectType: projectType,
+          projectType: Number(projectType) as ProjectTypeEnum,
           dateFrom: format(dataFromYear, "yyyy-MM-dd"),
           dateTo: format(dataToYear, "yyyy-MM-dd"),
         });
@@ -67,7 +67,7 @@ export const SentryAnalytics = () => {
       case AnalyticsInterval.ANALYTICS_INTERVAL_GAP:
         if (date?.from && date.to) {
           mutate({
-            projectType: projectType,
+            projectType: Number(projectType) as ProjectTypeEnum,
             dateFrom: format(date.from, "yyyy-MM-dd"),
             dateTo: format(date.to, "yyyy-MM-dd"),
           });
@@ -100,25 +100,17 @@ export const SentryAnalytics = () => {
               </TabsList>
             </div>
 
-            <Select defaultValue={projectType} onValueChange={(type) => setProjectType(type)}>
+            <Select
+              defaultValue={projectType.toString()}
+              onValueChange={(type) => setProjectType(type as unknown as ProjectTypeEnum)}
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
               <SelectContent>
-                {(
-                  [
-                    ProjectTypeEnum.Launcher,
-                    ProjectTypeEnum.Profiles,
-                    ProjectTypeEnum.Backend,
-                    ProjectTypeEnum.All,
-                  ] as Array<ProjectTypeEnum>
-                ).map((key) => (
-                  <SelectItem value={key}>
-                    {
-                      EntityProjectTypeOption[
-                        `OPTION_${key}` as keyof typeof EntityProjectTypeOption
-                      ]
-                    }
+                {enumValues(ProjectTypeEnum).map(([type, value]) => (
+                  <SelectItem key={type} value={String(value)}>
+                    {ProjectTypeOption[`OPTION_${value}` as keyof typeof ProjectTypeOption]}
                   </SelectItem>
                 ))}
               </SelectContent>

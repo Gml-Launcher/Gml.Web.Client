@@ -5,7 +5,7 @@ export enum ProjectTypeEnum {
   All = 7,
 }
 
-export enum EntityProjectTypeOption {
+export enum ProjectTypeOption {
   "OPTION_1" = "Лаунчер",
   "OPTION_2" = "Профили",
   "OPTION_4" = "Бэкенд",
