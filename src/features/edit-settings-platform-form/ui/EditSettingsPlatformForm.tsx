@@ -77,9 +77,9 @@ export const EditSettingsPlatformForm = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
                     <div className="space-y-0.5">
-                      <h6 className="text-sm font-bold">Texture Протокол</h6>
+                      <h6 className="text-sm font-bold">Тип HTTP для сервиса скинов</h6>
                       <p className="text-sm text-gray-700 dark:text-gray-300">
-                        Эта настройка для отображения скинов в игре
+                        Протокол передачи текстур для Minecraft клиента
                       </p>
                     </div>
                     <Select
