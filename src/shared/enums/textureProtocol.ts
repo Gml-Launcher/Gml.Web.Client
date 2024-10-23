@@ -4,6 +4,6 @@ export enum TextureProtocol {
 }
 
 export enum TextureProtocolOption {
-  "OPTION_0" = "Http",
-  "OPTION_1" = "Https",
+  "OPTION_0" = "HTTP",
+  "OPTION_1" = "HTTPS",
 }

@@ -14,6 +14,7 @@ import { Input } from "@/shared/ui/input";
 
 import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
 import { TextureProtocol, TextureProtocolOption } from "@/shared/enums/textureProtocol";
+import { enumValues } from "@/shared/lib/utils";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -92,12 +93,15 @@ export const EditSettingsPlatformForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value={String(TextureProtocol.Http)}>
-                          {TextureProtocolOption.OPTION_0}
-                        </SelectItem>
-                        <SelectItem value={String(TextureProtocol.Https)}>
-                          {TextureProtocolOption.OPTION_1}
-                        </SelectItem>
+                        {enumValues(TextureProtocol).map(([protocol, value]) => (
+                          <SelectItem key={protocol} value={String(value)}>
+                            {
+                              TextureProtocolOption[
+                                `OPTION_${value}` as keyof typeof TextureProtocolOption
+                              ]
+                            }
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormItem>
