@@ -18,6 +18,7 @@ import { DateRange } from "react-day-picker";
 import { cn } from "@/shared/lib/utils";
 import { DatePickerWithRange } from "@/shared/ui/data-range-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 export const SentryAnalytics = () => {
   const [date, setDate] = useState<DateRange | undefined>(undefined);
@@ -31,9 +32,6 @@ export const SentryAnalytics = () => {
 
   useEffect(() => {
     const todayDate = new Date();
-
-    const year = todayDate.getFullYear();
-    const month = todayDate.getMonth();
 
     const dataFromWeak = startOfWeek(todayDate, { weekStartsOn: 1 });
     const dataToWeak = endOfWeek(todayDate, { weekStartsOn: 1 });
@@ -127,6 +125,8 @@ export const SentryAnalytics = () => {
             </Select>
           </div>
 
+          {isPending && <Skeleton className="w-full h-32" />}
+
           {data && !data.data.data.length && (
             <Card>
               <CardHeader className="px-7">
@@ -136,41 +136,43 @@ export const SentryAnalytics = () => {
             </Card>
           )}
 
-          <Card>
-            <CardHeader className="px-7">
-              <CardTitle>Проблемы</CardTitle>
-              <CardDescription>
-                На данной странице представлены самые популярные проблемы
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Ошибка</TableHead>
-                    <TableHead>У скольки пользователей</TableHead>
-                    <TableHead>Сколько данных ошибок</TableHead>
-                    {/*<TableHead>График</TableHead>*/}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data &&
-                    data.data.data.map((bug) => {
-                      return (
-                        <TableRow key={bug.exception} className="bg-accent">
-                          <TableCell>{bug.exception}</TableCell>
-                          <TableCell>{bug.countUsers}</TableCell>
-                          <TableCell>{bug.count}</TableCell>
-                          {/*<TableCell>*/}
-                          {/*  <SentryAnalyticsChart bug={bug} />*/}
-                          {/*</TableCell>*/}
-                        </TableRow>
-                      );
-                    })}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+          {data && data.data.data && data.data.data.length > 0 && (
+            <Card>
+              <CardHeader className="px-7">
+                <CardTitle>Проблемы</CardTitle>
+                <CardDescription>
+                  На данной странице представлены самые популярные проблемы
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Ошибка</TableHead>
+                      <TableHead>У скольки пользователей</TableHead>
+                      <TableHead>Сколько данных ошибок</TableHead>
+                      {/*<TableHead>График</TableHead>*/}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data &&
+                      data.data.data.map((bug) => {
+                        return (
+                          <TableRow key={bug.exception} className="bg-accent">
+                            <TableCell>{bug.exception}</TableCell>
+                            <TableCell>{bug.countUsers}</TableCell>
+                            <TableCell>{bug.count}</TableCell>
+                            {/*<TableCell>*/}
+                            {/*  <SentryAnalyticsChart bug={bug} />*/}
+                            {/*</TableCell>*/}
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
         </Tabs>
       </div>
     </>
