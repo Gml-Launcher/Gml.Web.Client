@@ -13,6 +13,7 @@ import { Switch } from "@/shared/ui/switch";
 import { Input } from "@/shared/ui/input";
 
 import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
+import { TextureProtocol, TextureProtocolOption } from "@/shared/enums/textureProtocol";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -26,6 +27,7 @@ export const EditSettingsPlatformForm = () => {
       storageHost: platform?.storageHost || "",
       storageLogin: platform?.storageLogin || "",
       storagePassword: "",
+      textureProtocol: platform?.textureProtocol || TextureProtocol.Https,
     },
     resolver: zodResolver(EditSettingsPlatformSchema),
   });
@@ -43,33 +45,72 @@ export const EditSettingsPlatformForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-y-8 w-full lg:w-[58rem]">
-          <div className="flex gap-x-8 mb-8">
-            <FormField
-              control={form.control}
-              name="registrationIsEnabled"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <h6 className="text-sm font-bold">
-                      Регистрация новых пользователей (
-                      {watchRegistration ? "Разрешена" : "Запрещена"})
-                    </h6>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                      Позволяет регистрироваться новым пользователям на сайте
-                    </p>
-                  </div>
-                  <FormControl>
-                    <Switch checked={field.value} onCheckedChange={field.onChange} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+        <div className="flex flex-col gap-y-4 w-full lg:w-[58rem]">
+          <div className="flex flex-col gap-y-4 gap-x-8 mb-8">
+            <div>
+              <FormField
+                control={form.control}
+                name="registrationIsEnabled"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <h6 className="text-sm font-bold">
+                        Регистрация новых пользователей (
+                        {watchRegistration ? "Разрешена" : "Запрещена"})
+                      </h6>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Позволяет регистрироваться новым пользователям на сайте
+                      </p>
+                    </div>
+                    <FormControl>
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="">
+              <FormField
+                control={form.control}
+                name="textureProtocol"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                    <div className="space-y-0.5">
+                      <h6 className="text-sm font-bold">Texture Протокол</h6>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Эта настройка для отображения скинов в игре
+                      </p>
+                    </div>
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      defaultValue={String(TextureProtocol.Https)}
+                      value={String(field.value)}
+                    >
+                      <FormControl className="max-w-32">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выберите хранилище" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value={String(TextureProtocol.Http)}>
+                          {TextureProtocolOption.OPTION_0}
+                        </SelectItem>
+                        <SelectItem value={String(TextureProtocol.Https)}>
+                          {TextureProtocolOption.OPTION_1}
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <div className="flex gap-x-8">
             <div className="flex flex-col gap-y-1 w-1/2">
               <h6 className="text-sm font-bold">Хранилище</h6>
-              <p className="text-sm text-gray-700 dark:text-gray-300">Текущее хранилище, где хранится лаунчер</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Текущее хранилище, где хранится лаунчер
+              </p>
             </div>
             <div className="flex flex-col w-1/2">
               <FormField
