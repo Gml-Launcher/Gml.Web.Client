@@ -156,7 +156,7 @@ export const useGetGameVersions = (
   >,
 ): UseQueryResult<TGameVersionsResponse["data"]> => {
   return useQuery({
-    queryKey: profileKeys.gameVersions(body.minecraftVersion),
+    queryKey: [profileKeys.gameVersions(body.minecraftVersion), { gameLoader: body.gameLoader }],
     queryFn: async () => await profileService.getGameVersions(body),
     select: (data) => data.data.data,
     ...options,
