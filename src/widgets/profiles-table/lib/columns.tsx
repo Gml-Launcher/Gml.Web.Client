@@ -11,7 +11,7 @@ import { Edit2Icon, Trash2Icon } from "lucide-react";
 
 import { ClientState } from "@/widgets/client-hub";
 
-import { DataTableColumnHeader } from "@/entities/Table";
+import { DataTableColumnHeader } from "@/entities/table";
 
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";

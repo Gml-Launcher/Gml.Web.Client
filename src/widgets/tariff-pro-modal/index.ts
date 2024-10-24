@@ -1,1 +1,1 @@
-export * from "./ui/TariffProDialog";
+export * from "./ui/tariff-pro-dialog";

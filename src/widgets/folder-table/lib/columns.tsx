@@ -2,7 +2,7 @@ import { createColumnHelper } from "@tanstack/table-core";
 import { ProfileFolderBaseEntity } from "@/shared/api/contracts";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/shared/ui/checkbox";
-import { DataTableColumnHeader } from "@/entities/Table";
+import { DataTableColumnHeader } from "@/entities/table";
 
 enum ColumnHeader {
   PATH = "Путь к папке",

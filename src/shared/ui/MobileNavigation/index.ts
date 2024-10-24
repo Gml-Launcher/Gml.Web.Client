@@ -1,1 +1,1 @@
-export * from "./ui/MobileNavigation";
+export * from "./ui/mobile-navigation";

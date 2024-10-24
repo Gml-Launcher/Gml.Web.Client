@@ -18,9 +18,9 @@ export * from "@/shared/api/contracts/whitelist/schemas";
 export * from "@/shared/api/contracts/whitelist/requests";
 
 // Контракты для игровых серверов
-export * from "@/shared/api/contracts/gameservers/schemas";
-export * from "@/shared/api/contracts/gameservers/requests";
-export * from "@/shared/api/contracts/gameservers/zod";
+export * from "@/shared/api/contracts/game-servers/schemas";
+export * from "@/shared/api/contracts/game-servers/requests";
+export * from "@/shared/api/contracts/game-servers/zod";
 
 // Контракты для уведомлений
 export * from "@/shared/api/contracts/notification/schemas";

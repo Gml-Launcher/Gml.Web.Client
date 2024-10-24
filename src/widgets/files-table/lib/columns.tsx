@@ -2,7 +2,7 @@
 
 import { createColumnHelper } from "@tanstack/table-core";
 
-import { DataTableColumnHeader } from "@/entities/Table";
+import { DataTableColumnHeader } from "@/entities/table";
 import { ProfileFileBaseEntity } from "@/shared/api/contracts";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";

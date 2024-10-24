@@ -6,7 +6,7 @@ import Link from "next/link";
 import { BellIcon } from "lucide-react";
 
 import { useConnectionHub } from "@/widgets/notifications-hub";
-import { ClearNotificationModel } from "@/widgets/clear-notifications";
+import { ClearNotificationsModel } from "@/widgets/clear-notifications";
 
 import { useNotificationsState } from "@/views/notification";
 
@@ -66,7 +66,7 @@ export const Notifications = () => {
             </div>
           </div>
           <div className="absolute top-auto right-4">
-            <ClearNotificationModel description={"Прочитать все"} />
+            <ClearNotificationsModel description={"Прочитать все"} />
           </div>
         </div>
         <DropdownMenuSeparator />

@@ -1,5 +1,5 @@
 import { StorageType } from "@/shared/enums/storages";
-import { TextureProtocol } from "@/shared/enums/textureProtocol";
+import { TextureProtocol } from "@/shared/enums/texture-protocol";
 
 export type SettingsPlatformBaseEntity = {
   registrationIsEnabled: boolean;
