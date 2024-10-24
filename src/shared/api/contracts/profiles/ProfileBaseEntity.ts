@@ -37,12 +37,12 @@ export type ProfileFileBaseEntity = {
   hash: string;
 };
 
-export type ProfileFolderBaseEntity = {
-  path: string;
-};
-
 export type JavaVersionBaseEntity = {
   name: string;
   version: string;
   majorVersion: number;
+};
+
+export type ProfileFolderBaseEntity = {
+  path: string;
 };

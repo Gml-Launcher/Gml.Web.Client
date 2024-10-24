@@ -1,4 +1,4 @@
-import * as React from "react";
+import {forwardRef, HTMLAttributes} from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/shared/lib/utils";
@@ -21,15 +21,15 @@ const alertVariants = cva(
   },
 );
 
-const Alert = React.forwardRef<
+const Alert = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
+  HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
 >(({ className, variant, ...props }, ref) => (
   <div ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
 ));
 Alert.displayName = "Alert";
 
-const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
+const AlertTitle = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
     <h5
       ref={ref}
@@ -40,9 +40,9 @@ const AlertTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<H
 );
 AlertTitle.displayName = "AlertTitle";
 
-const AlertDescription = React.forwardRef<
+const AlertDescription = forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
+  HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("text-sm [&_p]:leading-relaxed", className)} {...props} />
 ));
