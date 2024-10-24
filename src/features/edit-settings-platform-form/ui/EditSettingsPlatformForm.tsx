@@ -15,6 +15,9 @@ import { Input } from "@/shared/ui/input";
 import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
 import { TextureProtocol, TextureProtocolOption } from "@/shared/enums/textureProtocol";
 import { enumValues } from "@/shared/lib/utils";
+import React from "react";
+import { DatabaseIcon, ImagesIcon, ProjectorIcon, SettingsIcon, UsersIcon } from "lucide-react";
+import { Separator } from "@/shared/ui/separator";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -47,7 +50,7 @@ export const EditSettingsPlatformForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-4 w-full lg:w-[58rem]">
-          <div className="flex flex-col gap-y-4 gap-x-8 mb-8">
+          <div className="flex flex-col gap-y-4 gap-x-8">
             <div>
               <FormField
                 control={form.control}
@@ -55,10 +58,13 @@ export const EditSettingsPlatformForm = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
                     <div className="space-y-0.5">
-                      <h6 className="text-sm font-bold">
-                        Регистрация новых пользователей (
-                        {watchRegistration ? "Разрешена" : "Запрещена"})
-                      </h6>
+                      <div className="flex flex-row items-center gap-x-1 mb-2">
+                        <UsersIcon className="mr-2 h-4 w-4" />
+                        <h6 className="text-sm font-bold">
+                          Регистрация новых пользователей (
+                          {watchRegistration ? "Разрешена" : "Запрещена"})
+                        </h6>
+                      </div>
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         Позволяет регистрироваться новым пользователям на сайте
                       </p>
@@ -77,11 +83,15 @@ export const EditSettingsPlatformForm = () => {
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
                     <div className="space-y-0.5">
-                      <h6 className="text-sm font-bold">Тип HTTP для сервиса скинов</h6>
+                      <div className="flex flex-row items-center gap-x-1 mb-2">
+                        <ImagesIcon className="mr-2 h-4 w-4" />
+                        <h6 className="text-sm font-bold">Тип HTTP для сервиса скинов</h6>
+                      </div>
                       <p className="text-sm text-gray-700 dark:text-gray-300">
                         Протокол передачи текстур для Minecraft клиента
                       </p>
                     </div>
+
                     <Select
                       onValueChange={(value) => field.onChange(Number(value))}
                       defaultValue={String(TextureProtocol.Https)}
@@ -109,9 +119,12 @@ export const EditSettingsPlatformForm = () => {
               />
             </div>
           </div>
-          <div className="flex gap-x-8">
+          <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
             <div className="flex flex-col gap-y-1 w-1/2">
-              <h6 className="text-sm font-bold">Хранилище</h6>
+              <div className="flex flex-row items-center gap-x-1 mb-2">
+                <DatabaseIcon className="mr-2 h-4 w-4" />
+                <h6 className="text-sm font-bold">Хранилище</h6>
+              </div>
               <p className="text-sm text-gray-700 dark:text-gray-300">
                 Текущее хранилище, где хранится лаунчер
               </p>

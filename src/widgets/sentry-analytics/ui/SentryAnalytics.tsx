@@ -19,6 +19,7 @@ import { cn, enumValues } from "@/shared/lib/utils";
 import { DatePickerWithRange } from "@/shared/ui/data-range-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Skeleton } from "@/shared/ui/skeleton";
+import { Textarea } from "@/shared/ui/textarea";
 
 export const SentryAnalytics = () => {
   const [date, setDate] = useState<DateRange | undefined>(undefined);
@@ -151,7 +152,11 @@ export const SentryAnalytics = () => {
                       data.data.data.map((bug) => {
                         return (
                           <TableRow key={bug.exception} className="bg-accent">
-                            <TableCell>{bug.exception}</TableCell>
+                            <TableCell>
+                              {bug.exception}
+                              <Separator className="my-4" />
+                              <Textarea value={bug.stackTrace} className="h-24" />
+                            </TableCell>
                             <TableCell>{bug.countUsers}</TableCell>
                             <TableCell>{bug.count}</TableCell>
                             {/*<TableCell>*/}

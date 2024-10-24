@@ -24,6 +24,7 @@ export type BaseSentryError = {
   countUsers: number;
   count: number;
   exception: string;
+  stackTrace: string;
   graphic: Graphic[];
   operationSystems: OperationSystem[];
   bugInfo: SentryBug;
