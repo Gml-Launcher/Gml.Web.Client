@@ -155,8 +155,10 @@ export const useGetGameVersions = (
     UseQueryOptions<AxiosResponse<TGameVersionsResponse>, Error, TGameVersionsResponse["data"]>
   >,
 ): UseQueryResult<TGameVersionsResponse["data"]> => {
+  console.log("@1");
+
   return useQuery({
-    queryKey: profileKeys.gameVersions(body.minecraftVersion),
+    queryKey: [profileKeys.gameVersions(body.minecraftVersion), { gameLoader: body.gameLoader }],
     queryFn: async () => await profileService.getGameVersions(body),
     select: (data) => data.data.data,
     ...options,

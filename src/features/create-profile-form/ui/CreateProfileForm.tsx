@@ -77,11 +77,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
       minecraftVersion: form.watch("version"),
     },
     {
-      enabled:
-        form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.FABRIC.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString(),
+      enabled: form.watch("gameLoader") !== GameLoaderOption.VANILLA.toString(),
     },
   );
 
@@ -193,10 +189,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           />
 
-          {(form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
-            form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString() ||
-            form.watch("gameLoader") === GameLoaderOption.FABRIC.toString() ||
-            form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString()) && (
+          {form.watch("gameLoader") !== GameLoaderOption.VANILLA.toString() && (
             <Controller
               name="loaderVersion"
               render={({ field }) => (
@@ -205,7 +198,11 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                   <FormCombobox
                     name={field.name}
                     value={field.value}
-                    placeholder="Выберите версию загрузчика"
+                    placeholder={
+                      loaderVersion.data?.length
+                        ? "Выберите версию загрузчика"
+                        : "Данная версия игры не поддерживается загрузчиком"
+                    }
                     placeholderInputSearch="Поиск версии загрузчика"
                     options={loaderVersion && loaderVersion.data}
                     description="Данная версия игры не поддерживается загрузчиком"
@@ -222,7 +219,15 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           )}
 
           <div className="flex justify-end">
-            <Button disabled={isPending || !form.formState.isDirty || loaderVersion.isError}>
+            <Button
+              disabled={
+                isPending ||
+                !form.formState.isDirty ||
+                loaderVersion.isError ||
+                versions.isFetching ||
+                loaderVersion.isFetching
+              }
+            >
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Создать
             </Button>
