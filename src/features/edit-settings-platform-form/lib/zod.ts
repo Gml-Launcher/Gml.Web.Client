@@ -6,6 +6,7 @@ export const EditSettingsPlatformSchema = z.object({
   storageHost: z.string(),
   storageLogin: z.string(),
   storagePassword: z.string(),
+  textureProtocol: z.number(),
 });
 
 export type EditSettingsPlatformSchemaType = z.infer<typeof EditSettingsPlatformSchema>;
