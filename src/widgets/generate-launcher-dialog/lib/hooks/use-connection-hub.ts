@@ -79,7 +79,7 @@ export const useConnectionHub = () => {
         console.log("Success stopping connectionHub");
       });
     };
-  }, []);
+  }, [accessToken, connectionHub, toast]);
 
   return {
     connectionHub,

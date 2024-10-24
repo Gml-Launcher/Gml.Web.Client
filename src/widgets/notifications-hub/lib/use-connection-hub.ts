@@ -15,14 +15,14 @@ const CONNECTION_URL = (token: string) =>
 export const useConnectionHub = () => {
   const { addNotification, addCount, setNotifications, setCount } = useNotificationsState();
 
-  const { data, isLoading } = useNotifications();
+  const { data } = useNotifications();
 
   useEffect(() => {
     if (data) {
       setCount(data.amount);
       setNotifications(data.notifications);
     }
-  }, [data]);
+  }, [data, setCount, setNotifications]);
 
   const accessToken = getStorageAccessToken();
 
@@ -67,5 +67,5 @@ export const useConnectionHub = () => {
     return () => {
       connectionHub?.stop().then().catch();
     };
-  }, []);
+  }, [accessToken, addCount, addNotification, connectionHub]);
 };
