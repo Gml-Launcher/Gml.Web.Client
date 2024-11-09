@@ -51,6 +51,7 @@ export default function Page({ children }: React.PropsWithChildren) {
             <Link href="/" className={classes.aside__logo}>
               <Image src={logo} alt="GML Frontend" />
               {config.name}
+              <sup className={classes.version}>{config.version}</sup>
             </Link>
           </div>
           <DesktopNavigation menu={menu} />

@@ -41,3 +41,7 @@
 .header__actions {
     @apply flex items-center gap-x-6 ml-auto;
 }
+
+.version {
+    @apply text-xs text-gray-400
+}
