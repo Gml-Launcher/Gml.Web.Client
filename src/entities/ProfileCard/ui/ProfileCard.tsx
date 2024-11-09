@@ -38,7 +38,7 @@ interface ProfileCardParams {
 }
 
 export const ProfileCard = ({ profile }: ProfileCardParams) => {
-  const { theme } = useTheme();
+  const { resolvedTheme: theme } = useTheme();
 
   const { mutateAsync, isPending } = useEditProfile();
 

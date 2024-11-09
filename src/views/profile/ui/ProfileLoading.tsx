@@ -28,10 +28,10 @@ export const ProfileLoading = () => {
 
       <div className={classes.tabs}>
         <div className={classes.tabs__list}>
-          <Skeleton className="w-[178px] h-[168px]" />
+          <Skeleton className="w-[178px] h-[208px]" />
         </div>
         <div className={classes.tabs__content}>
-          <Skeleton className="h-[600px]" />
+          <Skeleton className="h-[400px]" />
         </div>
       </div>
     </>
