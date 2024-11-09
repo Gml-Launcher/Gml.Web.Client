@@ -37,6 +37,7 @@ export const MobileNavigation = ({ menu }: MobileNavigationParams) => {
           <Link href="/" className={classes.sheet__logo}>
             <Image src={logo} alt="GML Frontend" />
             {config.name}
+            <sup className={classes.version}>{config.version}</sup>
           </Link>
           {menu.map(({ icon, path, text }) => (
             <Link
