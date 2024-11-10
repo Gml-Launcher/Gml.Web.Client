@@ -1,9 +1,7 @@
 "use client";
 
 import React, { ReactElement, useEffect } from "react";
-
 import Image from "next/image";
-
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -22,7 +20,6 @@ import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
 import { FormCombobox } from "@/shared/ui/FormCombobox";
-
 import loaderMinecraft from "@/assets/logos/minecraft.png";
 import loaderForge from "@/assets/logos/forge.png";
 import loaderFabric from "@/assets/logos/fabric.png";

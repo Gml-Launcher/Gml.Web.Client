@@ -2,11 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { config } from "@/core/configs";
-
 import { cn } from "@/shared/lib/utils";
 import { AUTH_PAGES } from "@/shared/routes";
 import { buttonVariants } from "@/shared/ui/button";
-
 import logo from "@/assets/logos/logo.svg";
 
 export default function Home() {

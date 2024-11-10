@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 
 import { $api } from "@/core/api";
-
 import {
   TDeleteNotificationResponse,
   TGetNotificationRequest,

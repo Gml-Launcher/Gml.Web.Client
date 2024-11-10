@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-
 import { Ubuntu_Mono } from "next/font/google";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ChevronsUpDown } from "lucide-react";
+
+import { useConnectionHub } from "../lib/useConnectionHub";
 
 import {
   JavaVersionBaseEntity,
@@ -29,7 +30,6 @@ import { Separator } from "@/shared/ui/separator";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { useGetJavaVersions } from "@/shared/hooks";
 
-import { useConnectionHub } from "../lib/useConnectionHub";
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;

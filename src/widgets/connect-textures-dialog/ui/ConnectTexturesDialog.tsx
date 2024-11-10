@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-
 import { WallpaperIcon } from "lucide-react";
 
 import { ConnectTexturesForm } from "@/features/connect-textures-form";
-
 import {
   Dialog,
   DialogContent,

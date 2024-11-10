@@ -1,7 +1,8 @@
 import React from "react";
-
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { ClientUpdateFormSchemaType, ClientUpdateSchema } from "../lib/static";
 
 import { Icons } from "@/shared/ui/icons";
 import { useLauncherBuildVersions, useLauncherUpload } from "@/shared/hooks";
@@ -12,7 +13,6 @@ import { Textarea } from "@/shared/ui/textarea";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 
-import { ClientUpdateFormSchemaType, ClientUpdateSchema } from "../lib/static";
 
 interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: () => void;

@@ -1,11 +1,11 @@
 "use client";
 
 import { createColumnHelper } from "@tanstack/table-core";
+import { ColumnDef } from "@tanstack/react-table";
 
 import { DataTableColumnHeader } from "@/entities/Table";
 import { ProfileFileBaseEntity } from "@/shared/api/contracts";
 import { Checkbox } from "@/shared/ui/checkbox";
-import { ColumnDef } from "@tanstack/react-table";
 
 enum ColumnHeader {
   NAME = "Название",

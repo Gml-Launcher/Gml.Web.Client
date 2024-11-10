@@ -1,23 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-
 import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon } from "lucide-react";
 
-import { config } from "@/core/configs";
+import classes from "./styles.module.css";
 
+import { config } from "@/core/configs";
 import { ChangeTheme } from "@/features/change-theme";
 import { Notifications } from "@/features/notifications";
-
 import { DesktopNavigation } from "@/shared/ui/DesktopNavigation";
 import { MobileNavigation } from "@/shared/ui/MobileNavigation";
 import { AccountNavigation } from "@/shared/ui/AccountNavigation";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { DonationPro } from "@/shared/ui/DonationPro";
 import { TMenuItem } from "@/shared/types";
-
 import logo from "@/assets/logos/logo.svg";
 
-import classes from "./styles.module.css";
 
 const menu: TMenuItem[] = [
   {

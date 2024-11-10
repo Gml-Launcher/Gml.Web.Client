@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { InfoIcon, Trash2Icon } from "lucide-react";
 

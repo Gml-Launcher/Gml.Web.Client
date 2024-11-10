@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { KeyRound } from "lucide-react";
 
 import { AuthenticationFormUndefined } from "@/features/authentication-undefined-form";
@@ -11,7 +10,6 @@ import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-for
 import { AuthenticationFormEasycabinet } from "@/features/authentication-easycabinet-form";
 import { AuthenticationFormUniCoreCMS } from "@/features/authentication-unicorecms-form";
 import { AuthenticationFormCustom } from "@/features/authentication-custom-form";
-
 import {
   Dialog,
   DialogContent,

@@ -1,7 +1,7 @@
 import {forwardRef, InputHTMLAttributes} from "react";
+import { UploadCloud } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
-import { UploadCloud } from "lucide-react";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }

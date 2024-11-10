@@ -1,6 +1,5 @@
 import { CreateProfileDialog } from "@/widgets/create-profile-dialog";
 import { ProfilesTable } from "@/widgets/profiles-table";
-
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 

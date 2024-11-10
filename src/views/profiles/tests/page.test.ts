@@ -1,4 +1,5 @@
 import { test } from "@playwright/test";
+
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import {
   inspect_request,

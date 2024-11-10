@@ -1,10 +1,11 @@
 import { DateRange } from "react-day-picker";
 import { Dispatch, SetStateAction } from "react";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+
 import { cn } from "@/shared/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { Button } from "@/shared/ui/button";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
 import { Calendar } from "@/shared/ui/calendar";
 
 type DatePickerWithRangeProps = React.HTMLAttributes<HTMLDivElement> & {

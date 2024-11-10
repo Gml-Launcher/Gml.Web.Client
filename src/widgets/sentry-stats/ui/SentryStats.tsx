@@ -1,9 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useState } from "react";
+import { BarChart2, Bug } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { BarChart2, Bug } from "lucide-react";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { BaseSentryStats, BaseSentrySummary } from "@/shared/api/contracts/sentry/schemas";
 
 const chartConfig = {

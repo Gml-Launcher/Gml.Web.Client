@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getStorageAccessToken } from "@/shared/services";

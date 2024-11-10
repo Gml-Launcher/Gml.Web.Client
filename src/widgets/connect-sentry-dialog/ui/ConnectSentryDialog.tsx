@@ -1,6 +1,7 @@
 "use client";
 
 import { PencilIcon, PlugIcon } from "lucide-react";
+import { useState } from "react";
 
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
 import { useSentry } from "@/shared/hooks";
 import { Button } from "@/shared/ui/button";
 import { ConnectSentryForm } from "@/features/connect-sentry-form";
-import { useState } from "react";
 
 export function ConnectSentryDialog() {
   const [open, setOpen] = useState(false);

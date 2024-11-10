@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-
 import { PencilIcon, PlugIcon } from "lucide-react";
 
 import { ConnectDiscordForm } from "@/features/connect-discord-form";
-
 import {
   Dialog,
   DialogContent,

@@ -1,7 +1,6 @@
 import React from "react";
 
 import { EditSettingsPlatformForm } from "@/features/edit-settings-platform-form";
-
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { DASHBOARD_PAGES } from "@/shared/routes";

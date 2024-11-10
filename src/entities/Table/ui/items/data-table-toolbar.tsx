@@ -1,8 +1,8 @@
 "use client";
 
 import { RowSelectionState } from "@tanstack/react-table";
-
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+
 import { Button } from "@/shared/ui/button";
 
 interface DataTableToolbarProps<TData> {

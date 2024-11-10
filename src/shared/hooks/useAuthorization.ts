@@ -1,7 +1,5 @@
 import { useRouter } from "next/navigation";
-
 import { useMutation } from "@tanstack/react-query";
-
 import { isAxiosError } from "axios";
 
 import { TPostSignInRequest, TPostSignUpRequest } from "@/shared/api/contracts";

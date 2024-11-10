@@ -3,10 +3,11 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
+import classes from "./styles.module.css";
+
 import { cn } from "@/shared/lib/utils";
 import { TMenuItem } from "@/shared/types";
 
-import classes from "./styles.module.css";
 
 interface DesktopNavigationParams {
   menu: TMenuItem[];

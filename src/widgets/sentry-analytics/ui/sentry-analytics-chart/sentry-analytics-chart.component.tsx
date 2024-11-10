@@ -1,10 +1,11 @@
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis } from "recharts";
 
+import { chartConfig } from "./sentry-analytics-chart.config";
+import { getChartData } from "./sentry-analytics-chart.utils";
+
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 import { BaseSentryError } from "@/shared/api/contracts/sentry/schemas";
 
-import { chartConfig } from "./sentry-analytics-chart.config";
-import { getChartData } from "./sentry-analytics-chart.utils";
 
 interface SentryAnalyticsChartProps {
   bug: BaseSentryError;

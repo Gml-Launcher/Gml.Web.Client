@@ -1,10 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Separator } from "@/shared/ui/separator";
-import { useSentryFilterErrorsList } from "@/shared/hooks";
 import React, { useEffect, useState } from "react";
-import { AnalyticsInterval, ProjectTypeEnum, ProjectTypeOption } from "@/shared/enums";
 import {
   endOfMonth,
   endOfWeek,
@@ -15,6 +9,13 @@ import {
   startOfYear,
 } from "date-fns";
 import { DateRange } from "react-day-picker";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Separator } from "@/shared/ui/separator";
+import { useSentryFilterErrorsList } from "@/shared/hooks";
+import { AnalyticsInterval, ProjectTypeEnum, ProjectTypeOption } from "@/shared/enums";
 import { cn, enumValues } from "@/shared/lib/utils";
 import { DatePickerWithRange } from "@/shared/ui/data-range-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";

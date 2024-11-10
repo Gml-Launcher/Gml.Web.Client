@@ -2,6 +2,10 @@
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { DatabaseIcon, ImagesIcon, UsersIcon } from "lucide-react";
+
+import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
 
 import { StorageType, StorageTypeOption } from "@/shared/enums";
 import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks";
@@ -11,12 +15,8 @@ import { Button } from "@/shared/ui/button";
 import { Icons } from "@/shared/ui/icons";
 import { Switch } from "@/shared/ui/switch";
 import { Input } from "@/shared/ui/input";
-
-import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
 import { TextureProtocol, TextureProtocolOption } from "@/shared/enums/textureProtocol";
 import { enumValues } from "@/shared/lib/utils";
-import React from "react";
-import { DatabaseIcon, ImagesIcon, UsersIcon } from "lucide-react";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();

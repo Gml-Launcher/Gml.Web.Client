@@ -1,16 +1,15 @@
 import Image from "next/image";
-
 import { useTheme } from "next-themes";
 import { Edit2Icon } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ClientState } from "@/widgets/client-hub";
+import classes from "./styles.module.css";
 
+import { ClientState } from "@/widgets/client-hub";
 import { InputFile } from "@/shared/ui/input";
 import { Form, FormMessage } from "@/shared/ui/form";
 import { useEditProfile } from "@/shared/hooks";
-
 import {
   EditImageProfileSchema,
   EditImageProfileSchemaType,
@@ -27,10 +26,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/dialog";
-
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
-
-import classes from "./styles.module.css";
 import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
 interface ProfileCardParams {
