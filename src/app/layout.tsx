@@ -4,8 +4,7 @@ import { Manrope } from "next/font/google";
 import { config } from "@/core/configs";
 import { QueryProvider, ThemeProvider, TooltipProvider } from "@/core/providers";
 import { cn } from "@/shared/lib/utils";
-import { Toaster } from "@/shared/ui/toaster";
-import { Toaster as Sonner } from "@/shared/ui/sonner";
+import { Toaster } from "@/shared/ui/sonner";
 
 import "./globals.css";
 
@@ -36,8 +35,7 @@ export default function RootLayout({
           >
             <TooltipProvider>{children}</TooltipProvider>
           </ThemeProvider>
-          <Toaster />
-          <Sonner position="top-right" />
+          <Toaster position="top-right" />
         </QueryProvider>
       </body>
     </html>

@@ -1,4 +1,4 @@
-import { NotificationStatus } from "@/shared/enums/notificationType";
+import { NotificationStatus } from "@/shared/enums";
 
 export type NotificationBaseEntity = {
   message: string;

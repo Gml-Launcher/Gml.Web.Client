@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import {
   TGetActiveAuthIntegrationsResponse,
@@ -9,9 +10,9 @@ import {
   TPutSentryConnectRequest,
 } from "@/shared/api/contracts";
 import { integrationService } from "@/shared/services/IntegrationService";
-import { useToast } from "@/shared/ui/use-toast";
 import { TexturesServiceType } from "@/shared/enums";
 import { isAxiosError } from "@/shared/lib/utils";
+import { getEntries } from "@/shared/lib/helpers";
 
 export const integrationsKeys = {
   all: ["integrations"] as const,
@@ -22,6 +23,7 @@ export const integrationsKeys = {
   launcherGithubVersions: () => [...integrationsKeys.all, "github-versions"] as const,
   launcherBuildVersions: () => [...integrationsKeys.all, "build-versions"] as const,
   launcherUpload: () => [...integrationsKeys.all, "launcher-upload"] as const,
+  launcherActualVersion: () => [...integrationsKeys.all, "launcher-actual-version"] as const,
   launcherPlatforms: () => [...integrationsKeys.all, "launcher-platforms"] as const,
 
   sentry: () => [...integrationsKeys.all, "sentry"] as const,
@@ -63,7 +65,6 @@ export const useActiveAuthIntegrations = () => {
 };
 
 export const useEditIntegration = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -72,8 +73,7 @@ export const useEditIntegration = () => {
       integrationService.putAuthIntegrations(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: integrationsKeys.auth() });
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
@@ -108,14 +108,11 @@ export const useLauncherBuildVersions = () => {
 };
 
 export const useLauncherUpload = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationKey: integrationsKeys.launcherUpload(),
     mutationFn: (data: TPostLauncherUploadRequest) => integrationService.postLauncherUpload(data),
     onSuccess: async (data) => {
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
@@ -134,14 +131,11 @@ export const useSentry = () => {
 };
 
 export const useEditSentry = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationKey: integrationsKeys.sentryEditing(),
     mutationFn: (data: TPutSentryConnectRequest) => integrationService.putSentryConnect(data),
     onSuccess: async (data) => {
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
@@ -160,7 +154,6 @@ export const useConnectTextures = (type: TexturesServiceType) => {
 };
 
 export const useEditConnectTextures = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -175,8 +168,7 @@ export const useEditConnectTextures = () => {
         await queryClient.invalidateQueries({
           queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_CLOAKS),
         });
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
@@ -195,19 +187,24 @@ export const useDiscord = () => {
 };
 
 export const useEditDiscord = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationKey: integrationsKeys.discordEditing(),
     mutationFn: (data: TPutConnectDiscordRequest) => integrationService.putConnectDiscord(data),
     onSuccess: async (data) => {
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
     onError: (error) => {
       isAxiosError({ toast, error });
     },
+  });
+};
+
+export const useLauncherActualVersion = () => {
+  return useQuery({
+    queryKey: integrationsKeys.launcherActualVersion(),
+    queryFn: () => integrationService.getLauncherActualVersion(),
+    select: (data) => getEntries(data.data.data),
   });
 };

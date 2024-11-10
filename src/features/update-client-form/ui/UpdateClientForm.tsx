@@ -5,14 +5,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ClientUpdateFormSchemaType, ClientUpdateSchema } from "../lib/static";
 
 import { Icons } from "@/shared/ui/icons";
-import { useLauncherBuildVersions, useLauncherUpload } from "@/shared/hooks";
+import {
+  useLauncherActualVersion,
+  useLauncherBuildVersions,
+  useLauncherUpload,
+} from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shared/ui/form";
 import { Textarea } from "@/shared/ui/textarea";
 import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-
 
 interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: () => void;
@@ -20,6 +30,7 @@ interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateClientFormProps) {
   const { data: versions } = useLauncherBuildVersions();
+  const { data: actualVersion } = useLauncherActualVersion();
 
   const { mutateAsync, isPending } = useLauncherUpload();
 
@@ -78,11 +89,18 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите версию обновления</FormLabel>
                 <FormControl>
-                  <Input placeholder="1.0.0" {...field} />
+                  <Input placeholder="1.0.0.0" {...field} />
                 </FormControl>
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
+                <FormDescription className="flex flex-col gap-1">
+                  {actualVersion?.map(([title, kek]) => (
+                    <span key={title}>
+                      Актуальная версия для {title}: {kek.version}
+                    </span>
+                  ))}
+                </FormDescription>
               </FormItem>
             )}
           />

@@ -1,18 +1,16 @@
 import { isAxiosError as isAxiosErrorBase } from "axios";
-
-import { useToast } from "@/shared/ui/use-toast";
+import { toast } from "sonner";
 
 interface isAxiosErrorParams {
-  toast: ReturnType<typeof useToast>["toast"];
+  toast: typeof toast;
   error: Error;
+  customDescription?: string;
 }
 
-export const isAxiosError = ({ toast, error }: isAxiosErrorParams) => {
+export const isAxiosError = ({ toast, error, customDescription }: isAxiosErrorParams) => {
   if (isAxiosErrorBase(error)) {
-    toast({
-      variant: "destructive",
-      title: (error.response && error.response.data.message) || "Ошибка!",
-      description: error.response && error.response.data.errors[0],
+    toast.error((error.response && error.response.data.message) || "Ошибка", {
+      description: (error.response && error.response.data.errors[0]) || customDescription,
     });
   }
 };
