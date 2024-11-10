@@ -6,5 +6,5 @@ export * from "./notification-type";
 export * from "./project-type";
 export * from "./storages";
 export * from "./systems";
-export * from "./texture-protocol";
+export * from "./protocol";
 export * from "./textures";
