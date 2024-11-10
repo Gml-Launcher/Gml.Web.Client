@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-
 import { SubmitHandler, useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { integrationSchema, SentryFormSchemaType } from "../lib/static";
 
 import { useEditSentry, useSentry } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
@@ -12,7 +12,6 @@ import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
-import { integrationSchema, SentryFormSchemaType } from "../lib/static";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;

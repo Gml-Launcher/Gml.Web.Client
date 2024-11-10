@@ -1,9 +1,7 @@
 "use client";
 
 import { ClearNotificationModel } from "@/widgets/clear-notifications";
-
 import { NotificationCard } from "@/entities/NotificationCard";
-
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { NotificationStatus } from "@/shared/enums";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";

@@ -2,11 +2,12 @@
 
 import React from "react";
 
+import classes from "./styles.module.css";
+
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 
-import classes from "./styles.module.css";
 
 export const ProfileLoading = () => {
   return (

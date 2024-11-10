@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-
 import { RowSelectionState } from "@tanstack/react-table";
+
+import { useColumns } from "../lib/columns";
+
+import { ProfilesTableSkeleton } from "./ProfilesTableSkeleton";
 
 import { DataTable, DataTableToolbar } from "@/entities/Table";
 import {
@@ -26,10 +29,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/sha
 import { Label } from "@/shared/ui/label";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/shared/ui/sheet";
 import { Switch } from "@/shared/ui/switch";
-
-import { useColumns } from "../lib/columns";
-
-import { ProfilesTableSkeleton } from "./ProfilesTableSkeleton";
 import { Icons } from "@/shared/ui/icons";
 
 export function ProfilesTable() {

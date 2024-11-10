@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 import { $api } from "@/core/api";
 import {
   TGetSettingsPlatformRequest,
@@ -5,7 +7,6 @@ import {
   TPutSettingsPlatformRequest,
   TPutSettingsPlatformResponse,
 } from "@/shared/api/contracts";
-import { AxiosResponse } from "axios";
 
 class SettingsService {
   private BASE_URL_PLATFORM = "/settings/platform";

@@ -1,4 +1,5 @@
 import classes from "./styles.module.css";
+
 import { Skeleton } from "@/shared/ui/skeleton";
 
 export const GameServersSkeleton = () => {

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import { useEditIntegration } from "@/shared/hooks";

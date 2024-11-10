@@ -1,5 +1,4 @@
 import { Table } from "@tanstack/react-table";
-
 import {
   ChevronLeftIcon,
   ChevronRightIcon,

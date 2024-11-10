@@ -1,3 +1,6 @@
+import React from "react";
+import { UseFormSetValue } from "react-hook-form";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { FormControl } from "@/shared/ui/form";
 import { Button } from "@/shared/ui/button";
@@ -10,8 +13,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
-import React from "react";
-import { UseFormSetValue } from "react-hook-form";
 
 type FormComboboxParams = {
   value: string;

@@ -1,10 +1,10 @@
 import { SubmitHandler } from "react-hook-form";
 
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
+import { ClientDownloadFormSchemaType } from "../static";
 
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 import { toast } from "@/shared/ui/use-toast";
 
-import { ClientDownloadFormSchemaType } from "../static";
 
 interface UseOnSubmitParams {
   connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];

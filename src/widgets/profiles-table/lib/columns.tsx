@@ -1,18 +1,14 @@
 "use client";
 
 import React from "react";
-
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 import { useQueryClient } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/table-core";
 import { Edit2Icon, Trash2Icon } from "lucide-react";
 
 import { ClientState } from "@/widgets/client-hub";
-
 import { DataTableColumnHeader } from "@/entities/Table";
-
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { ProfileBaseEntity } from "@/shared/api/contracts";
@@ -20,7 +16,6 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { Icons } from "@/shared/ui/icons";
 import { getFormatDate } from "@/shared/lib/utils";
 import { profileKeys } from "@/shared/hooks";
-
 import defaultProfileIcon from "@/assets/logos/minecraft.png";
 
 enum ColumnHeader {

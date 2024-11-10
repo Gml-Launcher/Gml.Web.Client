@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-
 import { Hammer } from "lucide-react";
+
+import { useConnectionHub } from "../lib/hooks/useConnectionHub";
 
 import { DownloadClientForm } from "@/features/download-client-form";
 import { BuildClientForm } from "@/features/build-client-form";
 import { UpdateClientForm } from "@/features/update-client-form";
-
 import {
   Dialog,
   DialogContent,
@@ -18,7 +18,6 @@ import {
 import { Button } from "@/shared/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
-import { useConnectionHub } from "../lib/hooks/useConnectionHub";
 
 export function GenerateLauncherDialog() {
   const [open, setOpen] = useState(false);

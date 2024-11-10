@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { CheckIcon, Copy, LinkIcon, StarIcon } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -8,9 +11,7 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
-import Link from "next/link";
 import { HREF_DISCORD } from "@/shared/constants";
-import { CheckIcon, Copy, LinkIcon, StarIcon } from "lucide-react";
 import { Separator } from "@/shared/ui/separator";
 import {
   Card,

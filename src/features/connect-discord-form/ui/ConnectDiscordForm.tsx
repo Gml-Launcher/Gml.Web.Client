@@ -1,9 +1,9 @@
 import React from "react";
-
 import Image from "next/image";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { DiscordFormSchemaType, integrationSchema } from "../lib/static";
 
 import { useDiscord, useEditDiscord } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
@@ -20,10 +20,8 @@ import {
 import { Card, CardContent, CardDescription, CardHeader } from "@/shared/ui/card";
 import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
-
 import discordHint from "@/assets/logos/discord.webp";
 
-import { DiscordFormSchemaType, integrationSchema } from "../lib/static";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;

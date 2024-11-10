@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 import { $api } from "@/core/api";
 import {
   TDeleteWhitelistFileRequest,
@@ -9,7 +11,6 @@ import {
   TPostWhitelistFolderRequest,
   TPostWhitelistFolderResponse,
 } from "@/shared/api/contracts";
-import { AxiosResponse } from "axios";
 
 class WhitelistService {
   private BASE_URL_FILE = "/file/whitelist";

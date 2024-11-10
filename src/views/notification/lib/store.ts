@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import { NotificationBaseEntity } from "@/shared/api/contracts";
 
 interface Notifications {

@@ -1,15 +1,12 @@
 "use client";
 
 import React from "react";
-
 import Link from "next/link";
 import { BellIcon } from "lucide-react";
 
 import { useConnectionHub } from "@/widgets/notifications-hub";
 import { ClearNotificationModel } from "@/widgets/clear-notifications";
-
 import { useNotificationsState } from "@/views/notification";
-
 import {
   DropdownMenu,
   DropdownMenuContent,

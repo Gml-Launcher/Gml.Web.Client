@@ -1,17 +1,13 @@
 import React from "react";
-
 import Image from "next/image";
 
 import { ClientState } from "@/widgets/client-hub";
-
 import { DeleteGameServerDialog } from "@/features/delete-game-server";
-
 import { GameServerBaseEntity } from "@/shared/api/contracts";
 import { Card } from "@/shared/ui/card";
 import { Progress } from "@/shared/ui/progress";
 import { getProgressColor } from "@/shared/lib/utils";
 import { EntityState } from "@/shared/enums";
-
 import minecraftLogo from "@/assets/logos/minecraft.png";
 
 interface GameServerCardParams {

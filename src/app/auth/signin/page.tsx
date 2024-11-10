@@ -1,13 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import classes from "./styles.module.css";
+
 import { SignInForm } from "@/features/auth-credentials-form";
-
 import { AUTH_PAGES } from "@/shared/routes";
-
 import logo from "@/assets/logos/logo.svg";
 
-import classes from "./styles.module.css";
 
 export default function Page() {
   return (

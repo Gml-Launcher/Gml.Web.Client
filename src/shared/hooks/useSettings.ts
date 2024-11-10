@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-
 import { isAxiosError } from "axios";
 
 import { TPutSettingsPlatformRequest } from "@/shared/api/contracts";

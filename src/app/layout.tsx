@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
-
 import { Manrope } from "next/font/google";
 
 import { config } from "@/core/configs";
 import { QueryProvider, ThemeProvider, TooltipProvider } from "@/core/providers";
-
 import { cn } from "@/shared/lib/utils";
 import { Toaster } from "@/shared/ui/toaster";
 import { Toaster as Sonner } from "@/shared/ui/sonner";
