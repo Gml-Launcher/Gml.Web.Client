@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
-import { useDeleteGameServer } from "@/shared/hooks/useServers";
+import { useDeleteGameServer } from "@/shared/hooks";
 import { Button } from "@/shared/ui/button";
 
 type DeleteGameServerDialogParams = {

@@ -2,7 +2,7 @@ import { CreateGameServerDialog } from "@/features/create-game-server";
 
 import { GameServerCard } from "@/entities/ServerCard";
 
-import { useGameServers } from "@/shared/hooks/useServers";
+import { useGameServers } from "@/shared/hooks";
 import { ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 
 import { GameServersSkeleton } from "./GameServersSkeleton";

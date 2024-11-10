@@ -13,7 +13,7 @@ import {
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
-import { useCreateGameServer } from "@/shared/hooks/useServers";
+import { useCreateGameServer } from "@/shared/hooks";
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,
