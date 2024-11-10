@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { StorageType, StorageTypeOption } from "@/shared/enums";
-import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks/useSettings";
+import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Button } from "@/shared/ui/button";
@@ -16,8 +16,7 @@ import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../l
 import { TextureProtocol, TextureProtocolOption } from "@/shared/enums/textureProtocol";
 import { enumValues } from "@/shared/lib/utils";
 import React from "react";
-import { DatabaseIcon, ImagesIcon, ProjectorIcon, SettingsIcon, UsersIcon } from "lucide-react";
-import { Separator } from "@/shared/ui/separator";
+import { DatabaseIcon, ImagesIcon, UsersIcon } from "lucide-react";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();

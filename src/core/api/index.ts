@@ -1,4 +1,4 @@
-import axios, { HttpStatusCode } from "axios";
+import axios, { CreateAxiosDefaults, HttpStatusCode } from "axios";
 
 import {
   getStorageAccessToken,
@@ -6,14 +6,12 @@ import {
   removeStorageTokens,
 } from "@/shared/services";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const PREFIX_API = process.env.NEXT_PUBLIC_PREFIX_API;
-const VERSION_API = process.env.NEXT_PUBLIC_VERSION_API;
-
-export const $api = axios.create({
-  baseURL: `${BASE_URL}/${PREFIX_API}/${VERSION_API}`,
+const OPTIONS: CreateAxiosDefaults = {
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   headers: { "Access-Control-Allow-Credentials": "*" },
-});
+};
+
+export const $api = axios.create(OPTIONS);
 
 $api.interceptors.request.use((config) => {
   const accessToken = getStorageAccessToken();
