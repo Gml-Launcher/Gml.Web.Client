@@ -10,7 +10,7 @@ export const enumValues = <T extends Record<string, unknown>>(enumEntity: T) =>
 
 export const emptyArray = (length: number) => Array(length).fill(1);
 
-export const getApiBaseUrl = () => process.env.NEXT_PUBLIC_BASE_URL;
+export const getApiBaseUrl = () => process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const isValidToken = (token: string) => {
   const tokenRegex = /^[a-zA-Z0-9-_]+?\.[a-zA-Z0-9-_]+?\.([a-zA-Z0-9-_]+)?$/;
