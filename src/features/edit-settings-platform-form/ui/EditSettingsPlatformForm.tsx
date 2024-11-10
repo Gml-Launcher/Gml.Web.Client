@@ -32,7 +32,8 @@ export const EditSettingsPlatformForm = () => {
       storageHost: platform?.storageHost || "",
       storageLogin: platform?.storageLogin || "",
       storagePassword: "",
-      textureProtocol: platform?.textureProtocol || Protocol.HTTPS,
+      textureProtocol:
+        platform?.textureProtocol === Protocol.HTTPS ? Protocol.HTTPS : Protocol.HTTP,
     },
     resolver: zodResolver(EditSettingsPlatformSchema),
   });
