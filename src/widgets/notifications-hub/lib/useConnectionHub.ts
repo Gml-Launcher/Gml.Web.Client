@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { toast as sonner } from "sonner";
+import { toast } from "sonner";
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 import { getApiBaseUrl } from "@/shared/lib/utils";
@@ -46,13 +46,13 @@ export const useConnectionHub = () => {
           const { details, message } = notification;
           addCount();
           addNotification(notification);
-          sonner(message, {
+          toast.error(message, {
             description: details && `${details?.substring(0, 50)}...`,
             action: {
               label: "Копировать",
               onClick: async () => {
                 await navigator.clipboard.writeText(details ? details : message);
-                sonner("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });
+                toast("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });
               },
             },
           });

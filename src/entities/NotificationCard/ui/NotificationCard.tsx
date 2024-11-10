@@ -1,5 +1,5 @@
 import { Copy } from "lucide-react";
-import { toast as sonner } from "sonner";
+import { toast } from "sonner";
 
 import { getFormatDate } from "@/shared/lib/utils";
 import { Card } from "@/shared/ui/card";
@@ -27,10 +27,7 @@ export const NotificationCard = ({ card }: ProfileCardParams) => {
         className="w-fit"
         onClick={async () => {
           await navigator.clipboard.writeText(card.details ? card.details : card.message);
-          sonner("Текст успешно скопирован", {
-            duration: 1500,
-            onAutoClose: () => true,
-          });
+          toast.success("Текст успешно скопирован");
         }}
       >
         <Copy className="h-3 w-3 mr-1" />

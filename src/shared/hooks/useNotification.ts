@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast as sonner } from "sonner";
+import { toast } from "sonner";
 
 import { notificationService } from "@/shared/services/NotifiactionService";
 import { serversKeys } from "@/shared/hooks";
 import { useNotificationsState } from "@/views/notification/lib/store";
+import { isAxiosError } from "@/shared/lib/isAxiosError/isAxiosError";
 
 export const notificationsKeys = {
   all: ["notifications"] as const,
@@ -30,12 +31,12 @@ export const useClearNotifications = () => {
       clearNotifications();
       clearCount();
       queryClient.removeQueries({ queryKey: notificationsKeys.all });
-      sonner("Успешно", {
+      toast.success("Успешно", {
         description: `Все уведомления были очищены`,
       });
     },
-    onError: () => {
-      sonner("Ошибка");
+    onError: (error) => {
+      isAxiosError({ toast, error });
     },
   });
 };
