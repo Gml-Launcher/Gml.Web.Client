@@ -4,15 +4,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { DatabaseIcon, ImagesIcon, UsersIcon } from "lucide-react";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
+import { extractProtocol } from "../lib/utils";
 
-import {
-  StorageType,
-  StorageTypeOption,
-  TextureProtocol,
-  TextureProtocolOption,
-} from "@/shared/enums";
+import { Protocol, ProtocolOption, StorageType, StorageTypeOption } from "@/shared/enums";
 import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
@@ -21,6 +18,7 @@ import { Icons } from "@/shared/ui/icons";
 import { Switch } from "@/shared/ui/switch";
 import { Input } from "@/shared/ui/input";
 import { enumValues } from "@/shared/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -34,10 +32,12 @@ export const EditSettingsPlatformForm = () => {
       storageHost: platform?.storageHost || "",
       storageLogin: platform?.storageLogin || "",
       storagePassword: "",
-      textureProtocol: platform?.textureProtocol || TextureProtocol.Https,
+      textureProtocol: platform?.textureProtocol || Protocol.HTTPS,
     },
     resolver: zodResolver(EditSettingsPlatformSchema),
   });
+
+  const currentProtocol = extractProtocol(process.env.NEXT_PUBLIC_BACKEND_URL);
 
   const watchRegistration = form.watch("registrationIsEnabled");
   const watchStorageType = form.watch("storageType");
@@ -54,37 +54,35 @@ export const EditSettingsPlatformForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-4 w-full lg:w-[58rem]">
           <div className="flex flex-col gap-y-4 gap-x-8">
-            <div>
-              <FormField
-                control={form.control}
-                name="registrationIsEnabled"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <div className="flex flex-row items-center gap-x-1 mb-2">
-                        <UsersIcon className="mr-2 h-4 w-4" />
-                        <h6 className="text-sm font-bold">
-                          Регистрация новых пользователей (
-                          {watchRegistration ? "Разрешена" : "Запрещена"})
-                        </h6>
-                      </div>
-                      <p className="text-sm text-gray-700 dark:text-gray-300">
-                        Позволяет регистрироваться новым пользователям на сайте
-                      </p>
+            <FormField
+              control={form.control}
+              name="registrationIsEnabled"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <div className="flex flex-row items-center gap-x-1 mb-2">
+                      <UsersIcon className="mr-2 h-4 w-4" />
+                      <h6 className="text-sm font-bold">
+                        Регистрация новых пользователей (
+                        {watchRegistration ? "Разрешена" : "Запрещена"})
+                      </h6>
                     </div>
-                    <FormControl>
-                      <Switch checked={field.value} onCheckedChange={field.onChange} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      Позволяет регистрироваться новым пользователям на сайте
+                    </p>
+                  </div>
+                  <FormControl>
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-col gap-6 w-full rounded-lg border p-4">
               <FormField
                 control={form.control}
                 name="textureProtocol"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                  <FormItem className="flex flex-row items-center justify-between">
                     <div className="space-y-0.5">
                       <div className="flex flex-row items-center gap-x-1 mb-2">
                         <ImagesIcon className="mr-2 h-4 w-4" />
@@ -97,7 +95,7 @@ export const EditSettingsPlatformForm = () => {
 
                     <Select
                       onValueChange={(value) => field.onChange(Number(value))}
-                      defaultValue={String(TextureProtocol.Https)}
+                      defaultValue={String(Protocol.HTTPS)}
                       value={String(field.value)}
                     >
                       <FormControl className="max-w-32">
@@ -106,13 +104,9 @@ export const EditSettingsPlatformForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {enumValues(TextureProtocol).map(([protocol, value]) => (
+                        {enumValues(Protocol).map(([protocol, value]) => (
                           <SelectItem key={protocol} value={String(value)}>
-                            {
-                              TextureProtocolOption[
-                                `OPTION_${value}` as keyof typeof TextureProtocolOption
-                              ]
-                            }
+                            {ProtocolOption[`OPTION_${value}` as keyof typeof ProtocolOption]}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -120,6 +114,17 @@ export const EditSettingsPlatformForm = () => {
                   </FormItem>
                 )}
               />
+
+              {currentProtocol !== form.watch("textureProtocol") && (
+                <Alert variant="destructive">
+                  <ExclamationTriangleIcon className="h-4 w-4" />
+                  <AlertTitle>Внимание!</AlertTitle>
+                  <AlertDescription>
+                    Протоколы передачи данных текстур и бэкенда <strong>не совпадают</strong>.
+                    Возможны ошибки при загрузке текстур или их полное отсутствие.
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
           </div>
           <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
