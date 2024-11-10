@@ -15,6 +15,16 @@ export type LauncherBuildsBaseEntity = {
   dateTime: string;
 };
 
+export type LauncherActualVersionBaseEntity = Record<
+  string,
+  {
+    version: string;
+    title: string;
+    description: string;
+    guid: string;
+  }
+>;
+
 export type SentryBaseEntity = {
   url: string;
 };

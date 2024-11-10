@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-import { toast, useToast } from "@/shared/ui/use-toast";
 import { gameServerService } from "@/shared/services/GameServerService";
 import {
   TDeleteGameServersRequest,
@@ -29,7 +29,6 @@ export const useGameServers = (profile: TGetGameServersRequest) => {
 };
 
 export const useCreateGameServer = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,8 +38,8 @@ export const useCreateGameServer = () => {
       await queryClient.invalidateQueries({
         queryKey: serversKeys.entities(),
       });
-      toast({
-        title: "Успешно",
+
+      toast.success("Успешно", {
         description: `Сервер "${data.data.name}" успешно добавлен`,
       });
     },
@@ -60,8 +59,8 @@ export const useDeleteGameServer = () => {
       await queryClient.invalidateQueries({
         queryKey: serversKeys.entities(),
       });
-      toast({
-        title: "Успешно",
+
+      toast.success("Успешно", {
         description: "Сервер успешно удален",
       });
     },

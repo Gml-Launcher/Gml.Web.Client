@@ -6,13 +6,14 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
   TGetAuthIntegrationsResponse,
-  TGetLauncherBuildPlatformsResponse,
   TGetConnectDiscordRequest,
   TGetConnectDiscordResponse,
   TGetConnectTexturesRequest,
   TGetConnectTexturesResponse,
-  TGetLauncherGithubVersionsResponse,
+  TGetLauncherActualVersionResponse,
+  TGetLauncherBuildPlatformsResponse,
   TGetLauncherBuildVersionsResponse,
+  TGetLauncherGithubVersionsResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
@@ -70,6 +71,10 @@ class IntegrationService {
 
   async getLauncherBuildVersions(): Promise<AxiosResponse<TGetLauncherBuildVersionsResponse>> {
     return await $api.get<TGetLauncherBuildVersionsResponse>(`${this.BASE_URL_LAUNCHER}/builds`);
+  }
+
+  async getLauncherActualVersion(): Promise<AxiosResponse<TGetLauncherActualVersionResponse>> {
+    return await $api.get<TGetLauncherActualVersionResponse>(this.BASE_URL_LAUNCHER);
   }
 
   async getLauncherBuildPlatforms(): Promise<AxiosResponse<TGetLauncherBuildPlatformsResponse>> {

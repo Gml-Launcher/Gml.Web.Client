@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { sentryService } from "@/shared/services/SentryService";
 import { isAxiosError } from "@/shared/lib/isAxiosError/isAxiosError";
-import { useToast } from "@/shared/ui/use-toast";
 import {
   TPostSentryFilterErrorsListRequest,
   TPostSentryFilterErrorsRequest,
@@ -26,8 +26,6 @@ export const useSentryErrors = () => {
 };
 
 export const useSentryFilterErrorsList = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationKey: sentryKeys.filterErrors(),
     mutationFn: (data: TPostSentryFilterErrorsListRequest) =>
@@ -39,8 +37,6 @@ export const useSentryFilterErrorsList = () => {
 };
 
 export const useSentryFilterErrors = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationKey: sentryKeys.filterErrors(),
     mutationFn: (data: TPostSentryFilterErrorsRequest) => sentryService.getSentryFilterErrors(data),
