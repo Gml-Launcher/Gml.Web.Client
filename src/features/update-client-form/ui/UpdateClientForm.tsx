@@ -78,7 +78,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
               <FormItem className="flex-1">
                 <FormLabel>Введите версию обновления</FormLabel>
                 <FormControl>
-                  <Input placeholder="1.0.0" {...field} />
+                  <Input placeholder="1.0.0.0" {...field} />
                 </FormControl>
                 {form.formState.errors.version && (
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
