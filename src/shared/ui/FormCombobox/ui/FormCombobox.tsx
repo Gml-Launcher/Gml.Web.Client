@@ -1,3 +1,6 @@
+import React from "react";
+import { UseFormSetValue } from "react-hook-form";
+
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
 import { FormControl } from "@/shared/ui/form";
 import { Button } from "@/shared/ui/button";
@@ -10,8 +13,6 @@ import {
   CommandItem,
   CommandList,
 } from "@/shared/ui/command";
-import React from "react";
-import { UseFormSetValue } from "react-hook-form";
 
 type FormComboboxParams = {
   value: string;
@@ -26,7 +27,7 @@ type FormComboboxParams = {
 };
 
 // TODO: Добавить Disabled: boolean
-// TODO: Провести рефакторинг и отказаться от Textera
+// TODO: Провести рефакторинг и отказаться от Textarea
 
 export const FormCombobox = ({
   value,
@@ -39,8 +40,8 @@ export const FormCombobox = ({
   setValue,
   description,
 }: FormComboboxParams) => {
-  if (isLoading) return <Textera text="Загрузка" />;
-  if (isError && description) return <Textera text={description} />;
+  if (isLoading) return <Textarea text="Загрузка" />;
+  if (isError && description) return <Textarea text={description} />;
 
   return (
     <>
@@ -84,7 +85,7 @@ export const FormCombobox = ({
   );
 };
 
-const Textera = ({ text }: { text: string }) => {
+const Textarea = ({ text }: { text: string }) => {
   return (
     <div className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1">
       <span className="text-muted-foreground">{text}</span>

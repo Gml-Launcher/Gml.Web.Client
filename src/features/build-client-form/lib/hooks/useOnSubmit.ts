@@ -1,10 +1,9 @@
 import { SubmitHandler } from "react-hook-form";
-
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
-
-import { toast } from "@/shared/ui/use-toast";
+import { toast } from "sonner";
 
 import { ClientBuildFormSchemaType } from "../static";
+
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
 interface UseOnSubmitBuildParams {
   connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
@@ -20,9 +19,7 @@ export const useOnSubmit = ({ connectionHub, state, version }: UseOnSubmitBuildP
       state.setIsBuilding(() => true);
       connectionHub?.invoke("Compile", version, data.operatingSystem).then(() => {});
     } catch (error: unknown) {
-      toast({
-        variant: "destructive",
-        title: "Ошибка!",
+      toast.error("Ошибка", {
         description: JSON.stringify(error),
       });
     } finally {

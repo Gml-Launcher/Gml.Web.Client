@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 import { $api } from "@/core/api";
 import {
   TDeleteProfileRequest,
@@ -15,7 +17,6 @@ import {
   TPutProfileRequest,
   TPutProfileResponse,
 } from "@/shared/api/contracts";
-import { AxiosResponse } from "axios";
 
 class ProfileService {
   private BASE_URL = "/profiles";

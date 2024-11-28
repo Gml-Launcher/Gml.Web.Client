@@ -2,17 +2,23 @@
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { DatabaseIcon, ImagesIcon, UsersIcon } from "lucide-react";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
-import { StorageType, StorageTypeOption } from "@/shared/enums";
-import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks/useSettings";
+import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
+import { extractProtocol } from "../lib/utils";
+
+import { Protocol, ProtocolOption, StorageType, StorageTypeOption } from "@/shared/enums";
+import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Button } from "@/shared/ui/button";
 import { Icons } from "@/shared/ui/icons";
 import { Switch } from "@/shared/ui/switch";
 import { Input } from "@/shared/ui/input";
-
-import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
+import { enumValues } from "@/shared/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -26,9 +32,13 @@ export const EditSettingsPlatformForm = () => {
       storageHost: platform?.storageHost || "",
       storageLogin: platform?.storageLogin || "",
       storagePassword: "",
+      textureProtocol:
+        platform?.textureProtocol === Protocol.HTTPS ? Protocol.HTTPS : Protocol.HTTP,
     },
     resolver: zodResolver(EditSettingsPlatformSchema),
   });
+
+  const currentProtocol = extractProtocol(process.env.NEXT_PUBLIC_BACKEND_URL);
 
   const watchRegistration = form.watch("registrationIsEnabled");
   const watchStorageType = form.watch("storageType");
@@ -43,18 +53,21 @@ export const EditSettingsPlatformForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-y-8 w-full lg:w-[58rem]">
-          <div className="flex gap-x-8 mb-8">
+        <div className="flex flex-col gap-y-4 w-full lg:w-[58rem]">
+          <div className="flex flex-col gap-y-4 gap-x-8">
             <FormField
               control={form.control}
               name="registrationIsEnabled"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
                   <div className="space-y-0.5">
-                    <h6 className="text-sm font-bold">
-                      Регистрация новых пользователей (
-                      {watchRegistration ? "Разрешена" : "Запрещена"})
-                    </h6>
+                    <div className="flex flex-row items-center gap-x-1 mb-2">
+                      <UsersIcon className="mr-2 h-4 w-4" />
+                      <h6 className="text-sm font-bold">
+                        Регистрация новых пользователей (
+                        {watchRegistration ? "Разрешена" : "Запрещена"})
+                      </h6>
+                    </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                       Позволяет регистрироваться новым пользователям на сайте
                     </p>
@@ -65,11 +78,65 @@ export const EditSettingsPlatformForm = () => {
                 </FormItem>
               )}
             />
+            <div className="flex flex-col gap-6 w-full rounded-lg border p-4">
+              <FormField
+                control={form.control}
+                name="textureProtocol"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between">
+                    <div className="space-y-0.5">
+                      <div className="flex flex-row items-center gap-x-1 mb-2">
+                        <ImagesIcon className="mr-2 h-4 w-4" />
+                        <h6 className="text-sm font-bold">Тип HTTP для сервиса скинов</h6>
+                      </div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                        Протокол передачи текстур для Minecraft клиента
+                      </p>
+                    </div>
+
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      defaultValue={String(Protocol.HTTPS)}
+                      value={String(field.value)}
+                    >
+                      <FormControl className="max-w-32">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выберите хранилище" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {enumValues(Protocol).map(([protocol, value]) => (
+                          <SelectItem key={protocol} value={String(value)}>
+                            {ProtocolOption[`OPTION_${value}` as keyof typeof ProtocolOption]}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+
+              {currentProtocol !== form.watch("textureProtocol") && (
+                <Alert variant="destructive">
+                  <ExclamationTriangleIcon className="h-4 w-4" />
+                  <AlertTitle>Внимание!</AlertTitle>
+                  <AlertDescription>
+                    Протоколы передачи данных текстур и бэкенда <strong>не совпадают</strong>.
+                    Возможны ошибки при загрузке текстур или их полное отсутствие.
+                  </AlertDescription>
+                </Alert>
+              )}
+            </div>
           </div>
-          <div className="flex gap-x-8">
+          <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
             <div className="flex flex-col gap-y-1 w-1/2">
-              <h6 className="text-sm font-bold">Хранилище</h6>
-              <p className="text-sm text-gray-700 dark:text-gray-300">Текущее хранилище, где хранится лаунчер</p>
+              <div className="flex flex-row items-center gap-x-1 mb-2">
+                <DatabaseIcon className="mr-2 h-4 w-4" />
+                <h6 className="text-sm font-bold">Хранилище</h6>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Текущее хранилище, где хранится лаунчер
+              </p>
             </div>
             <div className="flex flex-col w-1/2">
               <FormField

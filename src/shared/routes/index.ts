@@ -13,4 +13,5 @@ export const DASHBOARD_PAGES = {
   INTEGRATIONS: "/dashboard/integrations",
   PROFILES: "/dashboard/profiles",
   PROFILE: "/dashboard/profile",
+  SENTRY: "/dashboard/sentry",
 };

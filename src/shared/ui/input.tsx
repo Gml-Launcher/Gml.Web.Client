@@ -1,11 +1,12 @@
-import * as React from "react";
-
-import { cn } from "@/shared/lib/utils";
+import {forwardRef, InputHTMLAttributes} from "react";
 import { UploadCloud } from "lucide-react";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+import { cn } from "@/shared/lib/utils";
 
-export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+}
+
+export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => (
     <input
       type={type}
@@ -24,7 +25,7 @@ interface InputFileProps extends InputProps {
   fileTypes?: string[];
 }
 
-export const InputFile = React.forwardRef<HTMLInputElement, InputFileProps>(
+export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
   ({ className, id, fileTypes, type = "file", ...props }, ref) => (
     <label
       htmlFor={id}

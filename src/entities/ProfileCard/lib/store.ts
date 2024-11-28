@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import { EntityState, EntityStateOption } from "@/shared/enums";
 
 interface State {

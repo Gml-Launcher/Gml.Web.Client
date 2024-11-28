@@ -1,11 +1,12 @@
+import { LinkIcon } from "lucide-react";
+import Link from "next/link";
+
 import { GenerateLauncherDialog } from "@/widgets/generate-launcher-dialog";
 import { ChooseAuthenticationMethodDialog } from "@/widgets/choose-authentication-method-dialog";
 import { ConnectTexturesDialog } from "@/widgets/connect-textures-dialog";
 import { ConnectSentryDialog } from "@/widgets/connect-sentry-dialog";
 import { ConnectDiscordDialog } from "@/widgets/connect-discord-dialog";
-
 import { IntegrationCard } from "@/entities/IntegrationCard";
-
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import {
@@ -15,10 +16,7 @@ import {
   DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
   DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
 } from "@/shared/constants/data";
-import { LinkIcon } from "lucide-react";
 import { Button } from "@/shared/ui/button";
-
-import Link from "next/link";
 import { HREF_DISCORD } from "@/shared/constants";
 
 export const IntegrationsPage = () => {

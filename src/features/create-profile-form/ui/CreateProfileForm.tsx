@@ -1,9 +1,7 @@
 "use client";
 
 import React, { ReactElement, useEffect } from "react";
-
 import Image from "next/image";
-
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -22,7 +20,6 @@ import { Input } from "@/shared/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
 import { FormCombobox } from "@/shared/ui/FormCombobox";
-
 import loaderMinecraft from "@/assets/logos/minecraft.png";
 import loaderForge from "@/assets/logos/forge.png";
 import loaderFabric from "@/assets/logos/fabric.png";
@@ -77,11 +74,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
       minecraftVersion: form.watch("version"),
     },
     {
-      enabled:
-        form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.FABRIC.toString() ||
-        form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString(),
+      enabled: form.watch("gameLoader") !== GameLoaderOption.VANILLA.toString(),
     },
   );
 
@@ -193,10 +186,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           />
 
-          {(form.watch("gameLoader") === GameLoaderOption.FORGE.toString() ||
-            form.watch("gameLoader") === GameLoaderOption.NEOFORGE.toString() ||
-            form.watch("gameLoader") === GameLoaderOption.FABRIC.toString() ||
-            form.watch("gameLoader") === GameLoaderOption.LITELOADER.toString()) && (
+          {form.watch("gameLoader") !== GameLoaderOption.VANILLA.toString() && (
             <Controller
               name="loaderVersion"
               render={({ field }) => (
@@ -205,7 +195,11 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                   <FormCombobox
                     name={field.name}
                     value={field.value}
-                    placeholder="Выберите версию загрузчика"
+                    placeholder={
+                      loaderVersion.data?.length
+                        ? "Выберите версию загрузчика"
+                        : "Данная версия игры не поддерживается загрузчиком"
+                    }
                     placeholderInputSearch="Поиск версии загрузчика"
                     options={loaderVersion && loaderVersion.data}
                     description="Данная версия игры не поддерживается загрузчиком"
@@ -222,7 +216,15 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           )}
 
           <div className="flex justify-end">
-            <Button disabled={isPending || !form.formState.isDirty || loaderVersion.isError}>
+            <Button
+              disabled={
+                isPending ||
+                !form.formState.isDirty ||
+                loaderVersion.isError ||
+                versions.isFetching ||
+                loaderVersion.isFetching
+              }
+            >
               {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
               Создать
             </Button>

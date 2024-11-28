@@ -1,9 +1,10 @@
 import { Controller, useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
+import { ClientDownloadFormSchemaType, ClientDownloadSchema } from "../lib/static";
+import { useOnSubmit } from "../lib/hooks/useOnSubmit";
 
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 import { useLauncherGithubVersions } from "@/shared/hooks";
 import { cn, getApiBaseUrl } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
@@ -13,8 +14,6 @@ import { Input } from "@/shared/ui/input";
 import { Progress } from "@/shared/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
 
-import { ClientDownloadFormSchemaType, ClientDownloadSchema } from "../lib/static";
-import { useOnSubmit } from "../lib/hooks/useOnSubmit";
 
 interface DownloadClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];

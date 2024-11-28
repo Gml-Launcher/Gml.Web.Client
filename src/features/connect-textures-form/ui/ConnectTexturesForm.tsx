@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { InfoIcon } from "lucide-react";
+
+import { ConnectTexturesFormSchemaType, ConnectTexturesSchema } from "../lib/static";
 
 import { Button } from "@/shared/ui/button";
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
@@ -16,7 +16,6 @@ import { Icons } from "@/shared/ui/icons";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { TextureServiceBaseEntity } from "@/shared/api/contracts";
 
-import { ConnectTexturesFormSchemaType, ConnectTexturesSchema } from "../lib/static";
 
 interface ConnectTexturesFormProps extends React.HTMLAttributes<HTMLDivElement> {
   skins?: TextureServiceBaseEntity;

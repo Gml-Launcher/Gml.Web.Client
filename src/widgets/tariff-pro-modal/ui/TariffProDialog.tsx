@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { CheckIcon, Copy, LinkIcon, StarIcon } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -8,9 +11,7 @@ import {
   DialogTrigger,
 } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
-import Link from "next/link";
-import { HREF_DISCORD } from "@/shared/constants";
-import { CheckIcon, Copy, LinkIcon, StarIcon } from "lucide-react";
+import { HREF_RECLOUD_PRO } from "@/shared/constants";
 import { Separator } from "@/shared/ui/separator";
 import {
   Card,
@@ -105,10 +106,6 @@ export function TariffProDialog() {
                   <CheckIcon className="text-purple-700" size={16} />
                 </li>
                 <li className="flex items-center justify-between">
-                  <span className="text-muted-foreground">• Кастомизация стилей лаунчера</span>
-                  <CheckIcon className="text-purple-700" size={16} />
-                </li>
-                <li className="flex items-center justify-between">
                   <span className="text-muted-foreground">• Помощь в сборке проекта</span>
                   <CheckIcon className="text-purple-700" size={16} />
                 </li>
@@ -146,7 +143,7 @@ export function TariffProDialog() {
           <Link
             target="_blank"
             className="mx-auto inline-flex mt-1 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-purple-600 text-secondary-foreground hover:bg-purple-700 h-10 px-4 py-2 w-fit"
-            href={HREF_DISCORD}
+            href={HREF_RECLOUD_PRO}
           >
             <StarIcon className="mr-2" size={16} />
             Подключить

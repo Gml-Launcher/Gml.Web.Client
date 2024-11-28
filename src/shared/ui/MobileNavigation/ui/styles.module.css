@@ -21,3 +21,7 @@
 .sheet__link-active {
     @apply bg-white text-primary transition-all hover:text-primary
 }
+
+.version {
+    @apply text-xs text-gray-400
+}

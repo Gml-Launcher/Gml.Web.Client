@@ -1,11 +1,13 @@
+import { useEffect, useRef } from "react";
 import { Ubuntu_Mono } from "next/font/google";
-
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
+import { ClientBuildFormSchemaType, ClientBuildSchema } from "../lib/static";
+import { useOnSubmit } from "../lib/hooks/useOnSubmit";
 
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 import { useLauncherGithubVersions, useLauncherPlatforms } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { Icons } from "@/shared/ui/icons";
@@ -23,9 +25,6 @@ import {
   CommandList,
 } from "@/shared/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-
-import { ClientBuildFormSchemaType, ClientBuildSchema } from "../lib/static";
-import { useOnSubmit } from "../lib/hooks/useOnSubmit";
 
 interface BuildClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
@@ -77,6 +76,13 @@ export function BuildClientForm({
     state,
     version: form.getValues("version"),
   });
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  }, [logs]);
 
   return (
     <div className={cn("grid gap-4", className)} {...props}>
@@ -177,6 +183,7 @@ export function BuildClientForm({
       </Form>
       {isBuilding && logs && (
         <Textarea
+          ref={textareaRef}
           value={logs.join("\n")}
           className={cn("h-64 max-h-64 font-sans", ubuntuMono.variable)}
           readOnly

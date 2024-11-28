@@ -1,6 +1,7 @@
 import { createColumnHelper } from "@tanstack/table-core";
-import { ProfileFolderBaseEntity } from "@/shared/api/contracts";
 import { ColumnDef } from "@tanstack/react-table";
+
+import { ProfileFolderBaseEntity } from "@/shared/api/contracts";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { DataTableColumnHeader } from "@/entities/Table";
 

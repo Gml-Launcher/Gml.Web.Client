@@ -1,10 +1,9 @@
 import { SubmitHandler } from "react-hook-form";
-
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
-
-import { toast } from "@/shared/ui/use-toast";
+import { toast } from "sonner";
 
 import { ClientDownloadFormSchemaType } from "../static";
+
+import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
 
 interface UseOnSubmitParams {
   connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
@@ -19,9 +18,7 @@ export const useOnSubmit = ({ connectionHub, state }: UseOnSubmitParams) => {
       state.setIsDownload(() => true);
       connectionHub?.invoke("Download", data.branch, data.host, data.folder).then(() => {});
     } catch (error: unknown) {
-      toast({
-        variant: "destructive",
-        title: "Ошибка!",
+      toast.error("Ошибка", {
         description: JSON.stringify(error),
       });
     } finally {

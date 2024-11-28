@@ -2,6 +2,7 @@ import {
   AuthIntegrationBaseEntity,
   BranchBaseEntity,
   DiscordBaseEntity,
+  LauncherActualVersionBaseEntity,
   LauncherBuildsBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
@@ -37,6 +38,12 @@ export type TGetLauncherBuildPlatformsResponse = ResponseBaseEntity & {
 export type TGetLauncherBuildVersionsRequest = {};
 export type TGetLauncherBuildVersionsResponse = ResponseBaseEntity & {
   data: LauncherBuildsBaseEntity[];
+};
+
+// Получение актуальной версии лаунчера
+export type TGetLauncherActualVersionRequest = {};
+export type TGetLauncherActualVersionResponse = ResponseBaseEntity & {
+  data: LauncherActualVersionBaseEntity;
 };
 
 // Обновление лаунчера

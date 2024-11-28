@@ -1,8 +1,8 @@
 import React from "react";
-
 import { SubmitHandler, useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 
 import { useEditIntegration, useGetActiveAuthIntegrations } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
@@ -12,7 +12,6 @@ import { Icons } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { AuthenticationType } from "@/shared/enums";
 
-import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;

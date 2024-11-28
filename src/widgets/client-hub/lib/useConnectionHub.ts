@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { toast } from "sonner";
 
 import { getStorageAccessToken } from "@/shared/services";
-import { useToast } from "@/shared/ui/use-toast";
 import { JavaVersionBaseEntity, ProfileExtendedBaseEntity } from "@/shared/api/contracts";
 import { getApiBaseUrl } from "@/shared/lib/utils";
 import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
@@ -20,7 +19,6 @@ const CONNECTION_URL = (token: string) =>
 export const useConnectionHub = (props: ConnectionHubProps) => {
   const { profile, isLoading } = props;
 
-  const { toast } = useToast();
   const accessToken = getStorageAccessToken();
 
   const [connectionHub, setConnectionHub] = useState<HubConnection | null>(null);
@@ -90,8 +88,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
 
         connection.on("Message", (msg) => {
           setIsConnected(true);
-          toast({
-            title: "Ошибка!",
+          toast.error("Ошибка", {
             description: msg,
           });
         });
@@ -105,8 +102,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
             setPercentStage(0);
             setPercentAllStages(0);
             setLogs(null);
-            toast({
-              title: "Успешно",
+            toast.success("Успешно", {
               description: `Профиль ${profileName} успешно загружен`,
             });
           }
@@ -121,8 +117,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
             setLogs(null);
           }
 
-          toast({
-            title: "Успешно",
+          toast.success("Успешно", {
             description: `Профиль ${profileName} успешно собран`,
           });
         });
@@ -148,11 +143,10 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         setIsConnected(true);
       })
       .catch((error) => {
-        toast({
-          variant: "destructive",
-          title: "Ошибка!",
+        toast.error("Ошибка", {
           description: JSON.stringify(error),
         });
+
         if (profile) {
           setProfileCardState(profile.state);
         }
@@ -173,11 +167,10 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         setIsConnected(true);
       })
       .catch((error) => {
-        toast({
-          variant: "destructive",
-          title: "Ошибка!",
+        toast.error("Ошибка", {
           description: JSON.stringify(error),
         });
+
         if (profile) {
           setProfileCardState(profile.state);
         }
@@ -198,11 +191,10 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         setIsConnected(true);
       })
       .catch((error) => {
-        toast({
-          variant: "destructive",
-          title: "Ошибка!",
+        toast.error("Ошибка", {
           description: JSON.stringify(error),
         });
+
         if (profile) {
           setProfileCardState(profile.state);
           setProfileCardState(EntityState.ENTITY_STATE_LOADING);

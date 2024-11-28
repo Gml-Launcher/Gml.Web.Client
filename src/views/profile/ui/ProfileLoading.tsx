@@ -2,11 +2,12 @@
 
 import React from "react";
 
+import classes from "./styles.module.css";
+
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { DASHBOARD_PAGES } from "@/shared/routes";
 
-import classes from "./styles.module.css";
 
 export const ProfileLoading = () => {
   return (
@@ -28,10 +29,10 @@ export const ProfileLoading = () => {
 
       <div className={classes.tabs}>
         <div className={classes.tabs__list}>
-          <Skeleton className="w-[178px] h-[168px]" />
+          <Skeleton className="w-[178px] h-[208px]" />
         </div>
         <div className={classes.tabs__content}>
-          <Skeleton className="h-[600px]" />
+          <Skeleton className="h-[400px]" />
         </div>
       </div>
     </>

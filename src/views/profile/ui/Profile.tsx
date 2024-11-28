@@ -1,28 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { RowSelectionState } from "@tanstack/react-table";
 
-import { ProfileLoading } from "@/views/profile";
+import classes from "./styles.module.css";
 
+import { ProfileLoading } from "@/views/profile";
 import { FilesTable } from "@/widgets/files-table";
 import { DownloadClientHub } from "@/widgets/client-hub";
 import { AddingFilesWhitelistDialog } from "@/widgets/adding-files-whitelist-dialog";
 import { AddingFoldersWhitelistDialog } from "@/widgets/adding-folders-whitelist-dialog";
 import { GameServers } from "@/widgets/game-servers";
-
 import { EditProfileForm } from "@/features/edit-profile-form";
-
 import { Section } from "@/entities/Section";
 import { ProfileCard } from "@/entities/ProfileCard";
-
 import { DASHBOARD_PAGES } from "@/shared/routes";
 import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
-import { useProfile } from "@/shared/hooks";
+import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from "@/shared/hooks";
 import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
 import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from "@/shared/api/contracts";
-import { useDeleteFilesWhitelist, useDeleteFolderWhitelist } from "@/shared/hooks/useWhitelist";
 import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
 import { Button } from "@/shared/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
@@ -37,9 +33,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
-
-import classes from "./styles.module.css";
 import { FolderTable } from "@/widgets/folder-table";
+
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();

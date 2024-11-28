@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   Column,
   ColumnFiltersState,
@@ -13,9 +12,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { ProfileFileBaseEntity } from "@/shared/api/contracts";
-
 import { useColumns } from "../lib/columns";
+
+import { ProfileFileBaseEntity } from "@/shared/api/contracts";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
 import { DataTablePagination } from "@/entities/Table/ui/items/data-table-pagination";
 import { Input } from "@/shared/ui/input";

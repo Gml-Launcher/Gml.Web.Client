@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import {
   ProfileBaseEntity,
@@ -13,7 +14,6 @@ import {
   TPutProfileRequest,
 } from "@/shared/api/contracts";
 import { profileService } from "@/shared/services/ProfileService";
-import { useToast } from "@/shared/ui/use-toast";
 import { isAxiosError } from "@/shared/lib/utils";
 import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
 
@@ -40,7 +40,6 @@ export const useProfiles = () => {
 };
 
 export const useProfile = () => {
-  const { toast } = useToast();
   const { setState } = useProfileCardStore();
 
   const queryClient = useQueryClient();
@@ -67,7 +66,6 @@ export const useCurrentProfile = () => {
 };
 
 export const useCreateProfile = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -75,8 +73,7 @@ export const useCreateProfile = () => {
     mutationFn: (data: TPostProfilesRequest) => profileService.createProfile(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: `Профиль "${data.data.name}" успешно создан`,
       });
     },
@@ -87,14 +84,11 @@ export const useCreateProfile = () => {
 };
 
 export const useEditProfile = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationKey: profileKeys.editing(),
     mutationFn: (data: TPutProfileRequest) => profileService.editProfile(data),
     onSuccess: (data) => {
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: `Профиль "${data.data.name}" успешно обновлен`,
       });
     },
@@ -105,7 +99,6 @@ export const useEditProfile = () => {
 };
 
 export const useDeleteProfile = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -116,8 +109,7 @@ export const useDeleteProfile = () => {
       await queryClient.setQueryData(profileKeys.reading(), () => null);
     },
     onSuccess: async (data) => {
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
@@ -128,7 +120,6 @@ export const useDeleteProfile = () => {
 };
 
 export const useDeleteProfiles = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -138,8 +129,7 @@ export const useDeleteProfiles = () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
     onSuccess: async (data) => {
-      toast({
-        title: "Успешно",
+      toast.success("Успешно", {
         description: data.message,
       });
     },
@@ -156,7 +146,7 @@ export const useGetGameVersions = (
   >,
 ): UseQueryResult<TGameVersionsResponse["data"]> => {
   return useQuery({
-    queryKey: profileKeys.gameVersions(body.minecraftVersion),
+    queryKey: [profileKeys.gameVersions(body.minecraftVersion), { gameLoader: body.gameLoader }],
     queryFn: async () => await profileService.getGameVersions(body),
     select: (data) => data.data.data,
     ...options,

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -13,7 +12,7 @@ import {
 import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
-import { useCreateGameServer } from "@/shared/hooks/useServers";
+import { useCreateGameServer } from "@/shared/hooks";
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,

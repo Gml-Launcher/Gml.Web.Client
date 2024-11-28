@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { RowSelectionState } from "@tanstack/react-table";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import {
   Dialog,
@@ -13,10 +15,8 @@ import { Button } from "@/shared/ui/button";
 import { ProfileFileBaseEntity, WhitelistFileBaseEntity } from "@/shared/api/contracts";
 import { FilesTable } from "@/widgets/files-table";
 import { Tabs, TabsContent } from "@/shared/ui/tabs";
-import { RowSelectionState } from "@tanstack/react-table";
-import { useAddingFilesWhitelist } from "@/shared/hooks/useWhitelist";
+import { useAddingFilesWhitelist } from "@/shared/hooks";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { Separator } from "@/shared/ui/separator";
 
