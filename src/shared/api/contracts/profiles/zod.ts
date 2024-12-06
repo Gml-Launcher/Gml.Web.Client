@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-const MAX_FILE_SIZE = 1_000_000;
-const ACCEPTED_IMAGE_TYPES = ["image/png"];
-
 export const CreateProfileSchema = z.object({
   name: z
     .string()
@@ -38,6 +35,7 @@ export const EditProfileSchema = z.object({
   jvmArguments: z.string().optional(),
   gameArguments: z.string().optional(),
   icon: z.any(),
+  isEnabled: z.boolean().default(true).optional(),
   background: z.any(),
 });
 

@@ -87,11 +87,6 @@ export const useEditProfile = () => {
   return useMutation({
     mutationKey: profileKeys.editing(),
     mutationFn: (data: TPutProfileRequest) => profileService.editProfile(data),
-    onSuccess: (data) => {
-      toast.success("Успешно", {
-        description: `Профиль "${data.data.name}" успешно обновлен`,
-      });
-    },
     onError: (error) => {
       isAxiosError({ toast, error });
     },

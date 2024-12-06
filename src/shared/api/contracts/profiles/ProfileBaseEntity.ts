@@ -24,6 +24,7 @@ export type ProfileExtendedBaseEntity = {
   jvmArguments: string;
   gameArguments: string;
   hasUpdate: boolean;
+  isEnabled: boolean;
   state: EntityState;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
