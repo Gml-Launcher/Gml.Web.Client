@@ -1,5 +1,5 @@
-import { UserBaseEntity } from '@/shared/api/contracts';
-import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { PlayerBaseEntity, UserBaseEntity } from "@/shared/api/contracts";
+import { ResponseBaseEntity } from "@/shared/api/schemas";
 
 // Регистрация
 export type TPostSignUpRequest = {
@@ -22,4 +22,14 @@ export type TPostSignInResponse = ResponseBaseEntity & {
   data: UserBaseEntity & {
     accessToken: string;
   };
+};
+
+// Игроки
+export type TGetPlayersRequest = {
+  take: number;
+  offset: number;
+  findName: string;
+};
+export type TGetPlayersResponse = ResponseBaseEntity & {
+  data: PlayerBaseEntity[];
 };

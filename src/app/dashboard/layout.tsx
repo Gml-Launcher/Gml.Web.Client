@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon } from "lucide-react";
+import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon, Users2Icon } from "lucide-react";
 
 import classes from "./styles.module.css";
 
@@ -14,7 +14,6 @@ import { DASHBOARD_PAGES } from "@/shared/routes";
 import { DonationPro } from "@/shared/ui/DonationPro";
 import { TMenuItem } from "@/shared/types";
 import logo from "@/assets/logos/logo.svg";
-
 
 const menu: TMenuItem[] = [
   {
@@ -36,6 +35,11 @@ const menu: TMenuItem[] = [
     icon: <PieChartIcon size={16} />,
     path: DASHBOARD_PAGES.SENTRY,
     text: "Ошибки",
+  },
+  {
+    icon: <Users2Icon size={16} />,
+    path: DASHBOARD_PAGES.PLAYERS,
+    text: "Игроки",
   },
 ];
 
