@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 
 import { $api } from "@/core/api";
 import {
+  TAddPlayerToProfileRequest,
   TDeleteProfileRequest,
   TDeleteProfileResponse,
   TDeleteProfilesRequest,
@@ -17,6 +18,7 @@ import {
   TPutProfileRequest,
   TPutProfileResponse,
 } from "@/shared/api/contracts";
+import { ResponseBaseEntity } from "@/shared/api/schemas";
 
 class ProfileService {
   private BASE_URL = "/profiles";
@@ -65,6 +67,21 @@ class ProfileService {
     const { data } = await $api.delete<TDeleteProfileResponse>(`${this.BASE_URL}/${profileNames}`, {
       params,
     });
+
+    return data;
+  }
+
+  async addPlayer({
+    profileName,
+    ...params
+  }: TAddPlayerToProfileRequest): Promise<ResponseBaseEntity> {
+    debugger;
+    const { data } = await $api.post<ResponseBaseEntity>(
+      `${this.BASE_URL}/${profileName}/players/whitelist/${params.userUuid}`,
+      {
+        params,
+      },
+    );
 
     return data;
   }

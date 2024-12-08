@@ -51,6 +51,12 @@ export type TDeleteProfileRequest = {
   profileName: string;
   removeFiles: boolean;
 };
+
+// Добавление игрока в профиль
+export type TAddPlayerToProfileRequest = {
+  profileName: string;
+  userUuid: string;
+};
 export type TDeleteProfileResponse = ResponseBaseEntity & {};
 
 // Удаление профилей

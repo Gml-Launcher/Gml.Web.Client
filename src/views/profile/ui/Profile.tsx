@@ -58,7 +58,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         OsType: OsTypeEnum.WINDOWS.toString(),
       });
     }
-  }, []);
+  }, [accessToken, account, mutate, params.name]);
 
   if (isPending || !profile) return <ProfileLoading />;
 
@@ -210,7 +210,10 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </Section>
         </TabsContent>
         <TabsContent value="players" className={classes.tabs__content}>
-          <Section title="Игроки" subtitle="Управление игроками">
+          <Section
+            title="Игроки"
+            subtitle="Управление игроками, которые могут заходить в игровой клиент"
+          >
             <GamePlayers profile={profile} />
           </Section>
         </TabsContent>

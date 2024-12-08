@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import {
   ProfileBaseEntity,
+  TAddPlayerToProfileRequest,
   TDeleteProfileRequest,
   TDeleteProfilesRequest,
   TGameVersionsRequest,
@@ -120,6 +121,26 @@ export const useDeleteProfiles = () => {
   return useMutation({
     mutationKey: profileKeys.deletingAll(),
     mutationFn: (body: TDeleteProfilesRequest) => profileService.deleteProfiles(body),
+    onSettled: async () => {
+      await queryClient.invalidateQueries({ queryKey: profileKeys.all });
+    },
+    onSuccess: async (data) => {
+      toast.success("Успешно", {
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useAddProfilePlayers = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: profileKeys.deletingAll(),
+    mutationFn: (body: TAddPlayerToProfileRequest) => profileService.addPlayer(body),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
