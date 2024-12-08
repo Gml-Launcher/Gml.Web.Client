@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RowSelectionState } from "@tanstack/react-table";
 
 import classes from "./styles.module.css";
@@ -34,7 +34,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alert-dialog";
 import { FolderTable } from "@/widgets/folder-table";
-
+import { GamePlayers } from "@/widgets/game-players";
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -118,6 +118,9 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </TabsTrigger>
           <TabsTrigger className="w-full h-10" value="servers">
             Сервера
+          </TabsTrigger>
+          <TabsTrigger className="w-full h-10" value="players">
+            Игроки
           </TabsTrigger>
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>
@@ -204,6 +207,11 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         <TabsContent value="servers" className={classes.tabs__content}>
           <Section title="Сервера" subtitle="Управление серверами">
             <GameServers profile={profile} />
+          </Section>
+        </TabsContent>
+        <TabsContent value="players" className={classes.tabs__content}>
+          <Section title="Игроки" subtitle="Управление игроками">
+            <GamePlayers profile={profile} />
           </Section>
         </TabsContent>
       </Tabs>

@@ -1,4 +1,5 @@
 import { EntityState } from "@/shared/enums";
+import { PlayerBaseEntity } from "@/shared/api/contracts";
 
 export type ProfileBaseEntity = {
   name: string;
@@ -29,6 +30,7 @@ export type ProfileExtendedBaseEntity = {
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
   whiteListFolders: ProfileFolderBaseEntity[];
+  usersWhiteList: PlayerBaseEntity[];
 };
 
 export type ProfileFileBaseEntity = {
