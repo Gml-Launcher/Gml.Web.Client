@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
-import { AUTH_PAGES, DASHBOARD_PAGES } from "@/shared/routes";
-import { isTokenExpired } from "@/shared/lib/utils";
+import { AUTH_PAGES, DASHBOARD_PAGES } from '@/shared/routes';
+import { isTokenExpired } from '@/shared/lib/utils';
 
 const protectedRoutes = [
   DASHBOARD_PAGES.HOME,
@@ -12,7 +12,7 @@ const protectedRoutes = [
   DASHBOARD_PAGES.PROFILES,
   DASHBOARD_PAGES.PROFILE,
 ];
-const publicRoutes = ["/", AUTH_PAGES.HOME, AUTH_PAGES.SIGN_IN, AUTH_PAGES.SIGN_UP];
+const publicRoutes = ['/', AUTH_PAGES.HOME, AUTH_PAGES.SIGN_IN, AUTH_PAGES.SIGN_UP];
 
 export async function middleware(request: NextRequest) {
   const {
@@ -23,10 +23,10 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.includes(pathname);
   const isPublicRoute = publicRoutes.includes(pathname);
 
-  const accessToken = cookies.get("accessToken");
+  const accessToken = cookies.get('accessToken');
 
   if (isProtectedRoute && isTokenExpired(accessToken?.value)) {
-    cookies.delete("accessToken");
+    cookies.delete('accessToken');
     return NextResponse.redirect(new URL(AUTH_PAGES.SIGN_IN, request.nextUrl));
   }
 
@@ -42,5 +42,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 };

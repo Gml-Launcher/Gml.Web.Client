@@ -1,17 +1,17 @@
-import React from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { ClientUpdateFormSchemaType, ClientUpdateSchema } from "../lib/static";
+import { ClientUpdateFormSchemaType, ClientUpdateSchema } from '../lib/static';
 
-import { Icons } from "@/shared/ui/icons";
+import { Icons } from '@/shared/ui/icons';
 import {
   useLauncherActualVersion,
   useLauncherBuildVersions,
   useLauncherUpload,
-} from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
+} from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 import {
   Form,
   FormControl,
@@ -19,10 +19,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/ui/form";
-import { Textarea } from "@/shared/ui/textarea";
-import { Input } from "@/shared/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
+} from '@/shared/ui/form';
+import { Textarea } from '@/shared/ui/textarea';
+import { Input } from '@/shared/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 interface UpdateClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: () => void;
@@ -35,7 +35,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
   const { mutateAsync, isPending } = useLauncherUpload();
 
   const form = useForm<ClientUpdateFormSchemaType>({
-    values: { version: "", title: "", description: "", launcherBuild: "" },
+    values: { version: '', title: '', description: '', launcherBuild: '' },
     resolver: zodResolver(ClientUpdateSchema),
   });
 
@@ -43,15 +43,15 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
     data: ClientUpdateFormSchemaType,
   ) => {
     const formCreate = new FormData();
-    formCreate.append("version", data.version);
-    formCreate.append("title", data.title);
-    formCreate.append("description", data.description);
-    formCreate.append("launcherBuild", data.launcherBuild);
+    formCreate.append('version', data.version);
+    formCreate.append('title', data.title);
+    formCreate.append('description', data.description);
+    formCreate.append('launcherBuild', data.launcherBuild);
     await mutateAsync(formCreate);
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller

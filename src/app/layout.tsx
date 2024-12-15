@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import type { Metadata } from 'next';
+import { Manrope } from 'next/font/google';
 
-import { config } from "@/core/configs";
-import { QueryProvider, ThemeProvider, TooltipProvider } from "@/core/providers";
-import { cn } from "@/shared/lib/utils";
-import { Toaster } from "@/shared/ui/sonner";
+import { config } from '@/core/configs';
+import { QueryProvider, ThemeProvider, TooltipProvider } from '@/core/providers';
+import { cn } from '@/shared/lib/utils';
+import { Toaster } from '@/shared/ui/sonner';
 
-import "./globals.css";
+import './globals.css';
 
 const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-sans",
+  subsets: ['latin'],
+  variable: '--font-sans',
 });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", manrope.variable)}>
+      <body className={cn('min-h-screen bg-background font-sans antialiased', manrope.variable)}>
         <QueryProvider>
           <ThemeProvider
             attribute="class"

@@ -1,7 +1,7 @@
-import packageJson from "../../../package.json";
+import packageJson from '../../../package.json';
 
-export const BRAND_NAME = "GML";
-export const PLATFORM_SHORT_APP_NAME = "Frontend";
+export const BRAND_NAME = 'GML';
+export const PLATFORM_SHORT_APP_NAME = 'Frontend';
 export const PLATFORM_APP_NAME = `${BRAND_NAME} ${PLATFORM_SHORT_APP_NAME}`;
 
 export const PLATFORM_VERSION = `${packageJson.version}`;

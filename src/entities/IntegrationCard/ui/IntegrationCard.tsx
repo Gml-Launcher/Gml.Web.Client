@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
-import { Card } from "@/shared/ui/card";
-import { Button } from "@/shared/ui/button";
+import { Card } from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
 
 interface IntegrationCardProps {
   title: string;

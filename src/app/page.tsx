@@ -1,11 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { config } from "@/core/configs";
-import { cn } from "@/shared/lib/utils";
-import { AUTH_PAGES } from "@/shared/routes";
-import { buttonVariants } from "@/shared/ui/button";
-import logo from "@/assets/logos/logo.svg";
+import { config } from '@/core/configs';
+import { cn } from '@/shared/lib/utils';
+import { AUTH_PAGES } from '@/shared/routes';
+import { buttonVariants } from '@/shared/ui/button';
+import logo from '@/assets/logos/logo.svg';
 
 export default function Home() {
   return (
@@ -20,10 +20,10 @@ export default function Home() {
           Добро пожаловать в панель <br /> управления вашим игровым проектом
         </h1>
         <div className="flex gap-x-4">
-          <Link href={AUTH_PAGES.SIGN_UP} className={cn(buttonVariants({ variant: "outline" }))}>
+          <Link href={AUTH_PAGES.SIGN_UP} className={cn(buttonVariants({ variant: 'outline' }))}>
             Регистрация
           </Link>
-          <Link href={AUTH_PAGES.SIGN_IN} className={cn(buttonVariants({ variant: "default" }))}>
+          <Link href={AUTH_PAGES.SIGN_IN} className={cn(buttonVariants({ variant: 'default' }))}>
             Войти
           </Link>
         </div>

@@ -1,4 +1,4 @@
-import { $api } from "@/core/api";
+import { $api } from '@/services/api.service';
 import {
   TDeleteGameServersRequest,
   TDeleteGameServersResponse,
@@ -6,10 +6,10 @@ import {
   TGetGameServersResponse,
   TPostGameServersRequest,
   TPostGameServersResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class GameServerService {
-  private BASE_URL = "/servers";
+  private BASE_URL = '/servers';
 
   async getServers({ profileName }: TGetGameServersRequest): Promise<TGetGameServersResponse> {
     const { data } = await $api.get<TGetGameServersResponse>(`${this.BASE_URL}/${profileName}`);

@@ -1,4 +1,4 @@
-import { Protocol, StorageType } from "@/shared/enums";
+import { Protocol, StorageType } from '@/shared/enums';
 
 export type SettingsPlatformBaseEntity = {
   registrationIsEnabled: boolean;

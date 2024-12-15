@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { RowSelectionState } from "@tanstack/react-table";
+import React, { useEffect, useState } from 'react';
+import { RowSelectionState } from '@tanstack/react-table';
 
-import classes from "./styles.module.css";
+import classes from './styles.module.css';
 
-import { ProfileLoading } from "@/views/profile";
-import { FilesTable } from "@/widgets/files-table";
-import { DownloadClientHub } from "@/widgets/client-hub";
-import { AddingFilesWhitelistDialog } from "@/widgets/adding-files-whitelist-dialog";
-import { AddingFoldersWhitelistDialog } from "@/widgets/adding-folders-whitelist-dialog";
-import { GameServers } from "@/widgets/game-servers";
-import { EditProfileForm } from "@/features/edit-profile-form";
-import { Section } from "@/entities/Section";
-import { ProfileCard } from "@/entities/ProfileCard";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { OsArchitectureEnum, OsTypeEnum } from "@/shared/enums";
-import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from "@/shared/hooks";
-import { getStorageAccessToken, getStorageProfile } from "@/shared/services";
-import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from "@/shared/api/contracts";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { Button } from "@/shared/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { ProfileLoading } from '@/views/profile';
+import { FilesTable } from '@/widgets/files-table';
+import { DownloadClientHub } from '@/widgets/client-hub';
+import { AddingFilesWhitelistDialog } from '@/widgets/adding-files-whitelist-dialog';
+import { AddingFoldersWhitelistDialog } from '@/widgets/adding-folders-whitelist-dialog';
+import { GameServers } from '@/widgets/game-servers';
+import { EditProfileForm } from '@/features/edit-profile-form';
+import { Section } from '@/entities/Section';
+import { ProfileCard } from '@/entities/ProfileCard';
+import { DASHBOARD_PAGES } from '@/shared/routes';
+import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
+import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from '@/shared/hooks';
+import { getStorageAccessToken, getStorageProfile } from '@/shared/services';
+import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { Button } from '@/shared/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,9 +32,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/ui/alert-dialog";
-import { FolderTable } from "@/widgets/folder-table";
-import { GamePlayers } from "@/widgets/game-players";
+} from '@/shared/ui/alert-dialog';
+import { FolderTable } from '@/widgets/folder-table';
+import { GamePlayers } from '@/widgets/game-players';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -53,7 +53,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         UserName: account.login,
         ProfileName: decodeURIComponent(params.name),
         UserAccessToken: accessToken,
-        UserUuid: "uuid",
+        UserUuid: 'uuid',
         OsArchitecture: OsArchitectureEnum.X64,
         OsType: OsTypeEnum.WINDOWS.toString(),
       });
@@ -85,9 +85,9 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       <Breadcrumbs
         current={profile.profileName}
         breadcrumbs={[
-          { value: "Главная", path: DASHBOARD_PAGES.HOME },
+          { value: 'Главная', path: DASHBOARD_PAGES.HOME },
           {
-            value: "Профили",
+            value: 'Профили',
             path: DASHBOARD_PAGES.PROFILES,
           },
         ]}

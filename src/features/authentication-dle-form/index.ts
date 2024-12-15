@@ -1,1 +1,1 @@
-export { AuthenticationFormDle } from "@/features/authentication-dle-form/ui/AuthenticationFormDle";
+export { AuthenticationFormDle } from '@/features/authentication-dle-form/ui/AuthenticationFormDle';

@@ -1,1 +1,1 @@
-export { EditSettingsPlatformForm } from "./ui/EditSettingsPlatformForm";
+export { EditSettingsPlatformForm } from './ui/EditSettingsPlatformForm';

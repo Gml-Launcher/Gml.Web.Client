@@ -7,9 +7,9 @@ export enum GameLoaderType {
 }
 
 export enum GameLoaderOption {
-  VANILLA = "Vanilla",
-  FORGE = "Forge",
-  FABRIC = "Fabric",
-  LITELOADER = "LiteLoader",
-  NEOFORGE = "NeoForge",
+  VANILLA = 'Vanilla',
+  FORGE = 'Forge',
+  FABRIC = 'Fabric',
+  LITELOADER = 'LiteLoader',
+  NEOFORGE = 'NeoForge',
 }

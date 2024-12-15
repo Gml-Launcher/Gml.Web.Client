@@ -1,1 +1,1 @@
-export * from "./lib/useConnectionHub";
+export * from './lib/useConnectionHub';

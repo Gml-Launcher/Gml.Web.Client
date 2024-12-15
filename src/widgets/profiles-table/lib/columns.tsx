@@ -1,30 +1,30 @@
-"use client";
+'use client';
 
-import React from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { createColumnHelper } from "@tanstack/table-core";
-import { Edit2Icon, Trash2Icon } from "lucide-react";
+import React from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { createColumnHelper } from '@tanstack/table-core';
+import { Edit2Icon, Trash2Icon } from 'lucide-react';
 
-import { ClientState } from "@/widgets/client-hub";
-import { DataTableColumnHeader } from "@/entities/Table";
-import { Button } from "@/shared/ui/button";
-import { Checkbox } from "@/shared/ui/checkbox";
-import { ProfileBaseEntity } from "@/shared/api/contracts";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { Icons } from "@/shared/ui/icons";
-import { getFormatDate } from "@/shared/lib/utils";
-import { profileKeys } from "@/shared/hooks";
-import defaultProfileIcon from "@/assets/logos/minecraft.png";
+import { ClientState } from '@/widgets/client-hub';
+import { DataTableColumnHeader } from '@/entities/Table';
+import { Button } from '@/shared/ui/button';
+import { Checkbox } from '@/shared/ui/checkbox';
+import { ProfileBaseEntity } from '@/shared/api/contracts';
+import { DASHBOARD_PAGES } from '@/shared/routes';
+import { Icons } from '@/shared/ui/icons';
+import { getFormatDate } from '@/shared/lib/utils';
+import { profileKeys } from '@/shared/hooks';
+import defaultProfileIcon from '@/assets/logos/minecraft.png';
 
 enum ColumnHeader {
-  ICON = "",
-  NAME = "Название",
-  CREATED_AT = "Дата создания",
-  VERSION_LAUNCHER = "Запускаемая версия",
-  GAME_VERSION = "Версия",
-  PROFILE_STATE = "Статус",
+  ICON = '',
+  NAME = 'Название',
+  CREATED_AT = 'Дата создания',
+  VERSION_LAUNCHER = 'Запускаемая версия',
+  GAME_VERSION = 'Версия',
+  PROFILE_STATE = 'Статус',
 }
 
 interface UseColumnsProps {
@@ -45,13 +45,13 @@ export const useColumns = (props: UseColumnsProps) => {
 
   const columns: any = [
     columnsHelper.display({
-      id: "checkbox",
+      id: 'checkbox',
       size: 48,
       header: ({ table }) => (
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Выбрать все строки"
@@ -69,7 +69,7 @@ export const useColumns = (props: UseColumnsProps) => {
       enableSorting: false,
       enableHiding: false,
     }),
-    columnsHelper.accessor("iconBase64", {
+    columnsHelper.accessor('iconBase64', {
       size: 64,
       header: ColumnHeader.ICON,
       cell: ({ row }) => (
@@ -86,33 +86,33 @@ export const useColumns = (props: UseColumnsProps) => {
         />
       ),
     }),
-    columnsHelper.accessor("name", {
+    columnsHelper.accessor('name', {
       size: 500,
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
       cell: ({ getValue }) => getValue(),
     }),
-    columnsHelper.accessor("launchVersion", {
+    columnsHelper.accessor('launchVersion', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.VERSION_LAUNCHER} />
       ),
-      cell: ({ getValue }) => (getValue() ? getValue() : "Не загружен"),
+      cell: ({ getValue }) => (getValue() ? getValue() : 'Не загружен'),
     }),
-    columnsHelper.accessor("gameVersion", {
+    columnsHelper.accessor('gameVersion', {
       size: 100,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION} />
       ),
       cell: ({ getValue }) => getValue(),
     }),
-    columnsHelper.accessor("createDate", {
+    columnsHelper.accessor('createDate', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
       ),
       cell: ({ getValue }) => getFormatDate(getValue()),
     }),
-    columnsHelper.accessor("state", {
+    columnsHelper.accessor('state', {
       size: 50,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE} />
@@ -121,7 +121,7 @@ export const useColumns = (props: UseColumnsProps) => {
     }),
     columnsHelper.display({
       size: 48,
-      id: "edit",
+      id: 'edit',
       cell: ({ row }) => (
         <Button variant="ghost" size="icon" onClick={onRedirectEditProfile(row.original.name)}>
           <Edit2Icon size={16} />
@@ -130,7 +130,7 @@ export const useColumns = (props: UseColumnsProps) => {
     }),
     columnsHelper.display({
       size: 48,
-      id: "delete",
+      id: 'delete',
       cell: ({ row }) => {
         const onClickDeleteProfile = () => {
           queryClient.setQueryData(profileKeys.reading(), () => row.original);

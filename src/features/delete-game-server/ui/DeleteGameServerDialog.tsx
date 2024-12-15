@@ -1,4 +1,4 @@
-import { Trash2Icon } from "lucide-react";
+import { Trash2Icon } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -10,9 +10,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/ui/alert-dialog";
-import { useDeleteGameServer } from "@/shared/hooks";
-import { Button } from "@/shared/ui/button";
+} from '@/shared/ui/alert-dialog';
+import { useDeleteGameServer } from '@/shared/hooks';
+import { Button } from '@/shared/ui/button';
 
 type DeleteGameServerDialogParams = {
   serverName: string;

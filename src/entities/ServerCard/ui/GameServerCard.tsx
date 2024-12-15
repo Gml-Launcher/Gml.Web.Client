@@ -1,14 +1,14 @@
-import React from "react";
-import Image from "next/image";
+import React from 'react';
+import Image from 'next/image';
 
-import { ClientState } from "@/widgets/client-hub";
-import { DeleteGameServerDialog } from "@/features/delete-game-server";
-import { GameServerBaseEntity } from "@/shared/api/contracts";
-import { Card } from "@/shared/ui/card";
-import { Progress } from "@/shared/ui/progress";
-import { getProgressColor } from "@/shared/lib/utils";
-import { EntityState } from "@/shared/enums";
-import minecraftLogo from "@/assets/logos/minecraft.png";
+import { ClientState } from '@/widgets/client-hub';
+import { DeleteGameServerDialog } from '@/features/delete-game-server';
+import { GameServerBaseEntity } from '@/shared/api/contracts';
+import { Card } from '@/shared/ui/card';
+import { Progress } from '@/shared/ui/progress';
+import { getProgressColor } from '@/shared/lib/utils';
+import { EntityState } from '@/shared/enums';
+import minecraftLogo from '@/assets/logos/minecraft.png';
 
 interface GameServerCardParams {
   profileName: string;
@@ -25,7 +25,7 @@ export const GameServerCard = ({ server, profileName }: GameServerCardParams) =>
         <div className="flex flex-col min-w-[350px]">
           <span className="text-lg font-bold">{server.name}</span>
           <span className="text-gray-600 dark:text-gray-400 font-medium text-sm">
-            {server.version ?? "Нет информации"}
+            {server.version ?? 'Нет информации'}
           </span>
         </div>
         {server.isOnline && (

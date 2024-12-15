@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { WallpaperIcon } from "lucide-react";
+import { useState } from 'react';
+import { WallpaperIcon } from 'lucide-react';
 
-import { ConnectTexturesForm } from "@/features/connect-textures-form";
+import { ConnectTexturesForm } from '@/features/connect-textures-form';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
-import { useConnectTextures } from "@/shared/hooks";
-import { TexturesServiceType } from "@/shared/enums";
+} from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/button';
+import { useConnectTextures } from '@/shared/hooks';
+import { TexturesServiceType } from '@/shared/enums';
 
 export function ConnectTexturesDialog() {
   const [open, setOpen] = useState(false);

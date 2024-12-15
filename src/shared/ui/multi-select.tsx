@@ -1,11 +1,11 @@
-import { forwardRef, useEffect, useState } from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { CheckIcon, ChevronDown, XCircle, XIcon } from "lucide-react";
+import { forwardRef, useEffect, useState } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { CheckIcon, ChevronDown, XCircle, XIcon } from 'lucide-react';
 
-import { Separator } from "@/shared/ui/separator";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+import { Separator } from '@/shared/ui/separator';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import {
   Command,
   CommandEmpty,
@@ -14,24 +14,24 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/shared/ui/command";
-import { cn } from "@/shared/lib/utils";
+} from '@/shared/ui/command';
+import { cn } from '@/shared/lib/utils';
 
 const multiSelectVariants = cva(
-  "m-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300",
+  'm-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300',
   {
     variants: {
       variant: {
-        default: "border-foreground/10 text-foreground bg-card hover:bg-card/80",
+        default: 'border-foreground/10 text-foreground bg-card hover:bg-card/80',
         secondary:
-          "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          'border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80',
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        inverted: "inverted",
+          'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
+        inverted: 'inverted',
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: 'default',
     },
   },
 );
@@ -100,7 +100,7 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
       onValueChange,
       variant,
       defaultValue = [],
-      placeholder = "Выберите...",
+      placeholder = 'Выберите...',
       maxCount = 3,
       modalPopover = false,
       asChild = false,
@@ -119,9 +119,9 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
     }, [defaultValue, selectedValues]);
 
     const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === "Enter") {
+      if (event.key === 'Enter') {
         setIsPopoverOpen(true);
-      } else if (event.key === "Backspace" && !event.currentTarget.value) {
+      } else if (event.key === 'Backspace' && !event.currentTarget.value) {
         const newSelectedValues = [...selectedValues];
         newSelectedValues.pop();
         setSelectedValues(newSelectedValues);
@@ -174,7 +174,7 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
             {...props}
             onClick={handleTogglePopover}
             className={cn(
-              "flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit",
+              'flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit',
               className,
             )}
           >
@@ -201,7 +201,7 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                   {selectedValues.length > maxCount && (
                     <Badge
                       className={cn(
-                        "bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
+                        'bg-transparent text-foreground border-foreground/1 hover:bg-transparent',
                         multiSelectVariants({ variant }),
                       )}
                     >
@@ -231,7 +231,7 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
             ) : (
               <div className="flex items-center justify-between w-full mx-auto">
                 <span className="text-sm text-muted-foreground mx-3">
-                  {options && !Boolean(options.length) ? "Нет элементов для выбора" : placeholder}
+                  {options && !Boolean(options.length) ? 'Нет элементов для выбора' : placeholder}
                 </span>
                 <ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
               </div>
@@ -251,10 +251,10 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                 <CommandItem key="all" onSelect={toggleAll} className="cursor-pointer">
                   <div
                     className={cn(
-                      "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                      'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
                       selectedValues.length === options?.length
-                        ? "bg-primary text-primary-foreground"
-                        : "opacity-50 [&_svg]:invisible",
+                        ? 'bg-primary text-primary-foreground'
+                        : 'opacity-50 [&_svg]:invisible',
                     )}
                   >
                     <CheckIcon className="h-4 w-4" />
@@ -272,10 +272,10 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                       >
                         <div
                           className={cn(
-                            "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                            'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
                             isSelected
-                              ? "bg-primary text-primary-foreground"
-                              : "opacity-50 [&_svg]:invisible",
+                              ? 'bg-primary text-primary-foreground'
+                              : 'opacity-50 [&_svg]:invisible',
                           )}
                         >
                           <CheckIcon className="h-4 w-4" />
@@ -319,4 +319,4 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
   },
 );
 
-MultiSelect.displayName = "MultiSelect";
+MultiSelect.displayName = 'MultiSelect';

@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import React, { useEffect, useRef, useState } from "react";
-import { Ubuntu_Mono } from "next/font/google";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { ChevronsUpDown } from "lucide-react";
+import React, { useEffect, useRef, useState } from 'react';
+import { Ubuntu_Mono } from 'next/font/google';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { ChevronsUpDown } from 'lucide-react';
 
-import { useConnectionHub } from "../lib/useConnectionHub";
+import { useConnectionHub } from '../lib/useConnectionHub';
 
 import {
   JavaVersionBaseEntity,
   ProfileExtendedBaseEntity,
   RestoreProfileSchemaType,
-} from "@/shared/api/contracts";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Progress } from "@/shared/ui/progress";
-import { Textarea } from "@/shared/ui/textarea";
-import { Icons } from "@/shared/ui/icons";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
+} from '@/shared/api/contracts';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Progress } from '@/shared/ui/progress';
+import { Textarea } from '@/shared/ui/textarea';
+import { Icons } from '@/shared/ui/icons';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
 import {
   Command,
   CommandEmpty,
@@ -25,11 +25,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shared/ui/command";
-import { Separator } from "@/shared/ui/separator";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { useGetJavaVersions } from "@/shared/hooks";
-
+} from '@/shared/ui/command';
+import { Separator } from '@/shared/ui/separator';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
+import { useGetJavaVersions } from '@/shared/hooks';
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -37,9 +36,9 @@ interface DownloadClientHubProps {
 }
 
 const ubuntuMono = Ubuntu_Mono({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: "400",
+  subsets: ['latin'],
+  variable: '--font-sans',
+  weight: '400',
 });
 
 export function DownloadClientHub(props: DownloadClientHubProps) {
@@ -117,7 +116,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                               <span className="truncate grow mr-2 text-start">
                                 {field.value && (JSON.parse(field.value) as JavaVersionBaseEntity)
                                   ? `${(JSON.parse(field.value) as JavaVersionBaseEntity).name}@${(JSON.parse(field.value) as JavaVersionBaseEntity).version}`
-                                  : "По умолчанию"}
+                                  : 'По умолчанию'}
                               </span>
                               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
@@ -130,7 +129,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                                 <CommandGroup>
                                   <CommandItem
                                     onSelect={() => {
-                                      form.resetField("javaVersion");
+                                      form.resetField('javaVersion');
                                       onOpenJavaVersionsChange();
                                     }}
                                   >
@@ -212,8 +211,8 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           <div className="flex flex-col gap-y-4 col-span-1 xl:col-span-2 min-[1920px]:col-span-1">
             <Textarea
               ref={textareaRef}
-              value={logs ? logs.join("\n") : ""}
-              className={cn("h-80 max-h-80 font-sans", ubuntuMono.variable)}
+              value={logs ? logs.join('\n') : ''}
+              className={cn('h-80 max-h-80 font-sans', ubuntuMono.variable)}
               readOnly
             />
           </div>

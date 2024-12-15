@@ -1,11 +1,11 @@
-import { ResponseBaseEntity } from "@/shared/api/schemas";
+import { ResponseBaseEntity } from '@/shared/api/schemas';
 import {
   BaseSentryError,
   BaseSentryException,
   BaseSentryStats,
   BaseSentrySummary,
-} from "@/shared/api/contracts/sentry/schemas";
-import { ProjectTypeEnum } from "@/shared/enums";
+} from '@/shared/api/contracts/sentry/schemas';
+import { ProjectTypeEnum } from '@/shared/enums';
 
 export type TPostSentryErrorsRequest = {
   projectType: ProjectTypeEnum;

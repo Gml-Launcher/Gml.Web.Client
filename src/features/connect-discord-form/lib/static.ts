@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const integrationSchema = z.object({
   clientId: z.string().transform((v) => v.trim()),

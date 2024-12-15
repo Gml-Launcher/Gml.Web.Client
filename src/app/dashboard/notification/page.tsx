@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { NotificationPage } from "@/views/notification";
+import { NotificationPage } from '@/views/notification';
 
 export const metadata: Metadata = {
-  title: "Уведомления",
+  title: 'Уведомления',
 };
 
 const Page = () => {

@@ -1,1 +1,1 @@
-export { AddingFilesWhitelistDialog } from "./ui/AddingFilesWhitelistDialog";
+export { AddingFilesWhitelistDialog } from './ui/AddingFilesWhitelistDialog';

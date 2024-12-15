@@ -1,1 +1,1 @@
-export * from "./ui/NotificationCard";
+export * from './ui/NotificationCard';

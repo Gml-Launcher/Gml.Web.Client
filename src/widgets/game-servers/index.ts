@@ -1,1 +1,1 @@
-export * from "./ui/GameServers";
+export * from './ui/GameServers';

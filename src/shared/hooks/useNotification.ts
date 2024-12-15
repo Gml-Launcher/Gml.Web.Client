@@ -1,14 +1,14 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-import { notificationService } from "@/shared/services/NotifiactionService";
-import { serversKeys } from "@/shared/hooks";
-import { useNotificationsState } from "@/views/notification/lib/store";
-import { isAxiosError } from "@/shared/lib/isAxiosError/isAxiosError";
+import { notificationService } from '@/shared/services/NotifiactionService';
+import { serversKeys } from '@/shared/hooks';
+import { useNotificationsState } from '@/views/notification/lib/store';
+import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
 
 export const notificationsKeys = {
-  all: ["notifications"] as const,
-  clearAll: ["clear-notifications"] as const,
+  all: ['notifications'] as const,
+  clearAll: ['clear-notifications'] as const,
 };
 
 export const useNotifications = () => {
@@ -31,7 +31,7 @@ export const useClearNotifications = () => {
       clearNotifications();
       clearCount();
       queryClient.removeQueries({ queryKey: notificationsKeys.all });
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: `Все уведомления были очищены`,
       });
     },

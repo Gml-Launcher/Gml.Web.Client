@@ -1,7 +1,7 @@
-import { AxiosResponse } from "axios";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { AxiosResponse } from 'axios';
+import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import {
   ProfileBaseEntity,
@@ -13,23 +13,23 @@ import {
   TGetProfileRequest,
   TPostProfilesRequest,
   TPutProfileRequest,
-} from "@/shared/api/contracts";
-import { profileService } from "@/shared/services/ProfileService";
-import { isAxiosError } from "@/shared/lib/utils";
-import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
+} from '@/shared/api/contracts';
+import { profileService } from '@/shared/services/ProfileService';
+import { isAxiosError } from '@/shared/lib/utils';
+import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 
 export const profileKeys = {
-  all: ["profiles"] as const,
-  creating: () => [...profileKeys.all, "creating"] as const,
-  reading: () => [...profileKeys.all, "reading"] as const,
-  editing: () => [...profileKeys.all, "editing"] as const,
-  deleting: () => [...profileKeys.all, "deleting"] as const,
-  deletingAll: () => [...profileKeys.all, "deletingAll"] as const,
+  all: ['profiles'] as const,
+  creating: () => [...profileKeys.all, 'creating'] as const,
+  reading: () => [...profileKeys.all, 'reading'] as const,
+  editing: () => [...profileKeys.all, 'editing'] as const,
+  deleting: () => [...profileKeys.all, 'deleting'] as const,
+  deletingAll: () => [...profileKeys.all, 'deletingAll'] as const,
 
-  entities: () => [...profileKeys.all, "entities"] as const,
+  entities: () => [...profileKeys.all, 'entities'] as const,
 
-  javaVerison: () => [...profileKeys.all, "javaVerison"] as const,
-  gameVersions: (version: string) => [...profileKeys.entities(), version, "versions"] as const,
+  javaVerison: () => [...profileKeys.all, 'javaVerison'] as const,
+  gameVersions: (version: string) => [...profileKeys.entities(), version, 'versions'] as const,
 };
 
 export const useProfiles = () => {
@@ -74,7 +74,7 @@ export const useCreateProfile = () => {
     mutationFn: (data: TPostProfilesRequest) => profileService.createProfile(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: `Профиль "${data.data.name}" успешно создан`,
       });
     },
@@ -105,7 +105,7 @@ export const useDeleteProfile = () => {
       await queryClient.setQueryData(profileKeys.reading(), () => null);
     },
     onSuccess: async (data) => {
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -125,7 +125,7 @@ export const useDeleteProfiles = () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
     onSuccess: async (data) => {
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -145,7 +145,7 @@ export const useAddProfilePlayers = () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
     onSuccess: async (data) => {
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -158,9 +158,9 @@ export const useAddProfilePlayers = () => {
 export const useGetGameVersions = (
   body: TGameVersionsRequest,
   options?: Partial<
-    UseQueryOptions<AxiosResponse<TGameVersionsResponse>, Error, TGameVersionsResponse["data"]>
+    UseQueryOptions<AxiosResponse<TGameVersionsResponse>, Error, TGameVersionsResponse['data']>
   >,
-): UseQueryResult<TGameVersionsResponse["data"]> => {
+): UseQueryResult<TGameVersionsResponse['data']> => {
   return useQuery({
     queryKey: [profileKeys.gameVersions(body.minecraftVersion), { gameLoader: body.gameLoader }],
     queryFn: async () => await profileService.getGameVersions(body),

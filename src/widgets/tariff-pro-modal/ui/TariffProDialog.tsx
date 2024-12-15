@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { CheckIcon, Copy, LinkIcon, StarIcon } from "lucide-react";
+import Link from 'next/link';
+import { CheckIcon, Copy, LinkIcon, StarIcon } from 'lucide-react';
 
 import {
   Dialog,
@@ -9,10 +9,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
-import { HREF_RECLOUD_PRO } from "@/shared/constants";
-import { Separator } from "@/shared/ui/separator";
+} from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/button';
+import { HREF_RECLOUD_PRO } from '@/shared/constants';
+import { Separator } from '@/shared/ui/separator';
 import {
   Card,
   CardContent,
@@ -20,7 +20,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/shared/ui/card";
+} from '@/shared/ui/card';
 
 export function TariffProDialog() {
   return (

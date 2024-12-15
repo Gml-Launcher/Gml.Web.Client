@@ -1,1 +1,1 @@
-export * from "./ui/CreateGameServerDialog";
+export * from './ui/CreateGameServerDialog';

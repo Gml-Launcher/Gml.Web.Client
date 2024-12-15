@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   ColumnDef,
   getCoreRowModel,
@@ -8,7 +8,7 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 interface TableProps<TData, TValue> {
   data?: TData[];

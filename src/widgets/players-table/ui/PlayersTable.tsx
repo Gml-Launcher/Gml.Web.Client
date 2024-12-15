@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   flexRender,
   getCoreRowModel,
@@ -9,22 +9,22 @@ import {
   SortingState,
   useReactTable,
   VisibilityState,
-} from "@tanstack/react-table";
-import { useInView } from "react-intersection-observer";
-import { SearchIcon } from "lucide-react";
+} from '@tanstack/react-table';
+import { useInView } from 'react-intersection-observer';
+import { SearchIcon } from 'lucide-react';
 
-import { useColumns } from "../lib/columns";
+import { useColumns } from '../lib/columns';
 
-import { PlayersTableSkeleton } from "./PlayersTableSkeleton";
+import { PlayersTableSkeleton } from './PlayersTableSkeleton';
 
-import { usePlayers } from "@/shared/hooks/usePlayers";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
+import { usePlayers } from '@/shared/hooks/usePlayers';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { Input } from '@/shared/ui/input';
+import { Button } from '@/shared/ui/button';
 
 export function PlayersTable() {
   const { ref, inView } = useInView();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const { data: players, status, error, fetchNextPage, refetch } = usePlayers(search);
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -64,9 +64,9 @@ export function PlayersTable() {
 
   return (
     <>
-      {status === "pending" ? (
+      {status === 'pending' ? (
         <PlayersTableSkeleton />
-      ) : status === "error" ? (
+      ) : status === 'error' ? (
         <span>Error: {error.message}</span>
       ) : (
         <div className="flex flex-col gap-4">
@@ -101,7 +101,7 @@ export function PlayersTable() {
                 <TableBody>
                   {table.getRowModel().rows?.length ? (
                     table.getRowModel().rows.map((row) => (
-                      <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                      <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                         {row.getVisibleCells().map((cell) => (
                           <TableCell key={cell.id}>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -120,7 +120,7 @@ export function PlayersTable() {
               </Table>
             </div>
           )}
-          <div ref={ref} style={{ height: "10px" }} />
+          <div ref={ref} style={{ height: '10px' }} />
         </div>
       )}
     </>

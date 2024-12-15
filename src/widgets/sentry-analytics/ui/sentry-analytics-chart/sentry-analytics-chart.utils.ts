@@ -1,4 +1,4 @@
-import { Graphic } from "@/shared/api/contracts/sentry/schemas";
+import { Graphic } from '@/shared/api/contracts/sentry/schemas';
 
 export const getChartData = (graphic: Graphic[]) =>
   graphic.map((item) => ({

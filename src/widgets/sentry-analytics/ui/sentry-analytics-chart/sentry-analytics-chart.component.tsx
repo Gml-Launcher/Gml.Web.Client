@@ -1,11 +1,10 @@
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis } from 'recharts';
 
-import { chartConfig } from "./sentry-analytics-chart.config";
-import { getChartData } from "./sentry-analytics-chart.utils";
+import { chartConfig } from './sentry-analytics-chart.config';
+import { getChartData } from './sentry-analytics-chart.utils';
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
-import { BaseSentryError } from "@/shared/api/contracts/sentry/schemas";
-
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/shared/ui/chart';
+import { BaseSentryError } from '@/shared/api/contracts/sentry/schemas';
 
 interface SentryAnalyticsChartProps {
   bug: BaseSentryError;
@@ -36,10 +35,10 @@ export const SentryAnalyticsChart = ({ bug }: SentryAnalyticsChartProps) => {
             content={
               <ChartTooltipContent
                 labelFormatter={(value) => {
-                  return new Date(value).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
+                  return new Date(value).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
                   });
                 }}
               />

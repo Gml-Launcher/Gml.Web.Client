@@ -3,9 +3,9 @@ import {
   JavaVersionBaseEntity,
   ProfileBaseEntity,
   ProfileExtendedBaseEntity,
-} from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
-import { OsArchitectureEnum } from "@/shared/enums"; // Получение профилей
+} from '@/shared/api/contracts';
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { OsArchitectureEnum } from '@/shared/enums'; // Получение профилей
 
 // Получение профилей
 export type TGetProfilesRequest = {};

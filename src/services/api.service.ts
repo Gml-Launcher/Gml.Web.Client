@@ -1,21 +1,21 @@
-import axios, { CreateAxiosDefaults, HttpStatusCode } from "axios";
+import axios, { CreateAxiosDefaults, HttpStatusCode } from 'axios';
 
 import {
   getStorageAccessToken,
   removeStorageProfile,
   removeStorageTokens,
-} from "@/shared/services";
+} from '@/shared/services';
 
 const OPTIONS: CreateAxiosDefaults = {
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  headers: { "Access-Control-Allow-Credentials": "*" },
+  headers: { 'Access-Control-Allow-Credentials': '*' },
 };
 
 export const $api = axios.create(OPTIONS);
 
 $api.interceptors.request.use((config) => {
   const accessToken = getStorageAccessToken();
-  config.headers.set("Authorization", `Bearer ${accessToken}`);
+  config.headers.set('Authorization', `Bearer ${accessToken}`);
 
   return config;
 });

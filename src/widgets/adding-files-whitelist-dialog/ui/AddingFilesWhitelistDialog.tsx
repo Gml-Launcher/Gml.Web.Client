@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { RowSelectionState } from "@tanstack/react-table";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import React, { useState } from 'react';
+import { RowSelectionState } from '@tanstack/react-table';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 import {
   Dialog,
@@ -10,15 +10,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
-import { ProfileFileBaseEntity, WhitelistFileBaseEntity } from "@/shared/api/contracts";
-import { FilesTable } from "@/widgets/files-table";
-import { Tabs, TabsContent } from "@/shared/ui/tabs";
-import { useAddingFilesWhitelist } from "@/shared/hooks";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { ScrollArea } from "@/shared/ui/scroll-area";
-import { Separator } from "@/shared/ui/separator";
+} from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/button';
+import { ProfileFileBaseEntity, WhitelistFileBaseEntity } from '@/shared/api/contracts';
+import { FilesTable } from '@/widgets/files-table';
+import { Tabs, TabsContent } from '@/shared/ui/tabs';
+import { useAddingFilesWhitelist } from '@/shared/hooks';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { ScrollArea } from '@/shared/ui/scroll-area';
+import { Separator } from '@/shared/ui/separator';
 
 interface AddingFilesWhitelistDialogProps {
   profileName: string;
@@ -34,7 +34,7 @@ export function AddingFilesWhitelistDialog({
   const [open, setOpen] = useState(false);
   const onOpenChange = () => setOpen((prev) => !prev);
 
-  const [tab, setTab] = useState("files");
+  const [tab, setTab] = useState('files');
   const onChangeTab = (currentTab: string) => () => setTab(currentTab);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -93,15 +93,15 @@ export function AddingFilesWhitelistDialog({
           </TabsContent>
         </Tabs>
         <div className="flex justify-end gap-x-4">
-          <Button className="w-fit" onClick={onChangeTab("files")} disabled={tab === "files"}>
+          <Button className="w-fit" onClick={onChangeTab('files')} disabled={tab === 'files'}>
             Назад
           </Button>
-          {tab === "files" && (
-            <Button className="w-fit" onClick={onChangeTab("checkout")}>
+          {tab === 'files' && (
+            <Button className="w-fit" onClick={onChangeTab('checkout')}>
               Далее
             </Button>
           )}
-          {tab === "checkout" && (
+          {tab === 'checkout' && (
             <Button className="w-fit" onClick={onSubmit}>
               Добавить
             </Button>

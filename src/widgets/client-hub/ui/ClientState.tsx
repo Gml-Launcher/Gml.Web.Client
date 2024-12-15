@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { EntityState, EntityStateOption } from "@/shared/enums";
+import { EntityState, EntityStateOption } from '@/shared/enums';
 
 interface ClientStateProps {
   state: EntityState;
 }
 
 const stateColorMap: Record<EntityState, string> = {
-  [EntityState.ENTITY_STATE_CREATED]: "bg-gray-600",
-  [EntityState.ENTITY_STATE_LOADING]: "bg-orange-500",
-  [EntityState.ENTITY_STATE_ACTIVE]: "bg-green-600",
-  [EntityState.ENTITY_STATE_DISABLED]: "bg-red-500",
-  [EntityState.ENTITY_STATE_INITIALIZE]: "bg-orange-500",
-  [EntityState.ENTITY_STATE_ERROR]: "bg-red-500",
+  [EntityState.ENTITY_STATE_CREATED]: 'bg-gray-600',
+  [EntityState.ENTITY_STATE_LOADING]: 'bg-orange-500',
+  [EntityState.ENTITY_STATE_ACTIVE]: 'bg-green-600',
+  [EntityState.ENTITY_STATE_DISABLED]: 'bg-red-500',
+  [EntityState.ENTITY_STATE_INITIALIZE]: 'bg-orange-500',
+  [EntityState.ENTITY_STATE_ERROR]: 'bg-red-500',
 };
 
 export function ClientState({ state }: ClientStateProps) {

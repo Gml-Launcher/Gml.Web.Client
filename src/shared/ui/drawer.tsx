@@ -1,6 +1,12 @@
 'use client';
 
-import {ComponentProps, ComponentPropsWithoutRef, ElementRef, forwardRef, HTMLAttributes} from 'react';
+import {
+  ComponentProps,
+  ComponentPropsWithoutRef,
+  ElementRef,
+  forwardRef,
+  HTMLAttributes,
+} from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
 import { cn } from '@/shared/lib/utils';
@@ -8,7 +14,7 @@ import { cn } from '@/shared/lib/utils';
 function Drawer({
   shouldScaleBackground = true,
   ...props
-                }: ComponentProps<typeof DrawerPrimitive.Root>) {
+}: ComponentProps<typeof DrawerPrimitive.Root>) {
   return <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />;
 }
 Drawer.displayName = 'Drawer';
@@ -52,12 +58,12 @@ const DrawerContent = forwardRef<
 ));
 DrawerContent.displayName = 'DrawerContent';
 
-function DrawerHeader({className, ...props}: HTMLAttributes<HTMLDivElement>) {
+function DrawerHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return <div className={cn('grid gap-1.5 p-4 text-center sm:text-left', className)} {...props} />;
 }
 DrawerHeader.displayName = 'DrawerHeader';
 
-function DrawerFooter({className, ...props}: HTMLAttributes<HTMLDivElement>) {
+function DrawerFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return <div className={cn('mt-auto flex flex-col gap-2 p-4', className)} {...props} />;
 }
 DrawerFooter.displayName = 'DrawerFooter';

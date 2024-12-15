@@ -1,1 +1,1 @@
-export * from "./ui/FolderTable";
+export * from './ui/FolderTable';

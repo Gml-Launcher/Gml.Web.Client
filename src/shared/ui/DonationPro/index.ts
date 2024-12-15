@@ -1,1 +1,1 @@
-export * from "./ui/DonationPro";
+export * from './ui/DonationPro';

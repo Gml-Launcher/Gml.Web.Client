@@ -1,1 +1,1 @@
-export { ConnectTexturesForm } from "@/features/connect-textures-form/ui/ConnectTexturesForm";
+export { ConnectTexturesForm } from '@/features/connect-textures-form/ui/ConnectTexturesForm';

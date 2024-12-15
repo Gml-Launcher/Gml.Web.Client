@@ -1,1 +1,1 @@
-export { ClearNotificationModel } from "./ui/ClearNotificationModel";
+export { ClearNotificationModel } from './ui/ClearNotificationModel';

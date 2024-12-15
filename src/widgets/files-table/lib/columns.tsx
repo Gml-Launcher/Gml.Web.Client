@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { createColumnHelper } from "@tanstack/table-core";
-import { ColumnDef } from "@tanstack/react-table";
+import { createColumnHelper } from '@tanstack/table-core';
+import { ColumnDef } from '@tanstack/react-table';
 
-import { DataTableColumnHeader } from "@/entities/Table";
-import { ProfileFileBaseEntity } from "@/shared/api/contracts";
-import { Checkbox } from "@/shared/ui/checkbox";
+import { DataTableColumnHeader } from '@/entities/Table';
+import { ProfileFileBaseEntity } from '@/shared/api/contracts';
+import { Checkbox } from '@/shared/ui/checkbox';
 
 enum ColumnHeader {
-  NAME = "Название",
-  DIRECTORY = "Директория",
-  FILE_SIZE = "Размер файла",
+  NAME = 'Название',
+  DIRECTORY = 'Директория',
+  FILE_SIZE = 'Размер файла',
 }
 
 export const columnsHelper = createColumnHelper<ProfileFileBaseEntity>();
 export const useColumns = () => {
   const columns: ColumnDef<ProfileFileBaseEntity, any>[] = [
     columnsHelper.display({
-      id: "checkbox",
+      id: 'checkbox',
       size: 48,
       header: ({ table }) => (
         <Checkbox
           checked={
             table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
+            (table.getIsSomePageRowsSelected() && 'indeterminate')
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Выбрать все строки"
@@ -41,19 +41,19 @@ export const useColumns = () => {
       enableSorting: false,
       enableHiding: false,
     }),
-    columnsHelper.accessor("name", {
+    columnsHelper.accessor('name', {
       size: 500,
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
       cell: ({ getValue }) => getValue(),
     }),
-    columnsHelper.accessor("directory", {
+    columnsHelper.accessor('directory', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.DIRECTORY} />
       ),
       cell: ({ getValue }) => getValue(),
     }),
-    columnsHelper.accessor("size", {
+    columnsHelper.accessor('size', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.FILE_SIZE} />

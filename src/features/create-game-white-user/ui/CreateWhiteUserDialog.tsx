@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { throttle } from "lodash";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
+import { throttle } from 'lodash';
 
 import {
   Dialog,
@@ -10,22 +10,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Form, FormItem, FormMessage } from "@/shared/ui/form";
-import { Button } from "@/shared/ui/button";
-import { useAddProfilePlayers, useCreateGameServer } from "@/shared/hooks";
+} from '@/shared/ui/dialog';
+import { Form, FormItem, FormMessage } from '@/shared/ui/form';
+import { Button } from '@/shared/ui/button';
+import { useAddProfilePlayers, useCreateGameServer } from '@/shared/hooks';
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,
   ProfileExtendedBaseEntity,
-} from "@/shared/api/contracts";
-import { Icons } from "@/shared/ui/icons";
-import { usePlayers } from "@/shared/hooks/usePlayers";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from "@/shared/ui/command";
-import { cn } from "@/shared/lib/utils";
-import { $api } from "@/core/api";
-import { Input } from "@/shared/ui/input";
+} from '@/shared/api/contracts';
+import { Icons } from '@/shared/ui/icons';
+import { usePlayers } from '@/shared/hooks/usePlayers';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@/shared/ui/command';
+import { cn } from '@/shared/lib/utils';
+import { $api } from '@/services/api.service';
+import { Input } from '@/shared/ui/input';
 
 type AddGameServerDialogParams = {
   profile?: ProfileExtendedBaseEntity;
@@ -36,8 +36,8 @@ export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) =>
   const onOpenChange = () => setOpen((prev) => !prev);
 
   const [openComboBox, setComboboxOpen] = React.useState(false);
-  const [valueComboBox, setComboboxValue] = React.useState("");
-  const [search, setSearch] = useState("");
+  const [valueComboBox, setComboboxValue] = React.useState('');
+  const [search, setSearch] = useState('');
   const addPlayerMutation = useAddProfilePlayers();
 
   const form = useForm<AddGameServerSchemeType>({
@@ -84,7 +84,7 @@ export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) =>
                     >
                       {valueComboBox
                         ? players.find((player) => player.uuid === valueComboBox)?.name
-                        : "Выберите игрока..."}
+                        : 'Выберите игрока...'}
                       <ChevronsUpDownIcon className="opacity-50" />
                     </Button>
                   </PopoverTrigger>
@@ -106,7 +106,7 @@ export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) =>
                               className="flex items-center gap-2 font-medium"
                               onSelect={(currentValue) => {
                                 setComboboxValue(
-                                  currentValue === valueComboBox ? "" : currentValue,
+                                  currentValue === valueComboBox ? '' : currentValue,
                                 );
                                 setComboboxOpen(false);
                               }}
@@ -119,8 +119,8 @@ export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) =>
                               {player.name}
                               <CheckIcon
                                 className={cn(
-                                  "ml-auto w-4",
-                                  valueComboBox === player.uuid ? "opacity-100" : "opacity-0",
+                                  'ml-auto w-4',
+                                  valueComboBox === player.uuid ? 'opacity-100' : 'opacity-0',
                                 )}
                               />
                             </CommandItem>
@@ -136,7 +136,7 @@ export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) =>
               )}
             </FormItem>
             <div className="flex justify-end">
-              <Button disabled={valueComboBox === ""}>
+              <Button disabled={valueComboBox === ''}>
                 {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Добавить
               </Button>

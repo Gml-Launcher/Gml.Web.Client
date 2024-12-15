@@ -1,8 +1,8 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from '@playwright/test';
 
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { inspect_request } from "@/shared/tests/utils";
-import { DATA_TEST_ID_DIALOG_CONNECT_DISCORD } from "@/shared/constants/data";
+import { DASHBOARD_PAGES } from '@/shared/routes';
+import { inspect_request } from '@/shared/tests/utils';
+import { DATA_TEST_ID_DIALOG_CONNECT_DISCORD } from '@/shared/constants/data';
 
 const mock_client_id = `${Date.now()}`;
 const mock_details = `details-${Date.now()}`;
@@ -11,24 +11,24 @@ const mock_large_Image_Text = `large-image-text-${Date.now()}`;
 const mock_small_Image_Key = `small-image-key-${Date.now()}`;
 const mock_small_Image_Text = `small-image-text-${Date.now()}`;
 
-const get_discord_api_endpoint_url = "/api/v1/integrations/discord";
-const put_discord_api_endpoint_url = "/api/v1/integrations/discord";
+const get_discord_api_endpoint_url = '/api/v1/integrations/discord';
+const put_discord_api_endpoint_url = '/api/v1/integrations/discord';
 
-test.describe("ConnectDiscordDialog", () => {
-  test("connect discord", async ({ page, baseURL, browser }) => {
+test.describe('ConnectDiscordDialog', () => {
+  test('connect discord', async ({ page, baseURL, browser }) => {
     await page.goto(`${baseURL}${DASHBOARD_PAGES.INTEGRATIONS}`);
 
     const widget = page.getByTestId(DATA_TEST_ID_DIALOG_CONNECT_DISCORD);
-    const widget_action_connect = widget.getByRole("button", { name: "Подключить" });
-    const widget_action_edit = widget.getByRole("button", { name: "Изменить" });
+    const widget_action_connect = widget.getByRole('button', { name: 'Подключить' });
+    const widget_action_edit = widget.getByRole('button', { name: 'Изменить' });
 
-    const input_client_id = page.getByPlaceholder("Введите clientId приложения");
-    const input_details = page.getByPlaceholder("Введите details");
-    const input_large_Image_Key = page.getByPlaceholder("Введите largeImageKey");
-    const input_large_Image_Text = page.getByPlaceholder("Введите largeImageText");
-    const input_small_Image_Key = page.getByPlaceholder("Введите smallImageKey");
-    const input_small_Image_Text = page.getByPlaceholder("Введите smallImageText");
-    const button_save = page.getByRole("button", { name: "Сохранить" });
+    const input_client_id = page.getByPlaceholder('Введите clientId приложения');
+    const input_details = page.getByPlaceholder('Введите details');
+    const input_large_Image_Key = page.getByPlaceholder('Введите largeImageKey');
+    const input_large_Image_Text = page.getByPlaceholder('Введите largeImageText');
+    const input_small_Image_Key = page.getByPlaceholder('Введите smallImageKey');
+    const input_small_Image_Text = page.getByPlaceholder('Введите smallImageText');
+    const button_save = page.getByRole('button', { name: 'Сохранить' });
 
     const response_discord_raw = await inspect_request(page, get_discord_api_endpoint_url);
     const response_discord_json = await response_discord_raw.json();

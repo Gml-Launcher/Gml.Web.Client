@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { Table } from "@tanstack/react-table";
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
-import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+import { Table } from '@tanstack/react-table';
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+import { MixerHorizontalIcon } from '@radix-ui/react-icons';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/shared/ui/dropdown-menu";
+} from '@/shared/ui/dropdown-menu';
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
@@ -31,7 +31,7 @@ export function DataTableViewOptions<TData>({ table }: DataTableViewOptionsProps
         <DropdownMenuSeparator />
         {table
           .getAllColumns()
-          .filter((column) => typeof column.accessorFn !== "undefined" && column.getCanHide())
+          .filter((column) => typeof column.accessorFn !== 'undefined' && column.getCanHide())
           .map((column) => (
             <DropdownMenuCheckboxItem
               key={column.id}

@@ -9,15 +9,15 @@ import {
   RowSelectionState,
   SortingState,
   useReactTable,
-} from "@tanstack/react-table";
-import { useState } from "react";
+} from '@tanstack/react-table';
+import { useState } from 'react';
 
-import { useColumns } from "../lib/columns";
+import { useColumns } from '../lib/columns';
 
-import { ProfileFolderBaseEntity } from "@/shared/api/contracts";
-import { Input } from "@/shared/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { DataTablePagination } from "@/entities/Table/ui/items/data-table-pagination";
+import { ProfileFolderBaseEntity } from '@/shared/api/contracts';
+import { Input } from '@/shared/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { DataTablePagination } from '@/entities/Table/ui/items/data-table-pagination';
 
 interface FolderTableProps {
   folders: ProfileFolderBaseEntity[];
@@ -33,7 +33,7 @@ function Filter({ column }: { column: Column<ProfileFolderBaseEntity, unknown> }
       className="mb-4"
       placeholder={`Поиск...`}
       type="text"
-      value={(columnFilterValue ?? "") as string}
+      value={(columnFilterValue ?? '') as string}
       onChange={(value) => column.setFilterValue(value.target.value)}
     />
   );
@@ -89,7 +89,7 @@ export const FolderTable = ({ folders, rowSelection, setRowSelection }: FolderTa
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -1,1 +1,1 @@
-export * from "./ui/SentryPage";
+export * from './ui/SentryPage';

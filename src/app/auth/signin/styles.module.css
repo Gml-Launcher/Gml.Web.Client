@@ -1,43 +1,43 @@
 .login {
-    @apply w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh];
+  @apply w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh];
 }
 
 .login__main-content {
-    @apply flex items-center justify-center py-12;
+  @apply flex items-center justify-center py-12;
 }
 
 .login__form {
-    @apply mx-auto grid w-[350px] gap-6;
+  @apply mx-auto grid w-[350px] gap-6;
 }
 
 .login__details {
-    @apply grid gap-3;
+  @apply grid gap-3;
 }
 
 .login__logo {
-    @apply w-12;
+  @apply w-12;
 }
 
 .login__title {
-    @apply text-3xl font-bold;
+  @apply text-3xl font-bold;
 }
 
 .login__subtitle {
-    @apply text-balance text-muted-foreground;
+  @apply text-balance text-muted-foreground;
 }
 
 .login__registration {
-    @apply mt-4 text-center text-sm;
+  @apply mt-4 text-center text-sm;
 }
 
 .login__link {
-    @apply underline;
+  @apply underline;
 }
 
 .login__banner {
-    @apply hidden bg-muted lg:flex items-center justify-center;
+  @apply hidden bg-muted lg:flex items-center justify-center;
 }
 
 .login__banner-image {
-    @apply w-48 opacity-10;
+  @apply w-48 opacity-10;
 }
