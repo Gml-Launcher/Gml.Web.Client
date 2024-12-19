@@ -14,7 +14,7 @@ export default function Page() {
         <div className={classes['register__main-content']}>
           <div className={classes.register__form}>
             <div className={classes.register__details}>
-              <Image src={logo} className={classes.register__logo} alt="GML Frontend" />
+              <Image src={logo} className={classes.register__logo} alt="Gml Frontend" />
               <h1 className={classes.register__title}>Регистрация</h1>
               <p className={classes.register__subtitle}>
                 Введите свой адрес электронной почты ниже, чтобы создать свою учетную запись
@@ -30,7 +30,7 @@ export default function Page() {
           </div>
         </div>
         <div className={classes.register__banner}>
-          <Image src={logo} className={classes['register__banner-image']} alt="GML Frontend" />
+          <Image src={logo} className={classes['register__banner-image']} alt="Gml Frontend" />
         </div>
       </div>
     </>

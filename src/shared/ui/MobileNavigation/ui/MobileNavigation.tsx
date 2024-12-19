@@ -32,7 +32,7 @@ export const MobileNavigation = ({ menu }: MobileNavigationParams) => {
       <SheetContent side="left" className={classes.sheet}>
         <nav className={classes.sheet__navigation}>
           <Link href="/" className={classes.sheet__logo}>
-            <Image src={logo} alt="GML Frontend" />
+            <Image src={logo} alt="Gml Frontend" />
             {config.name}
             <sup className={classes.version}>{config.version}</sup>
           </Link>

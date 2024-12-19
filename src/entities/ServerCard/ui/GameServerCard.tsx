@@ -21,7 +21,7 @@ export const GameServerCard = ({ server, profileName }: GameServerCardParams) =>
   return (
     <Card className="flex flex-row items-center justify-between gap-y-4 p-3 pr-8">
       <div className="flex flex-row gap-x-5 items-center">
-        <Image src={minecraftLogo} className="w-16" alt="GML Frontend" />
+        <Image src={minecraftLogo} className="w-16" alt="Gml Frontend" />
         <div className="flex flex-col min-w-[350px]">
           <span className="text-lg font-bold">{server.name}</span>
           <span className="text-gray-600 dark:text-gray-400 font-medium text-sm">

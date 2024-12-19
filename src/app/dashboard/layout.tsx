@@ -50,7 +50,7 @@ export default function Page({ children }: React.PropsWithChildren) {
         <div className={classes.aside__wrapper}>
           <div className={classes['aside__wrapper-logo']}>
             <Link href="/" className={classes.aside__logo}>
-              <Image src={logo} alt="GML Frontend" />
+              <Image src={logo} alt="Gml Frontend" />
               {config.name}
               <sup className={classes.version}>{config.version}</sup>
             </Link>
