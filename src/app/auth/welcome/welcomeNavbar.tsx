@@ -71,17 +71,17 @@ export default function WelcomeNavbar() {
           </NavigationMenuItem>
           <NavigationMenuItem className="hidden sm:block">
             <Link href="https://github.com/Gml-Launcher" target="_blank" legacyBehavior passHref>
-              <NavigationMenuLink>Github</NavigationMenuLink>
+              <NavigationMenuLink target={'_blank'}>Github</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="hidden sm:block">
             <Link href="https://discord.gg/b5xgqfWgNt" target="_blank" legacyBehavior passHref>
-              <NavigationMenuLink>Discord</NavigationMenuLink>
+              <NavigationMenuLink target={'_blank'}>Discord</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="hidden text-xl sm:block font-bold leading-none tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 inline-block text-transparent bg-clip-text">
             <Link href="https://recloud.tb.ru" target="_blank" legacyBehavior passHref>
-              <NavigationMenuLink> Перейти на Pro</NavigationMenuLink>
+              <NavigationMenuLink target={'_blank'}> Перейти на Pro</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
