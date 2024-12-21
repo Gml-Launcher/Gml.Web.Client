@@ -15,7 +15,7 @@ const chartConfig = {
     color: 'hsl(var(--chart-1))',
   },
   backend: {
-    label: 'Сервер',
+    label: 'Панель Gml',
     color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig;

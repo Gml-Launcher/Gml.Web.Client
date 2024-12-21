@@ -9,6 +9,7 @@ import {
   startOfYear,
 } from 'date-fns';
 import { DateRange } from 'react-day-picker';
+import { CopyIcon } from '@radix-ui/react-icons';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -20,7 +21,7 @@ import { cn, enumValues } from '@/shared/lib/utils';
 import { DatePickerWithRange } from '@/shared/ui/data-range-picker';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { Textarea } from '@/shared/ui/textarea';
+import { Button } from '@/shared/ui/button';
 
 export const SentryAnalytics = () => {
   const [date, setDate] = useState<DateRange | undefined>(undefined);
@@ -145,6 +146,7 @@ export const SentryAnalytics = () => {
                       <TableHead>Ошибка</TableHead>
                       <TableHead>У скольки пользователей</TableHead>
                       <TableHead>Сколько данных ошибок</TableHead>
+                      <TableHead>Действия</TableHead>
                       {/*<TableHead>График</TableHead>*/}
                     </TableRow>
                   </TableHeader>
@@ -152,17 +154,20 @@ export const SentryAnalytics = () => {
                     {data &&
                       data.data.data.map((bug) => {
                         return (
-                          <TableRow key={bug.exception} className="bg-accent">
-                            <TableCell>
-                              {bug.exception}
-                              <Separator className="my-4" />
-                              <Textarea value={bug.stackTrace} className="h-24" />
-                            </TableCell>
+                          <TableRow key={bug.exception}>
+                            <TableCell>{bug.exception}</TableCell>
                             <TableCell>{bug.countUsers}</TableCell>
                             <TableCell>{bug.count}</TableCell>
-                            {/*<TableCell>*/}
-                            {/*  <SentryAnalyticsChart bug={bug} />*/}
-                            {/*</TableCell>*/}
+                            <TableCell>
+                              <Button
+                                className="gap-3"
+                                onClick={() => navigator.clipboard.writeText(bug.stackTrace)}
+                                variant="secondary"
+                              >
+                                <CopyIcon />
+                                Копировать
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         );
                       })}
