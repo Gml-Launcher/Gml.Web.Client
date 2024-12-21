@@ -17,8 +17,8 @@ import recloudLogo from '@/assets/logos/recloud.png';
 export default function WelcomeNavbar() {
   return (
     <>
-      <NavigationMenu className="h-6 max-h-6">
-        <NavigationMenuList className="gap-5 sm:gap-6 lg:gap-8">
+      <NavigationMenu className="items-start h-6 max-h-6 sm:h-8 sm:max-h-8 md:h-10 md:max-h-10 lg:h-12 lg:max-h-12">
+        <NavigationMenuList className="gap-5 sm:gap-6 lg:gap-8 flex-wrap">
           <Link
             href="/"
             className="flex items-center gap-x-2 text-xl sm:text-2xl font-bold whitespace-nowrap"
@@ -69,17 +69,17 @@ export default function WelcomeNavbar() {
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
-          <NavigationMenuItem className="hidden sm:block">
+          <NavigationMenuItem>
             <Link href="https://github.com/Gml-Launcher" target="_blank" legacyBehavior passHref>
               <NavigationMenuLink target={'_blank'}>Github</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem className="hidden sm:block">
+          <NavigationMenuItem>
             <Link href="https://discord.gg/b5xgqfWgNt" target="_blank" legacyBehavior passHref>
               <NavigationMenuLink target={'_blank'}>Discord</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem className="hidden text-xl sm:block font-bold leading-none tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 inline-block text-transparent bg-clip-text">
+          <NavigationMenuItem className="text-xlfont-bold leading-none tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 inline-block text-transparent bg-clip-text">
             <Link href="https://recloud.tb.ru" target="_blank" legacyBehavior passHref>
               <NavigationMenuLink target={'_blank'}> Перейти на Pro</NavigationMenuLink>
             </Link>
