@@ -40,7 +40,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
   const accessToken = getStorageAccessToken();
   const { data, mutate, isPending } = useProfile();
-  const profile = data?.data;
+  const profile = data?.data.data;
 
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
   const { mutate: mutateDeleteFoldersWhitelist } = useDeleteFolderWhitelist();
