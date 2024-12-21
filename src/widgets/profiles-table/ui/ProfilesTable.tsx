@@ -73,7 +73,7 @@ export function ProfilesTable() {
         <>
           <DataTableToolbar rowSelection={rowSelection} onOpenChange={onProfilesDrawerToggle} />
           <DataTable
-            data={profiles}
+            data={profiles.data}
             columns={columns}
             rowSelection={rowSelection}
             setRowSelection={setRowSelection}
