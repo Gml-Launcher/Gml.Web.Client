@@ -17,7 +17,7 @@ import recloudLogo from '@/assets/logos/recloud.png';
 export default function WelcomeNavbar() {
   return (
     <>
-      <NavigationMenu className="fixed">
+      <NavigationMenu className="h-6 max-h-6">
         <NavigationMenuList className="gap-5 sm:gap-6 lg:gap-8">
           <Link
             href="/"
