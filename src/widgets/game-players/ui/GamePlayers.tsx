@@ -1,10 +1,13 @@
+import { TrashIcon } from 'lucide-react';
+
 import { GamePlayersSkeleton } from './GamePlayersSkeleton';
 
-import { useGameServers } from '@/shared/hooks';
+import { useDeleteProfilePlayers, useGameServers } from '@/shared/hooks';
 import { ProfileExtendedBaseEntity } from '@/shared/api/contracts';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { $api } from '@/services/api.service';
 import { CreateWhiteUserDialog } from '@/features/create-game-white-user';
+import { Button } from '@/shared/ui/button';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -12,8 +15,13 @@ interface GameServersParams {
 
 export const GamePlayers = ({ profile }: GameServersParams) => {
   const { isLoading } = useGameServers({ profileName: profile.profileName });
+  const { mutateAsync } = useDeleteProfilePlayers({ profileName: profile.profileName });
 
   if (isLoading) return <GamePlayersSkeleton />;
+
+  const deletePlayer = async (uuid: string) => {
+    await mutateAsync({ playerUuid: uuid });
+  };
 
   return (
     <div className="grid gap-y-4">
@@ -35,6 +43,9 @@ export const GamePlayers = ({ profile }: GameServersParams) => {
                   {server.isBanned ? 'Заблокирован' : 'Не заблокирован'}
                 </CardDescription>
               </div>
+              <Button variant="destructive" onSubmit={() => deletePlayer(server.uuid)}>
+                <TrashIcon />
+              </Button>
             </CardHeader>
           </Card>
         ))}

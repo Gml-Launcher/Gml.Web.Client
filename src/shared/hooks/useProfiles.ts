@@ -52,7 +52,7 @@ export const useProfile = () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
     onSuccess: async (data) => {
-      setState(data.data.state);
+      setState(data.data.data.state);
     },
     onError: (error) => {
       isAxiosError({ toast, error });
@@ -75,7 +75,7 @@ export const useCreateProfile = () => {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
       toast.success('Успешно', {
-        description: `Профиль "${data.data.name}" успешно создан`,
+        description: `Профиль "${data.data.data.name}" успешно создан`,
       });
     },
     onError: (error) => {
@@ -106,7 +106,7 @@ export const useDeleteProfile = () => {
     },
     onSuccess: async (data) => {
       toast.success('Успешно', {
-        description: data.message,
+        description: data.data.message,
       });
     },
     onError: (error) => {
@@ -126,7 +126,7 @@ export const useDeleteProfiles = () => {
     },
     onSuccess: async (data) => {
       toast.success('Успешно', {
-        description: data.message,
+        description: data.data.message,
       });
     },
     onError: (error) => {
@@ -146,7 +146,25 @@ export const useAddProfilePlayers = () => {
     },
     onSuccess: async (data) => {
       toast.success('Успешно', {
-        description: data.message,
+        description: data.data.message,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useDeleteProfilePlayers = ({ profileName }: { profileName: string }) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: profileKeys.deletingAll(),
+    mutationFn: ({ playerUuid }: { playerUuid: string }) =>
+      profileService.deletePlayer({ profileName, playerUuid }),
+    onSuccess: async (data) => {
+      toast.success('Успешно', {
+        description: data.data.message,
       });
     },
     onError: (error) => {
