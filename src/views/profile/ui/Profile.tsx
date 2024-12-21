@@ -58,7 +58,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         OsType: OsTypeEnum.WINDOWS.toString(),
       });
     }
-  }, [accessToken, account, mutate, params.name]);
+  }, []);
 
   if (isPending || !profile) return <ProfileLoading />;
 
