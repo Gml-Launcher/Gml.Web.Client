@@ -29,9 +29,10 @@ export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
   const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('launcher');
 
   const getPercent = (num: number) => {
-    if (num == 0) return `Не изменилось`;
-    if (num > 0) return `На +${num}% больше обычного`;
-    return `На ${num}% меньше обычного`;
+    const roundedNum = Math.round(num);
+    if (roundedNum === 0) return `Не изменилось`;
+    if (roundedNum > 0) return `На +${roundedNum}% больше обычного`;
+    return `На ${roundedNum}% меньше обычного`;
   };
 
   const total = useMemo(() => {
