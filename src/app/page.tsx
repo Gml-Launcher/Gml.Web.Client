@@ -98,9 +98,9 @@ export default function Home() {
       <div className="p-4 sm:p-10 h-screen flex flex-col">
         <WelcomeNavbar />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] xl:grid-cols-[550px_1fr] h-full gap-10 md:grid-cols-2 pt-16 items-start xl:items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] xl:grid-cols-[550px_1fr] h-full gap-10 md:grid-cols-2 pt-32 sm:pt-16 items-start xl:items-center">
           <div className="flex relative gap-y-5 flex-col">
-            <h1 className="text-4xl font-bold">Спасибо, за выбор Gml</h1>
+            <h1 className="text-4xl font-bold">Спасибо за выбор Gml</h1>
             <p className="text-xl text-gray-400 leading-relaxed">
               Добро пожаловать в панель управления! Мы рады приветствовать вас в панели управления.
               Здесь вы можете настроить, управлять и следить за всеми аспектами вашего проекта.
