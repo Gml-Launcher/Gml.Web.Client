@@ -35,11 +35,13 @@ import {
 } from '@/shared/ui/alert-dialog';
 import { FolderTable } from '@/widgets/folder-table';
 import { GamePlayers } from '@/widgets/game-players';
+import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
   const accessToken = getStorageAccessToken();
   const { data, mutate, isPending } = useProfile();
+  const { setPlayers } = useGamePlayerStore();
   const profile = data?.data.data;
 
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
@@ -59,6 +61,12 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (profile !== undefined) {
+      setPlayers(profile?.usersWhiteList);
+    }
+  }, [profile, setPlayers]);
 
   if (isPending || !profile) return <ProfileLoading />;
 

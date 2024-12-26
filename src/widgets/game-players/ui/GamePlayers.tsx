@@ -1,4 +1,5 @@
 import { TrashIcon } from 'lucide-react';
+import { useEffect } from 'react';
 
 import { GamePlayersSkeleton } from './GamePlayersSkeleton';
 
@@ -8,6 +9,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { $api } from '@/services/api.service';
 import { CreateWhiteUserDialog } from '@/features/create-game-white-user';
 import { Button } from '@/shared/ui/button';
+import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -16,20 +18,29 @@ interface GameServersParams {
 export const GamePlayers = ({ profile }: GameServersParams) => {
   const { isLoading } = useGameServers({ profileName: profile.profileName });
   const { mutateAsync } = useDeleteProfilePlayers({ profileName: profile.profileName });
+  const { players, removePlayer } = useGamePlayerStore();
+
+  useEffect(() => {
+    console.log(players);
+  }, [players]);
 
   if (isLoading) return <GamePlayersSkeleton />;
 
   const deletePlayer = async (uuid: string) => {
-    await mutateAsync({ playerUuid: uuid });
+    const mutate = await mutateAsync({ playerUuid: uuid });
+
+    if (mutate.status === 200) {
+      removePlayer(uuid);
+    }
   };
 
   return (
     <div className="grid gap-y-4">
       <div className="flex flex-col gap-x-2">
-        <CreateWhiteUserDialog profile={profile} />
+        <CreateWhiteUserDialog profile={profile} playersState={players} />
       </div>
       <div className="flex flex-wrap gap-4">
-        {profile?.usersWhiteList.map((server, index) => (
+        {players.map((server, index) => (
           <Card key={index} className="w-[280px]">
             <CardHeader className="flex flex-row items-center">
               <img
@@ -43,7 +54,7 @@ export const GamePlayers = ({ profile }: GameServersParams) => {
                   {server.isBanned ? 'Заблокирован' : 'Не заблокирован'}
                 </CardDescription>
               </div>
-              <Button variant="destructive" onSubmit={() => deletePlayer(server.uuid)}>
+              <Button variant="destructive" onClick={() => deletePlayer(server.uuid)}>
                 <TrashIcon />
               </Button>
             </CardHeader>

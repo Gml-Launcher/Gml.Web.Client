@@ -80,7 +80,7 @@ class ProfileService {
     playerUuid: string;
   }): Promise<AxiosResponse<TDeletePlayerToProfileResponse>> {
     return await $api.delete<TDeletePlayerToProfileResponse>(
-      `${this.BASE_URL}/${profileName}/${playerUuid}`,
+      `${this.BASE_URL}/${profileName}/players/whitelist/${playerUuid}`,
     );
   }
 

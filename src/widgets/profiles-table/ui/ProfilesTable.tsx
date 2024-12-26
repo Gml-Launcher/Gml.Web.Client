@@ -52,6 +52,8 @@ export function ProfilesTable() {
     isPendingDelete: deleteMutation.isPending,
   });
 
+  console.log(profiles);
+
   const onProfileDelete =
     ({ profileName, removeFiles }: { profileName: string; removeFiles: boolean }) =>
     async () => {
@@ -73,7 +75,7 @@ export function ProfilesTable() {
         <>
           <DataTableToolbar rowSelection={rowSelection} onOpenChange={onProfilesDrawerToggle} />
           <DataTable
-            data={profiles.data}
+            data={profiles}
             columns={columns}
             rowSelection={rowSelection}
             setRowSelection={setRowSelection}

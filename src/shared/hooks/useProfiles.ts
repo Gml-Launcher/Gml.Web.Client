@@ -1,7 +1,13 @@
-import { AxiosResponse } from 'axios';
-import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosResponse, isAxiosError as isAxiosErrorBase } from 'axios';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import {
   ProfileBaseEntity,
@@ -25,6 +31,8 @@ export const profileKeys = {
   editing: () => [...profileKeys.all, 'editing'] as const,
   deleting: () => [...profileKeys.all, 'deleting'] as const,
   deletingAll: () => [...profileKeys.all, 'deletingAll'] as const,
+  deletingPlayers: () => [...profileKeys.all, 'deletingPlayers'] as const,
+  addingPlayers: () => [...profileKeys.all, 'addingPlayers'] as const,
 
   entities: () => [...profileKeys.all, 'entities'] as const,
 
@@ -36,17 +44,18 @@ export const useProfiles = () => {
   return useQuery({
     queryKey: profileKeys.all,
     queryFn: () => profileService.getProfiles(),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };
 
 export const useProfile = () => {
   const { setState } = useProfileCardStore();
 
+  const route = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: profileKeys.reading(),
+    mutationKey: [...profileKeys.reading()],
     mutationFn: (data: TGetProfileRequest) => profileService.getProfile(data),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
@@ -56,6 +65,12 @@ export const useProfile = () => {
     },
     onError: (error) => {
       isAxiosError({ toast, error });
+
+      if (isAxiosErrorBase(error)) {
+        if (error.response && error.response.status === 404) {
+          route.push('/dashboard/profiles');
+        }
+      }
     },
   });
 };
@@ -135,16 +150,16 @@ export const useDeleteProfiles = () => {
   });
 };
 
-export const useAddProfilePlayers = () => {
+export const useAddProfilePlayers = (profileName?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: profileKeys.deletingAll(),
+    mutationKey: profileKeys.addingPlayers(),
     mutationFn: (body: TAddPlayerToProfileRequest) => profileService.addPlayer(body),
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: profileKeys.all });
-    },
     onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: [...profileKeys.reading(), { profileName: profileName }],
+      });
       toast.success('Успешно', {
         description: data.data.message,
       });
@@ -159,7 +174,7 @@ export const useDeleteProfilePlayers = ({ profileName }: { profileName: string }
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: profileKeys.deletingAll(),
+    mutationKey: profileKeys.deletingPlayers(),
     mutationFn: ({ playerUuid }: { playerUuid: string }) =>
       profileService.deletePlayer({ profileName, playerUuid }),
     onSuccess: async (data) => {

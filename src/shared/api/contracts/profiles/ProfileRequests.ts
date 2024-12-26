@@ -1,6 +1,7 @@
 import {
   GameLoaderOption,
   JavaVersionBaseEntity,
+  PlayerBaseEntity,
   ProfileBaseEntity,
   ProfileExtendedBaseEntity,
 } from '@/shared/api/contracts';
@@ -58,7 +59,9 @@ export type TAddPlayerToProfileRequest = {
   profileName: string;
   userUuid: string;
 };
-export type TAddPlayerToProfileResponse = ResponseBaseEntity & {};
+export type TAddPlayerToProfileResponse = ResponseBaseEntity & {
+  data: PlayerBaseEntity;
+};
 
 // Удаление игрока в профиле
 export type TDeletePlayerToProfileRequest = {};

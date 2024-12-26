@@ -17,6 +17,7 @@ import { useAddProfilePlayers, useCreateGameServer } from '@/shared/hooks';
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,
+  PlayerBaseEntity,
   ProfileExtendedBaseEntity,
 } from '@/shared/api/contracts';
 import { Icons } from '@/shared/ui/icons';
@@ -26,19 +27,23 @@ import { Command, CommandEmpty, CommandGroup, CommandItem, CommandList } from '@
 import { cn } from '@/shared/lib/utils';
 import { $api } from '@/services/api.service';
 import { Input } from '@/shared/ui/input';
+import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
 
 type AddGameServerDialogParams = {
   profile?: ProfileExtendedBaseEntity;
+  playersState: PlayerBaseEntity[];
 };
 
-export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) => {
+export const CreateWhiteUserDialog = ({ profile, playersState }: AddGameServerDialogParams) => {
   const [open, setOpen] = useState(false);
   const onOpenChange = () => setOpen((prev) => !prev);
 
   const [openComboBox, setComboboxOpen] = React.useState(false);
   const [valueComboBox, setComboboxValue] = React.useState('');
   const [search, setSearch] = useState('');
-  const addPlayerMutation = useAddProfilePlayers();
+  const addPlayerMutation = useAddProfilePlayers(profile?.profileName);
+
+  const { addPlayer } = useGamePlayerStore();
 
   const form = useForm<AddGameServerSchemeType>({
     resolver: zodResolver(AddGameServerScheme),
@@ -55,10 +60,14 @@ export const CreateWhiteUserDialog = ({ profile }: AddGameServerDialogParams) =>
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await addPlayerMutation.mutateAsync({
+    const mutate = await addPlayerMutation.mutateAsync({
       profileName: profile!.profileName,
       userUuid: valueComboBox,
     });
+
+    if (mutate.status === 200) {
+      addPlayer(mutate.data.data);
+    }
   };
 
   return (
