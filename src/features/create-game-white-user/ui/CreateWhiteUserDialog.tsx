@@ -41,7 +41,7 @@ export const CreateWhiteUserDialog = ({ profile, playersState }: AddGameServerDi
   const [openComboBox, setComboboxOpen] = React.useState(false);
   const [valueComboBox, setComboboxValue] = React.useState('');
   const [search, setSearch] = useState('');
-  const addPlayerMutation = useAddProfilePlayers(profile?.profileName);
+  const { mutateAsync } = useAddProfilePlayers(profile?.profileName);
 
   const { addPlayer } = useGamePlayerStore();
 
@@ -55,19 +55,18 @@ export const CreateWhiteUserDialog = ({ profile, playersState }: AddGameServerDi
   const handleSearchInput = throttle((text: string) => {
     setSearch(text);
     refetch().then(() => {});
-    console.log(text);
   }, 2000);
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const mutate = await addPlayerMutation.mutateAsync({
+    mutateAsync({
       profileName: profile!.profileName,
       userUuid: valueComboBox,
+    }).then((response) => {
+      addPlayer(response.data.data);
+      onOpenChange();
+      setComboboxValue('');
     });
-
-    if (mutate.status === 200) {
-      addPlayer(mutate.data.data);
-    }
   };
 
   return (

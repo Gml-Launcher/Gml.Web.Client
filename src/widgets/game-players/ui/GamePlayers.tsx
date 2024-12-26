@@ -1,5 +1,4 @@
 import { TrashIcon } from 'lucide-react';
-import { useEffect } from 'react';
 
 import { GamePlayersSkeleton } from './GamePlayersSkeleton';
 
@@ -20,18 +19,12 @@ export const GamePlayers = ({ profile }: GameServersParams) => {
   const { mutateAsync } = useDeleteProfilePlayers({ profileName: profile.profileName });
   const { players, removePlayer } = useGamePlayerStore();
 
-  useEffect(() => {
-    console.log(players);
-  }, [players]);
-
   if (isLoading) return <GamePlayersSkeleton />;
 
-  const deletePlayer = async (uuid: string) => {
-    const mutate = await mutateAsync({ playerUuid: uuid });
-
-    if (mutate.status === 200) {
+  const deletePlayer = (uuid: string) => {
+    mutateAsync({ playerUuid: uuid }).then(() => {
       removePlayer(uuid);
-    }
+    });
   };
 
   return (
