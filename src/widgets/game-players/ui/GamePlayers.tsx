@@ -34,21 +34,25 @@ export const GamePlayers = ({ profile }: GameServersParams) => {
       </div>
       <div className="flex flex-wrap gap-4">
         {players.map((server, index) => (
-          <Card key={index} className="w-[280px]">
-            <CardHeader className="flex flex-row items-center">
+          <Card key={index} className="w-[300px]">
+            <CardHeader className="flex flex-row justify-between items-Start">
               <img
                 src={$api.getUri() + `/integrations/texture/head/${server.uuid}`}
                 alt="skin"
-                className="w-10 rounded-lg"
+                className="w-12 h-12 mt-1 rounded-lg"
               />
               <div className="ml-2">
                 <CardTitle className="font-bold">{server.name}</CardTitle>
-                <CardDescription className="font-medium">
+                <CardDescription className="font-medium mt-1">
                   {server.isBanned ? 'Заблокирован' : 'Не заблокирован'}
                 </CardDescription>
               </div>
-              <Button variant="destructive" onClick={() => deletePlayer(server.uuid)}>
-                <TrashIcon />
+              <Button
+                variant="destructive"
+                className="w-8 h-8 p-0"
+                onClick={() => deletePlayer(server.uuid)}
+              >
+                <TrashIcon size="16" />
               </Button>
             </CardHeader>
           </Card>
