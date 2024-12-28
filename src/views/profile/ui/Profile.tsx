@@ -213,14 +213,17 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </Section>
         </TabsContent>
         <TabsContent value="servers" className={classes.tabs__content}>
-          <Section title="Сервера" subtitle="Управление серверами">
+          <Section
+            title="Сервера"
+            subtitle="Добавление серверов, для вывода онлайна в лаунчере, можно использовать домены, srv записи и IP адреса"
+          >
             <GameServers profile={profile} />
           </Section>
         </TabsContent>
         <TabsContent value="players" className={classes.tabs__content}>
           <Section
             title="Игроки"
-            subtitle="Управление игроками, которые могут заходить в игровой клиент"
+            subtitle="Управление игроками, которые могут заходить в игровой клиент, даже если он выключен или недоступен"
           >
             <GamePlayers profile={profile} />
           </Section>
