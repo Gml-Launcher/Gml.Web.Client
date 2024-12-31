@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { InfoIcon, Trash2Icon } from "lucide-react";
+import React, { useState } from 'react';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { InfoIcon, Trash2Icon } from 'lucide-react';
 
 import {
   Dialog,
@@ -8,16 +8,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Button } from "@/shared/ui/button";
-import { Tabs, TabsContent } from "@/shared/ui/tabs";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { Input } from "@/shared/ui/input";
-import { useAddingFolderWhitelist } from "@/shared/hooks";
-import { WhitelistFolderBaseEntity } from "@/shared/api/contracts";
-import { Card } from "@/shared/ui/card";
-import { Switch } from "@/shared/ui/switch";
-import { Label } from "@/shared/ui/label";
+} from '@/shared/ui/dialog';
+import { Button } from '@/shared/ui/button';
+import { Tabs, TabsContent } from '@/shared/ui/tabs';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { Input } from '@/shared/ui/input';
+import { useAddingFolderWhitelist } from '@/shared/hooks';
+import { WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { Card } from '@/shared/ui/card';
+import { Switch } from '@/shared/ui/switch';
+import { Label } from '@/shared/ui/label';
 
 interface AddingFoldersWhitelistDialogProps {
   profileName: string;
@@ -33,10 +33,10 @@ export const AddingFoldersWhitelistDialog = ({
 
   const [preview, setPreview] = useState(false);
 
-  const [tab, setTab] = useState("folders");
+  const [tab, setTab] = useState('folders');
   const onChangeTab = (currentTab: string) => () => setTab(currentTab);
 
-  const [folder, setFolder] = useState<string>("");
+  const [folder, setFolder] = useState<string>('');
   const [folders, setFolders] = useState<string[]>([]);
 
   const handleAppendFolder = (folder: string) => {
@@ -62,7 +62,7 @@ export const AddingFoldersWhitelistDialog = ({
     mutate(folderPaths);
 
     setFolders([]);
-    setFolder("");
+    setFolder('');
 
     onOpenChange();
   };
@@ -83,7 +83,7 @@ export const AddingFoldersWhitelistDialog = ({
                 placeholder="Введите путь до папки"
                 onChange={(event) => handleChangeFolder(event.target.value)}
               />
-              <Button onClick={() => handleAppendFolder(folder)} disabled={folder == ""}>
+              <Button onClick={() => handleAppendFolder(folder)} disabled={folder == ''}>
                 Добавить
               </Button>
             </div>
@@ -91,7 +91,7 @@ export const AddingFoldersWhitelistDialog = ({
               <Card className="rounded-md">
                 <div className="max-w-[1050px] py-2 px-2">
                   <span className="break-words">
-                    C:/Users/test/AppData/Roaming/{"{НазваниеВашегоЛаунчера}"}/clients/{profileName}
+                    C:/Users/test/AppData/Roaming/{'{НазваниеВашегоЛаунчера}'}/clients/{profileName}
                     /{folder}
                   </span>
                 </div>
@@ -123,11 +123,11 @@ export const AddingFoldersWhitelistDialog = ({
               <InfoIcon className="h-4 w-4" />
               <AlertTitle>Обратите внимание!</AlertTitle>
               <AlertDescription className="mb-2">
-                Пример заполнения: <b>{"jorneymap/maps"}</b> будет заменено на{" "}
+                Пример заполнения: <b>{'jorneymap/maps'}</b> будет заменено на{' '}
                 <div>
                   <span>
-                    C:/Users/test/AppData/Roaming/<b>{"{НазваниеВашегоЛаунчера}"}</b>/clients/
-                    {profileName}/<b>{"jorneymap/maps"}</b>
+                    C:/Users/test/AppData/Roaming/<b>{'{НазваниеВашегоЛаунчера}'}</b>/clients/
+                    {profileName}/<b>{'jorneymap/maps'}</b>
                   </span>
                 </div>
               </AlertDescription>
@@ -149,19 +149,19 @@ export const AddingFoldersWhitelistDialog = ({
             <Switch id="preview-mode" checked={preview} onCheckedChange={setPreview} />
             <Label htmlFor="preview-mode">Preview</Label>
           </div>
-          <Button className="w-fit" onClick={onChangeTab("folders")} disabled={tab === "folders"}>
+          <Button className="w-fit" onClick={onChangeTab('folders')} disabled={tab === 'folders'}>
             Назад
           </Button>
-          {tab === "folders" && (
+          {tab === 'folders' && (
             <Button
               className="w-fit"
-              onClick={onChangeTab("checkout")}
+              onClick={onChangeTab('checkout')}
               disabled={folders.length == 0}
             >
               Далее
             </Button>
           )}
-          {tab === "checkout" && (
+          {tab === 'checkout' && (
             <Button className="w-fit" onClick={onSubmit}>
               Добавить
             </Button>

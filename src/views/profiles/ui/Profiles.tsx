@@ -1,14 +1,14 @@
-import { CreateProfileDialog } from "@/widgets/create-profile-dialog";
-import { ProfilesTable } from "@/widgets/profiles-table";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { DASHBOARD_PAGES } from "@/shared/routes";
+import { CreateProfileDialog } from '@/widgets/create-profile-dialog';
+import { ProfilesTable } from '@/widgets/profiles-table';
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { DASHBOARD_PAGES } from '@/shared/routes';
 
 export const ProfilesPage = () => {
   return (
     <>
       <Breadcrumbs
-        current={"Профили"}
-        breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
+        current={'Профили'}
+        breadcrumbs={[{ value: 'Главная', path: DASHBOARD_PAGES.HOME }]}
       />
       <div className="flex flex-col items-start py-4">
         <div className="flex justify-between w-full">

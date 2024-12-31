@@ -1,6 +1,6 @@
 'use client';
 
-import {forwardRef, ElementRef, HTMLAttributes, ComponentPropsWithoutRef} from 'react';
+import { forwardRef, ElementRef, HTMLAttributes, ComponentPropsWithoutRef } from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 
 import { cn } from '@/shared/lib/utils';
@@ -45,7 +45,7 @@ const AlertDialogContent = forwardRef<
 ));
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
-function AlertDialogHeader({className, ...props}: HTMLAttributes<HTMLDivElement>) {
+function AlertDialogHeader({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
   );
@@ -53,7 +53,7 @@ function AlertDialogHeader({className, ...props}: HTMLAttributes<HTMLDivElement>
 
 AlertDialogHeader.displayName = 'AlertDialogHeader';
 
-function AlertDialogFooter({className, ...props}: HTMLAttributes<HTMLDivElement>) {
+function AlertDialogFooter({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}

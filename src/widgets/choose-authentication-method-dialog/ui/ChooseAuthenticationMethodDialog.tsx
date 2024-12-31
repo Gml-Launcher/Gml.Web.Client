@@ -1,26 +1,26 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { KeyRound } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { KeyRound } from 'lucide-react';
 
-import { AuthenticationFormUndefined } from "@/features/authentication-undefined-form";
-import { AuthenticationFormDle } from "@/features/authentication-dle-form";
-import { AuthenticationAnyForm } from "@/features/authentication-any-form";
-import { AuthenticationFormAzuriom } from "@/features/authentication-azuriom-form";
-import { AuthenticationFormEasycabinet } from "@/features/authentication-easycabinet-form";
-import { AuthenticationFormUniCoreCMS } from "@/features/authentication-unicorecms-form";
-import { AuthenticationFormCustom } from "@/features/authentication-custom-form";
+import { AuthenticationFormUndefined } from '@/features/authentication-undefined-form';
+import { AuthenticationFormDle } from '@/features/authentication-dle-form';
+import { AuthenticationAnyForm } from '@/features/authentication-any-form';
+import { AuthenticationFormAzuriom } from '@/features/authentication-azuriom-form';
+import { AuthenticationFormEasycabinet } from '@/features/authentication-easycabinet-form';
+import { AuthenticationFormUniCoreCMS } from '@/features/authentication-unicorecms-form';
+import { AuthenticationFormCustom } from '@/features/authentication-custom-form';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { AuthenticationType, AuthenticationTypeOption } from "@/shared/enums";
-import { useActiveAuthIntegrations, useAuthIntegrations } from "@/shared/hooks";
-import { Button } from "@/shared/ui/button";
+} from '@/shared/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { AuthenticationType, AuthenticationTypeOption } from '@/shared/enums';
+import { useActiveAuthIntegrations, useAuthIntegrations } from '@/shared/hooks';
+import { Button } from '@/shared/ui/button';
 
 export function ChooseAuthenticationMethodDialog() {
   const [open, setOpen] = useState(false);

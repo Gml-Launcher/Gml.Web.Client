@@ -1,22 +1,22 @@
-import { useMemo, useState } from "react";
-import { BarChart2, Bug } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useMemo, useState } from 'react';
+import { BarChart2, Bug } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
-import { BaseSentryStats, BaseSentrySummary } from "@/shared/api/contracts/sentry/schemas";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/shared/ui/chart';
+import { BaseSentryStats, BaseSentrySummary } from '@/shared/api/contracts/sentry/schemas';
 
 const chartConfig = {
   views: {
-    label: "Ошибок",
+    label: 'Ошибок',
   },
   launcher: {
-    label: "Лаунчер",
-    color: "hsl(var(--chart-1))",
+    label: 'Лаунчер',
+    color: 'hsl(var(--chart-1))',
   },
   backend: {
-    label: "Сервер",
-    color: "hsl(var(--chart-2))",
+    label: 'Панель Gml',
+    color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig;
 
@@ -26,12 +26,13 @@ interface SentryStatsProps {
 }
 
 export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
-  const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("launcher");
+  const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>('launcher');
 
   const getPercent = (num: number) => {
-    if (num == 0) return `Не изменилось`;
-    if (num > 0) return `На +${num}% больше обычного`;
-    return `На ${num}% меньше обычного`;
+    const roundedNum = Math.round(num);
+    if (roundedNum === 0) return `Не изменилось`;
+    if (roundedNum > 0) return `На +${roundedNum}% больше обычного`;
+    return `На ${roundedNum}% меньше обычного`;
   };
 
   const total = useMemo(() => {
@@ -102,7 +103,7 @@ export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
             <CardDescription>Демонстрация количество ошибок за последние 3 месяца</CardDescription>
           </div>
           <div className="flex">
-            {["launcher", "backend"].map((key) => {
+            {['launcher', 'backend'].map((key) => {
               const chart = key as keyof typeof chartConfig;
               return (
                 <button
@@ -139,9 +140,9 @@ export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
                 minTickGap={32}
                 tickFormatter={(value) => {
                   const date = new Date(value);
-                  return date.toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
+                  return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
                   });
                 }}
               />
@@ -151,10 +152,10 @@ export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
                     className="w-[150px]"
                     nameKey="views"
                     labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                      return new Date(value).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
                       });
                     }}
                   />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Column,
   ColumnFiltersState,
@@ -10,14 +10,14 @@ import {
   RowSelectionState,
   SortingState,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
-import { useColumns } from "../lib/columns";
+import { useColumns } from '../lib/columns';
 
-import { ProfileFileBaseEntity } from "@/shared/api/contracts";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { DataTablePagination } from "@/entities/Table/ui/items/data-table-pagination";
-import { Input } from "@/shared/ui/input";
+import { ProfileFileBaseEntity } from '@/shared/api/contracts';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { DataTablePagination } from '@/entities/Table/ui/items/data-table-pagination';
+import { Input } from '@/shared/ui/input';
 
 interface FilesTableProps {
   files: ProfileFileBaseEntity[];
@@ -33,7 +33,7 @@ function Filter({ column }: { column: Column<ProfileFileBaseEntity, unknown> }) 
       className="mb-4"
       placeholder={`Поиск...`}
       type="text"
-      value={(columnFilterValue ?? "") as string}
+      value={(columnFilterValue ?? '') as string}
       onChange={(value) => column.setFilterValue(value.target.value)}
     />
   );
@@ -90,7 +90,7 @@ export function FilesTable({ files, rowSelection, setRowSelection }: FilesTableP
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

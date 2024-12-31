@@ -1,22 +1,19 @@
-import { z } from "zod";
-
-const MAX_FILE_SIZE = 1_000_000;
-const ACCEPTED_IMAGE_TYPES = ["image/png"];
+import { z } from 'zod';
 
 export const CreateProfileSchema = z.object({
   name: z
     .string()
-    .min(2, { message: "Длина имени должна быть больше 2 символов" })
-    .max(100, { message: "Длина имени не должна быть больше 100 символов" }),
+    .min(2, { message: 'Длина имени должна быть больше 2 символов' })
+    .max(100, { message: 'Длина имени не должна быть больше 100 символов' }),
   description: z
     .string()
-    .min(2, { message: "Длина описания должна быть больше 2 символов" })
+    .min(2, { message: 'Длина описания должна быть больше 2 символов' })
     .max(1000, {
-      message: "Длина описания не должна быть больше 1000 символов",
+      message: 'Длина описания не должна быть больше 1000 символов',
     }),
   version: z.string({
     errorMap: () => ({
-      message: "Не выбрана версия игры",
+      message: 'Не выбрана версия игры',
     }),
   }),
   loaderVersion: z.string().optional(),
@@ -27,17 +24,18 @@ export const CreateProfileSchema = z.object({
 export const EditProfileSchema = z.object({
   name: z
     .string()
-    .min(2, { message: "Длина имени должна быть больше 2 символов" })
-    .max(100, { message: "Длина имени не должна быть больше 100 символов" }),
+    .min(2, { message: 'Длина имени должна быть больше 2 символов' })
+    .max(100, { message: 'Длина имени не должна быть больше 100 символов' }),
   description: z
     .string()
-    .min(2, { message: "Длина описания должна быть больше 2 символов" })
+    .min(2, { message: 'Длина описания должна быть больше 2 символов' })
     .max(1000, {
-      message: "Длина описания не должна быть больше 1000 символов",
+      message: 'Длина описания не должна быть больше 1000 символов',
     }),
   jvmArguments: z.string().optional(),
   gameArguments: z.string().optional(),
   icon: z.any(),
+  isEnabled: z.boolean().default(true).optional(),
   background: z.any(),
 });
 

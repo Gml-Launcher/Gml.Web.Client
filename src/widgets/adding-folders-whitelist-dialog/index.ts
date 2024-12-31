@@ -1,1 +1,1 @@
-export * from "./ui/AddingFoldersWhitelistDialog";
+export * from './ui/AddingFoldersWhitelistDialog';

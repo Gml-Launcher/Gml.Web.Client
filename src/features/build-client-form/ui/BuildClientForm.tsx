@@ -1,21 +1,21 @@
-import { useEffect, useRef } from "react";
-import { Ubuntu_Mono } from "next/font/google";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { useEffect, useRef } from 'react';
+import { Ubuntu_Mono } from 'next/font/google';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Check, ChevronsUpDown } from 'lucide-react';
 
-import { ClientBuildFormSchemaType, ClientBuildSchema } from "../lib/static";
-import { useOnSubmit } from "../lib/hooks/useOnSubmit";
+import { ClientBuildFormSchemaType, ClientBuildSchema } from '../lib/static';
+import { useOnSubmit } from '../lib/hooks/useOnSubmit';
 
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
-import { useLauncherGithubVersions, useLauncherPlatforms } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Icons } from "@/shared/ui/icons";
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Textarea } from "@/shared/ui/textarea";
-import { SelectOption } from "@/shared/types";
-import { MultiSelect } from "@/shared/ui/multi-select";
+import { useConnectionHub } from '@/widgets/generate-launcher-dialog';
+import { useLauncherGithubVersions, useLauncherPlatforms } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Icons } from '@/shared/ui/icons';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Textarea } from '@/shared/ui/textarea';
+import { SelectOption } from '@/shared/types';
+import { MultiSelect } from '@/shared/ui/multi-select';
 import {
   Command,
   CommandEmpty,
@@ -23,18 +23,18 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/shared/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover";
+} from '@/shared/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 
 interface BuildClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
-  state: ReturnType<typeof useConnectionHub>["build"];
+  connectionHub: ReturnType<typeof useConnectionHub>['connectionHub'];
+  state: ReturnType<typeof useConnectionHub>['build'];
 }
 
 const ubuntuMono = Ubuntu_Mono({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: "400",
+  subsets: ['latin'],
+  variable: '--font-sans',
+  weight: '400',
 });
 
 export function BuildClientForm({
@@ -64,7 +64,7 @@ export function BuildClientForm({
 
   const form = useForm<ClientBuildFormSchemaType>({
     defaultValues: {
-      version: "",
+      version: '',
       operatingSystem: [],
     },
     resolver: zodResolver(ClientBuildSchema),
@@ -74,7 +74,7 @@ export function BuildClientForm({
   const { onSubmit } = useOnSubmit({
     connectionHub,
     state,
-    version: form.getValues("version"),
+    version: form.getValues('version'),
   });
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -85,7 +85,7 @@ export function BuildClientForm({
   }, [logs]);
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller
@@ -102,15 +102,15 @@ export function BuildClientForm({
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "w-full justify-between",
-                            !field.value && "text-muted-foreground",
+                            'w-full justify-between',
+                            !field.value && 'text-muted-foreground',
                           )}
                         >
                           {field.value
                             ? versionsOptions &&
                               versionsOptions.find((version) => version.value === field.value)
                                 ?.label
-                            : "Выберите версию"}
+                            : 'Выберите версию'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -126,13 +126,13 @@ export function BuildClientForm({
                                 key={option.value}
                                 value={option.value}
                                 onSelect={(currentValue) => {
-                                  form.setValue("version", currentValue);
+                                  form.setValue('version', currentValue);
                                 }}
                               >
                                 <Check
                                   className={cn(
-                                    "mr-2 h-4 w-4",
-                                    option.value === field.value ? "opacity-100" : "opacity-0",
+                                    'mr-2 h-4 w-4',
+                                    option.value === field.value ? 'opacity-100' : 'opacity-0',
                                   )}
                                 />
                                 {option.label}
@@ -184,8 +184,8 @@ export function BuildClientForm({
       {isBuilding && logs && (
         <Textarea
           ref={textareaRef}
-          value={logs.join("\n")}
-          className={cn("h-64 max-h-64 font-sans", ubuntuMono.variable)}
+          value={logs.join('\n')}
+          className={cn('h-64 max-h-64 font-sans', ubuntuMono.variable)}
           readOnly
         />
       )}

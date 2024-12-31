@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
 import {
   Breadcrumb,
@@ -7,7 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/shared/ui/breadcrumb";
+} from '@/shared/ui/breadcrumb';
 
 type BreadcrumbItemType = {
   value: string;

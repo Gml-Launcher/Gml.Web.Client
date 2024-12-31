@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 
-import { getApiBaseUrl } from "@/shared/lib/utils";
-import { getStorageAccessToken } from "@/shared/services";
-import { useNotificationsState } from "@/views/notification/lib/store";
-import { NotificationBaseEntity } from "@/shared/api/contracts";
-import { useNotifications } from "@/shared/hooks";
+import { getApiBaseUrl } from '@/shared/lib/utils';
+import { getStorageAccessToken } from '@/shared/services';
+import { useNotificationsState } from '@/views/notification/lib/store';
+import { NotificationBaseEntity } from '@/shared/api/contracts';
+import { useNotifications } from '@/shared/hooks';
 
 const CONNECTION_URL = (token: string) =>
   `${getApiBaseUrl()}/ws/notifications?access_token=${token}`;
@@ -33,7 +33,7 @@ export const useConnectionHub = () => {
       try {
         const connection = new HubConnectionBuilder()
           .withUrl(CONNECTION_URL(accessToken), {
-            headers: { "Access-Control-Allow-Credentials": "*" },
+            headers: { 'Access-Control-Allow-Credentials': '*' },
             withCredentials: false,
           })
           .withAutomaticReconnect()
@@ -42,17 +42,17 @@ export const useConnectionHub = () => {
 
         await connection.start();
 
-        connection.on("Notifications", (notification: NotificationBaseEntity) => {
+        connection.on('Notifications', (notification: NotificationBaseEntity) => {
           const { details, message } = notification;
           addCount();
           addNotification(notification);
           toast.error(message, {
             description: details && `${details?.substring(0, 50)}...`,
             action: {
-              label: "Копировать",
+              label: 'Копировать',
               onClick: async () => {
                 await navigator.clipboard.writeText(details ? details : message);
-                toast("Текст успешно скопирован", { duration: 500, onAutoClose: () => true });
+                toast('Текст успешно скопирован', { duration: 500, onAutoClose: () => true });
               },
             },
           });

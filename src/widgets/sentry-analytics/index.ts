@@ -1,1 +1,1 @@
-export * from "./ui/SentryAnalytics";
+export * from './ui/SentryAnalytics';

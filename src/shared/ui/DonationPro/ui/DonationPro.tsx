@@ -1,6 +1,6 @@
-import classes from "./styles.module.css";
+import classes from './styles.module.css';
 
-import { TariffProDialog } from "@/widgets/tariff-pro-modal";
+import { TariffProDialog } from '@/widgets/tariff-pro-modal';
 
 export const DonationPro = () => {
   return (

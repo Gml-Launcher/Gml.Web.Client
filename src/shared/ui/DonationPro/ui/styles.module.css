@@ -1,15 +1,15 @@
 .promo__card {
-    @apply flex flex-col gap-y-3 rounded-lg border bg-card text-card-foreground shadow-sm p-4
+  @apply flex flex-col gap-y-3 rounded-lg border bg-card text-card-foreground shadow-sm p-4;
 }
 
 .promo__title {
-    @apply text-xl font-bold leading-none tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 inline-block text-transparent bg-clip-text
+  @apply text-xl font-bold leading-none tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 inline-block text-transparent bg-clip-text;
 }
 
 .promo__description {
-    @apply text-sm text-muted-foreground leading-5
+  @apply text-sm text-muted-foreground leading-5;
 }
 
 .promo__button {
-    @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3 w-full
+  @apply inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3 w-full;
 }

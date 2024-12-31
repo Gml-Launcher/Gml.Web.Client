@@ -1,1 +1,1 @@
-export { ConnectSentryDialog } from "./ui/ConnectSentryDialog";
+export { ConnectSentryDialog } from './ui/ConnectSentryDialog';

@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { BellIcon } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import { BellIcon } from 'lucide-react';
 
-import { useConnectionHub } from "@/widgets/notifications-hub";
-import { ClearNotificationModel } from "@/widgets/clear-notifications";
-import { useNotificationsState } from "@/views/notification";
+import { useConnectionHub } from '@/widgets/notifications-hub';
+import { ClearNotificationModel } from '@/widgets/clear-notifications';
+import { useNotificationsState } from '@/views/notification';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
-import { Separator } from "@/shared/ui/separator";
-import { Button } from "@/shared/ui/button";
-import { Badge } from "@/shared/ui/badge";
-import { NotificationStatus } from "@/shared/enums";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { getFormatDate } from "@/shared/lib/utils";
+} from '@/shared/ui/dropdown-menu';
+import { Separator } from '@/shared/ui/separator';
+import { Button } from '@/shared/ui/button';
+import { Badge } from '@/shared/ui/badge';
+import { NotificationStatus } from '@/shared/enums';
+import { DASHBOARD_PAGES } from '@/shared/routes';
+import { getFormatDate } from '@/shared/lib/utils';
 
 const statusColor: Record<NotificationStatus, string> = {
-  [NotificationStatus.TRACE]: "bg-neutral-200",
-  [NotificationStatus.DEBUG]: "bg-white border-solid border-1 border-neutral-200",
-  [NotificationStatus.INFORMATION]: "bg-sky-500",
-  [NotificationStatus.WARNING]: "bg-amber-500",
-  [NotificationStatus.ERROR]: "bg-red-600",
-  [NotificationStatus.FATAL]: "bg-red-900",
+  [NotificationStatus.TRACE]: 'bg-neutral-200',
+  [NotificationStatus.DEBUG]: 'bg-white border-solid border-1 border-neutral-200',
+  [NotificationStatus.INFORMATION]: 'bg-sky-500',
+  [NotificationStatus.WARNING]: 'bg-amber-500',
+  [NotificationStatus.ERROR]: 'bg-red-600',
+  [NotificationStatus.FATAL]: 'bg-red-900',
 };
 
 export const Notifications = () => {
@@ -63,7 +63,7 @@ export const Notifications = () => {
             </div>
           </div>
           <div className="absolute top-auto right-4">
-            <ClearNotificationModel description={"Прочитать все"} />
+            <ClearNotificationModel description={'Прочитать все'} />
           </div>
         </div>
         <DropdownMenuSeparator />
@@ -82,7 +82,7 @@ export const Notifications = () => {
                       <span className="text-base font-semibold">{message}</span>
                     </div>
                     <span className="text-sm text-gray-400 truncate h-10 text-wrap w-[calc(100%-24px)]">
-                      {details ? details : "Детали отсутствуют"}
+                      {details ? details : 'Детали отсутствуют'}
                     </span>
                     <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
                   </div>

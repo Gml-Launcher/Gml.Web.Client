@@ -1,17 +1,16 @@
-import {forwardRef, InputHTMLAttributes} from "react";
-import { UploadCloud } from "lucide-react";
+import { forwardRef, InputHTMLAttributes } from 'react';
+import { UploadCloud } from 'lucide-react';
 
-import { cn } from "@/shared/lib/utils";
+import { cn } from '@/shared/lib/utils';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-}
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => (
     <input
       type={type}
       className={cn(
-        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
       ref={ref}
@@ -19,14 +18,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     />
   ),
 );
-Input.displayName = "Input";
+Input.displayName = 'Input';
 
 interface InputFileProps extends InputProps {
   fileTypes?: string[];
 }
 
 export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
-  ({ className, id, fileTypes, type = "file", ...props }, ref) => (
+  ({ className, id, fileTypes, type = 'file', ...props }, ref) => (
     <label
       htmlFor={id}
       className="text-base rounded w-full h-32 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 border-dashed font-[sans-serif]"
@@ -44,11 +43,11 @@ export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
             <p className="text-xs mt-2">Доступный формат: {fileTypes[0]}</p>
           )}
           {fileTypes.length > 1 && (
-            <p className="text-xs mt-2">Доступные форматы: {fileTypes.join(", ")}</p>
+            <p className="text-xs mt-2">Доступные форматы: {fileTypes.join(', ')}</p>
           )}
         </>
       )}
     </label>
   ),
 );
-InputFile.displayName = "Input";
+InputFile.displayName = 'Input';

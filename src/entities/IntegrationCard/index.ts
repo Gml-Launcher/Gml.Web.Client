@@ -1,1 +1,1 @@
-export { IntegrationCard } from "./ui/IntegrationCard";
+export { IntegrationCard } from './ui/IntegrationCard';

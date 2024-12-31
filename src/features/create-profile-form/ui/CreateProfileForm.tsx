@@ -1,30 +1,30 @@
-"use client";
+'use client';
 
-import React, { ReactElement, useEffect } from "react";
-import Image from "next/image";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React, { ReactElement, useEffect } from 'react';
+import Image from 'next/image';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   CreateProfileFormSchemaType,
   CreateProfileSchema,
   GameLoaderOption,
   ProfileExtendedBaseEntity,
-} from "@/shared/api/contracts";
-import { useCreateProfile, useGetGameVersions } from "@/shared/hooks";
-import { cn, enumValues } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
-import { Input } from "@/shared/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Textarea } from "@/shared/ui/textarea";
-import { FormCombobox } from "@/shared/ui/FormCombobox";
-import loaderMinecraft from "@/assets/logos/minecraft.png";
-import loaderForge from "@/assets/logos/forge.png";
-import loaderFabric from "@/assets/logos/fabric.png";
-import loaderLiteLoader from "@/assets/logos/liteloader.png";
-import neoForgeLoader from "@/assets/logos/neoforge.png";
+} from '@/shared/api/contracts';
+import { useCreateProfile, useGetGameVersions } from '@/shared/hooks';
+import { cn, enumValues } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { Textarea } from '@/shared/ui/textarea';
+import { FormCombobox } from '@/shared/ui/FormCombobox';
+import loaderMinecraft from '@/assets/logos/minecraft.png';
+import loaderForge from '@/assets/logos/forge.png';
+import loaderFabric from '@/assets/logos/fabric.png';
+import loaderLiteLoader from '@/assets/logos/liteloader.png';
+import neoForgeLoader from '@/assets/logos/neoforge.png';
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
@@ -54,46 +54,46 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
 
   const form = useForm<CreateProfileFormSchemaType>({
     defaultValues: {
-      name: profile?.profileName || "",
-      description: profile?.description || "",
+      name: profile?.profileName || '',
+      description: profile?.description || '',
       gameLoader: profile?.minecraftVersion || GameLoaderOption.VANILLA.toString(),
-      loaderVersion: "",
-      version: profile?.clientVersion || "",
+      loaderVersion: '',
+      version: profile?.clientVersion || '',
     },
     resolver: zodResolver(CreateProfileSchema),
   });
 
   const versions = useGetGameVersions({
     gameLoader: GameLoaderOption.VANILLA,
-    minecraftVersion: "0",
+    minecraftVersion: '0',
   });
 
   const loaderVersion = useGetGameVersions(
     {
-      gameLoader: form.watch("gameLoader") as GameLoaderOption,
-      minecraftVersion: form.watch("version"),
+      gameLoader: form.watch('gameLoader') as GameLoaderOption,
+      minecraftVersion: form.watch('version'),
     },
     {
-      enabled: form.watch("gameLoader") !== GameLoaderOption.VANILLA.toString(),
+      enabled: form.watch('gameLoader') !== GameLoaderOption.VANILLA.toString(),
     },
   );
 
   useEffect(() => {
-    form.setValue("loaderVersion", loaderVersion.data?.[0]);
+    form.setValue('loaderVersion', loaderVersion.data?.[0]);
   }, [loaderVersion.data]);
 
   const onSubmit: SubmitHandler<CreateProfileFormSchemaType> = async (
     data: CreateProfileFormSchemaType,
   ) => {
     const formCreate = new FormData();
-    formCreate.append("name", data.name);
-    formCreate.append("description", data.description);
-    formCreate.append("version", data.version);
-    formCreate.append("gameLoader", data.gameLoader);
-    formCreate.append("icon", data.icon[0]);
+    formCreate.append('name', data.name);
+    formCreate.append('description', data.description);
+    formCreate.append('version', data.version);
+    formCreate.append('gameLoader', data.gameLoader);
+    formCreate.append('icon', data.icon[0]);
 
     if (data.loaderVersion) {
-      formCreate.append("loaderVersion", data.loaderVersion);
+      formCreate.append('loaderVersion', data.loaderVersion);
     }
 
     await mutateAsync(formCreate).then(() => {
@@ -102,13 +102,13 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...rest}>
+    <div className={cn('grid gap-4', className)} {...rest}>
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
             <FormLabel>Иконка сервера</FormLabel>
             <FormControl>
-              <Input type="file" placeholder="Выберите иконку сервера" {...form.register("icon")} />
+              <Input type="file" placeholder="Выберите иконку сервера" {...form.register('icon')} />
             </FormControl>
             {form.formState.errors.icon && (
               <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
@@ -118,7 +118,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           <FormItem>
             <FormLabel>Введите название сервера</FormLabel>
             <FormControl>
-              <Input placeholder="Введите название сервера" {...form.register("name")} />
+              <Input placeholder="Введите название сервера" {...form.register('name')} />
             </FormControl>
             {form.formState.errors.name && (
               <FormMessage>{form.formState.errors.name.message}</FormMessage>
@@ -127,7 +127,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           <FormItem>
             <FormLabel>Введите описание сервера</FormLabel>
             <FormControl>
-              <Textarea placeholder="Введите описание сервера" {...form.register("description")} />
+              <Textarea placeholder="Введите описание сервера" {...form.register('description')} />
             </FormControl>
             {form.formState.errors.description && (
               <FormMessage>{form.formState.errors.description.message}</FormMessage>
@@ -164,7 +164,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    disabled={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
+                    disabled={!form.getFieldState('version').isDirty || loaderVersion.isFetching}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите игровой загрузчик" />
@@ -186,7 +186,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           />
 
-          {form.watch("gameLoader") !== GameLoaderOption.VANILLA.toString() && (
+          {form.watch('gameLoader') !== GameLoaderOption.VANILLA.toString() && (
             <Controller
               name="loaderVersion"
               render={({ field }) => (
@@ -197,14 +197,14 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                     value={field.value}
                     placeholder={
                       loaderVersion.data?.length
-                        ? "Выберите версию загрузчика"
-                        : "Данная версия игры не поддерживается загрузчиком"
+                        ? 'Выберите версию загрузчика'
+                        : 'Данная версия игры не поддерживается загрузчиком'
                     }
                     placeholderInputSearch="Поиск версии загрузчика"
                     options={loaderVersion && loaderVersion.data}
                     description="Данная версия игры не поддерживается загрузчиком"
                     isError={loaderVersion.isError}
-                    isLoading={!form.getFieldState("version").isDirty || loaderVersion.isFetching}
+                    isLoading={!form.getFieldState('version').isDirty || loaderVersion.isFetching}
                     setValue={form.setValue}
                   />
                   {form.formState.errors.gameLoader && (

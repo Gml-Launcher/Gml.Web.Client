@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { RowSelectionState } from "@tanstack/react-table";
-import { MixerHorizontalIcon } from "@radix-ui/react-icons";
+import { RowSelectionState } from '@tanstack/react-table';
+import { MixerHorizontalIcon } from '@radix-ui/react-icons';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 
 interface DataTableToolbarProps<TData> {
   rowSelection: RowSelectionState;
@@ -24,7 +24,7 @@ export function DataTableToolbar<TData>({
         disabled={!Object.keys(rowSelection).length}
       >
         <MixerHorizontalIcon className="mr-2 h-4 w-4" />
-        Управлять профилями
+        Управление выбранными профилями
       </Button>
     </div>
   );

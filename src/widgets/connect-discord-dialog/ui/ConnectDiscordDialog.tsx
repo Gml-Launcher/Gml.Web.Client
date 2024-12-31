@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { PencilIcon, PlugIcon } from "lucide-react";
+import { useState } from 'react';
+import { PencilIcon, PlugIcon } from 'lucide-react';
 
-import { ConnectDiscordForm } from "@/features/connect-discord-form";
+import { ConnectDiscordForm } from '@/features/connect-discord-form';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { useDiscord } from "@/shared/hooks";
-import { Button } from "@/shared/ui/button";
+} from '@/shared/ui/dialog';
+import { useDiscord } from '@/shared/hooks';
+import { Button } from '@/shared/ui/button';
 
 export function ConnectDiscordDialog() {
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ export function ConnectDiscordDialog() {
 
   const { data: discord, isLoading } = useDiscord();
 
-  const connectionText = Boolean(discord?.clientId) ? "Изменить" : "Подключить";
+  const connectionText = Boolean(discord?.clientId) ? 'Изменить' : 'Подключить';
   const connectionIcon = Boolean(discord?.clientId) ? (
     <PencilIcon className="mr-2" size={16} />
   ) : (

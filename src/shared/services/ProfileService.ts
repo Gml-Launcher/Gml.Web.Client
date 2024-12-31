@@ -1,7 +1,10 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
-import { $api } from "@/core/api";
+import { $api } from '@/services/api.service';
 import {
+  TAddPlayerToProfileRequest,
+  TAddPlayerToProfileResponse,
+  TDeletePlayerToProfileResponse,
   TDeleteProfileRequest,
   TDeleteProfileResponse,
   TDeleteProfilesRequest,
@@ -16,57 +19,69 @@ import {
   TPostProfilesResponse,
   TPutProfileRequest,
   TPutProfileResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class ProfileService {
-  private BASE_URL = "/profiles";
+  private BASE_URL = '/profiles';
 
-  async getProfiles(): Promise<TGetProfilesResponse> {
-    const { data } = await $api.get<TGetProfilesResponse>(this.BASE_URL);
-
-    return data;
+  async getProfiles(): Promise<AxiosResponse<TGetProfilesResponse>> {
+    return await $api.get<TGetProfilesResponse>(this.BASE_URL);
   }
 
-  async getProfile(body: TGetProfileRequest): Promise<TGetProfileResponse> {
-    const { data } = await $api.post<TGetProfileResponse>(`${this.BASE_URL}/details`, body);
-
-    return data;
+  async getProfile(body: TGetProfileRequest): Promise<AxiosResponse<TGetProfileResponse>> {
+    return await $api.post<TGetProfileResponse>(`${this.BASE_URL}/details`, body);
   }
 
-  async createProfile(body: TPostProfilesRequest): Promise<TPostProfilesResponse> {
-    const { data } = await $api.post<TPostProfilesResponse>(this.BASE_URL, body, {
-      headers: { "Content-Type": "multipart/form-data" },
+  async createProfile(body: TPostProfilesRequest): Promise<AxiosResponse<TPostProfilesResponse>> {
+    return await $api.post<TPostProfilesResponse>(this.BASE_URL, body, {
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
-
-    return data;
   }
 
-  async editProfile(body: TPutProfileRequest): Promise<TPutProfileResponse> {
-    const { data } = await $api.put<TPutProfileResponse>(this.BASE_URL, body);
-
-    return data;
+  async editProfile(body: TPutProfileRequest): Promise<AxiosResponse<TPutProfileResponse>> {
+    return await $api.put<TPutProfileResponse>(this.BASE_URL, body);
   }
 
   async deleteProfile({
     profileName,
     ...params
-  }: TDeleteProfileRequest): Promise<TDeleteProfileResponse> {
-    const { data } = await $api.delete<TDeleteProfileResponse>(`${this.BASE_URL}/${profileName}`, {
+  }: TDeleteProfileRequest): Promise<AxiosResponse<TDeleteProfileResponse>> {
+    return await $api.delete<TDeleteProfileResponse>(`${this.BASE_URL}/${profileName}`, {
       params,
     });
-
-    return data;
   }
 
   async deleteProfiles({
     profileNames,
     ...params
-  }: TDeleteProfilesRequest): Promise<TDeleteProfilesResponse> {
-    const { data } = await $api.delete<TDeleteProfileResponse>(`${this.BASE_URL}/${profileNames}`, {
+  }: TDeleteProfilesRequest): Promise<AxiosResponse<TDeleteProfilesResponse>> {
+    return await $api.delete<TDeleteProfileResponse>(`${this.BASE_URL}/${profileNames}`, {
       params,
     });
+  }
 
-    return data;
+  async addPlayer({
+    profileName,
+    ...params
+  }: TAddPlayerToProfileRequest): Promise<AxiosResponse<TAddPlayerToProfileResponse>> {
+    return await $api.post<TAddPlayerToProfileResponse>(
+      `${this.BASE_URL}/${profileName}/players/whitelist/${params.userUuid}`,
+      {
+        params,
+      },
+    );
+  }
+
+  async deletePlayer({
+    playerUuid,
+    profileName,
+  }: {
+    profileName: string;
+    playerUuid: string;
+  }): Promise<AxiosResponse<TDeletePlayerToProfileResponse>> {
+    return await $api.delete<TDeletePlayerToProfileResponse>(
+      `${this.BASE_URL}/${profileName}/players/whitelist/${playerUuid}`,
+    );
   }
 
   async getGameVersions({

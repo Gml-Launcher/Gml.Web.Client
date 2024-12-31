@@ -1,15 +1,15 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
-import { $api } from "@/core/api";
+import { $api } from '@/services/api.service';
 import {
   TGetSettingsPlatformRequest,
   TGetSettingsPlatformResponse,
   TPutSettingsPlatformRequest,
   TPutSettingsPlatformResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class SettingsService {
-  private BASE_URL_PLATFORM = "/settings/platform";
+  private BASE_URL_PLATFORM = '/settings/platform';
 
   async getPlatform(
     params?: TGetSettingsPlatformRequest,

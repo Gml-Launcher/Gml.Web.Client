@@ -1,4 +1,4 @@
-import { AuthenticationType } from "@/shared/enums";
+import { AuthenticationType } from '@/shared/enums';
 
 export type AuthIntegrationBaseEntity = {
   name: string;

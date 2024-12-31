@@ -1,1 +1,1 @@
-export { AuthenticationFormEasycabinet } from "./ui/AuthenticationFormEasycabinet";
+export { AuthenticationFormEasycabinet } from './ui/AuthenticationFormEasycabinet';

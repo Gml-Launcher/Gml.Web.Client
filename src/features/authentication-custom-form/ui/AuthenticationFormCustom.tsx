@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
+import { IntegrationFormSchemaType, integrationSchema } from '../lib/static';
 
-import { useEditIntegration, useGetActiveAuthIntegrations } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
+import { useEditIntegration, useGetActiveAuthIntegrations } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 import {
   Form,
   FormControl,
@@ -16,12 +16,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
-import { Input } from "@/shared/ui/input";
-import { AuthenticationType } from "@/shared/enums";
-import { HREF_DOCUMENTATION_CUSTOM_ENDPOINT } from "@/shared/constants";
-
+} from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
+import { AuthenticationType } from '@/shared/enums';
+import { HREF_DOCUMENTATION_CUSTOM_ENDPOINT } from '@/shared/constants';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -37,7 +36,7 @@ export function AuthenticationFormCustom({ className, onOpenChange, ...props }: 
       endpoint:
         integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM
           ? String(integration.endpoint)
-          : "",
+          : '',
       authType:
         integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_CUSTOM
           ? integration.authType
@@ -55,20 +54,20 @@ export function AuthenticationFormCustom({ className, onOpenChange, ...props }: 
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
             <FormLabel>Введите эндпоинт</FormLabel>
             <FormControl>
-              <Input placeholder="Введите эндпоинт" {...form.register("endpoint")} />
+              <Input placeholder="Введите эндпоинт" {...form.register('endpoint')} />
             </FormControl>
 
             {form.formState.errors.endpoint ? (
               <FormMessage>{form.formState.errors.endpoint.message}</FormMessage>
             ) : (
               <FormDescription>
-                Не знаете как использовать?{" "}
+                Не знаете как использовать?{' '}
                 <a
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   href={HREF_DOCUMENTATION_CUSTOM_ENDPOINT}

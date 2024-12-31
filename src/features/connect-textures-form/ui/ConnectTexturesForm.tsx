@@ -1,21 +1,20 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InfoIcon } from "lucide-react";
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { InfoIcon } from 'lucide-react';
 
-import { ConnectTexturesFormSchemaType, ConnectTexturesSchema } from "../lib/static";
+import { ConnectTexturesFormSchemaType, ConnectTexturesSchema } from '../lib/static';
 
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Input } from "@/shared/ui/input";
-import { TexturesServiceType } from "@/shared/enums";
-import { useEditConnectTextures } from "@/shared/hooks";
-import { Icons } from "@/shared/ui/icons";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { TextureServiceBaseEntity } from "@/shared/api/contracts";
-
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Input } from '@/shared/ui/input';
+import { TexturesServiceType } from '@/shared/enums';
+import { useEditConnectTextures } from '@/shared/hooks';
+import { Icons } from '@/shared/ui/icons';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { TextureServiceBaseEntity } from '@/shared/api/contracts';
 
 interface ConnectTexturesFormProps extends React.HTMLAttributes<HTMLDivElement> {
   skins?: TextureServiceBaseEntity;
@@ -33,21 +32,21 @@ export function ConnectTexturesForm({
 
   const form = useForm<ConnectTexturesFormSchemaType>({
     values: {
-      url_skins: skins?.url || "",
-      url_cloaks: cloaks?.url || "",
+      url_skins: skins?.url || '',
+      url_cloaks: cloaks?.url || '',
     },
     resolver: zodResolver(ConnectTexturesSchema),
   });
 
   const onSubmit = async (data: ConnectTexturesFormSchemaType) => {
-    if (form.getFieldState("url_skins").isDirty) {
+    if (form.getFieldState('url_skins').isDirty) {
       await mutateAsync({
         type: TexturesServiceType.TEXTURES_SERVICE_SKINS,
         url: data.url_skins,
       });
     }
 
-    if (form.getFieldState("url_cloaks").isDirty) {
+    if (form.getFieldState('url_cloaks').isDirty) {
       await mutateAsync({
         type: TexturesServiceType.TEXTURES_SERVICE_CLOAKS,
         url: data.url_cloaks,
@@ -100,16 +99,16 @@ export function ConnectTexturesForm({
               Вы можете использовать переменные, которые заменятся на соответствующие значения с
               нашей стороны
               <div className="grid">
-                <b className="py-1">{"{userName}"} - Ник пользователя</b>
-                <b className="py-1">{"{userUuid}"} - Uuid пользователя</b>
+                <b className="py-1">{'{userName}'} - Ник пользователя</b>
+                <b className="py-1">{'{userUuid}'} - Uuid пользователя</b>
               </div>
             </AlertDescription>
             <AlertDescription>
-              Пример: https://textures.recloud.tech/cloaks/<b>{"{userName}"}</b> будет заменено на
-              https://textures.recloud.tech/cloaks/<b>{"GamerVII"}</b>
+              Пример: https://textures.recloud.tech/cloaks/<b>{'{userName}'}</b> будет заменено на
+              https://textures.recloud.tech/cloaks/<b>{'GamerVII'}</b>
               <div className="py-2">
-                https://textures.recloud.tech/cloaks/<b>{"{userUuid}"}</b> будет заменено на
-                https://textures.recloud.tech/cloaks/<b>{"c07a9841-2275-4ba0-8f1c-2e1599a1f22f"}</b>
+                https://textures.recloud.tech/cloaks/<b>{'{userUuid}'}</b> будет заменено на
+                https://textures.recloud.tech/cloaks/<b>{'c07a9841-2275-4ba0-8f1c-2e1599a1f22f'}</b>
               </div>
             </AlertDescription>
           </Alert>

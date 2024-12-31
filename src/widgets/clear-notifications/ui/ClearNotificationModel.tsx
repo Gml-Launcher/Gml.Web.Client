@@ -8,9 +8,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/shared/ui/alert-dialog";
-import { Button } from "@/shared/ui/button";
-import { useClearNotifications } from "@/shared/hooks";
+} from '@/shared/ui/alert-dialog';
+import { Button } from '@/shared/ui/button';
+import { useClearNotifications } from '@/shared/hooks';
 
 interface ClearNotificationModelParams {
   description: string;

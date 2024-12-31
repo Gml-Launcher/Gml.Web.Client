@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { toast } from 'sonner';
 
-import { getStorageAccessToken } from "@/shared/services";
-import { getApiBaseUrl } from "@/shared/lib/utils";
+import { getStorageAccessToken } from '@/shared/services';
+import { getApiBaseUrl } from '@/shared/lib/utils';
 
 const CONNECTION_URL = (token: string) =>
   `${getApiBaseUrl()}/ws/launcher/build?access_token=${token}`;
@@ -37,7 +37,7 @@ export const useConnectionHub = () => {
       try {
         const connection = new HubConnectionBuilder()
           .withUrl(CONNECTION_URL(accessToken), {
-            headers: { "Access-Control-Allow-Credentials": "*" },
+            headers: { 'Access-Control-Allow-Credentials': '*' },
             withCredentials: false,
           })
           .withAutomaticReconnect()
@@ -46,21 +46,21 @@ export const useConnectionHub = () => {
 
         await connection.start();
 
-        connection.on("GitHubLauncherHubChangeProgress", (percent) => {
+        connection.on('GitHubLauncherHubChangeProgress', (percent) => {
           setPercentDownload(percent);
         });
 
-        connection.on("Message", (message) => {
-          toast.info("Информация", {
+        connection.on('Message', (message) => {
+          toast.info('Информация', {
             description: message,
           });
         });
 
-        connection.on("LauncherDownloadEnded", handleDownloadEnded);
-        connection.on("LauncherBuildEnded", handleBuildingEnded);
-        connection.on("LauncherPublishEnded", handleDownloadEnded);
+        connection.on('LauncherDownloadEnded', handleDownloadEnded);
+        connection.on('LauncherBuildEnded', handleBuildingEnded);
+        connection.on('LauncherPublishEnded', handleDownloadEnded);
 
-        connection.on("Log", (log: string) => {
+        connection.on('Log', (log: string) => {
           setLogsBuilding((prev) => (prev ? [...prev, log] : [log]));
         });
       } catch (error) {
@@ -69,12 +69,12 @@ export const useConnectionHub = () => {
     };
 
     onConnectedHub().then(() => {
-      console.log("Success starting connectionHub");
+      console.log('Success starting connectionHub');
     });
 
     return () => {
       connectionHub?.stop().then(() => {
-        console.log("Success stopping connectionHub");
+        console.log('Success stopping connectionHub');
       });
     };
   }, []);

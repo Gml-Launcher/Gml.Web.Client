@@ -1,6 +1,6 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
-import { $api } from "@/core/api";
+import { $api } from '@/services/api.service';
 import {
   TGetActiveAuthIntegrationsRequest,
   TGetActiveAuthIntegrationsResponse,
@@ -26,16 +26,16 @@ import {
   TPutConnectTexturesResponse,
   TPutSentryConnectRequest,
   TPutSentryConnectResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class IntegrationService {
-  private BASE_URL = "/integrations";
+  private BASE_URL = '/integrations';
   private BASE_URL_AUTH = `${this.BASE_URL}/auth`;
   private BASE_URL_GITHUB = `${this.BASE_URL}/github`;
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
   private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
   private BASE_URL_DISCORD = `${this.BASE_URL}/discord`;
-  private BASE_URL_LAUNCHER = "/launcher";
+  private BASE_URL_LAUNCHER = '/launcher';
 
   async getAuthIntegrations(): Promise<TGetAuthIntegrationsResponse> {
     const { data } = await $api.get<

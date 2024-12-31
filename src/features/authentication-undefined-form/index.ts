@@ -1,1 +1,1 @@
-export { AuthenticationFormUndefined } from "@/features/authentication-undefined-form/ui/AuthenticationFormUndefined";
+export { AuthenticationFormUndefined } from '@/features/authentication-undefined-form/ui/AuthenticationFormUndefined';

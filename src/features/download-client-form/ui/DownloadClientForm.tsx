@@ -1,23 +1,22 @@
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { ClientDownloadFormSchemaType, ClientDownloadSchema } from "../lib/static";
-import { useOnSubmit } from "../lib/hooks/useOnSubmit";
+import { ClientDownloadFormSchemaType, ClientDownloadSchema } from '../lib/static';
+import { useOnSubmit } from '../lib/hooks/useOnSubmit';
 
-import { useConnectionHub } from "@/widgets/generate-launcher-dialog";
-import { useLauncherGithubVersions } from "@/shared/hooks";
-import { cn, getApiBaseUrl } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
-import { Input } from "@/shared/ui/input";
-import { Progress } from "@/shared/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-
+import { useConnectionHub } from '@/widgets/generate-launcher-dialog';
+import { useLauncherGithubVersions } from '@/shared/hooks';
+import { cn, getApiBaseUrl } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
+import { Progress } from '@/shared/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 interface DownloadClientFormProps extends React.HTMLAttributes<HTMLDivElement> {
-  connectionHub: ReturnType<typeof useConnectionHub>["connectionHub"];
-  state: ReturnType<typeof useConnectionHub>["download"];
+  connectionHub: ReturnType<typeof useConnectionHub>['connectionHub'];
+  state: ReturnType<typeof useConnectionHub>['download'];
 }
 
 export function DownloadClientForm({
@@ -33,13 +32,13 @@ export function DownloadClientForm({
   const { data: branches } = useLauncherGithubVersions();
 
   const form = useForm<ClientDownloadFormSchemaType>({
-    values: { branch: "", host: getApiBaseUrl() || "", folder: "" },
+    values: { branch: '', host: getApiBaseUrl() || '', folder: '' },
     resolver: zodResolver(ClientDownloadSchema),
     disabled: isDownload,
   });
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller

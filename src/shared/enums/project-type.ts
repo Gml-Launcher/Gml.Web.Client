@@ -6,8 +6,8 @@ export enum ProjectTypeEnum {
 }
 
 export enum ProjectTypeOption {
-  "OPTION_1" = "Лаунчер",
-  "OPTION_2" = "Профили",
-  "OPTION_4" = "Бэкенд",
-  "OPTION_7" = "Все",
+  'OPTION_1' = 'Лаунчер',
+  'OPTION_2' = 'Профили',
+  'OPTION_4' = 'Бэкенд',
+  'OPTION_7' = 'Все',
 }

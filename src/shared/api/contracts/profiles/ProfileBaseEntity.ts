@@ -1,4 +1,5 @@
-import { EntityState } from "@/shared/enums";
+import { EntityState } from '@/shared/enums';
+import { PlayerBaseEntity } from '@/shared/api/contracts';
 
 export type ProfileBaseEntity = {
   name: string;
@@ -24,10 +25,12 @@ export type ProfileExtendedBaseEntity = {
   jvmArguments: string;
   gameArguments: string;
   hasUpdate: boolean;
+  isEnabled: boolean;
   state: EntityState;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
   whiteListFolders: ProfileFolderBaseEntity[];
+  usersWhiteList: PlayerBaseEntity[];
 };
 
 export type ProfileFileBaseEntity = {

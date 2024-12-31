@@ -1,11 +1,12 @@
 import {
   GameLoaderOption,
   JavaVersionBaseEntity,
+  PlayerBaseEntity,
   ProfileBaseEntity,
   ProfileExtendedBaseEntity,
-} from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
-import { OsArchitectureEnum } from "@/shared/enums"; // Получение профилей
+} from '@/shared/api/contracts';
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { OsArchitectureEnum } from '@/shared/enums'; // Получение профилей
 
 // Получение профилей
 export type TGetProfilesRequest = {};
@@ -52,6 +53,19 @@ export type TDeleteProfileRequest = {
   removeFiles: boolean;
 };
 export type TDeleteProfileResponse = ResponseBaseEntity & {};
+
+// Добавление игрока в профиль
+export type TAddPlayerToProfileRequest = {
+  profileName: string;
+  userUuid: string;
+};
+export type TAddPlayerToProfileResponse = ResponseBaseEntity & {
+  data: PlayerBaseEntity;
+};
+
+// Удаление игрока в профиле
+export type TDeletePlayerToProfileRequest = {};
+export type TDeletePlayerToProfileResponse = ResponseBaseEntity & {};
 
 // Удаление профилей
 export type TDeleteProfilesRequest = {

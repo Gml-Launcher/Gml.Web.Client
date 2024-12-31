@@ -1,2 +1,2 @@
-export * from "./ui/NotificationPage";
-export * from "./lib/store";
+export * from './ui/NotificationPage';
+export * from './lib/store';

@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import {
   TGetActiveAuthIntegrationsResponse,
@@ -8,33 +8,33 @@ import {
   TPutConnectDiscordRequest,
   TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
-} from "@/shared/api/contracts";
-import { integrationService } from "@/shared/services/IntegrationService";
-import { TexturesServiceType } from "@/shared/enums";
-import { isAxiosError } from "@/shared/lib/utils";
-import { getEntries } from "@/shared/lib/helpers";
+} from '@/shared/api/contracts';
+import { integrationService } from '@/shared/services/IntegrationService';
+import { TexturesServiceType } from '@/shared/enums';
+import { isAxiosError } from '@/shared/lib/utils';
+import { getEntries } from '@/shared/lib/helpers';
 
 export const integrationsKeys = {
-  all: ["integrations"] as const,
+  all: ['integrations'] as const,
 
-  auth: () => [...integrationsKeys.all, "auth"] as const,
-  authEditing: () => [...integrationsKeys.auth(), "editing"] as const,
+  auth: () => [...integrationsKeys.all, 'auth'] as const,
+  authEditing: () => [...integrationsKeys.auth(), 'editing'] as const,
 
-  launcherGithubVersions: () => [...integrationsKeys.all, "github-versions"] as const,
-  launcherBuildVersions: () => [...integrationsKeys.all, "build-versions"] as const,
-  launcherUpload: () => [...integrationsKeys.all, "launcher-upload"] as const,
-  launcherActualVersion: () => [...integrationsKeys.all, "launcher-actual-version"] as const,
-  launcherPlatforms: () => [...integrationsKeys.all, "launcher-platforms"] as const,
+  launcherGithubVersions: () => [...integrationsKeys.all, 'github-versions'] as const,
+  launcherBuildVersions: () => [...integrationsKeys.all, 'build-versions'] as const,
+  launcherUpload: () => [...integrationsKeys.all, 'launcher-upload'] as const,
+  launcherActualVersion: () => [...integrationsKeys.all, 'launcher-actual-version'] as const,
+  launcherPlatforms: () => [...integrationsKeys.all, 'launcher-platforms'] as const,
 
-  sentry: () => [...integrationsKeys.all, "sentry"] as const,
-  sentryEditing: () => [...integrationsKeys.sentry(), "editing"] as const,
+  sentry: () => [...integrationsKeys.all, 'sentry'] as const,
+  sentryEditing: () => [...integrationsKeys.sentry(), 'editing'] as const,
 
-  textures: () => [...integrationsKeys.all, "textures"] as const,
+  textures: () => [...integrationsKeys.all, 'textures'] as const,
   texturesEditing: (type: TexturesServiceType) =>
     [...integrationsKeys.textures(), `editing-${type}`] as const,
 
-  discord: () => [...integrationsKeys.all, "discord"] as const,
-  discordEditing: () => [...integrationsKeys.discord(), "editing"] as const,
+  discord: () => [...integrationsKeys.all, 'discord'] as const,
+  discordEditing: () => [...integrationsKeys.discord(), 'editing'] as const,
 };
 
 export const useAuthIntegrations = () => {
@@ -73,7 +73,7 @@ export const useEditIntegration = () => {
       integrationService.putAuthIntegrations(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: integrationsKeys.auth() });
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -112,7 +112,7 @@ export const useLauncherUpload = () => {
     mutationKey: integrationsKeys.launcherUpload(),
     mutationFn: (data: TPostLauncherUploadRequest) => integrationService.postLauncherUpload(data),
     onSuccess: async (data) => {
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -135,7 +135,7 @@ export const useEditSentry = () => {
     mutationKey: integrationsKeys.sentryEditing(),
     mutationFn: (data: TPutSentryConnectRequest) => integrationService.putSentryConnect(data),
     onSuccess: async (data) => {
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -168,7 +168,7 @@ export const useEditConnectTextures = () => {
         await queryClient.invalidateQueries({
           queryKey: integrationsKeys.texturesEditing(TexturesServiceType.TEXTURES_SERVICE_CLOAKS),
         });
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },
@@ -191,7 +191,7 @@ export const useEditDiscord = () => {
     mutationKey: integrationsKeys.discordEditing(),
     mutationFn: (data: TPutConnectDiscordRequest) => integrationService.putConnectDiscord(data),
     onSuccess: async (data) => {
-      toast.success("Успешно", {
+      toast.success('Успешно', {
         description: data.message,
       });
     },

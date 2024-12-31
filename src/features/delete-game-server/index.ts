@@ -1,1 +1,1 @@
-export * from "./ui/DeleteGameServerDialog";
+export * from './ui/DeleteGameServerDialog';

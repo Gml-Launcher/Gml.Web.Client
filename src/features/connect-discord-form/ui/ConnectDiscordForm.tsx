@@ -1,13 +1,13 @@
-import React from "react";
-import Image from "next/image";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from 'react';
+import Image from 'next/image';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { DiscordFormSchemaType, integrationSchema } from "../lib/static";
+import { DiscordFormSchemaType, integrationSchema } from '../lib/static';
 
-import { useDiscord, useEditDiscord } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
+import { useDiscord, useEditDiscord } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 import {
   Form,
   FormControl,
@@ -16,12 +16,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/shared/ui/form";
-import { Card, CardContent, CardDescription, CardHeader } from "@/shared/ui/card";
-import { Icons } from "@/shared/ui/icons";
-import { Input } from "@/shared/ui/input";
-import discordHint from "@/assets/logos/discord.webp";
-
+} from '@/shared/ui/form';
+import { Card, CardContent, CardDescription, CardHeader } from '@/shared/ui/card';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
+import discordHint from '@/assets/logos/discord.webp';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -33,12 +32,12 @@ export function ConnectDiscordForm({ className, onOpenChange, ...props }: SignIn
 
   const form = useForm<DiscordFormSchemaType>({
     values: {
-      clientId: data?.clientId || "",
-      details: data?.details || "",
-      largeImageKey: data?.largeImageKey || "",
-      largeImageText: data?.largeImageText || "",
-      smallImageKey: data?.smallImageKey || "",
-      smallImageText: data?.smallImageText || "",
+      clientId: data?.clientId || '',
+      details: data?.details || '',
+      largeImageKey: data?.largeImageKey || '',
+      largeImageText: data?.largeImageText || '',
+      smallImageKey: data?.smallImageKey || '',
+      smallImageText: data?.smallImageText || '',
     },
     resolver: zodResolver(integrationSchema),
   });
@@ -50,7 +49,7 @@ export function ConnectDiscordForm({ className, onOpenChange, ...props }: SignIn
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
