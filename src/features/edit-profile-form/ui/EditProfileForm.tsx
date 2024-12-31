@@ -67,6 +67,8 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     if (form.formState.dirtyFields.name) {
       return push(`${DASHBOARD_PAGES.PROFILE}/${body.name}`);
     }
+
+    form.reset(body);
   };
 
   return (
