@@ -1,19 +1,18 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import { CircleUser } from "lucide-react";
+import { useRouter } from 'next/navigation';
+import { CircleUser } from 'lucide-react';
 
-import { Button } from "@/shared/ui/button";
+import { Button } from '@/shared/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
-import { getStorageProfile, removeStorageProfile, removeStorageTokens } from "@/shared/services";
-import { AUTH_PAGES } from "@/shared/routes";
+} from '@/shared/ui/dropdown-menu';
+import { getStorageProfile, removeStorageProfile, removeStorageTokens } from '@/shared/services';
+import { AUTH_PAGES } from '@/shared/routes';
 
 export const AccountNavigation = () => {
   const router = useRouter();

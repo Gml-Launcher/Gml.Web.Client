@@ -1,5 +1,5 @@
-import { ResponseBaseEntity } from "@/shared/api/schemas";
-import { GameServerBaseEntity } from "@/shared/api/contracts";
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { GameServerBaseEntity } from '@/shared/api/contracts';
 
 export type TGetGameServersRequest = {
   profileName: string;

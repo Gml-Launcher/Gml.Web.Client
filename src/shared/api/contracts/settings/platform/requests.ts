@@ -1,6 +1,6 @@
-import { SettingsPlatformBaseEntity } from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
-import { StorageType } from "@/shared/enums";
+import { SettingsPlatformBaseEntity } from '@/shared/api/contracts';
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { StorageType } from '@/shared/enums';
 
 // Получение активного сервиса авторизации
 export type TGetSettingsPlatformRequest = {};

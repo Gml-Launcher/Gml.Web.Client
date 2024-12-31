@@ -1,1 +1,1 @@
-export { IntegrationsPage } from "./ui/Integrations";
+export { IntegrationsPage } from './ui/Integrations';

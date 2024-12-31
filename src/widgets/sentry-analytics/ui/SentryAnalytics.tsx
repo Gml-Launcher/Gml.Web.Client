@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   endOfMonth,
   endOfWeek,
@@ -7,20 +7,21 @@ import {
   startOfMonth,
   startOfWeek,
   startOfYear,
-} from "date-fns";
-import { DateRange } from "react-day-picker";
+} from 'date-fns';
+import { DateRange } from 'react-day-picker';
+import { CopyIcon } from '@radix-ui/react-icons';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Separator } from "@/shared/ui/separator";
-import { useSentryFilterErrorsList } from "@/shared/hooks";
-import { AnalyticsInterval, ProjectTypeEnum, ProjectTypeOption } from "@/shared/enums";
-import { cn, enumValues } from "@/shared/lib/utils";
-import { DatePickerWithRange } from "@/shared/ui/data-range-picker";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { Textarea } from "@/shared/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { Separator } from '@/shared/ui/separator';
+import { useSentryFilterErrorsList } from '@/shared/hooks';
+import { AnalyticsInterval, ProjectTypeEnum, ProjectTypeOption } from '@/shared/enums';
+import { cn, enumValues } from '@/shared/lib/utils';
+import { DatePickerWithRange } from '@/shared/ui/data-range-picker';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { Button } from '@/shared/ui/button';
 
 export const SentryAnalytics = () => {
   const [date, setDate] = useState<DateRange | undefined>(undefined);
@@ -48,30 +49,30 @@ export const SentryAnalytics = () => {
       case AnalyticsInterval.ANALYTICS_INTERVAL_WEAK:
         mutate({
           projectType: Number(projectType) as ProjectTypeEnum,
-          dateFrom: format(dataFromWeak, "yyyy-MM-dd"),
-          dateTo: format(dataToWeak, "yyyy-MM-dd"),
+          dateFrom: format(dataFromWeak, 'yyyy-MM-dd'),
+          dateTo: format(dataToWeak, 'yyyy-MM-dd'),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_MONTH:
         mutate({
           projectType: Number(projectType) as ProjectTypeEnum,
-          dateFrom: format(dataFromMonth, "yyyy-MM-dd"),
-          dateTo: format(dataToMonth, "yyyy-MM-dd"),
+          dateFrom: format(dataFromMonth, 'yyyy-MM-dd'),
+          dateTo: format(dataToMonth, 'yyyy-MM-dd'),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_YEAR:
         mutate({
           projectType: Number(projectType) as ProjectTypeEnum,
-          dateFrom: format(dataFromYear, "yyyy-MM-dd"),
-          dateTo: format(dataToYear, "yyyy-MM-dd"),
+          dateFrom: format(dataFromYear, 'yyyy-MM-dd'),
+          dateTo: format(dataToYear, 'yyyy-MM-dd'),
         });
         break;
       case AnalyticsInterval.ANALYTICS_INTERVAL_GAP:
         if (date?.from && date.to) {
           mutate({
             projectType: Number(projectType) as ProjectTypeEnum,
-            dateFrom: format(date.from, "yyyy-MM-dd"),
-            dateTo: format(date.to, "yyyy-MM-dd"),
+            dateFrom: format(date.from, 'yyyy-MM-dd'),
+            dateTo: format(date.to, 'yyyy-MM-dd'),
           });
         }
         break;
@@ -92,7 +93,7 @@ export const SentryAnalytics = () => {
                 <TabsTrigger className="relative" value={AnalyticsInterval.ANALYTICS_INTERVAL_GAP}>
                   Промежуток
                   <DatePickerWithRange
-                    className={cn("absolute left-32", {
+                    className={cn('absolute left-32', {
                       hidden: tab !== AnalyticsInterval.ANALYTICS_INTERVAL_GAP,
                     })}
                     date={date}
@@ -145,6 +146,7 @@ export const SentryAnalytics = () => {
                       <TableHead>Ошибка</TableHead>
                       <TableHead>У скольки пользователей</TableHead>
                       <TableHead>Сколько данных ошибок</TableHead>
+                      <TableHead>Действия</TableHead>
                       {/*<TableHead>График</TableHead>*/}
                     </TableRow>
                   </TableHeader>
@@ -152,17 +154,20 @@ export const SentryAnalytics = () => {
                     {data &&
                       data.data.data.map((bug) => {
                         return (
-                          <TableRow key={bug.exception} className="bg-accent">
-                            <TableCell>
-                              {bug.exception}
-                              <Separator className="my-4" />
-                              <Textarea value={bug.stackTrace} className="h-24" />
-                            </TableCell>
+                          <TableRow key={bug.exception}>
+                            <TableCell>{bug.exception}</TableCell>
                             <TableCell>{bug.countUsers}</TableCell>
                             <TableCell>{bug.count}</TableCell>
-                            {/*<TableCell>*/}
-                            {/*  <SentryAnalyticsChart bug={bug} />*/}
-                            {/*</TableCell>*/}
+                            <TableCell>
+                              <Button
+                                className="gap-3"
+                                onClick={() => navigator.clipboard.writeText(bug.stackTrace)}
+                                variant="secondary"
+                              >
+                                <CopyIcon />
+                                Копировать
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         );
                       })}

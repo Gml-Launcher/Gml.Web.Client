@@ -4,6 +4,6 @@ export enum Protocol {
 }
 
 export enum ProtocolOption {
-  "OPTION_0" = "HTTP",
-  "OPTION_1" = "HTTPS",
+  'OPTION_0' = 'HTTP',
+  'OPTION_1' = 'HTTPS',
 }

@@ -1,20 +1,20 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-import { sentryService } from "@/shared/services/SentryService";
-import { isAxiosError } from "@/shared/lib/isAxiosError/isAxiosError";
+import { sentryService } from '@/shared/services/SentryService';
+import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
 import {
   TPostSentryFilterErrorsListRequest,
   TPostSentryFilterErrorsRequest,
-} from "@/shared/api/contracts/sentry/requests";
+} from '@/shared/api/contracts/sentry/requests';
 
 export const sentryKeys = {
-  all: ["sentry"] as const,
-  exception: () => [...sentryKeys.all, "exception"] as const,
-  stats: () => [...sentryKeys.all, "stats"] as const,
-  summary: () => [...sentryKeys.all, "summary"] as const,
-  filterErrors: () => [...sentryKeys.all, "filter", "errors"] as const,
-  filterErrorsList: () => [...sentryKeys.all, "filter", "errors", "list"] as const,
+  all: ['sentry'] as const,
+  exception: () => [...sentryKeys.all, 'exception'] as const,
+  stats: () => [...sentryKeys.all, 'stats'] as const,
+  summary: () => [...sentryKeys.all, 'summary'] as const,
+  filterErrors: () => [...sentryKeys.all, 'filter', 'errors'] as const,
+  filterErrorsList: () => [...sentryKeys.all, 'filter', 'errors', 'list'] as const,
 };
 
 export const useSentryErrors = () => {

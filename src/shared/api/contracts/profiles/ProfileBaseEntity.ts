@@ -1,5 +1,5 @@
-import { EntityState } from "@/shared/enums";
-import { PlayerBaseEntity } from "@/shared/api/contracts";
+import { EntityState } from '@/shared/enums';
+import { PlayerBaseEntity } from '@/shared/api/contracts';
 
 export type ProfileBaseEntity = {
   name: string;

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { PlayersPage } from "@/views/players";
+import { PlayersPage } from '@/views/players';
 
 export const metadata: Metadata = {
-  title: "Игроки",
+  title: 'Игроки',
 };
 
 const Page = () => {

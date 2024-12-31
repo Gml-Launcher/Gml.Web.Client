@@ -1,9 +1,9 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { playersService } from "@/shared/services/PlayersService";
+import { playersService } from '@/shared/services/PlayersService';
 
 export const playersKeys = {
-  all: ["players"] as const,
+  all: ['players'] as const,
 };
 
 export const usePlayers = (search: string) => {

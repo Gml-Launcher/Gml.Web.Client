@@ -1,15 +1,15 @@
 .nav__wrapper {
-    @apply flex-1
+  @apply flex-1;
 }
 
 .nav {
-    @apply grid gap-y-2 items-start px-2 text-sm font-medium lg:px-4
+  @apply grid gap-y-2 items-start px-2 text-sm font-medium lg:px-4;
 }
 
 .nav__link {
-    @apply flex items-center gap-3 rounded-lg px-4 py-3 transition-all text-muted-foreground hover:bg-white
+  @apply flex items-center gap-3 rounded-lg px-4 py-3 transition-all text-muted-foreground hover:bg-white;
 }
 
 .nav__link-active {
-    @apply bg-white text-primary transition-all hover:text-primary
+  @apply bg-white text-primary transition-all hover:text-primary;
 }

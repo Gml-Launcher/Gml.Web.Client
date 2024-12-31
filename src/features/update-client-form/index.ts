@@ -1,1 +1,1 @@
-export * from "./ui/UpdateClientForm";
+export * from './ui/UpdateClientForm';

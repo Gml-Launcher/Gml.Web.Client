@@ -1,23 +1,22 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import classes from "./styles.module.css";
+import classes from './styles.module.css';
 
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { Skeleton } from "@/shared/ui/skeleton";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { DASHBOARD_PAGES } from '@/shared/routes';
 
 export const ProfileLoading = () => {
   return (
     <>
       <Breadcrumbs
-        current={"..."}
+        current={'...'}
         breadcrumbs={[
-          { value: "Главная", path: DASHBOARD_PAGES.HOME },
+          { value: 'Главная', path: DASHBOARD_PAGES.HOME },
           {
-            value: "Профили",
+            value: 'Профили',
             path: DASHBOARD_PAGES.PROFILES,
           },
         ]}

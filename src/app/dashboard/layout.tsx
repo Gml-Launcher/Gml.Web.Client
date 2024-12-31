@@ -1,45 +1,45 @@
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon, Users2Icon } from "lucide-react";
+import Link from 'next/link';
+import Image from 'next/image';
+import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon, Users2Icon } from 'lucide-react';
 
-import classes from "./styles.module.css";
+import classes from './styles.module.css';
 
-import { config } from "@/core/configs";
-import { ChangeTheme } from "@/features/change-theme";
-import { Notifications } from "@/features/notifications";
-import { DesktopNavigation } from "@/shared/ui/DesktopNavigation";
-import { MobileNavigation } from "@/shared/ui/MobileNavigation";
-import { AccountNavigation } from "@/shared/ui/AccountNavigation";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { DonationPro } from "@/shared/ui/DonationPro";
-import { TMenuItem } from "@/shared/types";
-import logo from "@/assets/logos/logo.svg";
+import { config } from '@/core/configs';
+import { ChangeTheme } from '@/features/change-theme';
+import { Notifications } from '@/features/notifications';
+import { DesktopNavigation } from '@/shared/ui/DesktopNavigation';
+import { MobileNavigation } from '@/shared/ui/MobileNavigation';
+import { AccountNavigation } from '@/shared/ui/AccountNavigation';
+import { DASHBOARD_PAGES } from '@/shared/routes';
+import { DonationPro } from '@/shared/ui/DonationPro';
+import { TMenuItem } from '@/shared/types';
+import logo from '@/assets/logos/logo.svg';
 
 const menu: TMenuItem[] = [
   {
     icon: <BlocksIcon size={16} />,
     path: DASHBOARD_PAGES.PROFILES,
-    text: "Профили",
+    text: 'Профили',
   },
   {
     icon: <ArrowUpDownIcon size={16} />,
     path: DASHBOARD_PAGES.INTEGRATIONS,
-    text: "Интеграции",
+    text: 'Интеграции',
   },
   {
     icon: <SettingsIcon size={16} />,
     path: DASHBOARD_PAGES.SETTINGS,
-    text: "Настройки",
+    text: 'Настройки',
   },
   {
     icon: <PieChartIcon size={16} />,
     path: DASHBOARD_PAGES.SENTRY,
-    text: "Ошибки",
+    text: 'Ошибки',
   },
   {
     icon: <Users2Icon size={16} />,
     path: DASHBOARD_PAGES.PLAYERS,
-    text: "Игроки",
+    text: 'Игроки',
   },
 ];
 
@@ -48,9 +48,9 @@ export default function Page({ children }: React.PropsWithChildren) {
     <div className={classes.layout}>
       <aside className={classes.aside}>
         <div className={classes.aside__wrapper}>
-          <div className={classes["aside__wrapper-logo"]}>
+          <div className={classes['aside__wrapper-logo']}>
             <Link href="/" className={classes.aside__logo}>
-              <Image src={logo} alt="GML Frontend" />
+              <Image src={logo} alt="Gml Frontend" />
               {config.name}
               <sup className={classes.version}>{config.version}</sup>
             </Link>

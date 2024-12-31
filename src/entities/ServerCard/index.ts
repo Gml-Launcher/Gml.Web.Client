@@ -1,1 +1,1 @@
-export * from "./ui/GameServerCard";
+export * from './ui/GameServerCard';

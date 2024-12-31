@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface SectionProps extends React.PropsWithChildren, React.HTMLAttributes<HTMLDivElement> {
   title?: string;

@@ -1,14 +1,14 @@
-import type { Locator, Page, Response } from "playwright-core";
+import type { Locator, Page, Response } from 'playwright-core';
 
-const mock_created_login = "autotestuser";
-const mock_created_email = "autotestuser@email.ru";
-const mock_created_password = "autotestuser-AUTOTEST-000";
+const mock_created_login = 'autotestuser';
+const mock_created_email = 'autotestuser@email.ru';
+const mock_created_password = 'autotestuser-AUTOTEST-000';
 
-export const mock_server_name = "autotestserver";
-export const mock_server_name_edited = "autotestserveredited";
-export const mock_server_description = "Описание профиля autotestserver";
-export const mock_server_version = "1.7.10";
-export const mock_server_loader = "Forge";
+export const mock_server_name = 'autotestserver';
+export const mock_server_name_edited = 'autotestserveredited';
+export const mock_server_description = 'Описание профиля autotestserver';
+export const mock_server_version = '1.7.10';
+export const mock_server_loader = 'Forge';
 
 export const type_login = async (locator: Locator) => {
   await locator.fill(mock_created_login);
@@ -37,11 +37,11 @@ export const type_input_server_loader = async (page: Page, locator: Locator, cus
 };
 
 export const type_button_edit_server = async (locator_row: Locator) => {
-  await locator_row.getByRole("button").first().click();
+  await locator_row.getByRole('button').first().click();
 };
 
 export const type_button_delete_server = async (locator_row: Locator, locator_button: Locator) => {
-  await locator_row.getByRole("button").nth(1).click();
+  await locator_row.getByRole('button').nth(1).click();
   await locator_button.click();
 };
 

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { SentryPage } from "@/views/sentry";
+import { SentryPage } from '@/views/sentry';
 
 export const metadata: Metadata = {
-  title: "Ошибки",
+  title: 'Ошибки',
 };
 const Page = async () => {
   return <SentryPage />;

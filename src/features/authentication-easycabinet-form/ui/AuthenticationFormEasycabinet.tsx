@@ -1,17 +1,16 @@
-import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { IntegrationFormSchemaType, integrationSchema } from "../lib/static";
+import { IntegrationFormSchemaType, integrationSchema } from '../lib/static';
 
-import { useEditIntegration, useGetActiveAuthIntegrations } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
-import { Input } from "@/shared/ui/input";
-import { AuthenticationType } from "@/shared/enums";
-
+import { useEditIntegration, useGetActiveAuthIntegrations } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
+import { AuthenticationType } from '@/shared/enums';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -31,7 +30,7 @@ export function AuthenticationFormEasycabinet({
       endpoint:
         integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET
           ? String(integration.endpoint)
-          : "",
+          : '',
       authType:
         integration?.authType === AuthenticationType.AUTHENTICATION_TYPE_EASY_CABINET
           ? integration.authType
@@ -49,13 +48,13 @@ export function AuthenticationFormEasycabinet({
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
             <FormLabel>Введите ссылку на ваш Backend</FormLabel>
             <FormControl>
-              <Input placeholder="Введите ссылку на ваш Backend" {...form.register("endpoint")} />
+              <Input placeholder="Введите ссылку на ваш Backend" {...form.register('endpoint')} />
             </FormControl>
             {form.formState.errors.endpoint && (
               <FormMessage>{form.formState.errors.endpoint.message}</FormMessage>

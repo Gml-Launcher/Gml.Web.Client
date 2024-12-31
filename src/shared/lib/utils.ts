@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,7 +18,7 @@ const isValidToken = (token: string) => {
 };
 
 const getTokenExpiredTime = (token: string) => {
-  const tokenParts = token.split(".");
+  const tokenParts = token.split('.');
   const payload = JSON.parse(atob(tokenParts[1]));
   return payload.exp;
 };
@@ -26,16 +26,16 @@ const getTokenExpiredTime = (token: string) => {
 export const isTokenExpired = (token?: string): boolean => {
   if (!token) return true;
 
-  if (!isValidToken(token)) throw new Error("Invalid token format");
+  if (!isValidToken(token)) throw new Error('Invalid token format');
 
   const expired_time = getTokenExpiredTime(token);
-  if (!expired_time) throw new Error("Token does not contain expiration time");
+  if (!expired_time) throw new Error('Token does not contain expiration time');
 
   const time_now = Math.floor(Date.now() / 1000);
 
   return expired_time <= time_now;
 };
 
-export * from "./getFormatDate/getFormatDate";
-export * from "./getProgressColor/getProgressColor";
-export * from "./isAxiosError/isAxiosError";
+export * from './getFormatDate/getFormatDate';
+export * from './getProgressColor/getProgressColor';
+export * from './isAxiosError/isAxiosError';

@@ -1,1 +1,1 @@
-export * from "./ui/DesktopNavigation";
+export * from './ui/DesktopNavigation';

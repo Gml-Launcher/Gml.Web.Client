@@ -1,5 +1,5 @@
-import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from "@/shared/api/contracts";
-import { ResponseBaseEntity } from "@/shared/api/schemas";
+import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { ResponseBaseEntity } from '@/shared/api/schemas';
 
 // Добавление файлов в whitelist
 export type TPostWhitelistFileRequest = WhitelistFileBaseEntity[];

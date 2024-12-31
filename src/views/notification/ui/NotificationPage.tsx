@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { ClearNotificationModel } from "@/widgets/clear-notifications";
-import { NotificationCard } from "@/entities/NotificationCard";
-import { DASHBOARD_PAGES } from "@/shared/routes";
-import { NotificationStatus } from "@/shared/enums";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { Badge } from "@/shared/ui/badge";
-import { useNotifications } from "@/shared/hooks";
+import { ClearNotificationModel } from '@/widgets/clear-notifications';
+import { NotificationCard } from '@/entities/NotificationCard';
+import { DASHBOARD_PAGES } from '@/shared/routes';
+import { NotificationStatus } from '@/shared/enums';
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { Badge } from '@/shared/ui/badge';
+import { useNotifications } from '@/shared/hooks';
 
 export const NotificationPage = () => {
   const { data } = useNotifications();
@@ -28,8 +28,8 @@ export const NotificationPage = () => {
   return (
     <>
       <Breadcrumbs
-        current={"Уведомления"}
-        breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
+        current={'Уведомления'}
+        breadcrumbs={[{ value: 'Главная', path: DASHBOARD_PAGES.HOME }]}
       />
       <Tabs
         className="flex gap-6 items-start"

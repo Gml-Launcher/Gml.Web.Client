@@ -1,35 +1,35 @@
-"use client";
+'use client';
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { useEffect } from "react";
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
+import { useEffect } from 'react';
 
-import { SentryGraphic } from "@/shared/api/contracts/sentry/schemas";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
-import { getFormatDate } from "@/shared/lib/getFormatDate/getFormatDate";
+import { SentryGraphic } from '@/shared/api/contracts/sentry/schemas';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/shared/ui/chart';
+import { getFormatDate } from '@/shared/lib/getFormatDate/getFormatDate';
 
 interface SentryChartParams {
   graphics: SentryGraphic[];
 }
 
 const chartData = [
-  { month: "January", desktop: 0 },
-  { month: "February", desktop: 0 },
-  { month: "March", desktop: 0 },
-  { month: "April", desktop: 0 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { month: 'January', desktop: 0 },
+  { month: 'February', desktop: 0 },
+  { month: 'March', desktop: 0 },
+  { month: 'April', desktop: 0 },
+  { month: 'May', desktop: 209 },
+  { month: 'June', desktop: 214 },
 ];
 const chartConfig = {
   desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+    label: 'Desktop',
+    color: 'hsl(var(--chart-1))',
   },
 } satisfies ChartConfig;
 
 export const SentryChart = ({ graphics }: SentryChartParams) => {
   useEffect(() => {
     graphics.map(({ month, count }) =>
-      console.log(getFormatDate(month).replace(", 00:00:00", "").replaceAll(".", "-")),
+      console.log(getFormatDate(month).replace(', 00:00:00', '').replaceAll('.', '-')),
     );
   });
   return (

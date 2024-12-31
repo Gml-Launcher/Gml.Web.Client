@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { EditSettingsPlatformForm } from "@/features/edit-settings-platform-form";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { DASHBOARD_PAGES } from "@/shared/routes";
+import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form';
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { DASHBOARD_PAGES } from '@/shared/routes';
 
 export const SettingsPage = () => {
   return (
     <>
       <Breadcrumbs
         current="Настройки"
-        breadcrumbs={[{ value: "Главная", path: DASHBOARD_PAGES.HOME }]}
+        breadcrumbs={[{ value: 'Главная', path: DASHBOARD_PAGES.HOME }]}
       />
       <div className="mx-auto grid w-full gap-2">
         <h1 className="text-3xl font-semibold">Настройки</h1>

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
   Dialog,
@@ -8,17 +8,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { useCreateGameServer } from "@/shared/hooks";
+} from '@/shared/ui/dialog';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { useCreateGameServer } from '@/shared/hooks';
 import {
   AddGameServerScheme,
   AddGameServerSchemeType,
   ProfileExtendedBaseEntity,
-} from "@/shared/api/contracts";
-import { Icons } from "@/shared/ui/icons";
+} from '@/shared/api/contracts';
+import { Icons } from '@/shared/ui/icons';
 
 type AddGameServerDialogParams = {
   profile?: ProfileExtendedBaseEntity;
@@ -38,7 +38,7 @@ export const CreateGameServerDialog = ({ profile }: AddGameServerDialogParams) =
     body: AddGameServerSchemeType,
   ) => {
     await mutateAsync({
-      profileName: profile?.profileName || "",
+      profileName: profile?.profileName || '',
       ...body,
     });
 
@@ -60,7 +60,7 @@ export const CreateGameServerDialog = ({ profile }: AddGameServerDialogParams) =
             <FormItem>
               <FormLabel>Введите название сервера</FormLabel>
               <FormControl>
-                <Input placeholder="Введите название сервера" {...form.register("name")} />
+                <Input placeholder="Введите название сервера" {...form.register('name')} />
               </FormControl>
               {form.formState.errors.name && (
                 <FormMessage>{form.formState.errors.name.message}</FormMessage>
@@ -69,7 +69,7 @@ export const CreateGameServerDialog = ({ profile }: AddGameServerDialogParams) =
             <FormItem>
               <FormLabel>Введите адрес сервера</FormLabel>
               <FormControl>
-                <Input placeholder="Введите адрес сервера" {...form.register("address")} />
+                <Input placeholder="Введите адрес сервера" {...form.register('address')} />
               </FormControl>
               {form.formState.errors.address && (
                 <FormMessage>{form.formState.errors.address.message}</FormMessage>
@@ -81,7 +81,7 @@ export const CreateGameServerDialog = ({ profile }: AddGameServerDialogParams) =
                 <Input
                   type="number"
                   placeholder="Введите порт сервера"
-                  {...form.register("port", { valueAsNumber: true })}
+                  {...form.register('port', { valueAsNumber: true })}
                 />
               </FormControl>
               {form.formState.errors.port && (

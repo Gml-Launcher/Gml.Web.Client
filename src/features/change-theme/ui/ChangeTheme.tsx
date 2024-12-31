@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { useTheme } from 'next-themes';
+import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
-import { Button } from "@/shared/ui/button";
+} from '@/shared/ui/dropdown-menu';
+import { Button } from '@/shared/ui/button';
 
 export const ChangeTheme = () => {
   const { setTheme } = useTheme();
@@ -24,9 +24,9 @@ export const ChangeTheme = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>Светлая тема</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>Темная тема</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>Системная тема</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('light')}>Светлая тема</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('dark')}>Темная тема</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('system')}>Системная тема</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

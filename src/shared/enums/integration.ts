@@ -9,11 +9,11 @@ export enum AuthenticationType {
 }
 
 export enum AuthenticationTypeOption {
-  "OPTION_0" = "Undefined", // Запрещена авторизация
-  "OPTION_1" = "DataLife Engine", // Авторизация через DLE
-  "OPTION_2" = "Any", // Разрешена авторизация под любым логином и паролем
-  "OPTION_3" = "Azuriom", // Разрешена авторизация под любым логином и паролем
-  "OPTION_4" = "EasyCabinet", // Авторизация через EasyCabinet
-  "OPTION_5" = "UniCoreCMS", // Авторизация через UniCoreCMS
-  "OPTION_6" = "Собственная Авторизация", // Авторизация через свой endpoint
+  'OPTION_0' = 'Undefined', // Запрещена авторизация
+  'OPTION_1' = 'DataLife Engine', // Авторизация через DLE
+  'OPTION_2' = 'Any', // Разрешена авторизация под любым логином и паролем
+  'OPTION_3' = 'Azuriom', // Разрешена авторизация под любым логином и паролем
+  'OPTION_4' = 'EasyCabinet', // Авторизация через EasyCabinet
+  'OPTION_5' = 'UniCoreCMS', // Авторизация через UniCoreCMS
+  'OPTION_6' = 'Собственная Авторизация', // Авторизация через свой endpoint
 }

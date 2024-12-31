@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { PencilIcon, PlugIcon } from "lucide-react";
-import { useState } from "react";
+import { PencilIcon, PlugIcon } from 'lucide-react';
+import { useState } from 'react';
 
 import {
   Dialog,
@@ -9,10 +9,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/shared/ui/dialog";
-import { useSentry } from "@/shared/hooks";
-import { Button } from "@/shared/ui/button";
-import { ConnectSentryForm } from "@/features/connect-sentry-form";
+} from '@/shared/ui/dialog';
+import { useSentry } from '@/shared/hooks';
+import { Button } from '@/shared/ui/button';
+import { ConnectSentryForm } from '@/features/connect-sentry-form';
 
 export function ConnectSentryDialog() {
   const [open, setOpen] = useState(false);
@@ -20,7 +20,7 @@ export function ConnectSentryDialog() {
 
   const { data: sentry, isLoading } = useSentry();
 
-  const connectionText = Boolean(sentry?.url) ? "Изменить" : "Подключить";
+  const connectionText = Boolean(sentry?.url) ? 'Изменить' : 'Подключить';
   const connectionIcon = Boolean(sentry?.url) ? (
     <PencilIcon className="mr-2" size={16} />
   ) : (

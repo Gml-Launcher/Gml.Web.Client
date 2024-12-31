@@ -1,6 +1,6 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
-import { $api } from "@/core/api";
+import { $api } from '@/services/api.service';
 import {
   TDeleteWhitelistFileRequest,
   TDeleteWhitelistFileResponse,
@@ -10,11 +10,11 @@ import {
   TPostWhitelistFileResponse,
   TPostWhitelistFolderRequest,
   TPostWhitelistFolderResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class WhitelistService {
-  private BASE_URL_FILE = "/file/whitelist";
-  private BASE_URL_FOLDER = "/folder/whitelist";
+  private BASE_URL_FILE = '/file/whitelist';
+  private BASE_URL_FOLDER = '/folder/whitelist';
 
   async appendFiles(
     body: TPostWhitelistFileRequest,

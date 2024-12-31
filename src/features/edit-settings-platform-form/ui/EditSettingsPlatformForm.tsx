@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { DatabaseIcon, ImagesIcon, UsersIcon } from "lucide-react";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { DatabaseIcon, ImagesIcon, UsersIcon } from 'lucide-react';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
-import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from "../lib/zod";
-import { extractProtocol } from "../lib/utils";
+import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from '../lib/zod';
+import { extractProtocol } from '../lib/utils';
 
-import { Protocol, ProtocolOption, StorageType, StorageTypeOption } from "@/shared/enums";
-import { useEditSettingsPlatform, useSettingsPlatform } from "@/shared/hooks";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select";
-import { Button } from "@/shared/ui/button";
-import { Icons } from "@/shared/ui/icons";
-import { Switch } from "@/shared/ui/switch";
-import { Input } from "@/shared/ui/input";
-import { enumValues } from "@/shared/lib/utils";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { Protocol, ProtocolOption, StorageType, StorageTypeOption } from '@/shared/enums';
+import { useEditSettingsPlatform, useSettingsPlatform } from '@/shared/hooks';
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/shared/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import { Button } from '@/shared/ui/button';
+import { Icons } from '@/shared/ui/icons';
+import { Switch } from '@/shared/ui/switch';
+import { Input } from '@/shared/ui/input';
+import { enumValues } from '@/shared/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -29,9 +29,9 @@ export const EditSettingsPlatformForm = () => {
     values: {
       registrationIsEnabled: platform?.registrationIsEnabled || false,
       storageType: platform?.storageType || StorageType.STORAGE_TYPE_LOCALSTORAGE,
-      storageHost: platform?.storageHost || "",
-      storageLogin: platform?.storageLogin || "",
-      storagePassword: "",
+      storageHost: platform?.storageHost || '',
+      storageLogin: platform?.storageLogin || '',
+      storagePassword: '',
       textureProtocol:
         platform?.textureProtocol === Protocol.HTTPS ? Protocol.HTTPS : Protocol.HTTP,
     },
@@ -40,8 +40,8 @@ export const EditSettingsPlatformForm = () => {
 
   const currentProtocol = extractProtocol(process.env.NEXT_PUBLIC_BACKEND_URL);
 
-  const watchRegistration = form.watch("registrationIsEnabled");
-  const watchStorageType = form.watch("storageType");
+  const watchRegistration = form.watch('registrationIsEnabled');
+  const watchStorageType = form.watch('storageType');
   const isFormS3Storage = Number(watchStorageType) === StorageType.STORAGE_TYPE_S3;
 
   const onSubmit: SubmitHandler<EditSettingsPlatformSchemaType> = async (
@@ -65,7 +65,7 @@ export const EditSettingsPlatformForm = () => {
                       <UsersIcon className="mr-2 h-4 w-4" />
                       <h6 className="text-sm font-bold">
                         Регистрация новых пользователей (
-                        {watchRegistration ? "Разрешена" : "Запрещена"})
+                        {watchRegistration ? 'Разрешена' : 'Запрещена'})
                       </h6>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">
@@ -116,7 +116,7 @@ export const EditSettingsPlatformForm = () => {
                 )}
               />
 
-              {currentProtocol !== form.watch("textureProtocol") && (
+              {currentProtocol !== form.watch('textureProtocol') && (
                 <Alert variant="destructive">
                   <ExclamationTriangleIcon className="h-4 w-4" />
                   <AlertTitle>Внимание!</AlertTitle>

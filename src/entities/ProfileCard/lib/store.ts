@@ -1,6 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import { EntityState, EntityStateOption } from "@/shared/enums";
+import { EntityState, EntityStateOption } from '@/shared/enums';
 
 interface State {
   state: Nullable<EntityState>;

@@ -1,7 +1,13 @@
-import { AxiosResponse } from "axios";
-import type { UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { AxiosResponse, isAxiosError as isAxiosErrorBase } from 'axios';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+  UseQueryResult,
+} from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import {
   ProfileBaseEntity,
@@ -13,49 +19,58 @@ import {
   TGetProfileRequest,
   TPostProfilesRequest,
   TPutProfileRequest,
-} from "@/shared/api/contracts";
-import { profileService } from "@/shared/services/ProfileService";
-import { isAxiosError } from "@/shared/lib/utils";
-import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
+} from '@/shared/api/contracts';
+import { profileService } from '@/shared/services/ProfileService';
+import { isAxiosError } from '@/shared/lib/utils';
+import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 
 export const profileKeys = {
-  all: ["profiles"] as const,
-  creating: () => [...profileKeys.all, "creating"] as const,
-  reading: () => [...profileKeys.all, "reading"] as const,
-  editing: () => [...profileKeys.all, "editing"] as const,
-  deleting: () => [...profileKeys.all, "deleting"] as const,
-  deletingAll: () => [...profileKeys.all, "deletingAll"] as const,
+  all: ['profiles'] as const,
+  creating: () => [...profileKeys.all, 'creating'] as const,
+  reading: () => [...profileKeys.all, 'reading'] as const,
+  editing: () => [...profileKeys.all, 'editing'] as const,
+  deleting: () => [...profileKeys.all, 'deleting'] as const,
+  deletingAll: () => [...profileKeys.all, 'deletingAll'] as const,
+  deletingPlayers: () => [...profileKeys.all, 'deletingPlayers'] as const,
+  addingPlayers: () => [...profileKeys.all, 'addingPlayers'] as const,
 
-  entities: () => [...profileKeys.all, "entities"] as const,
+  entities: () => [...profileKeys.all, 'entities'] as const,
 
-  javaVerison: () => [...profileKeys.all, "javaVerison"] as const,
-  gameVersions: (version: string) => [...profileKeys.entities(), version, "versions"] as const,
+  javaVerison: () => [...profileKeys.all, 'javaVerison'] as const,
+  gameVersions: (version: string) => [...profileKeys.entities(), version, 'versions'] as const,
 };
 
 export const useProfiles = () => {
   return useQuery({
     queryKey: profileKeys.all,
     queryFn: () => profileService.getProfiles(),
-    select: (data) => data.data,
+    select: (data) => data.data.data,
   });
 };
 
 export const useProfile = () => {
   const { setState } = useProfileCardStore();
 
+  const route = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: profileKeys.reading(),
+    mutationKey: [...profileKeys.reading()],
     mutationFn: (data: TGetProfileRequest) => profileService.getProfile(data),
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
     onSuccess: async (data) => {
-      setState(data.data.state);
+      setState(data.data.data.state);
     },
     onError: (error) => {
       isAxiosError({ toast, error });
+
+      if (isAxiosErrorBase(error)) {
+        if (error.response && error.response.status === 404) {
+          route.push('/dashboard/profiles');
+        }
+      }
     },
   });
 };
@@ -74,8 +89,8 @@ export const useCreateProfile = () => {
     mutationFn: (data: TPostProfilesRequest) => profileService.createProfile(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
-      toast.success("Успешно", {
-        description: `Профиль "${data.data.name}" успешно создан`,
+      toast.success('Успешно', {
+        description: `Профиль "${data.data.data.name}" успешно создан`,
       });
     },
     onError: (error) => {
@@ -105,8 +120,8 @@ export const useDeleteProfile = () => {
       await queryClient.setQueryData(profileKeys.reading(), () => null);
     },
     onSuccess: async (data) => {
-      toast.success("Успешно", {
-        description: data.message,
+      toast.success('Успешно', {
+        description: data.data.message,
       });
     },
     onError: (error) => {
@@ -125,8 +140,8 @@ export const useDeleteProfiles = () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
     },
     onSuccess: async (data) => {
-      toast.success("Успешно", {
-        description: data.message,
+      toast.success('Успешно', {
+        description: data.data.message,
       });
     },
     onError: (error) => {
@@ -135,18 +150,36 @@ export const useDeleteProfiles = () => {
   });
 };
 
-export const useAddProfilePlayers = () => {
+export const useAddProfilePlayers = (profileName?: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: profileKeys.deletingAll(),
+    mutationKey: profileKeys.addingPlayers(),
     mutationFn: (body: TAddPlayerToProfileRequest) => profileService.addPlayer(body),
-    onSettled: async () => {
-      await queryClient.invalidateQueries({ queryKey: profileKeys.all });
-    },
     onSuccess: async (data) => {
-      toast.success("Успешно", {
-        description: data.message,
+      await queryClient.invalidateQueries({
+        queryKey: [...profileKeys.reading(), { profileName: profileName }],
+      });
+      toast.success('Успешно', {
+        description: data.data.message,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useDeleteProfilePlayers = ({ profileName }: { profileName: string }) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: profileKeys.deletingPlayers(),
+    mutationFn: ({ playerUuid }: { playerUuid: string }) =>
+      profileService.deletePlayer({ profileName, playerUuid }),
+    onSuccess: async (data) => {
+      toast.success('Успешно', {
+        description: data.data.message,
       });
     },
     onError: (error) => {
@@ -158,9 +191,9 @@ export const useAddProfilePlayers = () => {
 export const useGetGameVersions = (
   body: TGameVersionsRequest,
   options?: Partial<
-    UseQueryOptions<AxiosResponse<TGameVersionsResponse>, Error, TGameVersionsResponse["data"]>
+    UseQueryOptions<AxiosResponse<TGameVersionsResponse>, Error, TGameVersionsResponse['data']>
   >,
-): UseQueryResult<TGameVersionsResponse["data"]> => {
+): UseQueryResult<TGameVersionsResponse['data']> => {
   return useQuery({
     queryKey: [profileKeys.gameVersions(body.minecraftVersion), { gameLoader: body.gameLoader }],
     queryFn: async () => await profileService.getGameVersions(body),

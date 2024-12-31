@@ -1,1 +1,1 @@
-export { ChooseAuthenticationMethodDialog } from "./ui/ChooseAuthenticationMethodDialog";
+export { ChooseAuthenticationMethodDialog } from './ui/ChooseAuthenticationMethodDialog';

@@ -1,1 +1,1 @@
-export * from "./ui/CreateWhiteUserDialog";
+export * from './ui/CreateWhiteUserDialog';

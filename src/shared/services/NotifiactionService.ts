@@ -1,14 +1,14 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios';
 
-import { $api } from "@/core/api";
+import { $api } from '@/services/api.service';
 import {
   TDeleteNotificationResponse,
   TGetNotificationRequest,
   TGetNotificationResponse,
-} from "@/shared/api/contracts";
+} from '@/shared/api/contracts';
 
 class NotificationService {
-  private BASE_URL = "/notifications";
+  private BASE_URL = '/notifications';
 
   async getNotification(
     params?: TGetNotificationRequest,

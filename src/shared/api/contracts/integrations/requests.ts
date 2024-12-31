@@ -6,9 +6,9 @@ import {
   LauncherBuildsBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
-} from "@/shared/api/contracts";
-import { TexturesServiceType } from "@/shared/enums";
-import { ResponseBaseEntity } from "@/shared/api/schemas"; // Получение списка серверов для авторизации
+} from '@/shared/api/contracts';
+import { TexturesServiceType } from '@/shared/enums';
+import { ResponseBaseEntity } from '@/shared/api/schemas'; // Получение списка серверов для авторизации
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};

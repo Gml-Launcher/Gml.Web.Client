@@ -1,6 +1,6 @@
 'use client';
 
-import {ComponentPropsWithoutRef, ElementRef, forwardRef, HTMLAttributes} from 'react';
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, HTMLAttributes } from 'react';
 import * as MenubarPrimitive from '@radix-ui/react-menubar';
 import { Check, ChevronRight, Circle } from 'lucide-react';
 
@@ -191,7 +191,7 @@ const MenubarSeparator = forwardRef<
 ));
 MenubarSeparator.displayName = MenubarPrimitive.Separator.displayName;
 
-function MenubarShortcut({className, ...props}: HTMLAttributes<HTMLSpanElement>) {
+function MenubarShortcut({ className, ...props }: HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
       className={cn('ml-auto text-xs tracking-widest text-muted-foreground', className)}

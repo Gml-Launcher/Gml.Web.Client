@@ -1,6 +1,6 @@
-import classes from "./styles.module.css";
+import classes from './styles.module.css';
 
-import { Skeleton } from "@/shared/ui/skeleton";
+import { Skeleton } from '@/shared/ui/skeleton';
 
 export const GamePlayersSkeleton = () => {
   return (

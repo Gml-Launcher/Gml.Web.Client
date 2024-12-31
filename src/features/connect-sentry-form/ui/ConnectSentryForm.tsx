@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import React from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { integrationSchema, SentryFormSchemaType } from "../lib/static";
+import { integrationSchema, SentryFormSchemaType } from '../lib/static';
 
-import { useEditSentry, useSentry } from "@/shared/hooks";
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/shared/ui/form";
-import { Icons } from "@/shared/ui/icons";
-import { Input } from "@/shared/ui/input";
+import { useEditSentry, useSentry } from '@/shared/hooks';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
+import { Icons } from '@/shared/ui/icons';
+import { Input } from '@/shared/ui/input';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -23,7 +23,7 @@ export function ConnectSentryForm({ className, onOpenChange, ...props }: SignInF
 
   const form = useForm<SentryFormSchemaType>({
     values: {
-      url: data?.url || "",
+      url: data?.url || '',
     },
     resolver: zodResolver(integrationSchema),
   });
@@ -35,13 +35,13 @@ export function ConnectSentryForm({ className, onOpenChange, ...props }: SignInF
   };
 
   return (
-    <div className={cn("grid gap-4", className)} {...props}>
+    <div className={cn('grid gap-4', className)} {...props}>
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
             <FormLabel>Введите эндпоинт</FormLabel>
             <FormControl>
-              <Input placeholder="Введите эндпоинт" {...form.register("url")} />
+              <Input placeholder="Введите эндпоинт" {...form.register('url')} />
             </FormControl>
             {form.formState.errors.url && (
               <FormMessage>{form.formState.errors.url.message}</FormMessage>

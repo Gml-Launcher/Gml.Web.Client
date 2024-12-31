@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { addDays } from "date-fns";
+import { z } from 'zod';
+import { addDays } from 'date-fns';
 
 export const SentryAnalyticsScheme = z.object({
   projectType: z.number(),
@@ -10,7 +10,7 @@ export const SentryAnalyticsScheme = z.object({
     })
     .refine(
       (data) => data.dateFrom > addDays(new Date(), -1),
-      "Дата начала должна быть в будущем.",
+      'Дата начала должна быть в будущем.',
     ),
 });
 

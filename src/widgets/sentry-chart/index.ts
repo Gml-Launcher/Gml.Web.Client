@@ -1,1 +1,1 @@
-export * from './ui/SentryChart'
+export * from './ui/SentryChart';

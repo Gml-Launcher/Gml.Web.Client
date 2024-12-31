@@ -1,1 +1,1 @@
-export * from "./ui/GamePlayers";
+export * from './ui/GamePlayers';

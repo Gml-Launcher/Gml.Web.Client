@@ -1,1 +1,1 @@
-export { ConnectDiscordDialog } from "./ui/ConnectDiscordDialog";
+export { ConnectDiscordDialog } from './ui/ConnectDiscordDialog';
