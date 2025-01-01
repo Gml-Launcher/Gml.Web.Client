@@ -17,12 +17,14 @@ import { Icons } from '@/shared/ui/icons';
 import { getFormatDate } from '@/shared/lib/utils';
 import { profileKeys } from '@/shared/hooks';
 import defaultProfileIcon from '@/assets/logos/minecraft.png';
+import { convertApiGameLoaderImage } from '@/shared/converters';
 
 enum ColumnHeader {
   ICON = '',
   NAME = 'Название',
   CREATED_AT = 'Дата создания',
   VERSION_LAUNCHER = 'Запускаемая версия',
+  LOADER_LAUNCHER = '',
   GAME_VERSION = 'Версия',
   PROFILE_STATE = 'Статус',
 }
@@ -91,6 +93,14 @@ export const useColumns = (props: UseColumnsProps) => {
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
       cell: ({ getValue }) => getValue(),
     }),
+    columnsHelper.accessor('loader', {
+      size: 50,
+      enableSorting: false,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.LOADER_LAUNCHER} />
+      ),
+      cell: ({ getValue }) => (getValue() ? convertApiGameLoaderImage(getValue()) : 'Не загружен'),
+    }),
     columnsHelper.accessor('launchVersion', {
       size: 500,
       header: ({ column }) => (
@@ -100,6 +110,7 @@ export const useColumns = (props: UseColumnsProps) => {
     }),
     columnsHelper.accessor('gameVersion', {
       size: 100,
+
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION} />
       ),
