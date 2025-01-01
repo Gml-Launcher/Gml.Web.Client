@@ -3,6 +3,7 @@ import { PlayerBaseEntity } from '@/shared/api/contracts';
 
 export type ProfileBaseEntity = {
   name: string;
+  loader: number;
   createDate: string;
   description: string;
   gameVersion: string;
