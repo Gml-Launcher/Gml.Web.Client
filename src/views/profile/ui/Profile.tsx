@@ -36,6 +36,7 @@ import {
 import { FolderTable } from '@/widgets/folder-table';
 import { GamePlayers } from '@/widgets/game-players';
 import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
+import { GameMods } from '@/widgets/game-mods';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -129,6 +130,9 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </TabsTrigger>
           <TabsTrigger className="w-full h-10" value="players">
             Игроки
+          </TabsTrigger>
+          <TabsTrigger className="w-full h-10" value="mods">
+            Моды
           </TabsTrigger>
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>
@@ -226,6 +230,11 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             subtitle="Управление игроками, которые могут заходить в игровой клиент, даже если он выключен или недоступен"
           >
             <GamePlayers profile={profile} />
+          </Section>
+        </TabsContent>
+        <TabsContent value="mods" className={classes.tabs__content}>
+          <Section title="Моды" subtitle="Управление игровыми модификациями">
+            <GameMods profile={profile} />
           </Section>
         </TabsContent>
       </Tabs>
