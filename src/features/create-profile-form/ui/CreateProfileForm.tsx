@@ -25,6 +25,7 @@ import loaderForge from '@/assets/logos/forge.png';
 import loaderFabric from '@/assets/logos/fabric.png';
 import loaderLiteLoader from '@/assets/logos/liteloader.png';
 import neoForgeLoader from '@/assets/logos/neoforge.png';
+import quiltLoader from '@/assets/logos/quilt.png';
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
@@ -45,6 +46,7 @@ const logoGameLoader: Record<GameLoaderOption, ReactElement> = {
   [GameLoaderOption.NEOFORGE]: (
     <Image src={neoForgeLoader} alt="Logotype NeoForge" width={18} height={18} />
   ),
+  [GameLoaderOption.QUILT]: <Image src={quiltLoader} alt="Logotype Quilt" width={18} height={18} />,
 };
 
 export function CreateProfileForm(props: CreateProfileFormProps) {
