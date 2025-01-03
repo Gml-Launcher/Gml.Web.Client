@@ -6,3 +6,13 @@ export type ModBaseEntity = {
   iconUrl: string;
   type: ModType;
 };
+
+export type ModEntity = {
+  id: string;
+  name: string;
+  description: string;
+  iconUrl: string;
+  downloadCount: number;
+  followsCount: number;
+  type: ModType;
+};

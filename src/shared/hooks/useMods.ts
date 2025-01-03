@@ -22,3 +22,19 @@ export const useOptionalMods = ({ profileName }: { profileName: string }) => {
     select: (data) => data.data.data,
   });
 };
+
+export const useSearchMods = ({
+  profileName,
+  modName,
+  limit,
+}: {
+  profileName: string;
+  modName: string;
+  limit: number;
+}) => {
+  return useQuery({
+    queryKey: ['mods', profileName, modName, limit],
+    queryFn: () => modService.getAvailableModsList({ profileName, modName, limit }),
+    select: (data) => data.data.data,
+  });
+};

@@ -110,7 +110,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         defaultValue="main"
         aria-orientation="vertical"
         orientation="vertical"
-        className={classes.tabs}
+        className="flex flex-col md:flex-row gap-6 items-start"
       >
         <TabsList defaultValue="main" className={classes.tabs__list}>
           <TabsTrigger className="w-full h-10" value="main">

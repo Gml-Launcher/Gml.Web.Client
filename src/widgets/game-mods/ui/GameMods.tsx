@@ -1,11 +1,11 @@
-import { FileIcon, PlusIcon } from '@radix-ui/react-icons';
+import { FileIcon } from '@radix-ui/react-icons';
 
 import { ProfileExtendedBaseEntity } from '@/shared/api/contracts';
 import { useMods, useOptionalMods } from '@/shared/hooks/useMods';
-import { Button } from '@/shared/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/shared/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
+import { AddingModsDialog } from '@/widgets/adding-mods-dialog';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -17,7 +17,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
 
   return (
     <div className="grid gap-y-4">
-      <div className="flex flex-row gap-x-5">
+      <div className="flex flex-col md:flex-row gap-5">
         <div className="flex flex-col gap-3 w-full">
           <div className="text-xl font-bold">Список модов</div>
           <Table className="border border-dashed rounded-2xl">
@@ -44,10 +44,8 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 ))}
             </TableBody>
           </Table>
-          <Button variant="secondary" className="w-max gap-2">
-            <PlusIcon />
-            Добавить
-          </Button>
+
+          <AddingModsDialog profile={profile} modType="mods" />
         </div>
         <div className="flex flex-col gap-3 w-full">
           <div className="text-xl">Опциональные моды</div>
@@ -75,11 +73,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 ))}
             </TableBody>
           </Table>
-
-          <Button variant="secondary" className="w-max gap-2">
-            <PlusIcon />
-            Добавить
-          </Button>
+          <AddingModsDialog profile={profile} modType="optional" />
         </div>
       </div>
     </div>
