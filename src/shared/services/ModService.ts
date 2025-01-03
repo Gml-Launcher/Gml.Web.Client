@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import {
+  TGetModInfoResponse,
   TGetModListResponse,
   TGetModOptionalListResponse,
   TGetSearchModOptionalListResponse,
@@ -17,6 +18,18 @@ class ModService {
     profileName: string;
   }): Promise<AxiosResponse<TGetModListResponse>> {
     return await $api.get<TGetModListResponse>(`${this.BASE_URL}/${profileName}/mods`);
+  }
+
+  async getModInfo({
+    profileName,
+    modId,
+  }: {
+    profileName: string;
+    modId: string;
+  }): Promise<AxiosResponse<TGetModInfoResponse>> {
+    return await $api.get<TGetModInfoResponse>(
+      `${this.BASE_URL}/${profileName}/mods/info?modId=${modId}`,
+    );
   }
 
   // Получение списка необязательных модов

@@ -21,6 +21,7 @@ import { Input } from '@/shared/ui/input';
 import { Icons } from '@/shared/ui/icons';
 import { SearchFormSchemaType } from '@/widgets/adding-mods-dialog/lib/static';
 import { Card } from '@/shared/ui/card';
+import { AddingModsSelectVersionDialog } from '@/widgets/adding-mods-select-version-dialog';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
@@ -29,7 +30,7 @@ interface ProfileModDialog {
 
 export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
   const form = useForm<SearchFormSchemaType>();
-  const [modName, setModName] = useState<string>(''); // Управление modName через состояние
+  const [modName, setModName] = useState<string>('');
 
   const {
     data: searchMods,
@@ -127,9 +128,7 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
                       </Badge>
                     </h3>
                     <p className="text-muted-foreground">{mod.description}</p>
-                    <Button className="w-max mt-2" variant="secondary">
-                      Установить
-                    </Button>
+                    <AddingModsSelectVersionDialog profile={profile} modType={modType} mod={mod} />
                   </div>
                 </div>
               </Card>

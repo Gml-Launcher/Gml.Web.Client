@@ -1,4 +1,4 @@
-import { ModBaseEntity, ModEntity } from '@/shared/api/contracts/mods/schemas';
+import { ModBaseEntity, ModEntity, ModInfoEntity } from '@/shared/api/contracts/mods/schemas';
 import { ResponseBaseEntity } from '@/shared/api/schemas';
 
 export type TGetModListRequest = {};
@@ -13,4 +13,8 @@ export type TGetModOptionalListResponse = ResponseBaseEntity & {
 
 export type TGetSearchModOptionalListResponse = ResponseBaseEntity & {
   data: ModEntity[];
+};
+
+export type TGetModInfoResponse = ResponseBaseEntity & {
+  data: ModInfoEntity;
 };

@@ -23,6 +23,14 @@ export const useOptionalMods = ({ profileName }: { profileName: string }) => {
   });
 };
 
+export const useModInfo = ({ profileName, modId }: { profileName: string; modId: string }) => {
+  return useQuery({
+    queryKey: ['versions', profileName, modId],
+    queryFn: () => modService.getModInfo({ profileName, modId }),
+    select: (data) => data.data.data,
+  });
+};
+
 export const useSearchMods = ({
   profileName,
   modName,

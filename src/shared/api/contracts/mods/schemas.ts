@@ -16,3 +16,32 @@ export type ModEntity = {
   followsCount: number;
   type: ModType;
 };
+
+export type ModInfoEntity = {
+  versions: Version[];
+  id: string;
+  description: string;
+  url?: any;
+  iconUrl: string;
+  downloadCount: number;
+  followsCount: number;
+  name: string;
+  type: number;
+};
+
+export interface Version {
+  id: string;
+  name: string;
+  versionName: string;
+  versionNumber?: any;
+  datePublished: string;
+  downloads: number;
+  dependencies: Dependency[];
+}
+
+export interface Dependency {
+  versionId?: any;
+  projectId: string;
+  fileName?: any;
+  dependencyType: string;
+}
