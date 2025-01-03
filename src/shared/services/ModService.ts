@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, GenericAbortSignal } from 'axios';
 
 import {
   TGetModInfoResponse,
@@ -23,12 +23,17 @@ class ModService {
   async getModInfo({
     profileName,
     modId,
+    signal,
   }: {
     profileName: string;
     modId: string;
+    signal?: GenericAbortSignal;
   }): Promise<AxiosResponse<TGetModInfoResponse>> {
     return await $api.get<TGetModInfoResponse>(
       `${this.BASE_URL}/${profileName}/mods/info?modId=${modId}`,
+      {
+        signal,
+      },
     );
   }
 

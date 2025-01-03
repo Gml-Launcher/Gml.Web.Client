@@ -18,6 +18,7 @@ import { Separator } from '@/shared/ui/separator';
 import { useModInfo } from '@/shared/hooks/useMods';
 import { Card } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
+import { ModsDependencyTooltip } from '@/widgets/mods-dependency-tooltip';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
@@ -117,6 +118,15 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
                         {formatNumber(mod.downloads)}
                       </Badge>
                       <p className="text-muted-foreground">{timeAgo(mod.datePublished)}</p>
+                      {!!mod.dependencies.length && (
+                        <>
+                          <Separator orientation="vertical" />
+                          <ModsDependencyTooltip
+                            profile={profile}
+                            dependencies={mod.dependencies}
+                          />
+                        </>
+                      )}
                     </h3>
                     <Button className="w-max mt-2 gap-2" variant="secondary">
                       <ArrowDownIcon />
