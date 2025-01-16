@@ -1,4 +1,5 @@
-import { FileIcon } from '@radix-ui/react-icons';
+import { FileIcon, PlusIcon } from '@radix-ui/react-icons';
+import React from 'react';
 
 import { ProfileExtendedBaseEntity } from '@/shared/api/contracts';
 import { useMods, useOptionalMods } from '@/shared/hooks/useMods';
@@ -6,6 +7,10 @@ import { Table, TableBody, TableCell, TableRow } from '@/shared/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { AddingModsDialog } from '@/widgets/adding-mods-dialog';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { useLoadProfileMods, useRemoveProfileMod } from '@/shared/hooks';
+import { Button } from '@/shared/ui/button';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -14,6 +19,37 @@ interface GameServersParams {
 export const GameMods = ({ profile }: GameServersParams) => {
   const { data: mods } = useMods({ profileName: profile.profileName });
   const { data: optionalMods } = useOptionalMods({ profileName: profile.profileName });
+  const loadModsMutate = useLoadProfileMods();
+  const removeModsMutate = useRemoveProfileMod();
+  const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    isOptional: boolean,
+  ) => {
+    const files = event.target.files;
+
+    if (!files) return;
+    const formCreate = new FormData();
+
+    Array.from(files).forEach((file) => {
+      if (file.size <= MAX_FILE_SIZE) {
+        formCreate.append('files', file);
+      } else {
+        console.warn(`File ${file.name} is larger than 100MB and was skipped.`);
+      }
+    });
+
+    await loadModsMutate.mutateAsync({
+      profileName: profile.profileName,
+      data: formCreate,
+      isOptional,
+    });
+  };
+
+  const removeMod = async (fileName: string) => {
+    await removeModsMutate.mutateAsync({ profileName: profile.profileName, modName: fileName });
+  };
 
   return (
     <div className="grid gap-y-4">
@@ -39,13 +75,36 @@ export const GameMods = ({ profile }: GameServersParams) => {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell>Удалить</TableCell>
+                    <TableCell>
+                      <Button variant="link" onClick={() => removeMod(`${mod.name}.jar`)}>
+                        Удалить
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
 
-          <AddingModsDialog profile={profile} modType="mods" />
+          <div className="flex gap-2">
+            <div className="flex gap-2">
+              <Label
+                htmlFor="loadMod"
+                className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-max gap-2"
+              >
+                Загрузить
+                <PlusIcon width={16} height={16} />
+              </Label>
+              <Input
+                id="loadMod"
+                type="file"
+                multiple={true}
+                accept=".jar"
+                onChange={(e) => handleFileChange(e, false)}
+                className="w-[300px] hidden"
+              />
+            </div>
+            <AddingModsDialog profile={profile} modType="mods" />
+          </div>
         </div>
         <div className="flex flex-col gap-3 w-full">
           <div className="text-xl">Опциональные моды</div>
@@ -68,12 +127,35 @@ export const GameMods = ({ profile }: GameServersParams) => {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell>Удалить</TableCell>
+                    <TableCell>
+                      <Button variant="link" onClick={() => removeMod(`${mod.name}.jar`)}>
+                        Удалить
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
           </Table>
-          <AddingModsDialog profile={profile} modType="optional" />
+          <div className="flex gap-2">
+            <div className="flex gap-2">
+              <Label
+                htmlFor="loadOptionalMod"
+                className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-max gap-2"
+              >
+                Загрузить
+                <PlusIcon width={16} height={16} />
+              </Label>
+              <Input
+                id="loadOptionalMod"
+                type="file"
+                multiple={true}
+                accept=".jar"
+                onChange={(e) => handleFileChange(e, true)}
+                className="w-[300px] hidden"
+              />
+            </div>
+            <AddingModsDialog profile={profile} modType="optional" />
+          </div>
         </div>
       </div>
     </div>

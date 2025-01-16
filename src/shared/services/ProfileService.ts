@@ -15,10 +15,14 @@ import {
   TGetProfileResponse,
   TGetProfilesResponse,
   TJavaVersionsResponse,
+  TPostLoadProfileModRequest,
+  TPostLoadProfileModResponse,
   TPostProfilesRequest,
   TPostProfilesResponse,
   TPutProfileRequest,
   TPutProfileResponse,
+  TRemoveProfileModRequest,
+  TRemoveProfileModResponse,
 } from '@/shared/api/contracts';
 
 class ProfileService {
@@ -36,6 +40,33 @@ class ProfileService {
     return await $api.post<TPostProfilesResponse>(this.BASE_URL, body, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
+  }
+
+  async loadProfileMod({
+    isOptional,
+    profileName,
+    data,
+  }: TPostLoadProfileModRequest): Promise<AxiosResponse<TPostLoadProfileModResponse>> {
+    return await $api.post<TPostLoadProfileModResponse>(
+      `${this.BASE_URL}/${profileName}/mods/load?isOptional=${isOptional}`,
+      data,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      },
+    );
+  }
+
+  async removeProfileMod({
+    profileName,
+    modName,
+    ...params
+  }: TRemoveProfileModRequest): Promise<AxiosResponse<TRemoveProfileModResponse>> {
+    return await $api.delete<TRemoveProfileModResponse>(
+      `${this.BASE_URL}/${profileName}/mods/remove/${modName}`,
+      {
+        params,
+      },
+    );
   }
 
   async editProfile(body: TPutProfileRequest): Promise<AxiosResponse<TPutProfileResponse>> {

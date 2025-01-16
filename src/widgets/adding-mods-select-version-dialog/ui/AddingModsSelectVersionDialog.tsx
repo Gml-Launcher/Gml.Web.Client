@@ -111,27 +111,30 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
               <Card key={mod.id} className="py-4 px-5">
                 <div className="flex gap-4">
                   <div className="flex flex-col">
-                    <h3 className="flex items-center font-bold text-sm gap-2">
-                      {mod.versionName}
+                    <h3 className="flex items-center font-bold text-sm gap-2">{mod.versionName}</h3>
+                    <div className="flex gap-2 items-center mt-3">
+                      <Button className="w-max gap-2" variant="secondary">
+                        <ArrowDownIcon />
+                        Установить
+                      </Button>
+
+                      <p className="text-muted-foreground">{timeAgo(mod.datePublished)}</p>
+                      <Separator className="h-8" orientation="vertical" />
+
                       <Badge className="gap-1 cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
                         <DownloadIcon width={16} height={16} />
                         {formatNumber(mod.downloads)}
+                        <span>Загрузок</span>
                       </Badge>
-                      <p className="text-muted-foreground">{timeAgo(mod.datePublished)}</p>
                       {!!mod.dependencies.length && (
                         <>
-                          <Separator orientation="vertical" />
                           <ModsDependencyTooltip
                             profile={profile}
                             dependencies={mod.dependencies}
                           />
                         </>
                       )}
-                    </h3>
-                    <Button className="w-max mt-2 gap-2" variant="secondary">
-                      <ArrowDownIcon />
-                      Установить
-                    </Button>
+                    </div>
                   </div>
                 </div>
               </Card>

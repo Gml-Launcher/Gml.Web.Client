@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DownloadIcon, FileIcon, HeartFilledIcon, PlusIcon } from '@radix-ui/react-icons';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import Image from 'next/image';
 
 import { Button } from '@/shared/ui/button';
 import {
@@ -22,6 +23,7 @@ import { Icons } from '@/shared/ui/icons';
 import { SearchFormSchemaType } from '@/widgets/adding-mods-dialog/lib/static';
 import { Card } from '@/shared/ui/card';
 import { AddingModsSelectVersionDialog } from '@/widgets/adding-mods-select-version-dialog';
+import modrinth from '@/assets/logos/modrinth.png';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
@@ -62,10 +64,11 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
 
   return (
     <Drawer>
-      <DrawerTrigger>
+      <DrawerTrigger className="flex items-start">
         <Button variant="secondary" className="w-max gap-2">
-          <PlusIcon />
+          <Image src={modrinth} alt="Modrinth" className="w-4 h-4" />
           Добавить
+          <PlusIcon width={16} height={16} />
         </Button>
       </DrawerTrigger>
       <DrawerContent>

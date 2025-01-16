@@ -17,12 +17,15 @@ import {
   TGameVersionsRequest,
   TGameVersionsResponse,
   TGetProfileRequest,
+  TPostLoadProfileModRequest,
   TPostProfilesRequest,
   TPutProfileRequest,
+  TRemoveProfileModRequest,
 } from '@/shared/api/contracts';
 import { profileService } from '@/shared/services/ProfileService';
 import { isAxiosError } from '@/shared/lib/utils';
 import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
+import { modsKeys } from '@/shared/hooks/useMods';
 
 export const profileKeys = {
   all: ['profiles'] as const,
@@ -33,6 +36,7 @@ export const profileKeys = {
   deletingAll: () => [...profileKeys.all, 'deletingAll'] as const,
   deletingPlayers: () => [...profileKeys.all, 'deletingPlayers'] as const,
   addingPlayers: () => [...profileKeys.all, 'addingPlayers'] as const,
+  addingMods: () => [...profileKeys.all, 'addingMods'] as const,
 
   entities: () => [...profileKeys.all, 'entities'] as const,
 
@@ -91,6 +95,42 @@ export const useCreateProfile = () => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
       toast.success('Успешно', {
         description: `Профиль "${data.data.data.name}" успешно создан`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useLoadProfileMods = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: profileKeys.addingMods(),
+    mutationFn: (data: TPostLoadProfileModRequest) => profileService.loadProfileMod(data),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: modsKeys.all });
+      toast.success('Успешно', {
+        description: 'Мод успешно загружен',
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useRemoveProfileMod = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: profileKeys.addingMods(),
+    mutationFn: (data: TRemoveProfileModRequest) => profileService.removeProfileMod(data),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: modsKeys.all });
+      toast.success('Успешно', {
+        description: 'Мод успешно загружен',
       });
     },
     onError: (error) => {
