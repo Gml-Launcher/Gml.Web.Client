@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Ubuntu_Mono } from 'next/font/google';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { ChevronsUpDown } from 'lucide-react';
+import { ArrowBigDownDash, ChevronsUpDown, Package2Icon } from 'lucide-react';
 
 import { useConnectionHub } from '../lib/useConnectionHub';
 
@@ -184,6 +184,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
                     }
                   >
                     {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                    <ArrowBigDownDash width={16} height={16} className="mr-2" />
                     Загрузить
                   </Button>
                 </div>
@@ -204,6 +205,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
               disabled={!isConnected || isDisable || !props.profile || !props.profile.hasUpdate}
             >
               {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              <Package2Icon width={16} height={16} className="mr-2" />
               Собрать
             </Button>
           </div>
