@@ -48,7 +48,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     formUpdate.append('originalName', profile?.profileName || '');
     formUpdate.append('description', body.description);
     formUpdate.append('icon', body.icon?.[0]);
-    formUpdate.append('Enabled', body.isEnabled?.toString() ?? 'true');
+    formUpdate.append('enabled', body.isEnabled?.toString() ?? 'true');
 
     if (body.background && body.background[0]) {
       formUpdate.append('background', body.background[0]);
