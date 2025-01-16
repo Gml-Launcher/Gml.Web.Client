@@ -22,6 +22,7 @@ import { Badge } from '@/shared/ui/badge';
 import { ModsDependencyTooltip } from '@/widgets/mods-dependency-tooltip';
 import { useLoadProfileModsByUrl } from '@/shared/hooks';
 import { Icons } from '@/shared/ui/icons';
+import { formatNumber } from '@/shared/lib/utils';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
@@ -46,19 +47,6 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
       })
       .then(() => {});
   };
-
-  function formatNumber(num: number): string {
-    if (num >= 1_000_000_000) {
-      return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
-    }
-    if (num >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-    }
-    if (num >= 1_000) {
-      return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
-    }
-    return num.toString();
-  }
 
   function timeAgo(dateString: string): string {
     const date = new Date(dateString);
@@ -101,7 +89,7 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
 
   return (
     <Drawer>
-      <DrawerTrigger className="w-max mt-2">
+      <DrawerTrigger className="w-max mt-auto">
         <Button variant="secondary" className="w-max gap-2">
           Выбрать
         </Button>
@@ -123,7 +111,7 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
         <DrawerFooter className="h-[400px] md:h-[650px] overflow-y-auto">
           {modInfo?.versions && modInfo?.versions.length > 0 ? (
             modInfo?.versions.map((mod, index) => (
-              <Card key={mod.id} className="py-4 px-5">
+              <Card key={mod?.id} className="py-4 px-5">
                 <div className="flex gap-4">
                   <div className="flex flex-col">
                     <h3 className="flex items-center font-bold text-sm gap-2">{mod.versionName}</h3>

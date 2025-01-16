@@ -82,19 +82,19 @@ export const GameMods = ({ profile }: GameServersParams) => {
                     <TableCell key={index}>
                       <div className="flex items-center gap-2">
                         <Avatar className="w-8 h-8">
-                          <AvatarImage src={mod.iconUrl} alt="@shadcn" />
+                          <AvatarImage src={mod?.iconUrl} alt="@shadcn" />
                           <AvatarFallback>
                             <FileIcon />
                           </AvatarFallback>
                         </Avatar>
-                        {mod.name}
+                        {mod?.name}
                         <Badge className="bg-orange-500 bg-opacity-20 text-orange-500 hover:bg-opacity-100 hover:bg-orange-500 hover:text-white">
                           Jar
                         </Badge>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Button variant="link" onClick={() => removeMod(`${mod.name}.jar`)}>
+                      <Button variant="link" onClick={() => removeMod(`${mod?.name}.jar`)}>
                         Удалить
                       </Button>
                     </TableCell>
@@ -134,19 +134,19 @@ export const GameMods = ({ profile }: GameServersParams) => {
                     <TableCell key={index}>
                       <div className="flex items-center gap-2">
                         <Avatar className="w-8 h-8">
-                          <AvatarImage src={mod.iconUrl} alt="@shadcn" />
+                          <AvatarImage src={mod?.iconUrl} alt="@shadcn" />
                           <AvatarFallback>
                             <FileIcon />
                           </AvatarFallback>
                         </Avatar>
-                        {mod.name}
+                        {mod?.name}
                         <Badge className="bg-orange-500 bg-opacity-20 text-orange-500 hover:bg-opacity-100 hover:bg-orange-500 hover:text-white">
                           Jar
                         </Badge>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Button variant="link" onClick={() => removeMod(`${mod.name}.jar`)}>
+                      <Button variant="link" onClick={() => removeMod(`${mod?.name}.jar`)}>
                         Удалить
                       </Button>
                     </TableCell>

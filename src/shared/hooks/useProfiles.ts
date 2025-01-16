@@ -151,7 +151,7 @@ export const useRemoveProfileMod = () => {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: modsKeys.all });
       toast.success('Успешно', {
-        description: 'Мод успешно загружен',
+        description: 'Мод успешно удален',
       });
     },
     onError: (error) => {
