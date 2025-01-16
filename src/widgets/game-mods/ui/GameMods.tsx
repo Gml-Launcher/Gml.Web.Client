@@ -1,5 +1,6 @@
 import { FileIcon, PlusIcon } from '@radix-ui/react-icons';
 import React from 'react';
+import { clsx } from 'clsx';
 
 import { ProfileExtendedBaseEntity } from '@/shared/api/contracts';
 import { useMods, useOptionalMods } from '@/shared/hooks/useMods';
@@ -11,6 +12,8 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { useLoadProfileMods, useRemoveProfileMod } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
+import { EntityState } from '@/shared/enums';
+import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -52,8 +55,23 @@ export const GameMods = ({ profile }: GameServersParams) => {
   };
 
   return (
-    <div className="grid gap-y-4">
-      <div className="flex flex-col md:flex-row gap-5">
+    <div className="grid gap-y-4 relative">
+      {profile.state !== EntityState.ENTITY_STATE_ACTIVE && (
+        <div className="absolute w-full h-full z-[10] flex items-center justify-center">
+          <Card className="p-6 w-[50%]">
+            <CardHeader className="font-bold text-xl">Модификации недоступны</CardHeader>
+            <CardContent className="content text-gray-700 dark:text-gray-300">
+              Система модификаций доступна только для активных профилей. Убедитесь, что у вас
+              активный профиль, а так же не имеет ошибок
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      <div
+        className={clsx('flex flex-col md:flex-row gap-5', {
+          'blur-sm': profile.state !== EntityState.ENTITY_STATE_ACTIVE,
+        })}
+      >
         <div className="flex flex-col gap-3 w-full">
           <div className="text-xl font-bold">Список модов</div>
           <Table className="border border-dashed rounded-2xl">
