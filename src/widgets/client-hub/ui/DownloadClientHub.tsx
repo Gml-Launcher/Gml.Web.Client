@@ -220,7 +220,7 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           </div>
         </div>
 
-        {Boolean(isDisable) && Boolean(isPacked) && logs && (
+        {Boolean(isDisable) && Boolean(isPacked) && (
           <div className="grid gap-y-4">
             <div>
               <div className="flex flex-col">

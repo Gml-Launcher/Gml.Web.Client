@@ -58,6 +58,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         connection.on('ChangeProgress', (profileName, percent) => {
           setIsConnected(true);
           if (profileName == profile?.profileName) {
+            setIsPacked(true);
             setIsRestoring(true);
             setPercentStage(percent);
           }
