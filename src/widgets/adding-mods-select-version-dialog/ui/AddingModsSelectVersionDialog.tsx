@@ -21,6 +21,7 @@ import { Card } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { ModsDependencyTooltip } from '@/widgets/mods-dependency-tooltip';
 import { useLoadProfileModsByUrl } from '@/shared/hooks';
+import { Icons } from '@/shared/ui/icons';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
@@ -132,6 +133,9 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
                         variant="secondary"
                         onClick={() => loadFilesByUrl(mod.files)}
                       >
+                        {loadModsMutate.isPending && (
+                          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        )}
                         <ArrowDownIcon />
                         Установить
                       </Button>
