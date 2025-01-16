@@ -52,13 +52,15 @@ class ModService {
     profileName,
     modName,
     limit,
+    offset,
   }: {
     profileName: string;
     modName: string;
     limit: number;
+    offset: number;
   }): Promise<AxiosResponse<TGetSearchModOptionalListResponse>> {
     return await $api.get<TGetSearchModOptionalListResponse>(
-      `${this.BASE_URL}/${profileName}/mods/search?ModName=${modName}&Offset=0&Take=${limit}`,
+      `${this.BASE_URL}/${profileName}/mods/search?ModName=${modName}&Offset=${offset}&Take=${limit}`,
     );
   }
 }

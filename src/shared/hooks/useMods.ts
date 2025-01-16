@@ -35,14 +35,16 @@ export const useSearchMods = ({
   profileName,
   modName,
   limit,
+  offset,
 }: {
   profileName: string;
   modName: string;
   limit: number;
+  offset: number;
 }) => {
   return useQuery({
     queryKey: ['mods', profileName, modName, limit],
-    queryFn: () => modService.getAvailableModsList({ profileName, modName, limit }),
+    queryFn: () => modService.getAvailableModsList({ profileName, modName, limit, offset }),
     select: (data) => data.data.data,
   });
 };

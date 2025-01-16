@@ -42,6 +42,7 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
     profileName: profile?.profileName ?? '',
     modName,
     limit: 10,
+    offset: 0,
   });
 
   function formatNumber(num: number): string {
