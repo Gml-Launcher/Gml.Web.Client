@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowDownIcon, DownloadIcon, FileIcon } from '@radix-ui/react-icons';
+import { FilesIcon } from 'lucide-react';
 
 import { Button } from '@/shared/ui/button';
 import {
@@ -19,6 +20,7 @@ import { useModInfo } from '@/shared/hooks/useMods';
 import { Card } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { ModsDependencyTooltip } from '@/widgets/mods-dependency-tooltip';
+import { useLoadProfileModsByUrl } from '@/shared/hooks';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
@@ -27,10 +29,22 @@ interface ProfileModDialog {
 }
 
 export function AddingModsSelectVersionDialog({ profile, modType, mod }: ProfileModDialog) {
+  const loadModsMutate = useLoadProfileModsByUrl();
+
   const { data: modInfo } = useModInfo({
     profileName: profile?.profileName ?? '',
     modId: mod?.id ?? '',
   });
+
+  const loadFilesByUrl = async (files: string[]) => {
+    await loadModsMutate
+      .mutateAsync({
+        profileName: profile?.profileName ?? '',
+        links: files,
+        isOptional: modType === 'optional',
+      })
+      .then(() => {});
+  };
 
   function formatNumber(num: number): string {
     if (num >= 1_000_000_000) {
@@ -113,7 +127,11 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
                   <div className="flex flex-col">
                     <h3 className="flex items-center font-bold text-sm gap-2">{mod.versionName}</h3>
                     <div className="flex gap-2 items-center mt-3">
-                      <Button className="w-max gap-2" variant="secondary">
+                      <Button
+                        className="w-max gap-2"
+                        variant="secondary"
+                        onClick={() => loadFilesByUrl(mod.files)}
+                      >
                         <ArrowDownIcon />
                         Установить
                       </Button>
@@ -126,6 +144,13 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
                         {formatNumber(mod.downloads)}
                         <span>Загрузок</span>
                       </Badge>
+
+                      <Badge className="gap-1 cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+                        <FilesIcon width={16} height={16} />
+                        {formatNumber(mod.files.length)}
+                        <span>Файл (ов)</span>
+                      </Badge>
+
                       {!!mod.dependencies.length && (
                         <>
                           <ModsDependencyTooltip

@@ -15,6 +15,8 @@ import {
   TGetProfileResponse,
   TGetProfilesResponse,
   TJavaVersionsResponse,
+  TPostLoadProfileModByUrlRequest,
+  TPostLoadProfileModByUrlResponse,
   TPostLoadProfileModRequest,
   TPostLoadProfileModResponse,
   TPostProfilesRequest,
@@ -53,6 +55,17 @@ class ProfileService {
       {
         headers: { 'Content-Type': 'multipart/form-data' },
       },
+    );
+  }
+
+  async loadProfileModByLink({
+    isOptional,
+    profileName,
+    links,
+  }: TPostLoadProfileModByUrlRequest): Promise<AxiosResponse<TPostLoadProfileModByUrlResponse>> {
+    return await $api.post<TPostLoadProfileModByUrlResponse>(
+      `${this.BASE_URL}/${profileName}/mods/load/url?isOptional=${isOptional}`,
+      links,
     );
   }
 

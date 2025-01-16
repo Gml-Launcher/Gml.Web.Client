@@ -28,6 +28,15 @@ export type TPostLoadProfileModRequest = {
 };
 export type TPostLoadProfileModResponse = ResponseBaseEntity;
 
+// Загрузка мода по Url
+export type TPostLoadProfileModByUrlRequest = {
+  profileName: string;
+  isOptional: boolean;
+  links: string[];
+};
+
+export type TPostLoadProfileModByUrlResponse = ResponseBaseEntity;
+
 // Получение профиля
 export type TGetProfileRequest = {
   UserName: string;

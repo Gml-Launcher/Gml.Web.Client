@@ -37,6 +37,7 @@ export interface Version {
   datePublished: string;
   downloads: number;
   dependencies: Dependency[];
+  files: string[];
 }
 
 export interface Dependency {
