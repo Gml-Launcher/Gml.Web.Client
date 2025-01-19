@@ -1,9 +1,15 @@
 import { FileIcon, PlusIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { clsx } from 'clsx';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
-import { ProfileExtendedBaseEntity } from '@/shared/api/contracts';
-import { useMods, useOptionalMods } from '@/shared/hooks/useMods';
+import {
+  ModDetailsEntitySchema,
+  ModDetailsEntitySchemaType,
+  ProfileExtendedBaseEntity,
+} from '@/shared/api/contracts';
+import { useDetailsMods, useMods, useOptionalMods } from '@/shared/hooks/useMods';
 import { Table, TableBody, TableCell, TableRow } from '@/shared/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
@@ -14,6 +20,8 @@ import { useLoadProfileMods, useRemoveProfileMod } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
 import { EntityState } from '@/shared/enums';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
+import { Form, FormMessage } from '@/shared/ui/form';
+import { Textarea } from '@/shared/ui/textarea';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -24,7 +32,11 @@ export const GameMods = ({ profile }: GameServersParams) => {
   const { data: optionalMods } = useOptionalMods({ profileName: profile.profileName });
   const loadModsMutate = useLoadProfileMods();
   const removeModsMutate = useRemoveProfileMod();
+  const { data: detailsMods, isPending } = useDetailsMods();
   const MAX_FILE_SIZE = 100 * 1024 * 1024;
+  const form = useForm<ModDetailsEntitySchemaType>({
+    resolver: zodResolver(ModDetailsEntitySchema),
+  });
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -52,6 +64,12 @@ export const GameMods = ({ profile }: GameServersParams) => {
 
   const removeMod = async (fileName: string) => {
     await removeModsMutate.mutateAsync({ profileName: profile.profileName, modName: fileName });
+  };
+
+  const onSubmit: SubmitHandler<ModDetailsEntitySchemaType> = async (
+    body: ModDetailsEntitySchemaType,
+  ) => {
+    console.log(body);
   };
 
   return (
@@ -129,20 +147,77 @@ export const GameMods = ({ profile }: GameServersParams) => {
           <Table className="border border-dashed rounded-2xl">
             <TableBody>
               {optionalMods &&
+                detailsMods &&
                 optionalMods.map((mod, index) => (
                   <TableRow key={index}>
                     <TableCell key={index}>
-                      <div className="flex items-center gap-2">
-                        <Avatar className="w-8 h-8">
-                          <AvatarImage src={mod?.iconUrl} alt="@shadcn" />
-                          <AvatarFallback>
-                            <FileIcon />
-                          </AvatarFallback>
-                        </Avatar>
-                        {mod?.name}
-                        <Badge className="bg-orange-500 bg-opacity-20 text-orange-500 hover:bg-opacity-100 hover:bg-orange-500 hover:text-white">
-                          Jar
-                        </Badge>
+                      <div className="flex flex-col">
+                        <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
+                          <Avatar className="hidden md:flex w-8 h-8">
+                            <AvatarImage src={mod?.iconUrl} alt="@shadcn" />
+                            <AvatarFallback>
+                              <FileIcon />
+                            </AvatarFallback>
+                          </Avatar>
+                          {mod?.name}
+                          <Badge className="hidden md:flex bg-orange-500 bg-opacity-20 text-orange-500 hover:bg-opacity-100 hover:bg-orange-500 hover:text-white">
+                            Jar
+                          </Badge>
+                        </div>
+                        <Form {...form}>
+                          <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <div className="border-l border-dashed ml-4">
+                              <div className="flex items-center gap-2 mt-3">
+                                <div className="border-t border-dashed w-[20px] h-[1px]"></div>
+                                <h3 className="text-gray-700 dark:text-gray-300">Наименование</h3>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-[20px] h-[1px]"></div>
+                                <Input
+                                  className=" p-0 text-md text-black dark:text-white bg-transparent shadow-none border-none"
+                                  style={{ boxShadow: 'none' }}
+                                  type="text"
+                                  defaultValue={detailsMods[`${mod?.name}.jar`]?.title}
+                                  {...form.register('title')}
+                                  placeholder="Введите наименование"
+                                />
+                                {form.formState.errors.title && (
+                                  <FormMessage>
+                                    {form.formState.errors.title.message?.toString()}
+                                  </FormMessage>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 mt-3">
+                                <div className="border-t border-dashed w-[20px] h-[1px]"></div>
+                                <h3 className="text-gray-700 dark:text-gray-300">Описание</h3>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-[20px] h-[1px]"></div>
+                                <Textarea
+                                  className="p-0 pt-2 text-md text-black dark:text-white bg-transparent shadow-none border-none"
+                                  style={{ boxShadow: 'none' }}
+                                  defaultValue={detailsMods[`${mod?.name}.jar`]?.description}
+                                  {...form.register('description')}
+                                  placeholder="Введите описание"
+                                />
+                                {form.formState.errors.description && (
+                                  <FormMessage>
+                                    {form.formState.errors.description.message?.toString()}
+                                  </FormMessage>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <div className="w-[10px] h-[1px]"></div>
+                                <Button
+                                  variant="link"
+                                  disabled={form.formState.disabled || !form.formState.isDirty}
+                                >
+                                  Сохранить
+                                </Button>
+                              </div>
+                            </div>
+                          </form>
+                        </Form>
                       </div>
                     </TableCell>
                     <TableCell>

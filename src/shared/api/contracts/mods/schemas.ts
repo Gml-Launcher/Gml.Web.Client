@@ -17,6 +17,12 @@ export type ModEntity = {
   type: ModType;
 };
 
+export type ModDetailsEntity = {
+  key: string;
+  title: string;
+  description: string;
+};
+
 export type ModInfoEntity = {
   versions: Version[];
   id: string;

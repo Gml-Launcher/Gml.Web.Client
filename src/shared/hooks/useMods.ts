@@ -2,10 +2,12 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { modService } from '@/shared/services';
 import { playersKeys } from '@/shared/hooks/usePlayers';
+import { ModDetailsEntity } from '@/shared/api/contracts/mods/schemas';
 
 export const modsKeys = {
   all: ['mods'] as const,
   optinal: () => [...modsKeys.all, 'optional'] as const,
+  modsDetails: () => [...modsKeys.all, 'modsDetails'] as const,
 };
 
 export const useMods = ({ profileName }: { profileName: string }) => {
@@ -21,6 +23,21 @@ export const useOptionalMods = ({ profileName }: { profileName: string }) => {
     queryKey: modsKeys.optinal(),
     queryFn: () => modService.getModsOptionalList({ profileName }),
     select: (data) => data.data.data,
+  });
+};
+
+export const useDetailsMods = () => {
+  return useQuery({
+    queryKey: modsKeys.modsDetails(),
+    queryFn: () => modService.getModsDetails(),
+    select: (data) =>
+      data.data.data.reduce(
+        (acc, mod) => {
+          acc[mod.key] = mod;
+          return acc;
+        },
+        {} as Record<string, ModDetailsEntity>,
+      ),
   });
 };
 

@@ -193,21 +193,41 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
           </Form>
 
           {/* Карточка 2 шаг */}
-          <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3">
-            <div className="flex flex-col gap-y-1">
-              <h6 className="text-xl font-bold">Шаг второй</h6>
-              <p className="text-sm text-gray-700 dark:text-gray-300">Необходимо собрать профиль</p>
+          <div className="flex flex-col rounded-lg text-card-foreground shadow-sm relative ">
+            <div className="flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 gap-3 h-full">
+              <div className="flex flex-col gap-y-1">
+                <h6 className="text-xl font-bold">Шаг второй</h6>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  Необходимо собрать профиль
+                </p>
+              </div>
+
+              <Button
+                className="w-fit"
+                onClick={onBuildDistributive}
+                disabled={!isConnected || isDisable || !props.profile || !props.profile.hasUpdate}
+              >
+                {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                <Package2Icon width={16} height={16} className="mr-2" />
+                Собрать
+              </Button>
             </div>
 
-            <Button
-              className="w-fit"
-              onClick={onBuildDistributive}
-              disabled={!isConnected || isDisable || !props.profile || !props.profile.hasUpdate}
-            >
-              {isDisable && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              <Package2Icon width={16} height={16} className="mr-2" />
-              Собрать
-            </Button>
+            {/*{props.profile && props.profile.state === EntityState.ENTITY_STATE_LOADING && (*/}
+            {/*  <div className="absolute w-full z-[10] flex items-center justify-center mt-12">*/}
+            {/*    <Card className="p-3 w-[80%]">*/}
+            {/*      <CardHeader className="font-bold text-xl">*/}
+            {/*        <div className="flex items-center gap3">*/}
+            {/*          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />*/}
+            {/*          <span>Сборка недоступна</span>*/}
+            {/*        </div>*/}
+            {/*      </CardHeader>*/}
+            {/*      <CardContent className="content text-gray-700 dark:text-gray-300">*/}
+            {/*        Во время загрузки сборка недоступна*/}
+            {/*      </CardContent>*/}
+            {/*    </Card>*/}
+            {/*  </div>*/}
+            {/*)}*/}
           </div>
 
           <div className="flex flex-col gap-y-4 col-span-1 xl:col-span-2 min-[1920px]:col-span-1">

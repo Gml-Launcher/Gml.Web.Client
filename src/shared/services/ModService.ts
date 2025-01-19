@@ -1,6 +1,7 @@
 import { AxiosResponse, GenericAbortSignal } from 'axios';
 
 import {
+  TGetModDetailsResponse,
   TGetModInfoResponse,
   TGetModListResponse,
   TGetModOptionalListResponse,
@@ -10,6 +11,7 @@ import { $api } from '@/services/api.service';
 
 class ModService {
   private BASE_URL = '/profiles';
+  private MODS_BASE_URL = '/mods';
 
   // Получение списка модов
   async getModsList({
@@ -46,6 +48,11 @@ class ModService {
     return await $api.get<TGetModOptionalListResponse>(
       `${this.BASE_URL}/${profileName}/mods/optionals`,
     );
+  }
+
+  // Получение списка информации по модам
+  async getModsDetails(): Promise<AxiosResponse<TGetModDetailsResponse>> {
+    return await $api.get<TGetModDetailsResponse>(`${this.MODS_BASE_URL}/details`);
   }
 
   async getAvailableModsList({
