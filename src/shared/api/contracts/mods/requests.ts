@@ -16,10 +16,12 @@ export type TGetModOptionalListResponse = ResponseBaseEntity & {
   data: ModBaseEntity[];
 };
 
+export type TGetSearchModOptionalListRequest = {};
 export type TGetSearchModOptionalListResponse = ResponseBaseEntity & {
   data: ModEntity[];
 };
 
+export type TGetModInfoRequest = {};
 export type TGetModInfoResponse = ResponseBaseEntity & {
   data: ModInfoEntity;
 };
