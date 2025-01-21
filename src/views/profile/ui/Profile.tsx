@@ -134,7 +134,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </TabsTrigger>
           <TabsTrigger className="w-full h-10" value="mods">
             Моды
-            <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black ml-2">
+            <Badge className="cursor-pointer text-sm dark:bg-white dark:bg-opacity-10 dark:text-white text-opacity-90 dark:hover:bg-opacity-10 dark:hover:bg-white ml-2">
               Beta
             </Badge>
           </TabsTrigger>
