@@ -56,8 +56,53 @@ export function ConnectTexturesForm({
     onOpenChange(false);
   };
 
+  const textureServices = [
+    {
+      key: 'danielraybone',
+      label: 'Danielraybone',
+      skinsUrl: 'https://skins.danielraybone.com/v1/skin/{userName}',
+      cloaksUrl: 'https://skins.danielraybone.com/v1/cape/{userName}',
+    },
+    {
+      key: 'auroralauncher',
+      label: 'AuroraLauncher',
+      skinsUrl: 'https://api.aurora-launcher.ru/mojang/skin?username={userName}',
+      cloaksUrl: 'https://api.aurora-launcher.ru/mojang/cape?username={userName}',
+    },
+    {
+      key: 'tlauncher',
+      label: 'TLauncher',
+      skinsUrl: 'https://tlauncher.org/upload/all/nickname/{userName}.png',
+      cloaksUrl: 'https://tlauncher.org/upload/all/cloaks/{userName}.png',
+    },
+    {
+      key: 'tmonitoring',
+      label: 'T-Мониторинг',
+      skinsUrl: 'https://tmonitoring.com/uploads/catalog/skins/nickname/{userName}.png',
+      cloaksUrl: 'https://tmonitoring.com/uploads/catalog/capes/{userName}.png',
+    },
+  ];
+
+  const handleButtonClick = (skinsUrl: string, cloaksUrl: string) => {
+    form.setValue('url_skins', skinsUrl, { shouldDirty: true });
+    form.setValue('url_cloaks', cloaksUrl, { shouldDirty: true });
+  };
+
   return (
     <div className="grid gap-4" {...props}>
+      <div className="flex gap-2">
+        {textureServices.map((service) => (
+          <Button
+            key={service.key}
+            variant="outline"
+            className="rounded-full h-8"
+            onClick={() => handleButtonClick(service.skinsUrl, service.cloaksUrl)}
+          >
+            {service.label}
+          </Button>
+        ))}
+      </div>
+
       <Form {...form}>
         <form className="flex flex-col space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <Controller
