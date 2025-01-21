@@ -7,6 +7,7 @@ import {
   startOfMonth,
   startOfWeek,
   startOfYear,
+  subMinutes,
 } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { CopyIcon } from '@radix-ui/react-icons';
@@ -46,36 +47,81 @@ export const SentryAnalytics = () => {
     const dataToYear = endOfYear(todayDate);
 
     switch (tab) {
-      case AnalyticsInterval.ANALYTICS_INTERVAL_WEAK:
+      case AnalyticsInterval.ANALYTICS_INTERVAL_FIVE_MINUTES: {
+        const dateFrom = format(subMinutes(new Date(), 5), "yyyy-MM-dd'T'HH:mm:ss");
+        const dateTo = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
+        console.log(dateFrom, dateTo);
         mutate({
           projectType: Number(projectType) as ProjectTypeEnum,
-          dateFrom: format(dataFromWeak, 'yyyy-MM-dd'),
-          dateTo: format(dataToWeak, 'yyyy-MM-dd'),
+          dateFrom,
+          dateTo,
         });
         break;
-      case AnalyticsInterval.ANALYTICS_INTERVAL_MONTH:
+      }
+      case AnalyticsInterval.ANALYTICS_INTERVAL_THIRTY_MINUTES: {
+        const dateFrom = format(subMinutes(new Date(), 30), "yyyy-MM-dd'T'HH:mm:ss");
+        const dateTo = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
         mutate({
           projectType: Number(projectType) as ProjectTypeEnum,
-          dateFrom: format(dataFromMonth, 'yyyy-MM-dd'),
-          dateTo: format(dataToMonth, 'yyyy-MM-dd'),
+          dateFrom,
+          dateTo,
         });
         break;
-      case AnalyticsInterval.ANALYTICS_INTERVAL_YEAR:
+      }
+      case AnalyticsInterval.ANALYTICS_INTERVAL_HOUR: {
+        const dateFrom = format(subMinutes(new Date(), 60), "yyyy-MM-dd'T'HH:mm:ss");
+        const dateTo = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
         mutate({
           projectType: Number(projectType) as ProjectTypeEnum,
-          dateFrom: format(dataFromYear, 'yyyy-MM-dd'),
-          dateTo: format(dataToYear, 'yyyy-MM-dd'),
+          dateFrom,
+          dateTo,
         });
         break;
-      case AnalyticsInterval.ANALYTICS_INTERVAL_GAP:
+      }
+      case AnalyticsInterval.ANALYTICS_INTERVAL_WEAK: {
+        const dateFrom = format(dataFromWeak, 'yyyy-MM-dd');
+        const dateTo = format(dataToWeak, 'yyyy-MM-dd');
+        mutate({
+          projectType: Number(projectType) as ProjectTypeEnum,
+          dateFrom,
+          dateTo,
+        });
+        break;
+      }
+      case AnalyticsInterval.ANALYTICS_INTERVAL_MONTH: {
+        const dateFrom = format(dataFromMonth, 'yyyy-MM-dd');
+        const dateTo = format(dataToMonth, 'yyyy-MM-dd');
+        mutate({
+          projectType: Number(projectType) as ProjectTypeEnum,
+          dateFrom,
+          dateTo,
+        });
+        break;
+      }
+      case AnalyticsInterval.ANALYTICS_INTERVAL_YEAR: {
+        const dateFrom = format(dataFromYear, 'yyyy-MM-dd');
+        const dateTo = format(dataToYear, 'yyyy-MM-dd');
+        mutate({
+          projectType: Number(projectType) as ProjectTypeEnum,
+          dateFrom,
+          dateTo,
+        });
+        break;
+      }
+      case AnalyticsInterval.ANALYTICS_INTERVAL_GAP: {
         if (date?.from && date.to) {
+          const dateFrom = format(date.from, 'yyyy-MM-dd');
+          const dateTo = format(date.to, 'yyyy-MM-dd');
           mutate({
             projectType: Number(projectType) as ProjectTypeEnum,
-            dateFrom: format(date.from, 'yyyy-MM-dd'),
-            dateTo: format(date.to, 'yyyy-MM-dd'),
+            dateFrom,
+            dateTo,
           });
         }
         break;
+      }
+      default:
+        console.error('Unknown tab:', tab);
     }
   }, [mutate, tab, date, projectType]);
 
@@ -86,6 +132,13 @@ export const SentryAnalytics = () => {
           <div className="flex justify-between">
             <div className="flex items-center mb-4">
               <TabsList>
+                <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_FIVE_MINUTES}>
+                  За 5 минут
+                </TabsTrigger>
+                <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_THIRTY_MINUTES}>
+                  За полчаса
+                </TabsTrigger>
+                <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_HOUR}>За час</TabsTrigger>
                 <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_WEAK}>Неделя</TabsTrigger>
                 <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_MONTH}>Месяц</TabsTrigger>
                 <TabsTrigger value={AnalyticsInterval.ANALYTICS_INTERVAL_YEAR}>Год</TabsTrigger>
