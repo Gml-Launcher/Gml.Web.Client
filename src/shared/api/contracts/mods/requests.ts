@@ -16,6 +16,13 @@ export type TGetModOptionalListResponse = ResponseBaseEntity & {
   data: ModBaseEntity[];
 };
 
+export type TPutModOptionalRequest = {
+  key: string;
+  title: string;
+  description: string;
+};
+export type TPutModOptionalResponse = ResponseBaseEntity & {};
+
 export type TGetSearchModOptionalListRequest = {};
 export type TGetSearchModOptionalListResponse = ResponseBaseEntity & {
   data: ModEntity[];

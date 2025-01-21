@@ -6,6 +6,8 @@ import {
   TGetModListResponse,
   TGetModOptionalListResponse,
   TGetSearchModOptionalListResponse,
+  TPutModOptionalRequest,
+  TPutModOptionalResponse,
 } from '@/shared/api/contracts/mods/requests';
 import { $api } from '@/services/api.service';
 
@@ -53,6 +55,11 @@ class ModService {
   // Получение списка информации по модам
   async getModsDetails(): Promise<AxiosResponse<TGetModDetailsResponse>> {
     return await $api.get<TGetModDetailsResponse>(`${this.MODS_BASE_URL}/details`);
+  }
+
+  async putModDetails({ ...body }: TPutModOptionalRequest): Promise<TPutModOptionalResponse> {
+    const { data } = await $api.put<TPutModOptionalResponse>(`${this.MODS_BASE_URL}/details`, body);
+    return data;
   }
 
   async getAvailableModsList({

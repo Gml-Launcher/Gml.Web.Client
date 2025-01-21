@@ -17,6 +17,7 @@ import {
   ProfileExtendedBaseEntity,
 } from '@/shared/api/contracts';
 import { useRemoveProfileMod } from '@/shared/hooks';
+import { usePutModDetails } from '@/shared/hooks/useMods';
 
 interface GameModItemType {
   mod: ModBaseEntity;
@@ -26,6 +27,7 @@ interface GameModItemType {
 
 export const GameModItem = ({ mod, profile, details }: GameModItemType) => {
   const { mutateAsync: removeModMutate } = useRemoveProfileMod();
+  const { mutateAsync: putModMutate } = usePutModDetails();
 
   const form = useForm<ModDetailsEntitySchemaType>({
     resolver: zodResolver(ModDetailsEntitySchema),
@@ -42,7 +44,11 @@ export const GameModItem = ({ mod, profile, details }: GameModItemType) => {
   const onSubmit: SubmitHandler<ModDetailsEntitySchemaType> = async (
     body: ModDetailsEntitySchemaType,
   ) => {
-    console.log(body);
+    await putModMutate({
+      key: `${mod.name}.jar`,
+      title: body.title,
+      description: body.description,
+    });
   };
 
   return (

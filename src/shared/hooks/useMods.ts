@@ -1,8 +1,12 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 import { modService } from '@/shared/services';
 import { playersKeys } from '@/shared/hooks/usePlayers';
 import { ModDetailsEntity } from '@/shared/api/contracts/mods/schemas';
+import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
+import { profileKeys } from '@/shared/hooks/useProfiles';
+import { TPutModOptionalRequest } from '@/shared/api/contracts/mods/requests';
 
 export const modsKeys = {
   all: ['mods'] as const,
@@ -38,6 +42,24 @@ export const useDetailsMods = () => {
         },
         {} as Record<string, ModDetailsEntity>,
       ),
+  });
+};
+
+export const usePutModDetails = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: profileKeys.creating(),
+    mutationFn: (data: TPutModOptionalRequest) => modService.putModDetails(data),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: profileKeys.all });
+      toast.success('Успешно', {
+        description: `Модификация успешно обновлена`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
   });
 };
 
