@@ -95,11 +95,15 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
                 <FormDescription className="flex flex-col gap-1">
-                  {actualVersion?.map(([title, kek]) => (
-                    <span key={title}>
-                      Актуальная версия для {title}: {kek.version}
-                    </span>
-                  ))}
+                  {actualVersion && actualVersion.length > 0 ? (
+                    actualVersion.map(([title, kek]) => (
+                      <span key={title}>
+                        Актуальная версия для {title}: {kek.version}
+                      </span>
+                    ))
+                  ) : (
+                    <span>Лаунчер ни разу не обновлялся *</span>
+                  )}
                 </FormDescription>
               </FormItem>
             )}
