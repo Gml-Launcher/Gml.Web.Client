@@ -31,7 +31,9 @@ export const SentryAnalytics = () => {
 
   const { data, mutate, isPending } = useSentryFilterErrorsList();
 
-  const [tab, setTab] = useState<AnalyticsInterval>(AnalyticsInterval.ANALYTICS_INTERVAL_WEAK);
+  const [tab, setTab] = useState<AnalyticsInterval>(
+    AnalyticsInterval.ANALYTICS_INTERVAL_FIVE_MINUTES,
+  );
   const handleChangeTab = (currentTab: string) => setTab(currentTab as AnalyticsInterval);
 
   useEffect(() => {
