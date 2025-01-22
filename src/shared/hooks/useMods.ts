@@ -12,6 +12,7 @@ export const modsKeys = {
   all: ['mods'] as const,
   optinal: () => [...modsKeys.all, 'optional'] as const,
   modsDetails: () => [...modsKeys.all, 'modsDetails'] as const,
+  putDetails: () => [...modsKeys.all, 'putDetails'] as const,
 };
 
 export const useMods = ({ profileName }: { profileName: string }) => {
@@ -49,7 +50,7 @@ export const usePutModDetails = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: profileKeys.creating(),
+    mutationKey: modsKeys.putDetails(),
     mutationFn: (data: TPutModOptionalRequest) => modService.putModDetails(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: profileKeys.all });
