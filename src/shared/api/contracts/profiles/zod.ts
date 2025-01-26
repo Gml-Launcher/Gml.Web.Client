@@ -1,5 +1,16 @@
 import { z } from 'zod';
 
+export const ModDetailsEntitySchema = z.object({
+  title: z
+    .string()
+    .min(2, { message: 'Название мода должно быть больше 2 символов' })
+    .max(100, { message: 'Название мода не должно быть больше 100 символов' }),
+  description: z
+    .string()
+    .min(2, { message: 'Описание мода должно быть больше 2 символов' })
+    .max(1000, { message: 'Описание мода не должно быть больше 1000 символов' }),
+});
+
 export const CreateProfileSchema = z.object({
   name: z
     .string()
@@ -29,8 +40,8 @@ export const EditProfileSchema = z.object({
   description: z
     .string()
     .min(2, { message: 'Длина описания должна быть больше 2 символов' })
-    .max(1000, {
-      message: 'Длина описания не должна быть больше 1000 символов',
+    .max(255, {
+      message: 'Длина описания не должна быть больше 255 символов',
     }),
   jvmArguments: z.string().optional(),
   gameArguments: z.string().optional(),
@@ -52,3 +63,4 @@ export type EditImageProfileSchemaType = z.infer<typeof EditImageProfileSchema>;
 export type CreateProfileFormSchemaType = z.infer<typeof CreateProfileSchema>;
 export type EditProfileFormSchemaType = z.infer<typeof EditProfileSchema>;
 export type RestoreProfileSchemaType = z.infer<typeof RestoreProfileSchema>;
+export type ModDetailsEntitySchemaType = z.infer<typeof ModDetailsEntitySchema>;

@@ -20,6 +20,23 @@ export type TPostProfilesResponse = ResponseBaseEntity & {
   data: Partial<ProfileBaseEntity>;
 };
 
+// Загрузка мода
+export type TPostLoadProfileModRequest = {
+  profileName: string;
+  isOptional: boolean;
+  data: FormData;
+};
+export type TPostLoadProfileModResponse = ResponseBaseEntity;
+
+// Загрузка мода по Url
+export type TPostLoadProfileModByUrlRequest = {
+  profileName: string;
+  isOptional: boolean;
+  links: string[];
+};
+
+export type TPostLoadProfileModByUrlResponse = ResponseBaseEntity;
+
 // Получение профиля
 export type TGetProfileRequest = {
   UserName: string;
@@ -53,6 +70,13 @@ export type TDeleteProfileRequest = {
   removeFiles: boolean;
 };
 export type TDeleteProfileResponse = ResponseBaseEntity & {};
+
+// Удаление мода
+export type TRemoveProfileModRequest = {
+  profileName: string;
+  modName: string;
+};
+export type TRemoveProfileModResponse = ResponseBaseEntity & {};
 
 // Добавление игрока в профиль
 export type TAddPlayerToProfileRequest = {

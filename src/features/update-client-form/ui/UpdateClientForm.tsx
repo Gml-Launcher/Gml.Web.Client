@@ -10,7 +10,7 @@ import {
   useLauncherBuildVersions,
   useLauncherUpload,
 } from '@/shared/hooks';
-import { cn } from '@/shared/lib/utils';
+import { cn, getFormatDate } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import {
   Form,
@@ -67,9 +67,9 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
                     </SelectTrigger>
                     <SelectContent>
                       {versions &&
-                        versions.map(({ name }) => (
+                        versions.map(({ name, dateTime }) => (
                           <SelectItem key={name} value={name}>
-                            {name}
+                            от {getFormatDate(dateTime)}
                           </SelectItem>
                         ))}
                     </SelectContent>
@@ -95,11 +95,15 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
                   <FormMessage>{form.formState.errors.version.message}</FormMessage>
                 )}
                 <FormDescription className="flex flex-col gap-1">
-                  {actualVersion?.map(([title, kek]) => (
-                    <span key={title}>
-                      Актуальная версия для {title}: {kek.version}
-                    </span>
-                  ))}
+                  {actualVersion && actualVersion.length > 0 ? (
+                    actualVersion.map(([title, kek]) => (
+                      <span key={title}>
+                        Актуальная версия для {title}: {kek.version}
+                      </span>
+                    ))
+                  ) : (
+                    <span>Лаунчер ни разу не обновлялся *</span>
+                  )}
                 </FormDescription>
               </FormItem>
             )}

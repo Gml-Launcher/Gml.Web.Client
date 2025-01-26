@@ -27,9 +27,9 @@ const menu: TMenuItem[] = [
     text: 'Интеграции',
   },
   {
-    icon: <SettingsIcon size={16} />,
-    path: DASHBOARD_PAGES.SETTINGS,
-    text: 'Настройки',
+    icon: <Users2Icon size={16} />,
+    path: DASHBOARD_PAGES.PLAYERS,
+    text: 'Игроки',
   },
   {
     icon: <PieChartIcon size={16} />,
@@ -37,9 +37,9 @@ const menu: TMenuItem[] = [
     text: 'Ошибки',
   },
   {
-    icon: <Users2Icon size={16} />,
-    path: DASHBOARD_PAGES.PLAYERS,
-    text: 'Игроки',
+    icon: <SettingsIcon size={16} />,
+    path: DASHBOARD_PAGES.SETTINGS,
+    text: 'Настройки',
   },
 ];
 

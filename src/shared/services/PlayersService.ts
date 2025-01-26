@@ -1,5 +1,10 @@
 import { $api } from '@/services/api.service';
-import { TGetPlayersRequest, TGetPlayersResponse } from '@/shared/api/contracts';
+import {
+  TGetPlayersRequest,
+  TGetPlayersResponse,
+  TPostBanPlayersRequest,
+  TPostBanPlayersResponse,
+} from '@/shared/api/contracts';
 
 class PlayersService {
   private BASE_URL = '/players';
@@ -8,6 +13,18 @@ class PlayersService {
     const { data } = await $api.get<TGetPlayersResponse>(this.BASE_URL, {
       params,
     });
+
+    return data;
+  }
+
+  async banPlayer(body: TPostBanPlayersRequest): Promise<TPostBanPlayersResponse> {
+    const { data } = await $api.post<TPostBanPlayersResponse>(`${this.BASE_URL}/ban`, body);
+
+    return data;
+  }
+
+  async pardonPlayer(body: TPostBanPlayersRequest): Promise<TPostBanPlayersResponse> {
+    const { data } = await $api.post<TPostBanPlayersResponse>(`${this.BASE_URL}/pardon`, body);
 
     return data;
   }

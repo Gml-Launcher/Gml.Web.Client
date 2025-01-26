@@ -33,3 +33,7 @@ export type TGetPlayersRequest = {
 export type TGetPlayersResponse = ResponseBaseEntity & {
   data: PlayerBaseEntity[];
 };
+
+// Бан юзера
+export type TPostBanPlayersRequest = string[];
+export type TPostBanPlayersResponse = ResponseBaseEntity & {};
