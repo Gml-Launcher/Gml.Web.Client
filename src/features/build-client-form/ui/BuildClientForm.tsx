@@ -156,13 +156,13 @@ export function BuildClientForm({
             name="operatingSystem"
             render={({ field }) => (
               <FormItem className="flex-1">
-                <FormLabel>Выбери операционную систему</FormLabel>
+                <FormLabel>Выберите операционную систему</FormLabel>
                 <FormControl>
                   <MultiSelect
                     options={platformsOptions}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    placeholder="Выбери операционную систему"
+                    placeholder="Выберите операционную систему"
                     variant="inverted"
                     maxCount={3}
                   />
