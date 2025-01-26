@@ -63,7 +63,7 @@ export const useColumns = () => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.SIGN_IN} />
       ),
-      cell: ({ getValue }) => getValue().length,
+      cell: ({ getValue }) => getValue()?.length,
     }),
     columnsHelper.accessor('expiredDate', {
       size: 300,
