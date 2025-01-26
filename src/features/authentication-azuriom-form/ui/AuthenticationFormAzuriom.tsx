@@ -3,6 +3,7 @@
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 import { IntegrationFormSchemaType, integrationSchema } from '../lib/static';
 
@@ -13,6 +14,7 @@ import { Form, FormControl, FormItem, FormLabel, FormMessage } from '@/shared/ui
 import { Icons } from '@/shared/ui/icons';
 import { Input } from '@/shared/ui/input';
 import { AuthenticationType } from '@/shared/enums';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 
 interface SignInFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onOpenChange: (open: boolean) => void;
@@ -57,6 +59,19 @@ export function AuthenticationFormAzuriom({ className, onOpenChange, ...props }:
             {form.formState.errors.endpoint && (
               <FormMessage>{form.formState.errors.endpoint.message}</FormMessage>
             )}
+
+            <Alert variant="warning">
+              <ExclamationTriangleIcon className="h-4 w-4" />
+              <AlertTitle>Внимание!</AlertTitle>
+              <AlertDescription>
+                в Azuriom есть проблема, которая не позволит заходить другим людям на ваши сервера!
+                <br />
+                <a href="https://gml-launcher.github.io/Gml.Docs/gml-auth-azuriom.html">
+                  <strong className="underline">Прочитайте эту статью</strong>
+                </a>
+                , чтобы узнать подробности.
+              </AlertDescription>
+            </Alert>
           </FormItem>
 
           <Button
