@@ -3,10 +3,13 @@
 import React from 'react';
 import { createColumnHelper } from '@tanstack/table-core';
 import { format } from 'date-fns';
+import { GavelIcon } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/entities/Table';
 import { PlayerBaseEntity } from '@/shared/api/contracts';
 import { $api } from '@/services/api.service';
+import { Button } from '@/shared/ui/button';
+import { useBanPlayer, usePardonPlayer } from '@/shared/hooks/usePlayers';
 
 enum ColumnHeader {
   ICON = '',
@@ -16,10 +19,22 @@ enum ColumnHeader {
   UUID = 'UUID',
   BANNED = 'Заблокирован',
   IP_ADDRESS = 'IP Адрес',
+  ACTIONS = 'Действия',
 }
 
 export const columnsHelper = createColumnHelper<PlayerBaseEntity>();
 export const useColumns = () => {
+  const banPlayer = useBanPlayer();
+  const pardonPlayer = usePardonPlayer();
+
+  const banUser = async (data: string) => {
+    await banPlayer.mutateAsync([data]);
+  };
+
+  const pardonUser = async (data: string) => {
+    await pardonPlayer.mutateAsync([data]);
+  };
+
   const columns: any = [
     columnsHelper.accessor('uuid', {
       size: 190,
@@ -48,7 +63,7 @@ export const useColumns = () => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.SIGN_IN} />
       ),
-      cell: ({ getValue }) => getValue().length,
+      cell: ({ getValue }) => getValue()?.length,
     }),
     columnsHelper.accessor('expiredDate', {
       size: 300,
@@ -74,6 +89,38 @@ export const useColumns = () => {
         );
 
         return <div className="flex flex-col">{distinctAddresses.join(', ')}</div>;
+      },
+    }),
+    columnsHelper.display({
+      id: 'actions',
+      size: 100,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.ACTIONS} />
+      ),
+      cell: ({ row }) => {
+        return (
+          <>
+            {row.original.isBanned ? (
+              <Button
+                variant="outline"
+                className="bg-green-600 hover:bg-green-700 rounded-full h-8 gap-2"
+                onClick={() => pardonUser(row.original.uuid)}
+              >
+                <GavelIcon size="12" />
+                Разбанить
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                className="rounded-full h-8 gap-2"
+                onClick={() => banUser(row.original.uuid)}
+              >
+                <GavelIcon size="12" />
+                Забанить
+              </Button>
+            )}
+          </>
+        );
       },
     }),
   ];

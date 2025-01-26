@@ -2,19 +2,21 @@
 
 import { createColumnHelper } from '@tanstack/table-core';
 import { ColumnDef } from '@tanstack/react-table';
+import { FileX2Icon } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/entities/Table';
-import { ProfileFileBaseEntity } from '@/shared/api/contracts';
+import { ProfileExtendedBaseEntity, ProfileFileBaseEntity } from '@/shared/api/contracts';
 import { Checkbox } from '@/shared/ui/checkbox';
 
 enum ColumnHeader {
   NAME = 'Название',
   DIRECTORY = 'Директория',
   FILE_SIZE = 'Размер файла',
+  ADDITIONAL = '',
 }
 
 export const columnsHelper = createColumnHelper<ProfileFileBaseEntity>();
-export const useColumns = () => {
+export const useColumns = (profile: ProfileExtendedBaseEntity) => {
   const columns: ColumnDef<ProfileFileBaseEntity, any>[] = [
     columnsHelper.display({
       id: 'checkbox',
@@ -59,6 +61,31 @@ export const useColumns = () => {
         <DataTableColumnHeader column={column} title={ColumnHeader.FILE_SIZE} />
       ),
       cell: ({ getValue }) => getValue(),
+      enableColumnFilter: false,
+    }),
+    columnsHelper.accessor('size', {
+      size: 500,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.ADDITIONAL} />
+      ),
+      cell: ({ row }) => {
+        const fileHash = row.original.hash;
+        // @ts-ignore
+        const fileExists = profile.files.some(
+          (file: ProfileFileBaseEntity) => file.hash === fileHash,
+        );
+
+        if (!fileExists)
+          return (
+            <div
+              className={`flex items-center gap-2 ${fileExists ? 'text-green-500' : 'text-red-500'} font-bold`}
+            >
+              <FileX2Icon size="16" />
+              Файл удален *
+            </div>
+          );
+      },
+      enableSorting: false,
       enableColumnFilter: false,
     }),
   ];

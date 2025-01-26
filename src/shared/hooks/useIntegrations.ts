@@ -103,7 +103,11 @@ export const useLauncherBuildVersions = () => {
   return useQuery({
     queryKey: integrationsKeys.launcherBuildVersions(),
     queryFn: () => integrationService.getLauncherBuildVersions(),
-    select: (data) => data.data.data,
+    select: (data) => {
+      return data.data.data.sort(
+        (a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime(),
+      );
+    },
   });
 };
 

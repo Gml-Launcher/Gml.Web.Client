@@ -8,3 +8,4 @@ export {
   setStorageProfile,
 } from './AuthTokenService';
 export { profileService } from './ProfileService';
+export { modService } from './ModService';

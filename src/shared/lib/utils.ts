@@ -36,6 +36,21 @@ export const isTokenExpired = (token?: string): boolean => {
   return expired_time <= time_now;
 };
 
+export const formatNumber = (num?: number | null): string => {
+  if (!num) return '';
+
+  if (num >= 1_000_000_000) {
+    return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + 'B';
+  }
+  if (num >= 1_000_000) {
+    return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  }
+  if (num >= 1_000) {
+    return (num / 1_000).toFixed(1).replace(/\.0$/, '') + 'K';
+  }
+  return num.toString();
+};
+
 export * from './getFormatDate/getFormatDate';
 export * from './getProgressColor/getProgressColor';
 export * from './isAxiosError/isAxiosError';

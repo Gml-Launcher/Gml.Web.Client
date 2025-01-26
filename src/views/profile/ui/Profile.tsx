@@ -36,6 +36,8 @@ import {
 import { FolderTable } from '@/widgets/folder-table';
 import { GamePlayers } from '@/widgets/game-players';
 import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
+import { GameMods } from '@/widgets/game-mods';
+import { Badge } from '@/shared/ui/badge';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -109,7 +111,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
         defaultValue="main"
         aria-orientation="vertical"
         orientation="vertical"
-        className={classes.tabs}
+        className="flex flex-col md:flex-row gap-6 items-start"
       >
         <TabsList defaultValue="main" className={classes.tabs__list}>
           <TabsTrigger className="w-full h-10" value="main">
@@ -129,6 +131,12 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </TabsTrigger>
           <TabsTrigger className="w-full h-10" value="players">
             Игроки
+          </TabsTrigger>
+          <TabsTrigger className="w-full h-10" value="mods">
+            Моды
+            <Badge className="cursor-pointer text-sm dark:bg-white dark:bg-opacity-10 dark:text-white text-opacity-90 dark:hover:bg-opacity-10 dark:hover:bg-white ml-2">
+              Beta
+            </Badge>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>
@@ -150,7 +158,11 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             subtitle="Белый список необходим для того чтобы исключить выбранные файлы из автоматического удаления"
           >
             <div className={classes.tabs__whitelist}>
-              <AddingFilesWhitelistDialog profileName={profile.profileName} files={profile.files} />
+              <AddingFilesWhitelistDialog
+                profile={profile}
+                profileName={profile.profileName}
+                files={profile.files}
+              />
               {!!Object.keys(rowSelection).length && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -173,6 +185,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             </div>
             <FilesTable
               files={profile.whiteListFiles}
+              profile={profile}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
             />
@@ -207,6 +220,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             </div>
             <FolderTable
               folders={profile.whiteListFolders}
+              profile={profile}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
             />
@@ -226,6 +240,11 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             subtitle="Управление игроками, которые могут заходить в игровой клиент, даже если он выключен или недоступен"
           >
             <GamePlayers profile={profile} />
+          </Section>
+        </TabsContent>
+        <TabsContent value="mods" className={classes.tabs__content}>
+          <Section title="Моды" subtitle="Управление игровыми модификациями">
+            <GameMods profile={profile} />
           </Section>
         </TabsContent>
       </Tabs>

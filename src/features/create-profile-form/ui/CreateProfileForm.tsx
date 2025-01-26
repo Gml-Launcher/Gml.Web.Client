@@ -1,7 +1,6 @@
 'use client';
 
-import React, { ReactElement, useEffect } from 'react';
-import Image from 'next/image';
+import React, { useEffect } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -20,32 +19,12 @@ import { Input } from '@/shared/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { Textarea } from '@/shared/ui/textarea';
 import { FormCombobox } from '@/shared/ui/FormCombobox';
-import loaderMinecraft from '@/assets/logos/minecraft.png';
-import loaderForge from '@/assets/logos/forge.png';
-import loaderFabric from '@/assets/logos/fabric.png';
-import loaderLiteLoader from '@/assets/logos/liteloader.png';
-import neoForgeLoader from '@/assets/logos/neoforge.png';
+import { convertGameLoaderImage } from '@/shared/converters';
 
 interface CreateProfileFormProps extends React.HTMLAttributes<HTMLDivElement> {
   profile?: ProfileExtendedBaseEntity;
   onModalToggle: () => void;
 }
-
-const logoGameLoader: Record<GameLoaderOption, ReactElement> = {
-  [GameLoaderOption.VANILLA]: (
-    <Image src={loaderMinecraft} alt="Logotype Minecraft" width={24} height={24} />
-  ),
-  [GameLoaderOption.FORGE]: <Image src={loaderForge} alt="Logotype Forge" width={24} height={24} />,
-  [GameLoaderOption.FABRIC]: (
-    <Image src={loaderFabric} alt="Logotype Fabric" width={24} height={24} />
-  ),
-  [GameLoaderOption.LITELOADER]: (
-    <Image src={loaderLiteLoader} alt="Logotype Liteloader" width={24} height={24} />
-  ),
-  [GameLoaderOption.NEOFORGE]: (
-    <Image src={neoForgeLoader} alt="Logotype NeoForge" width={18} height={18} />
-  ),
-};
 
 export function CreateProfileForm(props: CreateProfileFormProps) {
   const { profile, className, onModalToggle, ...rest } = props;
@@ -172,7 +151,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                     <SelectContent>
                       {enumValues(GameLoaderOption).map(([loader, value]) => (
                         <SelectItem key={loader} value={String(value)}>
-                          {logoGameLoader[value as GameLoaderOption]}
+                          {convertGameLoaderImage(value as GameLoaderOption)}
                           {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
                         </SelectItem>
                       ))}
