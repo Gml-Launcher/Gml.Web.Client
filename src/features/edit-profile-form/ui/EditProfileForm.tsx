@@ -113,8 +113,15 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <h6 className="text-sm font-bold">Описание</h6>
               <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в лаунчере</p>
             </div>
-            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
-              <Textarea placeholder="Введите описание сервера" {...form.register('description')} />
+            <div className="flex flex-col items-end gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                {form.watch('description')?.length} из 255
+              </p>
+              <Textarea
+                placeholder="Введите описание сервера"
+                rows={5}
+                {...form.register('description')}
+              />
               {form.formState.errors.description && (
                 <FormMessage>{form.formState.errors.description.message?.toString()}</FormMessage>
               )}

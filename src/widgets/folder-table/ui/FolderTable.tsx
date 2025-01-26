@@ -14,13 +14,14 @@ import { useState } from 'react';
 
 import { useColumns } from '../lib/columns';
 
-import { ProfileFolderBaseEntity } from '@/shared/api/contracts';
+import { ProfileExtendedBaseEntity, ProfileFolderBaseEntity } from '@/shared/api/contracts';
 import { Input } from '@/shared/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { DataTablePagination } from '@/entities/Table/ui/items/data-table-pagination';
 
 interface FolderTableProps {
   folders: ProfileFolderBaseEntity[];
+  profile: ProfileExtendedBaseEntity;
   rowSelection: RowSelectionState;
   setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
 }
@@ -39,7 +40,12 @@ function Filter({ column }: { column: Column<ProfileFolderBaseEntity, unknown> }
   );
 }
 
-export const FolderTable = ({ folders, rowSelection, setRowSelection }: FolderTableProps) => {
+export const FolderTable = ({
+  profile,
+  folders,
+  rowSelection,
+  setRowSelection,
+}: FolderTableProps) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 

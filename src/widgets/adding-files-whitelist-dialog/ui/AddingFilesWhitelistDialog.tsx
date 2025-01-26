@@ -12,7 +12,11 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import { ProfileFileBaseEntity, WhitelistFileBaseEntity } from '@/shared/api/contracts';
+import {
+  ProfileExtendedBaseEntity,
+  ProfileFileBaseEntity,
+  WhitelistFileBaseEntity,
+} from '@/shared/api/contracts';
 import { FilesTable } from '@/widgets/files-table';
 import { Tabs, TabsContent } from '@/shared/ui/tabs';
 import { useAddingFilesWhitelist } from '@/shared/hooks';
@@ -23,11 +27,13 @@ import { Separator } from '@/shared/ui/separator';
 interface AddingFilesWhitelistDialogProps {
   profileName: string;
   files: ProfileFileBaseEntity[];
+  profile: ProfileExtendedBaseEntity;
 }
 
 export function AddingFilesWhitelistDialog({
   profileName,
   files,
+  profile,
 }: AddingFilesWhitelistDialogProps) {
   const { mutate } = useAddingFilesWhitelist();
 
@@ -63,6 +69,7 @@ export function AddingFilesWhitelistDialog({
           <TabsContent value="files">
             <FilesTable
               files={files}
+              profile={profile}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
             />

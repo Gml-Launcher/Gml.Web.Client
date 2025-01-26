@@ -14,13 +14,14 @@ import {
 
 import { useColumns } from '../lib/columns';
 
-import { ProfileFileBaseEntity } from '@/shared/api/contracts';
+import { ProfileExtendedBaseEntity, ProfileFileBaseEntity } from '@/shared/api/contracts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { DataTablePagination } from '@/entities/Table/ui/items/data-table-pagination';
 import { Input } from '@/shared/ui/input';
 
 interface FilesTableProps {
   files: ProfileFileBaseEntity[];
+  profile: ProfileExtendedBaseEntity;
   rowSelection: RowSelectionState;
   setRowSelection: React.Dispatch<React.SetStateAction<RowSelectionState>>;
 }
@@ -39,11 +40,11 @@ function Filter({ column }: { column: Column<ProfileFileBaseEntity, unknown> }) 
   );
 }
 
-export function FilesTable({ files, rowSelection, setRowSelection }: FilesTableProps) {
+export function FilesTable({ files, profile, rowSelection, setRowSelection }: FilesTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const { columns } = useColumns();
+  const { columns } = useColumns(profile);
   const table = useReactTable({
     data: files,
     columns,

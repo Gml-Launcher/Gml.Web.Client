@@ -40,8 +40,8 @@ export const EditProfileSchema = z.object({
   description: z
     .string()
     .min(2, { message: 'Длина описания должна быть больше 2 символов' })
-    .max(1000, {
-      message: 'Длина описания не должна быть больше 1000 символов',
+    .max(255, {
+      message: 'Длина описания не должна быть больше 255 символов',
     }),
   jvmArguments: z.string().optional(),
   gameArguments: z.string().optional(),
