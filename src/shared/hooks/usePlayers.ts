@@ -4,13 +4,14 @@ import { toast } from 'sonner';
 import { playersService } from '@/shared/services/PlayersService';
 import { modsKeys } from '@/shared/hooks/useMods';
 import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
-import { TPostBanPlayersRequest } from '@/shared/api/contracts';
+import { TPostBanPlayersRequest, TPostRemovePlayersRequest } from '@/shared/api/contracts';
 
 export const playersKeys = {
   all: ['players'] as const,
   getPlayers: () => [...modsKeys.all, 'getPlayers'] as const,
   banPlayer: () => [...modsKeys.all, 'banPlayer'] as const,
   pardonPlayer: () => [...modsKeys.all, 'pardonPlayer'] as const,
+  removePlayer: () => [...modsKeys.all, 'pardonPlayer'] as const,
 };
 
 export const usePlayers = (search: string) => {
@@ -41,6 +42,24 @@ export const useBanPlayer = () => {
       await queryClient.invalidateQueries({ queryKey: playersKeys.all });
       toast.success('Успешно', {
         description: `Пользователь заблокирован`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useRemoveUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: playersKeys.banPlayer(),
+    mutationFn: (data: TPostRemovePlayersRequest) => playersService.removePlayer(data),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: playersKeys.all });
+      toast.success('Успешно', {
+        description: `Пользователь удален`,
       });
     },
     onError: (error) => {
