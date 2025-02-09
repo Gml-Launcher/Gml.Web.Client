@@ -9,6 +9,7 @@ import {
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
+import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 import {
   ProfileBaseEntity,
   TAddPlayerToProfileRequest,
@@ -25,8 +26,8 @@ import {
 } from '@/shared/api/contracts';
 import { profileService } from '@/shared/services/ProfileService';
 import { isAxiosError } from '@/shared/lib/utils';
-import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 import { modsKeys } from '@/shared/hooks/useMods';
+import { EntityState } from '@/shared/enums';
 
 export const profileKeys = {
   all: ['profiles'] as const,
@@ -107,12 +108,14 @@ export const useCreateProfile = () => {
 
 export const useLoadProfileMods = () => {
   const queryClient = useQueryClient();
+  const { setState: setProfileCardState } = useProfileCardStore();
 
   return useMutation({
     mutationKey: profileKeys.addingMods(),
     mutationFn: (data: TPostLoadProfileModRequest) => profileService.loadProfileMod(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: modsKeys.all });
+      setProfileCardState(EntityState.ENTITY_STATE_NEED_COMPILE);
       toast.success('Успешно', {
         description: 'Мод успешно загружен',
       });
@@ -125,6 +128,7 @@ export const useLoadProfileMods = () => {
 
 export const useLoadProfileModsByUrl = () => {
   const queryClient = useQueryClient();
+  const { setState: setProfileCardState } = useProfileCardStore();
 
   return useMutation({
     mutationKey: profileKeys.addingModsByUrl(),
@@ -132,6 +136,7 @@ export const useLoadProfileModsByUrl = () => {
       profileService.loadProfileModByLink(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: modsKeys.all });
+      setProfileCardState(EntityState.ENTITY_STATE_NEED_COMPILE);
       toast.success('Успешно', {
         description: 'Мод успешно загружен',
       });
@@ -144,12 +149,14 @@ export const useLoadProfileModsByUrl = () => {
 
 export const useRemoveProfileMod = () => {
   const queryClient = useQueryClient();
+  const { setState: setProfileCardState } = useProfileCardStore();
 
   return useMutation({
     mutationKey: profileKeys.addingMods(),
     mutationFn: (data: TRemoveProfileModRequest) => profileService.removeProfileMod(data),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries({ queryKey: modsKeys.all });
+      setProfileCardState(EntityState.ENTITY_STATE_NEED_COMPILE);
       toast.success('Успешно', {
         description: 'Мод успешно удален',
       });

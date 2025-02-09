@@ -154,7 +154,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
       })
       .finally(() => {
         setIsRestoring(false);
-        setProfileCardState(EntityState.ENTITY_STATE_LOADING);
+        setProfileCardState(EntityState.ENTITY_STATE_NEED_COMPILE);
       });
   };
 
@@ -185,7 +185,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
   const onBuildDistributive = () => {
     setIsPacked(false);
     setIsRestoring(true);
-    setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
+    setProfileCardState(EntityState.ENTITY_STATE_PACKING);
     connectionHub
       ?.invoke('Build', profile?.profileName)
       .then(() => {
@@ -202,6 +202,7 @@ export const useConnectionHub = (props: ConnectionHubProps) => {
         }
       })
       .finally(() => {
+        setProfileCardState(EntityState.ENTITY_STATE_ACTIVE);
         setIsRestoring(false);
       });
   };

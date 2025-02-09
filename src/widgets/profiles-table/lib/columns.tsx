@@ -124,7 +124,7 @@ export const useColumns = (props: UseColumnsProps) => {
       cell: ({ getValue }) => getFormatDate(getValue()),
     }),
     columnsHelper.accessor('state', {
-      size: 50,
+      size: 270,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE} />
       ),
