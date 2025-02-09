@@ -168,9 +168,14 @@ export const useRemoveProfileMod = () => {
 };
 
 export const useEditProfile = () => {
+  const { setState: setProfileCardState } = useProfileCardStore();
+
   return useMutation({
     mutationKey: profileKeys.editing(),
     mutationFn: (data: TPutProfileRequest) => profileService.editProfile(data),
+    onSuccess: (data) => {
+      setProfileCardState(EntityState.ENTITY_STATE_NEED_COMPILE);
+    },
     onError: (error) => {
       isAxiosError({ toast, error });
     },
