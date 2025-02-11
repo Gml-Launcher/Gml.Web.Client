@@ -28,6 +28,12 @@ class PlayersService {
 
     return data;
   }
+
+  async removePlayer(body: TPostBanPlayersRequest): Promise<TPostBanPlayersResponse> {
+    const { data } = await $api.post<TPostBanPlayersResponse>(`${this.BASE_URL}/remove`, body);
+
+    return data;
+  }
 }
 
 export const playersService = new PlayersService();

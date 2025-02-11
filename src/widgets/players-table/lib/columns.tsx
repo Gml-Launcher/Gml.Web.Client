@@ -3,13 +3,13 @@
 import React from 'react';
 import { createColumnHelper } from '@tanstack/table-core';
 import { format } from 'date-fns';
-import { GavelIcon } from 'lucide-react';
+import { GavelIcon, UserXIcon } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/entities/Table';
 import { PlayerBaseEntity } from '@/shared/api/contracts';
 import { $api } from '@/services/api.service';
 import { Button } from '@/shared/ui/button';
-import { useBanPlayer, usePardonPlayer } from '@/shared/hooks/usePlayers';
+import { useBanPlayer, usePardonPlayer, useRemoveUser } from '@/shared/hooks/usePlayers';
 
 enum ColumnHeader {
   ICON = '',
@@ -25,10 +25,14 @@ enum ColumnHeader {
 export const columnsHelper = createColumnHelper<PlayerBaseEntity>();
 export const useColumns = () => {
   const banPlayer = useBanPlayer();
+  const removePlayer = useRemoveUser();
   const pardonPlayer = usePardonPlayer();
 
   const banUser = async (data: string) => {
     await banPlayer.mutateAsync([data]);
+  };
+  const removeUser = async (data: string) => {
+    await removePlayer.mutateAsync([data]);
   };
 
   const pardonUser = async (data: string) => {
@@ -99,7 +103,7 @@ export const useColumns = () => {
       ),
       cell: ({ row }) => {
         return (
-          <>
+          <div className="flex gap-2">
             {row.original.isBanned ? (
               <Button
                 variant="outline"
@@ -119,7 +123,16 @@ export const useColumns = () => {
                 Забанить
               </Button>
             )}
-          </>
+
+            <Button
+              variant="outline"
+              className="rounded-full h-8 gap-2"
+              onClick={() => removeUser(row.original.uuid)}
+            >
+              <UserXIcon size="12" />
+              Удалить
+            </Button>
+          </div>
         );
       },
     }),

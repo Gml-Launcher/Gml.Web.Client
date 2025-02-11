@@ -66,8 +66,8 @@ export function ConnectTexturesForm({
     {
       key: 'auroralauncher',
       label: 'AuroraLauncher',
-      skinsUrl: 'https://api.aurora-launcher.ru/mojang/skin?username={userName}',
-      cloaksUrl: 'https://api.aurora-launcher.ru/mojang/cape?username={userName}',
+      skinsUrl: 'https://api.aurora-launcher.ru/mojang/username/skin/{userName}',
+      cloaksUrl: 'https://api.aurora-launcher.ru/mojang/username/cape/{userName}',
     },
     {
       key: 'tlauncher',

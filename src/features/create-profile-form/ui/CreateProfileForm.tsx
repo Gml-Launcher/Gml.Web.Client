@@ -95,18 +95,21 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           </FormItem>
 
           <FormItem>
-            <FormLabel>Введите название сервера</FormLabel>
+            <FormLabel>Введите название профиля</FormLabel>
             <FormControl>
-              <Input placeholder="Введите название сервера" {...form.register('name')} />
+              <Input placeholder="Введите название профиля" {...form.register('name')} />
             </FormControl>
             {form.formState.errors.name && (
               <FormMessage>{form.formState.errors.name.message}</FormMessage>
             )}
+            {/*<div className="text-gray-400 text-sm font-medium">*/}
+            {/*  slug: {form.watch('name').toLowerCase().replace(/\s+/g, '-')}*/}
+            {/*</div>*/}
           </FormItem>
           <FormItem>
-            <FormLabel>Введите описание сервера</FormLabel>
+            <FormLabel>Введите описание профиля</FormLabel>
             <FormControl>
-              <Textarea placeholder="Введите описание сервера" {...form.register('description')} />
+              <Textarea placeholder="Введите описание профиля" {...form.register('description')} />
             </FormControl>
             {form.formState.errors.description && (
               <FormMessage>{form.formState.errors.description.message}</FormMessage>
