@@ -10,6 +10,9 @@ import { PlayerBaseEntity } from '@/shared/api/contracts';
 import { $api } from '@/services/api.service';
 import { Button } from '@/shared/ui/button';
 import { useBanPlayer, usePardonPlayer, useRemoveUser } from '@/shared/hooks/usePlayers';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { timeAgo } from '@/shared/lib/getFormatDate/getFormatDate';
 
 enum ColumnHeader {
   ICON = '',
@@ -91,8 +94,29 @@ export const useColumns = () => {
         const distinctAddresses = Array.from(
           new Set(row.original.authHistory.map((c) => c.address)),
         );
+        const distinctDevices = row.original.authHistory;
 
-        return <div className="flex flex-col">{distinctAddresses.join(', ')}</div>;
+        return (
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="flex flex-col">{distinctAddresses.join(', ')}</div>
+            </TooltipTrigger>
+            <TooltipContent className="p-3">
+              <div className="flex flex-col overflow-y-auto gap-5 h-[300px]">
+                {distinctDevices.map((device, index) => (
+                  <Card key={index} className="p-0 border-none w-[300px] pt-4">
+                    <CardHeader className="p-0">
+                      <CardTitle className="text-base">{device.device}</CardTitle>
+                      <CardDescription>
+                        {device.address} / {timeAgo(device.date)}
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            </TooltipContent>
+          </Tooltip>
+        );
       },
     }),
     columnsHelper.display({
