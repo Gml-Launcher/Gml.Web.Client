@@ -30,6 +30,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
   const form = useForm<EditProfileFormSchemaType>({
     values: {
       name: profile?.profileName || '',
+      displayName: profile?.displayName || '',
       description: profile?.description || '',
       jvmArguments: profile?.jvmArguments || '',
       gameArguments: profile?.gameArguments || '',
@@ -45,6 +46,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
   ) => {
     const formUpdate = new FormData();
     formUpdate.append('name', body.name);
+    formUpdate.append('displayName', body.displayName);
     formUpdate.append('originalName', profile?.profileName || '');
     formUpdate.append('description', body.description);
     formUpdate.append('icon', body.icon?.[0]);
@@ -95,7 +97,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Название</h6>
-              <p className="text-sm text-gray-700 dark:text-gray-300">Отображается на клиенте</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Отображается в директории</p>
             </div>
             <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
               <Input
@@ -105,6 +107,24 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               />
               {form.formState.errors.name && (
                 <FormMessage>{form.formState.errors.name.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <h6 className="text-sm font-bold">Отображаемое имя</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Отображается в лаунчере, профиле
+              </p>
+            </div>
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <Input
+                type="text"
+                placeholder="Введите отображаемое имя"
+                {...form.register('displayName')}
+              />
+              {form.formState.errors.displayName && (
+                <FormMessage>{form.formState.errors.displayName.message?.toString()}</FormMessage>
               )}
             </div>
           </div>

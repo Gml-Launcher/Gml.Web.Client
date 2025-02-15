@@ -16,6 +16,7 @@ export type ProfileBaseEntity = {
 export type ProfileExtendedBaseEntity = {
   javaPath: string;
   profileName: string;
+  displayName: string;
   minecraftVersion: string;
   clientVersion: string;
   launchVersion: string;
