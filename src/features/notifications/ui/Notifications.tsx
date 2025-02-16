@@ -18,7 +18,8 @@ import { Button } from '@/shared/ui/button';
 import { Badge } from '@/shared/ui/badge';
 import { NotificationStatus } from '@/shared/enums';
 import { DASHBOARD_PAGES } from '@/shared/routes';
-import { getFormatDate } from '@/shared/lib/utils';
+import { getFormatDate, timeAgo } from '@/shared/lib/utils';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 
 const statusColor: Record<NotificationStatus, string> = {
   [NotificationStatus.TRACE]: 'bg-neutral-200',
@@ -81,10 +82,17 @@ export const Notifications = () => {
                       />
                       <span className="text-base font-semibold">{message}</span>
                     </div>
-                    <span className="text-sm text-gray-400 truncate h-10 text-wrap w-[calc(100%-24px)]">
+                    <span className="text-sm text-gray-400 truncate max-h-10 text-wrap w-[calc(100%-24px)]">
                       {details ? details : 'Детали отсутствуют'}
                     </span>
-                    <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <span className="text-sm text-muted-foreground">{timeAgo(date)}</span>
+                      </TooltipTrigger>
+                      <TooltipContent className="p-3">
+                        <span className="text-sm text-muted-foreground">{getFormatDate(date)}</span>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <Separator />
                 </Link>

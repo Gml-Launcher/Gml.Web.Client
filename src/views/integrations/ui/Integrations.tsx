@@ -15,9 +15,11 @@ import {
   DATA_TEST_ID_DIALOG_CONNECT_SENTRY,
   DATA_TEST_ID_DIALOG_CONNECT_TEXTURES,
   DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER,
+  DATA_TEST_ID_DIALOG_NEWS_PROVIDER,
 } from '@/shared/constants/data';
 import { Button } from '@/shared/ui/button';
 import { HREF_DISCORD } from '@/shared/constants';
+import { NewsProviderDialog } from '@/widgets/news-provider-dialog';
 
 export const IntegrationsPage = () => {
   return (
@@ -49,6 +51,12 @@ export const IntegrationsPage = () => {
               description="Синхронизация лаунчера и вашего Discord сервера"
               dialog={<ConnectDiscordDialog />}
               testid={DATA_TEST_ID_DIALOG_CONNECT_DISCORD}
+            />
+            <IntegrationCard
+              title="Новости"
+              description="Выводите новости из социальных сетей Вконтакте, Telegram или вашего сайта"
+              dialog={<NewsProviderDialog />}
+              testid={DATA_TEST_ID_DIALOG_NEWS_PROVIDER}
             />
           </div>
           <div className="flex justify-between w-full">
