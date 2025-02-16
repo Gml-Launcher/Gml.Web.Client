@@ -16,6 +16,14 @@ import websiteLogo from '@/assets/logos/website.svg';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
 import { AuthenticationType } from '@/shared/enums';
 import { Switch } from '@/shared/ui/switch';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
+import { Input } from '@/shared/ui/input';
+import { FormLabel } from '@/shared/ui/form';
 
 export function NewsProviderDialog() {
   const [open, setOpen] = useState(false);
@@ -33,31 +41,33 @@ export function NewsProviderDialog() {
     {
       name: 'Вконтакте',
       logo: vkLogo,
+      enabled: false,
       description: 'Импорт новостей из социальной сети Вконтакте',
+      descriptionToken: 'Введите токен VK',
+      tokenGenerateUrl:
+        'https://oauth.vk.com/authorize?client_id=6121396&scope=327680&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1',
       instructionLink: '/instructions/vk',
     },
     {
       name: 'Telegram',
       logo: telegramLogo,
+      enabled: true,
       description: 'Импорт новостей из социальной сети Telegram',
+      descriptionToken: 'Введите токен Telegram бота',
       instructionLink: '/instructions/facebook',
     },
   ];
 
-  const newsContent = [
-    {
-      name: 'Вконтакте',
-      logo: vkLogo,
-      description: 'Импорт новостей из социальной сети Вконтакте',
-      instructionLink: '/instructions/vk',
-    },
-    {
-      name: 'Telegram',
-      logo: telegramLogo,
-      description: 'Импорт новостей из социальной сети Telegram',
-      instructionLink: '/instructions/facebook',
-    },
-  ];
+  const enableNewsProvider = (social: {
+    name: string;
+    logo: any;
+    enabled: boolean;
+    description: string;
+    instructionLink: string;
+  }) => {
+    social.enabled = true;
+    alert(social.enabled);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -97,7 +107,38 @@ export function NewsProviderDialog() {
                           <Link className="text-sm" target="_blank" href={social.instructionLink}>
                             Инструкция
                           </Link>
-                          <Switch />
+                          <DropdownMenu>
+                            <DropdownMenuTrigger>
+                              <Switch checked={social.enabled} />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-[300px]">
+                              <DropdownMenuLabel>Настройка</DropdownMenuLabel>
+                              <div className="p-1">
+                                <div className="flex justify-between items-center mb-1">
+                                  <FormLabel>Access Token</FormLabel>
+                                  {social.tokenGenerateUrl && (
+                                    <div className="flex items-center">
+                                      <Link
+                                        href={social.tokenGenerateUrl}
+                                        target="_blank"
+                                        className="underline text-sm"
+                                      >
+                                        Получить токен
+                                      </Link>
+                                    </div>
+                                  )}
+                                </div>
+                                <Input type="text" placeholder={social.descriptionToken} />
+                                <Button
+                                  variant="secondary"
+                                  className="w-full mt-2"
+                                  onClick={() => enableNewsProvider(social)}
+                                >
+                                  Включить
+                                </Button>
+                              </div>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </div>
                       </CardFooter>
                     </Card>
