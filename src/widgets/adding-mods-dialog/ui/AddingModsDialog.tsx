@@ -27,11 +27,12 @@ import { AddingModsSelectVersionDialog } from '@/widgets/adding-mods-select-vers
 import modrinth from '@/assets/logos/modrinth.png';
 import curseforge from '@/assets/logos/curseforge.ico';
 import { formatNumber } from '@/shared/lib/utils';
+import { ModType } from '@/shared/enums';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
   modDirection: string;
-  modType: number;
+  modType: ModType;
 }
 
 export function AddingModsDialog({ profile, modDirection, modType }: ProfileModDialog) {
@@ -78,6 +79,19 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
             Мастер добавления модификаций
             <Badge className="cursor-pointer text-sm bg-blue-500 text-white hover:bg-opacity-100 hover:bg-blue-500">
               {modDirection}
+            </Badge>
+            <Badge className="cursor-pointer h-7 text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+              {modType === 1 ? (
+                <>
+                  <Image src={modrinth} alt="Modrinth" className="w-4 h-4 mr-2" />
+                  Modrinth
+                </>
+              ) : (
+                <>
+                  <Image src={curseforge} alt="Curseforge" className="w-4 h-4 mr-2" />
+                  CurseForge
+                </>
+              )}
             </Badge>
             <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               Minecraft: {profile?.minecraftVersion}
@@ -135,7 +149,7 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
                       <p className="text-muted-foreground mb-3">{mod?.description}</p>
                       <AddingModsSelectVersionDialog
                         profile={profile}
-                        modType={modDirection}
+                        modDirection={modDirection}
                         mod={mod}
                       />
                     </div>
@@ -143,7 +157,9 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
                 </Card>
               ))}
 
-              <div ref={ref} style={{ height: '10px' }} className="bg-red-500" />
+              <div ref={ref} className="flex items-center justify-center p-5">
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">

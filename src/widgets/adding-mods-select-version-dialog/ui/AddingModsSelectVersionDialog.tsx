@@ -23,19 +23,21 @@ import { ModsDependencyTooltip } from '@/widgets/mods-dependency-tooltip';
 import { useLoadProfileModsByUrl } from '@/shared/hooks';
 import { Icons } from '@/shared/ui/icons';
 import { formatNumber, timeAgo } from '@/shared/lib/utils';
+import { ModType } from '@/shared/enums';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
-  modType?: string;
+  modDirection?: string;
   mod?: ModEntity;
 }
 
-export function AddingModsSelectVersionDialog({ profile, modType, mod }: ProfileModDialog) {
+export function AddingModsSelectVersionDialog({ profile, modDirection, mod }: ProfileModDialog) {
   const loadModsMutate = useLoadProfileModsByUrl();
 
   const { data: modInfo } = useModInfo({
     profileName: profile?.profileName ?? '',
     modId: mod?.id ?? '',
+    modType: mod?.type ?? ModType.CURSE_FORGE,
   });
 
   const loadFilesByUrl = async (files: string[]) => {
@@ -43,7 +45,7 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
       .mutateAsync({
         profileName: profile?.profileName ?? '',
         links: files,
-        isOptional: modType === 'optional',
+        isOptional: modDirection === 'optional',
       })
       .then(() => {});
   };

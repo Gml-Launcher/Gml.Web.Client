@@ -7,6 +7,7 @@ import { ModDetailsEntity } from '@/shared/api/contracts/mods/schemas';
 import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
 import { profileKeys } from '@/shared/hooks/useProfiles';
 import { TPutModOptionalRequest } from '@/shared/api/contracts/mods/requests';
+import { ModType } from '@/shared/enums';
 
 export const modsKeys = {
   all: ['mods'] as const,
@@ -64,10 +65,18 @@ export const usePutModDetails = () => {
   });
 };
 
-export const useModInfo = ({ profileName, modId }: { profileName: string; modId: string }) => {
+export const useModInfo = ({
+  profileName,
+  modId,
+  modType,
+}: {
+  profileName: string;
+  modType: ModType;
+  modId: string;
+}) => {
   return useQuery({
     queryKey: ['versions', profileName, modId],
-    queryFn: () => modService.getModInfo({ profileName, modId }),
+    queryFn: () => modService.getModInfo({ profileName, modId, modType }),
     select: (data) => data.data.data,
   });
 };
@@ -93,7 +102,7 @@ export const useModInfo = ({ profileName, modId }: { profileName: string; modId:
 export const useSearchMods = (
   profileName: string,
   search: string,
-  modType: number,
+  modType: ModType,
   limit: number = 20,
 ) => {
   return useInfiniteQuery({

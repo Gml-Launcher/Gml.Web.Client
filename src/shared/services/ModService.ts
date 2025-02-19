@@ -10,6 +10,7 @@ import {
   TPutModOptionalResponse,
 } from '@/shared/api/contracts/mods/requests';
 import { $api } from '@/services/api.service';
+import { ModType } from '@/shared/enums';
 
 class ModService {
   private BASE_URL = '/profiles';
@@ -27,14 +28,16 @@ class ModService {
   async getModInfo({
     profileName,
     modId,
+    modType,
     signal,
   }: {
     profileName: string;
     modId: string;
+    modType: ModType;
     signal?: GenericAbortSignal;
   }): Promise<AxiosResponse<TGetModInfoResponse>> {
     return await $api.get<TGetModInfoResponse>(
-      `${this.BASE_URL}/${profileName}/mods/info?modId=${modId}`,
+      `${this.BASE_URL}/${profileName}/mods/info?modId=${modId}&modType=${modType}`,
       {
         signal,
       },
@@ -71,7 +74,7 @@ class ModService {
   }: {
     profileName: string;
     modName: string;
-    modType: number;
+    modType: ModType;
     limit: number;
     offset: number;
   }): Promise<AxiosResponse<TGetSearchModOptionalListResponse>> {
