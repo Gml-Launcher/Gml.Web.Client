@@ -128,7 +128,8 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 className="w-[300px] hidden"
               />
             </div>
-            <AddingModsDialog profile={profile} modType="mods" />
+            <AddingModsDialog profile={profile} modDirection="mods" modType={1} />
+            <AddingModsDialog profile={profile} modDirection="mods" modType={2} />
           </div>
         </div>
         <div className="flex flex-col gap-3 w-full">
@@ -162,7 +163,8 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 className="w-[300px] hidden"
               />
             </div>
-            <AddingModsDialog profile={profile} modType="optional" />
+            <AddingModsDialog profile={profile} modDirection="optional" modType={1} />
+            <AddingModsDialog profile={profile} modDirection="optional" modType={2} />
           </div>
         </div>
       </div>

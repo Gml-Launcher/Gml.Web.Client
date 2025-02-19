@@ -25,14 +25,16 @@ import { SearchFormSchemaType } from '@/widgets/adding-mods-dialog/lib/static';
 import { Card } from '@/shared/ui/card';
 import { AddingModsSelectVersionDialog } from '@/widgets/adding-mods-select-version-dialog';
 import modrinth from '@/assets/logos/modrinth.png';
+import curseforge from '@/assets/logos/curseforge.ico';
 import { formatNumber } from '@/shared/lib/utils';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
-  modType?: string;
+  modDirection: string;
+  modType: number;
 }
 
-export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
+export function AddingModsDialog({ profile, modDirection, modType }: ProfileModDialog) {
   const form = useForm<SearchFormSchemaType>();
   const [modName, setModName] = useState<string>('');
   const { ref, inView } = useInView();
@@ -43,7 +45,7 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
     error,
     fetchNextPage,
     refetch,
-  } = useSearchMods(profile?.profileName ?? '', modName);
+  } = useSearchMods(profile?.profileName ?? '', modName, modType);
 
   const onSubmit: SubmitHandler<SearchFormSchemaType> = async (content: SearchFormSchemaType) => {
     setModName(content.name);
@@ -61,7 +63,11 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
     <Drawer>
       <DrawerTrigger className="flex items-start">
         <Button variant="secondary" className="w-max gap-2">
-          <Image src={modrinth} alt="Modrinth" className="w-4 h-4" />
+          {modType === 1 ? (
+            <Image src={modrinth} alt="Modrinth" className="w-4 h-4" />
+          ) : (
+            <Image src={curseforge} alt="Curseforge" className="w-4 h-4" />
+          )}
           Добавить
           <PlusIcon width={16} height={16} />
         </Button>
@@ -71,7 +77,7 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
           <DrawerTitle className="gap-2 flex items-center flex-wrap">
             Мастер добавления модификаций
             <Badge className="cursor-pointer text-sm bg-blue-500 text-white hover:bg-opacity-100 hover:bg-blue-500">
-              {modType}
+              {modDirection}
             </Badge>
             <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               Minecraft: {profile?.minecraftVersion}
@@ -129,7 +135,7 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
                       <p className="text-muted-foreground mb-3">{mod?.description}</p>
                       <AddingModsSelectVersionDialog
                         profile={profile}
-                        modType={modType}
+                        modType={modDirection}
                         mod={mod}
                       />
                     </div>

@@ -90,7 +90,12 @@ export const useModInfo = ({ profileName, modId }: { profileName: string; modId:
 //   });
 // };
 
-export const useSearchMods = (profileName: string, search: string, limit: number = 20) => {
+export const useSearchMods = (
+  profileName: string,
+  search: string,
+  modType: number,
+  limit: number = 20,
+) => {
   return useInfiniteQuery({
     queryKey: playersKeys.all,
     initialPageParam: 0,
@@ -99,6 +104,7 @@ export const useSearchMods = (profileName: string, search: string, limit: number
         limit,
         offset: pageParam,
         modName: search,
+        modType: modType,
         profileName,
       }),
     select: (data) => data.pages.flatMap((page) => page.data.data),

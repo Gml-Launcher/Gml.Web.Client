@@ -65,16 +65,18 @@ class ModService {
   async getAvailableModsList({
     profileName,
     modName,
+    modType,
     limit,
     offset,
   }: {
     profileName: string;
     modName: string;
+    modType: number;
     limit: number;
     offset: number;
   }): Promise<AxiosResponse<TGetSearchModOptionalListResponse>> {
     return await $api.get<TGetSearchModOptionalListResponse>(
-      `${this.BASE_URL}/${profileName}/mods/search?ModName=${modName}&Offset=${offset}&Take=${limit}`,
+      `${this.BASE_URL}/${profileName}/mods/search?ModName=${modName}&Offset=${offset}&Take=${limit}&modType=${modType}`,
     );
   }
 }
