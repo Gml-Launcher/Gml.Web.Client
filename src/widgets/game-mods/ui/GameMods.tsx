@@ -12,7 +12,7 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { useLoadProfileMods, useRemoveProfileMod } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
-import { EntityState } from '@/shared/enums';
+import { EntityState, ModType } from '@/shared/enums';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { GameModItem } from '@/widgets/game-mods/ui/GameModItem';
 
@@ -128,8 +128,8 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 className="w-[300px] hidden"
               />
             </div>
-            <AddingModsDialog profile={profile} modDirection="mods" modType={1} />
-            <AddingModsDialog profile={profile} modDirection="mods" modType={2} />
+            <AddingModsDialog profile={profile} modDirection="mods" modType={ModType.MODRINTH} />
+            <AddingModsDialog profile={profile} modDirection="mods" modType={ModType.CURSE_FORGE} />
           </div>
         </div>
         <div className="flex flex-col gap-3 w-full">
@@ -163,8 +163,16 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 className="w-[300px] hidden"
               />
             </div>
-            <AddingModsDialog profile={profile} modDirection="optional" modType={1} />
-            <AddingModsDialog profile={profile} modDirection="optional" modType={2} />
+            <AddingModsDialog
+              profile={profile}
+              modDirection="optional"
+              modType={ModType.MODRINTH}
+            />
+            <AddingModsDialog
+              profile={profile}
+              modDirection="optional"
+              modType={ModType.CURSE_FORGE}
+            />
           </div>
         </div>
       </div>

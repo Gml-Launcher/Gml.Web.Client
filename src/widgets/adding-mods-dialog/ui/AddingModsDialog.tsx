@@ -51,7 +51,6 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
   const onSubmit: SubmitHandler<SearchFormSchemaType> = async (content: SearchFormSchemaType) => {
     setModName(content.name);
     refetch();
-    refetch();
   };
 
   useEffect(() => {
