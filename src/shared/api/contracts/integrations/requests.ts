@@ -4,6 +4,7 @@ import {
   DiscordBaseEntity,
   LauncherActualVersionBaseEntity,
   LauncherBuildsBaseEntity,
+  NewsIntegrationBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
 } from '@/shared/api/contracts';
@@ -20,6 +21,12 @@ export type TGetAuthIntegrationsResponse = ResponseBaseEntity & {
 export type TGetActiveAuthIntegrationsRequest = {};
 export type TGetActiveAuthIntegrationsResponse = ResponseBaseEntity & {
   data: AuthIntegrationBaseEntity;
+};
+
+// Получение новостных провайдеров
+export type TGetNewsProvidersIntegrationsRequest = {};
+export type TGetNewsProvidersIntegrationsResponse = ResponseBaseEntity & {
+  data: NewsIntegrationBaseEntity[];
 };
 
 // Получение списка веток

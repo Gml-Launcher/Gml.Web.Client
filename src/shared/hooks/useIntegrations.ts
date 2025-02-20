@@ -64,6 +64,14 @@ export const useActiveAuthIntegrations = () => {
   });
 };
 
+export const useNewsProviders = () => {
+  return useQuery({
+    queryKey: integrationsKeys.auth(),
+    queryFn: () => integrationService.getNewsIntegration(),
+    select: ({ data }) => data,
+  });
+};
+
 export const useEditIntegration = () => {
   const queryClient = useQueryClient();
 

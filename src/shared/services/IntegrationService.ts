@@ -14,6 +14,8 @@ import {
   TGetLauncherBuildPlatformsResponse,
   TGetLauncherBuildVersionsResponse,
   TGetLauncherGithubVersionsResponse,
+  TGetNewsProvidersIntegrationsRequest,
+  TGetNewsProvidersIntegrationsResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
@@ -31,6 +33,7 @@ import {
 class IntegrationService {
   private BASE_URL = '/integrations';
   private BASE_URL_AUTH = `${this.BASE_URL}/auth`;
+  private BASE_URL_NEWS = `${this.BASE_URL}/news`;
   private BASE_URL_GITHUB = `${this.BASE_URL}/github`;
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
   private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
@@ -51,6 +54,15 @@ class IntegrationService {
       TGetActiveAuthIntegrationsRequest,
       AxiosResponse<TGetActiveAuthIntegrationsResponse>
     >(`${this.BASE_URL_AUTH}/active`);
+
+    return data;
+  }
+
+  async getNewsIntegration(): Promise<TGetNewsProvidersIntegrationsResponse> {
+    const { data } = await $api.get<
+      TGetNewsProvidersIntegrationsRequest,
+      AxiosResponse<TGetNewsProvidersIntegrationsResponse>
+    >(`${this.BASE_URL_NEWS}/providers`);
 
     return data;
   }
