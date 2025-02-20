@@ -14,6 +14,7 @@ export interface SocialNetwork {
   name: string;
   logo: any;
   enabled: boolean;
+  token: string;
   description: string;
   descriptionToken: string;
   tokenGenerateUrl?: string;

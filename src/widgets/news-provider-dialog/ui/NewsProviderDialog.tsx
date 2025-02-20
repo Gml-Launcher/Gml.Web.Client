@@ -37,6 +37,7 @@ export function NewsProviderDialog() {
       name: 'Вконтакте',
       logo: vkLogo,
       enabled: false,
+      token: 'weafawefawef',
       description: 'Импорт новостей из социальной сети Вконтакте',
       descriptionToken: 'Введите токен VK',
       tokenGenerateUrl:
@@ -47,15 +48,12 @@ export function NewsProviderDialog() {
       name: 'Telegram',
       logo: telegramLogo,
       enabled: false,
+      token: 'weafawefawef',
       description: 'Импорт новостей из социальной сети Telegram',
       descriptionToken: 'Введите токен Telegram бота',
       instructionLink: '/instructions/facebook',
     },
   ];
-
-  const enableNewsProvider = (social: SocialNetwork) => {
-    social.enabled = true;
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
