@@ -99,7 +99,7 @@ export const useColumns = (props: UseColumnsProps) => {
       ),
     }),
     columnsHelper.accessor('loader', {
-      size: 50,
+      size: 70,
       enableSorting: false,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.LOADER_LAUNCHER} />
