@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { DatabaseIcon, ImagesIcon, UsersIcon } from 'lucide-react';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import Image from 'next/image';
 
 import { EditSettingsPlatformSchema, EditSettingsPlatformSchemaType } from '../lib/zod';
 import { extractProtocol } from '../lib/utils';
@@ -20,6 +21,7 @@ import { Input } from '@/shared/ui/input';
 import { enumValues } from '@/shared/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { Skeleton } from '@/shared/ui/skeleton';
+import curseforge from '@/assets/logos/curseforge.ico';
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -30,6 +32,7 @@ export const EditSettingsPlatformForm = () => {
     values: {
       registrationIsEnabled: platform?.registrationIsEnabled || false,
       storageType: platform?.storageType || StorageType.STORAGE_TYPE_LOCALSTORAGE,
+      curseForgeKey: platform?.curseForgeKey || '',
       storageHost: platform?.storageHost || '',
       storageLogin: platform?.storageLogin || '',
       storagePassword: '',
@@ -54,7 +57,7 @@ export const EditSettingsPlatformForm = () => {
   return (
     <>
       {isLoading || isPending ? (
-        <Skeleton className="w-full h-[400px]" />
+        <Skeleton className="w-[800px] h-[400px]" />
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -265,6 +268,42 @@ export const EditSettingsPlatformForm = () => {
                   </div>
                 </div>
               )}
+
+              <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                <div className="flex flex-col gap-y-1 w-1/2">
+                  <div className="flex flex-row items-center gap-x-1 mb-2">
+                    <Image src={curseforge} alt="Curseforge" className="w-4 h-4" />
+                    <h6 className="text-sm font-bold">CurseForge Api Key</h6>
+                  </div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    Используйте CurseForge Api Key для автоматической загрузки и обновления модов из
+                    CurseForge.
+                  </p>
+                </div>
+                <div className="flex flex-col w-1/2">
+                  <FormField
+                    control={form.control}
+                    name="curseForgeKey"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input type="text" placeholder="Введите API Key" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        <Button variant="link" asChild className="p-0">
+                          <a
+                            href="https://console.curseforge.com/?#/api-keys"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Получить Api Key
+                          </a>
+                        </Button>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
               <div className="flex justify-end">
                 <Button disabled={isPending || form.formState.disabled || !form.formState.isDirty}>

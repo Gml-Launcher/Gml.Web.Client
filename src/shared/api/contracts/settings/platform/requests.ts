@@ -12,6 +12,7 @@ export type TGetSettingsPlatformResponse = ResponseBaseEntity & {
 export type TPutSettingsPlatformRequest = {
   registrationIsEnabled: boolean;
   storageType: StorageType;
+  curseForgeKey: string;
   storageHost: string;
   storageLogin: string;
   storagePassword: string;
