@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowDownIcon, DownloadIcon, FileIcon } from '@radix-ui/react-icons';
 import { FilesIcon } from 'lucide-react';
 
@@ -32,6 +32,7 @@ interface ProfileModDialog {
 }
 
 export function AddingModsSelectVersionDialog({ profile, modDirection, mod }: ProfileModDialog) {
+  const [open, setOpen] = useState(false);
   const loadModsMutate = useLoadProfileModsByUrl();
 
   const { data: modInfo } = useModInfo({
@@ -47,11 +48,13 @@ export function AddingModsSelectVersionDialog({ profile, modDirection, mod }: Pr
         links: files,
         isOptional: modDirection === 'optional',
       })
-      .then(() => {});
+      .then(() => {
+        setOpen(false);
+      });
   };
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger className="w-max mt-auto">
         <Button variant="secondary" className="w-max gap-2">
           Выбрать

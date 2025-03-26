@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DownloadIcon, FileIcon, HeartFilledIcon, PlusIcon } from '@radix-ui/react-icons';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
+import { debounce } from 'lodash';
 
 import { Button } from '@/shared/ui/button';
 import {
@@ -37,8 +38,16 @@ interface ProfileModDialog {
 
 export function AddingModsDialog({ profile, modDirection, modType }: ProfileModDialog) {
   const form = useForm<SearchFormSchemaType>();
-  const [modName, setModName] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { ref, inView } = useInView();
+
+  // Используем useCallback для мемоизации функции поиска
+  const handleSearch = useCallback(
+    debounce((query: string) => {
+      setSearchQuery(query);
+    }, 300),
+    [],
+  );
 
   const {
     data: searchMods,
@@ -46,18 +55,30 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
     error,
     fetchNextPage,
     refetch,
-  } = useSearchMods(profile?.profileName ?? '', modName, modType);
+  } = useSearchMods(profile?.profileName ?? '', searchQuery, modType);
 
-  const onSubmit: SubmitHandler<SearchFormSchemaType> = async (content: SearchFormSchemaType) => {
-    setModName(content.name);
-    refetch();
-  };
+  // Эффект для автоматического поиска при изменении searchQuery
+  useEffect(() => {
+    if (searchQuery) {
+      refetch();
+    }
+  }, [searchQuery, refetch]);
 
+  // Эффект для пагинации
   useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
+
+  const onSubmit: SubmitHandler<SearchFormSchemaType> = (content: SearchFormSchemaType) => {
+    handleSearch(content.name);
+  };
+
+  // Добавляем обработчик изменений инпута для живого поиска
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleSearch(e.target.value);
+  };
 
   return (
     <Drawer>
@@ -106,15 +127,18 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
             <form className="flex gap-3 items-end mt-3" onSubmit={form.handleSubmit(onSubmit)}>
               <FormItem className="w-full">
                 <FormControl>
-                  <Input placeholder="Начните искать мод" {...form.register('name')} />
+                  <Input
+                    placeholder="Начните искать мод"
+                    {...form.register('name')}
+                    onChange={(e) => {
+                      form.register('name').onChange(e); // Для react-hook-form
+                      handleInputChange(e); // Для живого поиска
+                    }}
+                  />
                 </FormControl>
               </FormItem>
 
-              <Button
-                type="submit"
-                className="w-fit ml-auto"
-                disabled={status === 'pending' || !form.formState.isDirty}
-              >
+              <Button type="submit" className="w-fit ml-auto" disabled={status === 'pending'}>
                 {status === 'pending' && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Поиск
               </Button>

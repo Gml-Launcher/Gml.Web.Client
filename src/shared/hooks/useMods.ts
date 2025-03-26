@@ -2,7 +2,6 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { toast } from 'sonner';
 
 import { modService } from '@/shared/services';
-import { playersKeys } from '@/shared/hooks/usePlayers';
 import { ModDetailsEntity } from '@/shared/api/contracts/mods/schemas';
 import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
 import { profileKeys } from '@/shared/hooks/useProfiles';
@@ -106,7 +105,7 @@ export const useSearchMods = (
   limit: number = 20,
 ) => {
   return useInfiniteQuery({
-    queryKey: playersKeys.all,
+    queryKey: ['mods', 'search', profileName, modType],
     initialPageParam: 0,
     queryFn: ({ pageParam }) =>
       modService.getAvailableModsList({
