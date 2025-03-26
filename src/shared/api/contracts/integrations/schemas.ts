@@ -10,6 +10,7 @@ export type AuthIntegrationBaseEntity = {
 export type NewsIntegrationBaseEntity = {
   type: NewsTypeEnum;
   url: string | null;
+  name: string;
 };
 
 export type BranchBaseEntity = {

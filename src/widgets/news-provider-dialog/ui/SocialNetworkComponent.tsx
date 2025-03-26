@@ -35,7 +35,7 @@ export function SocialNetworkComponent({
   providers: NewsIntegrationBaseEntity[];
 }) {
   const [enabled, setEnabled] = useState(
-    providers.some((provider) => provider.type === social.type),
+    Array.isArray(providers) && providers.some((provider) => provider.type === social.type),
   );
   const onOpenChange = () => setEnabled((prev) => !prev);
 

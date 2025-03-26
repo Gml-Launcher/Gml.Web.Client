@@ -9,7 +9,8 @@ import {
   TextureServiceBaseEntity,
 } from '@/shared/api/contracts';
 import { TexturesServiceType } from '@/shared/enums';
-import { ResponseBaseEntity } from '@/shared/api/schemas'; // Получение списка серверов для авторизации
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { NewsTypeEnum } from '@/shared/enums/news-type'; // Получение списка серверов для авторизации
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};
@@ -26,6 +27,12 @@ export type TGetActiveAuthIntegrationsResponse = ResponseBaseEntity & {
 // Получение новостных провайдеров
 export type TGetNewsProvidersIntegrationsRequest = {};
 export type TGetNewsProvidersIntegrationsResponse = ResponseBaseEntity & {
+  data: NewsIntegrationBaseEntity[];
+};
+
+// Удаление новостного провайдера
+export type TDeleteNewsProvidersIntegrationsRequest = {};
+export type TDeleteNewsProvidersIntegrationsResponse = ResponseBaseEntity & {
   data: NewsIntegrationBaseEntity[];
 };
 
@@ -63,6 +70,13 @@ export type TPostAuthIntegrationsRequest = {
   endpoint: string;
 };
 export type TPostAuthIntegrationsResponse = ResponseBaseEntity & {};
+
+// Добавление новостного провайдера
+export type TPostNewsIntegrationsRequest = {
+  url: string;
+  type: NewsTypeEnum;
+};
+export type TPostNewsIntegrationsResponse = ResponseBaseEntity & {};
 
 // Получение активного сервиса авторизации
 export type TGetSentryConnectRequest = {};

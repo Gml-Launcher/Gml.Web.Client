@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { $api } from '@/services/api.service';
 import {
+  TDeleteNewsProvidersIntegrationsResponse,
   TGetActiveAuthIntegrationsRequest,
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
@@ -22,6 +23,8 @@ import {
   TPostAuthIntegrationsResponse,
   TPostLauncherUploadRequest,
   TPostLauncherUploadResponse,
+  TPostNewsIntegrationsRequest,
+  TPostNewsIntegrationsResponse,
   TPutConnectDiscordRequest,
   TPutConnectDiscordResponse,
   TPutConnectTexturesRequest,
@@ -29,6 +32,7 @@ import {
   TPutSentryConnectRequest,
   TPutSentryConnectResponse,
 } from '@/shared/api/contracts';
+import { NewsTypeEnum } from '@/shared/enums/news-type';
 
 class IntegrationService {
   private BASE_URL = '/integrations';
@@ -63,6 +67,27 @@ class IntegrationService {
       TGetNewsProvidersIntegrationsRequest,
       AxiosResponse<TGetNewsProvidersIntegrationsResponse>
     >(`${this.BASE_URL_NEWS}/providers`);
+
+    return data;
+  }
+
+  async deleteNewsProvider({
+    type,
+  }: {
+    type: NewsTypeEnum;
+  }): Promise<AxiosResponse<TDeleteNewsProvidersIntegrationsResponse>> {
+    return await $api.delete<TDeleteNewsProvidersIntegrationsResponse>(
+      `${this.BASE_URL_NEWS}/${type}`,
+    );
+  }
+
+  async postNewsIntegration(
+    body: TPostNewsIntegrationsRequest,
+  ): Promise<TPostNewsIntegrationsResponse> {
+    const { data } = await $api.post<
+      TPostNewsIntegrationsRequest,
+      AxiosResponse<TPostNewsIntegrationsResponse>
+    >(`${this.BASE_URL_NEWS}`, body);
 
     return data;
   }
