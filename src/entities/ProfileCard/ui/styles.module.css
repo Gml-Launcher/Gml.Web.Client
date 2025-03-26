@@ -1,47 +1,47 @@
 .profile-card {
-  @apply flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[230px] bg-no-repeat bg-cover bg-center;
+    @apply flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[230px] bg-no-repeat bg-cover bg-center;
 }
 
 .profile-card__edit-button {
-  @apply flex justify-end w-full;
+    @apply flex justify-end w-full;
 }
 
 .profile-card__edit-button-full {
-  @apply rounded-full;
+    @apply gap-3 rounded-full;
 }
 
 .profile-card__info {
-  @apply flex flex-col gap-3;
+    @apply flex flex-col gap-3;
 }
 
 .profile-card__info-state {
-  @apply flex items-center gap-2;
+    @apply flex items-center gap-2;
 }
 
 .profile-card__info-icon-wrapper {
-  @apply flex gap-x-5 items-center;
+    @apply flex gap-x-5 items-center;
 }
 
 .profile-card__info-icon {
-  @apply h-16 w-16 min-w-16 min-h-16 object-cover rounded;
+    @apply h-16 w-16 min-w-16 min-h-16 object-cover rounded;
 }
 
 .profile-card__info-text {
-  @apply flex flex-col gap-y-1 w-[calc(100%-20px-64px)];
+    @apply flex flex-col gap-y-1 w-[calc(100%-20px-64px)];
 }
 
 .profile-card__info-name {
-  @apply truncate font-extrabold text-[28px];
+    @apply truncate font-extrabold text-[28px];
 }
 
 .profile-card__info-version {
-  @apply flex gap-2;
+    @apply flex gap-2;
 }
 
 .profile-card__info-version-minecraft {
-  @apply truncate font-bold;
+    @apply truncate font-bold;
 }
 
 .profile-card__info-version-launch {
-  @apply truncate font-medium opacity-55;
+    @apply truncate font-medium opacity-55;
 }

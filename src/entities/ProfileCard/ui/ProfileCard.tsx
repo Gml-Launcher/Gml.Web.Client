@@ -26,7 +26,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog';
-import defaultProfileIcon from '@/assets/logos/minecraft.png';
 import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 
 interface ProfileCardParams {
@@ -48,6 +47,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     const formUpdate = new FormData();
 
     formUpdate.append('name', profile?.profileName);
+    formUpdate.append('displayName', profile?.displayName);
     formUpdate.append('originalName', profile?.profileName);
     formUpdate.append('description', profile?.description);
     formUpdate.append('enabled', profile?.isEnabled.toString());
@@ -64,7 +64,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
 
     await mutateAsync(formUpdate);
 
-    // TODO: исправить кастыль
+    // TODO: исправить костыль
     window.location.reload();
   };
 
@@ -84,12 +84,9 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
       <div className={classes['profile-card__edit-button']}>
         <Dialog>
           <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className={classes['profile-card__edit-button-full']}
-            >
-              <Edit2Icon size={16} />
+            <Button variant="outline" className={classes['profile-card__edit-button-full']}>
+              <Edit2Icon size={14} />
+              Оформление
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[625px]">
@@ -102,12 +99,38 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-3">
                   <h6 className="text-sm font-bold">Иконка</h6>
-                  <InputFile fileTypes={['PNG']} {...form.register('icon')} />
+                  {form.watch('icon') && form.watch('icon')[0] ? (
+                    <div className="mt-2">
+                      <Image
+                        alt="Preview Icon"
+                        src={URL.createObjectURL(form.watch('icon')[0])}
+                        width={48}
+                        height={48}
+                        className="rounded-md"
+                      />
+                    </div>
+                  ) : (
+                    <InputFile fileTypes={['PNG']} {...form.register('icon')} />
+                  )}
                   {form.formState.errors.icon && (
                     <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
                   )}
+
                   <h6 className="text-sm font-bold">Задний фон</h6>
-                  <InputFile fileTypes={['PNG']} {...form.register('background')} />
+                  {form.watch('background') && form.watch('background')[0] ? (
+                    <div className="mt-2">
+                      <Image
+                        alt="Background Preview"
+                        src={URL.createObjectURL(form.watch('background')[0])}
+                        layout="responsive"
+                        width={300}
+                        height={150}
+                        className="rounded-md"
+                      />
+                    </div>
+                  ) : (
+                    <InputFile fileTypes={['PNG']} {...form.register('background')} />
+                  )}
                   {form.formState.errors.background && (
                     <FormMessage>
                       {form.formState.errors.background.message?.toString()}
@@ -134,17 +157,17 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
           <ClientState state={state || profile.state} />
         </div>
         <div className={classes['profile-card__info-icon-wrapper']}>
-          <Image
-            className={classes['profile-card__info-icon']}
-            src={
-              profile.iconBase64
-                ? `data:text/plain;base64,${profile.iconBase64}`
-                : defaultProfileIcon
-            }
-            alt={profile.profileName}
-            width={64}
-            height={64}
-          />
+          {profile.iconBase64 ? (
+            <Image
+              className="min-w-12 min-h-12 h-12 w-12"
+              src={`data:image/png;base64,${profile.iconBase64}`}
+              alt={profile.profileName || 'Profile Icon'}
+              width={48}
+              height={48}
+            />
+          ) : (
+            <div className="min-w-12 min-h-12 h-12 w-12 bg-gray-200/10 rounded-xl animate-pulse" />
+          )}
 
           {/* Текст профиля */}
           <div className={classes['profile-card__info-text']}>

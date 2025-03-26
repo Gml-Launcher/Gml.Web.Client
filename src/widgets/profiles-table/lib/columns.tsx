@@ -16,7 +16,6 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { Icons } from '@/shared/ui/icons';
 import { getFormatDate } from '@/shared/lib/utils';
 import { profileKeys } from '@/shared/hooks';
-import defaultProfileIcon from '@/assets/logos/minecraft.png';
 import { convertApiGameLoaderImage } from '@/shared/converters';
 
 enum ColumnHeader {
@@ -74,24 +73,30 @@ export const useColumns = (props: UseColumnsProps) => {
     columnsHelper.accessor('iconBase64', {
       size: 64,
       header: ColumnHeader.ICON,
-      cell: ({ row }) => (
-        <Image
-          className="min-w-12 min-h-12 h-12 w-12"
-          src={
-            row.original.iconBase64
-              ? `data:text/plain;base64,${row.original.iconBase64}`
-              : defaultProfileIcon.src
-          }
-          alt={row.original.name}
-          width={48}
-          height={48}
-        />
-      ),
+      cell: ({ row }) =>
+        row.original.iconBase64 ? (
+          <Image
+            className="min-w-12 min-h-12 h-12 w-12"
+            src={`data:image/png;base64,${row.original.iconBase64}`}
+            alt={row.original.name || 'Profile Icon'}
+            width={48}
+            height={48}
+          />
+        ) : (
+          <div className="min-w-12 min-h-12 h-12 w-12 bg-gray-200/10 rounded-xl animate-pulse" />
+        ),
     }),
-    columnsHelper.accessor('name', {
-      size: 500,
+
+    columnsHelper.display({
+      size: 400,
+      id: 'name',
       header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
-      cell: ({ getValue }) => getValue(),
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-muted-foreground">{row.original.name}</p>
+          <h3>{row.original.displayName}</h3>
+        </div>
+      ),
     }),
     columnsHelper.accessor('loader', {
       size: 50,
