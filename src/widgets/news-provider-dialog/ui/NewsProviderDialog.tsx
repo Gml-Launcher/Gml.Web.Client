@@ -34,6 +34,14 @@ import { enumValues } from '@/shared/lib/utils';
 import { Icons } from '@/shared/ui/icons';
 import { NewsListComponent } from '@/widgets/news-provider-dialog/ui/NewsListComponent';
 
+export const socialNetworkLogos: Record<NewsTypeEnum, StaticImageData> = {
+  [NewsTypeEnum.VK]: vkLogo,
+  [NewsTypeEnum.UnicoreCMS]: unicoreLogo,
+  [NewsTypeEnum.Azuriom]: azuriomLogo,
+  [NewsTypeEnum.Telegram]: telegramLogo,
+  [NewsTypeEnum.Custom]: websiteLogo,
+};
+
 export function NewsProviderDialog() {
   const [open, setOpen] = useState(false);
   const onOpenChange = () => setOpen((prev) => !prev);
@@ -70,14 +78,6 @@ export function NewsProviderDialog() {
     await getNewsProvidersRefetch();
   }
 
-  const socialNetworkLogos: Record<NewsTypeEnum, StaticImageData> = {
-    [NewsTypeEnum.VK]: vkLogo,
-    [NewsTypeEnum.UnicoreCMS]: unicoreLogo,
-    [NewsTypeEnum.Azuriom]: azuriomLogo,
-    [NewsTypeEnum.Telegram]: telegramLogo,
-    [NewsTypeEnum.Custom]: websiteLogo,
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -92,7 +92,7 @@ export function NewsProviderDialog() {
           <Tabs defaultValue="connect">
             <TabsList className="mb-2">
               <TabsTrigger value="connect">Подключение</TabsTrigger>
-              <TabsTrigger value="view">Предпросмотр</TabsTrigger>
+              <TabsTrigger value="view">Предпросмотр новостей</TabsTrigger>
             </TabsList>
             <TabsContent value="connect">
               <div className="flex gap-12">

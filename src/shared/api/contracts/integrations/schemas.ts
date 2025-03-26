@@ -13,6 +13,13 @@ export type NewsIntegrationBaseEntity = {
   name: string;
 };
 
+export type NewsEntity = {
+  title: string;
+  content: string;
+  date: string;
+  type: NewsTypeEnum;
+};
+
 export type BranchBaseEntity = {
   version: string;
 };

@@ -13,6 +13,7 @@ export type TPutSettingsPlatformRequest = {
   registrationIsEnabled: boolean;
   storageType: StorageType;
   curseForgeKey: string;
+  vkKey: string;
   storageHost: string;
   storageLogin: string;
   storagePassword: string;

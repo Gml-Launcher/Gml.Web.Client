@@ -17,6 +17,8 @@ import {
   TGetLauncherGithubVersionsResponse,
   TGetNewsProvidersIntegrationsRequest,
   TGetNewsProvidersIntegrationsResponse,
+  TGetNewsRequest,
+  TGetNewsResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
@@ -67,6 +69,14 @@ class IntegrationService {
       TGetNewsProvidersIntegrationsRequest,
       AxiosResponse<TGetNewsProvidersIntegrationsResponse>
     >(`${this.BASE_URL_NEWS}/providers`);
+
+    return data;
+  }
+
+  async getNews(): Promise<TGetNewsResponse> {
+    const { data } = await $api.get<TGetNewsRequest, AxiosResponse<TGetNewsResponse>>(
+      `${this.BASE_URL_NEWS}/list`,
+    );
 
     return data;
   }

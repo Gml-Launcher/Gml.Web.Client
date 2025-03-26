@@ -5,6 +5,7 @@ export type SettingsPlatformBaseEntity = {
   storageType: StorageType;
   storageHost: string;
   curseForgeKey: string;
+  vkKey: string;
   storageLogin: string;
   textureProtocol: Protocol;
 };

@@ -4,6 +4,7 @@ import {
   DiscordBaseEntity,
   LauncherActualVersionBaseEntity,
   LauncherBuildsBaseEntity,
+  NewsEntity,
   NewsIntegrationBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
@@ -28,6 +29,12 @@ export type TGetActiveAuthIntegrationsResponse = ResponseBaseEntity & {
 export type TGetNewsProvidersIntegrationsRequest = {};
 export type TGetNewsProvidersIntegrationsResponse = ResponseBaseEntity & {
   data: NewsIntegrationBaseEntity[];
+};
+
+// Получение списка новостей
+export type TGetNewsRequest = {};
+export type TGetNewsResponse = ResponseBaseEntity & {
+  data: NewsEntity[];
 };
 
 // Удаление новостного провайдера

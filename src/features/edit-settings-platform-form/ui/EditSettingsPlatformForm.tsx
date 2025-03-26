@@ -22,6 +22,7 @@ import { enumValues } from '@/shared/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { Skeleton } from '@/shared/ui/skeleton';
 import curseforge from '@/assets/logos/curseforge.ico';
+import vk from '@/assets/logos/vk.svg';
 
 export const EditSettingsPlatformForm = () => {
   const { data: platform, isLoading } = useSettingsPlatform();
@@ -33,6 +34,7 @@ export const EditSettingsPlatformForm = () => {
       registrationIsEnabled: platform?.registrationIsEnabled || false,
       storageType: platform?.storageType || StorageType.STORAGE_TYPE_LOCALSTORAGE,
       curseForgeKey: platform?.curseForgeKey || '',
+      vkKey: platform?.vkKey || '',
       storageHost: platform?.storageHost || '',
       storageLogin: platform?.storageLogin || '',
       storagePassword: '',
@@ -276,8 +278,7 @@ export const EditSettingsPlatformForm = () => {
                     <h6 className="text-sm font-bold">CurseForge Api Key</h6>
                   </div>
                   <p className="text-sm text-gray-700 dark:text-gray-300">
-                    Используйте CurseForge Api Key для автоматической загрузки и обновления модов из
-                    CurseForge.
+                    Для автоматической загрузки модов из CurseForge.
                   </p>
                 </div>
                 <div className="flex flex-col w-1/2">
@@ -293,6 +294,41 @@ export const EditSettingsPlatformForm = () => {
                         <Button variant="link" asChild className="p-0">
                           <a
                             href="https://console.curseforge.com/?#/api-keys"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Получить Api Key
+                          </a>
+                        </Button>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                <div className="flex flex-col gap-y-1 w-1/2">
+                  <div className="flex flex-row items-center gap-x-1 mb-2">
+                    <Image src={vk} alt="Curseforge" className="w-4 h-4" />
+                    <h6 className="text-sm font-bold">Вконтакте Api Key</h6>
+                  </div>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    Для автоматической загрузки новостей из VK.
+                  </p>
+                </div>
+                <div className="flex flex-col w-1/2">
+                  <FormField
+                    control={form.control}
+                    name="vkKey"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input type="text" placeholder="Введите API Key" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                        <Button variant="link" asChild className="p-0">
+                          <a
+                            href="https://oauth.vk.com/authorize?client_id=6121396&scope=groups,wall&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1"
                             target="_blank"
                             rel="noopener noreferrer"
                           >

@@ -21,6 +21,7 @@ export const integrationsKeys = {
 
   auth: () => [...integrationsKeys.all, 'auth'] as const,
   news: () => [...integrationsKeys.all, 'news'] as const,
+  newsList: () => [...integrationsKeys.all, 'news-list'] as const,
   newsProviders: () => [...integrationsKeys.auth(), 'editing'] as const,
   newsDelete: () => [...integrationsKeys.auth(), 'news-delete'] as const,
   authEditing: () => [...integrationsKeys.auth(), 'add'] as const,
@@ -73,6 +74,13 @@ export const useNewsProviders = () => {
   return useQuery({
     queryKey: integrationsKeys.news(),
     queryFn: () => integrationService.getNewsIntegration(),
+    select: ({ data }) => data,
+  });
+};
+export const useNews = () => {
+  return useQuery({
+    queryKey: integrationsKeys.newsList(),
+    queryFn: () => integrationService.getNews(),
     select: ({ data }) => data,
   });
 };
