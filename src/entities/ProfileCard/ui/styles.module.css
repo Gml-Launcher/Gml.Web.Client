@@ -1,5 +1,5 @@
 .profile-card {
-    @apply flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[250px] bg-no-repeat bg-cover bg-center;
+    @apply flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[289px] xl:max-w-[510px] bg-no-repeat bg-cover bg-center;
 }
 
 .profile-card__edit-button {
