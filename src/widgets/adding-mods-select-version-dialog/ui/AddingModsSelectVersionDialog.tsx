@@ -28,17 +28,21 @@ import { ModType } from '@/shared/enums';
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
   modDirection?: string;
-  mod?: ModEntity;
+  modData?: ModEntity;
 }
 
-export function AddingModsSelectVersionDialog({ profile, modDirection, mod }: ProfileModDialog) {
+export function AddingModsSelectVersionDialog({
+  profile,
+  modDirection,
+  modData,
+}: ProfileModDialog) {
   const [open, setOpen] = useState(false);
   const loadModsMutate = useLoadProfileModsByUrl();
 
   const { data: modInfo } = useModInfo({
     profileName: profile?.profileName ?? '',
-    modId: mod?.id ?? '',
-    modType: mod?.type ?? ModType.CURSE_FORGE,
+    modId: modData?.id ?? '',
+    modType: modData?.type ?? ModType.CURSE_FORGE,
   });
 
   const loadFilesByUrl = async (files: string[]) => {
@@ -64,12 +68,12 @@ export function AddingModsSelectVersionDialog({ profile, modDirection, mod }: Pr
         <DrawerHeader>
           <DrawerTitle className="gap-2 flex items-center flex-wrap">
             <Avatar className="w-8 h-8">
-              <AvatarImage src={mod?.iconUrl} alt="Icon" />
+              <AvatarImage src={modData?.iconUrl} alt="Icon" />
               <AvatarFallback>
                 <FileIcon />
               </AvatarFallback>
             </Avatar>
-            {mod?.name}
+            {modData?.name}
             <Separator orientation="vertical" />
             <span className="text-muted-foreground">Выберите версию</span>
           </DrawerTitle>
@@ -113,6 +117,7 @@ export function AddingModsSelectVersionDialog({ profile, modDirection, mod }: Pr
                         <>
                           <ModsDependencyTooltip
                             profile={profile}
+                            modType={modData?.type ?? ModType.MODRINTH}
                             dependencies={mod.dependencies}
                           />
                         </>

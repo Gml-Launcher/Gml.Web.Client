@@ -173,7 +173,7 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
                       <AddingModsSelectVersionDialog
                         profile={profile}
                         modDirection={modDirection}
-                        mod={mod}
+                        modData={mod}
                       />
                     </div>
                   </div>
