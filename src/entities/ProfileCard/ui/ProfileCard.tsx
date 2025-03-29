@@ -169,7 +169,9 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
               height={48}
             />
           ) : (
-            <div className="min-w-12 min-h-12 h-12 w-12 bg-gray-200/10 rounded-xl animate-pulse" />
+            <div className="flex items-center justify-center min-w-12 min-h-12 h-12 w-12 bg-gray-200/5 rounded-xl">
+              {profile.profileName.substring(0, 2).toUpperCase()}
+            </div>
           )}
 
           {/* Текст профиля */}
