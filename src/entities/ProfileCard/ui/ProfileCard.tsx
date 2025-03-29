@@ -3,6 +3,7 @@ import { useTheme } from 'next-themes';
 import { Edit2Icon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Tooltip, TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
 
 import classes from './styles.module.css';
 
@@ -27,6 +28,7 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
+import { TooltipContent } from '@/shared/ui/tooltip';
 
 interface ProfileCardParams {
   profile: ProfileExtendedBaseEntity;
@@ -171,7 +173,18 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
 
           {/* Текст профиля */}
           <div className={classes['profile-card__info-text']}>
-            <h3 className={classes['profile-card__info-name']}>{profile.profileName}</h3>
+            <h3 className={classes['profile-card__info-name']}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <p className="truncate">{profile.displayName}</p>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{profile.displayName}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </h3>
             <p className={classes['profile-card__info-version']}>
               <span className={classes['profile-card__info-version-minecraft']}>
                 {profile.minecraftVersion}
