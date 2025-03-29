@@ -1,9 +1,9 @@
 .profile-card {
-    @apply flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[230px] bg-no-repeat bg-cover bg-center;
+    @apply flex flex-col rounded-lg border bg-card text-card-foreground shadow-sm justify-between p-6 min-h-[250px] bg-no-repeat bg-cover bg-center;
 }
 
 .profile-card__edit-button {
-    @apply flex justify-end w-full;
+    @apply flex justify-between w-full;
 }
 
 .profile-card__edit-button-full {
@@ -19,7 +19,7 @@
 }
 
 .profile-card__info-icon-wrapper {
-    @apply flex gap-x-5 items-center;
+    @apply flex gap-x-5 items-start;
 }
 
 .profile-card__info-icon {

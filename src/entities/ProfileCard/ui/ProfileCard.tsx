@@ -4,10 +4,10 @@ import { Edit2Icon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Tooltip, TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
+import React from 'react';
 
 import classes from './styles.module.css';
 
-import { ClientState } from '@/widgets/client-hub';
 import { InputFile } from '@/shared/ui/input';
 import { Form, FormMessage } from '@/shared/ui/form';
 import { useEditProfile } from '@/shared/hooks';
@@ -29,6 +29,7 @@ import {
 } from '@/shared/ui/dialog';
 import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 import { TooltipContent } from '@/shared/ui/tooltip';
+import { ClientState } from '@/widgets/client-hub';
 
 interface ProfileCardParams {
   profile: ProfileExtendedBaseEntity;
@@ -84,6 +85,9 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     >
       {/* Кнопка редактирования */}
       <div className={classes['profile-card__edit-button']}>
+        <div className={classes['profile-card__info-state']}>
+          <ClientState state={state || profile.state} />
+        </div>
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="outline" className={classes['profile-card__edit-button-full']}>
@@ -155,9 +159,6 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
 
       {/* Профиль */}
       <div className={classes['profile-card__info']}>
-        <div className={classes['profile-card__info-state']}>
-          <ClientState state={state || profile.state} />
-        </div>
         <div className={classes['profile-card__info-icon-wrapper']}>
           {profile.iconBase64 ? (
             <Image
@@ -177,7 +178,10 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <p className="truncate">{profile.displayName}</p>
+                    <div className="flex flex-col">
+                      <p className="text-sm text-muted-foreground">{profile.profileName}</p>
+                      <p className="truncate">{profile.displayName}</p>
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>{profile.displayName}</p>
