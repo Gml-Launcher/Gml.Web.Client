@@ -5,6 +5,7 @@ export type ProfileBaseEntity = {
   name: string;
   displayName: string;
   loader: number;
+  priority: number;
   createDate: string;
   description: string;
   gameVersion: string;
@@ -22,6 +23,7 @@ export type ProfileExtendedBaseEntity = {
   clientVersion: string;
   launchVersion: string;
   iconBase64: string;
+  priority: number;
   background: string;
   description: string;
   arguments: string;

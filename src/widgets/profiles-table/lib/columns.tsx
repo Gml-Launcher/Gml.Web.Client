@@ -25,6 +25,7 @@ enum ColumnHeader {
   VERSION_LAUNCHER = 'Запускаемая версия',
   LOADER_LAUNCHER = '',
   GAME_VERSION = 'Версия',
+  PRIORITY = 'Приоритет',
   PROFILE_STATE = 'Статус',
 }
 
@@ -129,6 +130,13 @@ export const useColumns = (props: UseColumnsProps) => {
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
       ),
       cell: ({ getValue }) => getFormatDate(getValue()),
+    }),
+    columnsHelper.accessor('priority', {
+      size: 150,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.PRIORITY} />
+      ),
+      cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor('state', {
       size: 270,

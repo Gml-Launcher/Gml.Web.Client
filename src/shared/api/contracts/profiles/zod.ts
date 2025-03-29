@@ -53,6 +53,7 @@ export const EditProfileSchema = z.object({
     }),
   jvmArguments: z.string().optional(),
   gameArguments: z.string().optional(),
+  priority: z.coerce.number().optional(),
   icon: z.any(),
   isEnabled: z.boolean().default(true).optional(),
   background: z.any(),
