@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { ExclamationTriangleIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Trash2Icon } from 'lucide-react';
 
 import {
@@ -64,7 +64,10 @@ export const AddingFoldersWhitelistDialog = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="w-fit">Добавить папки</Button>
+        <Button className="w-fit gap-2">
+          <PlusIcon width={16} height={16} />
+          Добавить папки
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
