@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 import { throttle } from 'lodash';
+import { PlusIcon } from '@radix-ui/react-icons';
 
 import {
   Dialog,
@@ -72,7 +73,10 @@ export const CreateWhiteUserDialog = ({ profile, playersState }: AddGameServerDi
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="w-fit">Добавить пользователя</Button>
+        <Button className="w-fit gap-2">
+          <PlusIcon width={16} height={16} />
+          Добавить пользователя
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

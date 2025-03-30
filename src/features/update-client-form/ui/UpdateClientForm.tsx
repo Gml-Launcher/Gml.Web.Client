@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 
 import { ClientUpdateFormSchemaType, ClientUpdateSchema } from '../lib/static';
 
@@ -10,7 +11,7 @@ import {
   useLauncherBuildVersions,
   useLauncherUpload,
 } from '@/shared/hooks';
-import { cn, getFormatDate } from '@/shared/lib/utils';
+import { cn, getApiBaseUrl, getFormatDate } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import {
   Form,
@@ -96,9 +97,12 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
                 )}
                 <FormDescription className="flex flex-col gap-1">
                   {actualVersion && actualVersion.length > 0 ? (
-                    actualVersion.map(([title, kek]) => (
+                    actualVersion.map(([title, data]) => (
                       <span key={title}>
-                        Актуальная версия для {title}: {kek.version}
+                        Актуальная версия для {title}: {data.version}
+                        <Button asChild variant="link" className="ml-2">
+                          <Link href={`${getApiBaseUrl()}/api/v1/file/${data.guid}`}>Скачать</Link>
+                        </Button>
                       </span>
                     ))
                   ) : (

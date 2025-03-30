@@ -5,6 +5,7 @@ import {
   TGetActiveAuthIntegrationsResponse,
   TPostAuthIntegrationsRequest,
   TPostLauncherUploadRequest,
+  TPostNewsIntegrationsRequest,
   TPutConnectDiscordRequest,
   TPutConnectTexturesRequest,
   TPutSentryConnectRequest,
@@ -13,12 +14,17 @@ import { integrationService } from '@/shared/services/IntegrationService';
 import { TexturesServiceType } from '@/shared/enums';
 import { isAxiosError } from '@/shared/lib/utils';
 import { getEntries } from '@/shared/lib/helpers';
+import { NewsTypeEnum } from '@/shared/enums/news-type';
 
 export const integrationsKeys = {
   all: ['integrations'] as const,
 
   auth: () => [...integrationsKeys.all, 'auth'] as const,
-  authEditing: () => [...integrationsKeys.auth(), 'editing'] as const,
+  news: () => [...integrationsKeys.all, 'news'] as const,
+  newsList: () => [...integrationsKeys.all, 'news-list'] as const,
+  newsProviders: () => [...integrationsKeys.auth(), 'editing'] as const,
+  newsDelete: () => [...integrationsKeys.auth(), 'news-delete'] as const,
+  authEditing: () => [...integrationsKeys.auth(), 'add'] as const,
 
   launcherGithubVersions: () => [...integrationsKeys.all, 'github-versions'] as const,
   launcherBuildVersions: () => [...integrationsKeys.all, 'build-versions'] as const,
@@ -61,6 +67,52 @@ export const useActiveAuthIntegrations = () => {
     queryKey: integrationsKeys.auth(),
     queryFn: () => integrationService.getActiveAuthIntegration(),
     select: ({ data }) => data,
+  });
+};
+
+export const useNewsProviders = () => {
+  return useQuery({
+    queryKey: integrationsKeys.news(),
+    queryFn: () => integrationService.getNewsIntegration(),
+    select: ({ data }) => data,
+  });
+};
+export const useNews = () => {
+  return useQuery({
+    queryKey: integrationsKeys.newsList(),
+    queryFn: () => integrationService.getNews(),
+    select: ({ data }) => data,
+  });
+};
+
+export const useAddNewsProvider = () => {
+  return useMutation({
+    mutationKey: integrationsKeys.newsProviders(),
+    mutationFn: (data: TPostNewsIntegrationsRequest) =>
+      integrationService.postNewsIntegration(data),
+    onSuccess: async (data) => {
+      toast.success('Успешно', {
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useDeleteNewsProvider = () => {
+  return useMutation({
+    mutationKey: integrationsKeys.newsDelete(),
+    mutationFn: (type: NewsTypeEnum) => integrationService.deleteNewsProvider({ type }),
+    onSuccess: async (data) => {
+      toast.success('Успешно', {
+        description: data.data.message,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
   });
 };
 

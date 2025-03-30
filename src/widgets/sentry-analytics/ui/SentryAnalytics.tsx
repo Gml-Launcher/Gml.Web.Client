@@ -11,6 +11,7 @@ import {
 } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { CopyIcon } from '@radix-ui/react-icons';
+import { toast } from 'sonner';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -200,7 +201,7 @@ export const SentryAnalytics = () => {
                     <TableRow>
                       <TableHead>Ошибка</TableHead>
                       <TableHead>У скольки пользователей</TableHead>
-                      <TableHead>Сколько данных ошибок</TableHead>
+                      <TableHead>Количество повторений</TableHead>
                       <TableHead>Действия</TableHead>
                       {/*<TableHead>График</TableHead>*/}
                     </TableRow>
@@ -210,17 +211,28 @@ export const SentryAnalytics = () => {
                       data.data.data.map((bug) => {
                         return (
                           <TableRow key={bug.exception}>
-                            <TableCell>{bug.exception}</TableCell>
-                            <TableCell>{bug.countUsers}</TableCell>
-                            <TableCell>{bug.count}</TableCell>
                             <TableCell>
+                              {bug.exception}
+                              <p className="text-sm text-gray-700 dark:text-gray-400 text-wrap">
+                                {bug.stackTrace.split('\n')[0]}
+                              </p>
+                            </TableCell>
+                            <TableCell width="110">{bug.countUsers}</TableCell>
+                            <TableCell width="110">{bug.count}</TableCell>
+                            <TableCell width="110">
                               <Button
                                 className="gap-3"
-                                onClick={() => navigator.clipboard.writeText(bug.stackTrace)}
+                                onClick={async () => {
+                                  await navigator.clipboard.writeText(bug.stackTrace);
+                                  toast('Текст успешно скопирован', {
+                                    duration: 500,
+                                    onAutoClose: () => true,
+                                  });
+                                }}
                                 variant="secondary"
                               >
                                 <CopyIcon />
-                                Копировать
+                                Копировать всё
                               </Button>
                             </TableCell>
                           </TableRow>

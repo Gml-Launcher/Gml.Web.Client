@@ -34,6 +34,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
   const form = useForm<CreateProfileFormSchemaType>({
     defaultValues: {
       name: profile?.profileName || '',
+      displayName: profile?.displayName || '',
       description: profile?.description || '',
       gameLoader: profile?.minecraftVersion || GameLoaderOption.VANILLA.toString(),
       loaderVersion: '',
@@ -66,6 +67,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
   ) => {
     const formCreate = new FormData();
     formCreate.append('name', data.name);
+    formCreate.append('DisplayName', data.displayName);
     formCreate.append('description', data.description);
     formCreate.append('version', data.version);
     formCreate.append('gameLoader', data.gameLoader);
@@ -85,7 +87,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
       <Form {...form}>
         <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
           <FormItem>
-            <FormLabel>Иконка сервера</FormLabel>
+            <FormLabel>Иконка</FormLabel>
             <FormControl>
               <Input type="file" placeholder="Выберите иконку сервера" {...form.register('icon')} />
             </FormControl>
@@ -95,16 +97,22 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
           </FormItem>
 
           <FormItem>
-            <FormLabel>Введите название профиля</FormLabel>
+            <FormLabel>Название профиля</FormLabel>
             <FormControl>
               <Input placeholder="Введите название профиля" {...form.register('name')} />
             </FormControl>
             {form.formState.errors.name && (
               <FormMessage>{form.formState.errors.name.message}</FormMessage>
             )}
-            {/*<div className="text-gray-400 text-sm font-medium">*/}
-            {/*  slug: {form.watch('name').toLowerCase().replace(/\s+/g, '-')}*/}
-            {/*</div>*/}
+          </FormItem>
+          <FormItem>
+            <FormLabel>Отображаемое имя</FormLabel>
+            <FormControl>
+              <Input placeholder="Введите название профиля" {...form.register('displayName')} />
+            </FormControl>
+            {form.formState.errors.displayName && (
+              <FormMessage>{form.formState.errors.displayName.message}</FormMessage>
+            )}
           </FormItem>
           <FormItem>
             <FormLabel>Введите описание профиля</FormLabel>
@@ -116,64 +124,66 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           </FormItem>
 
-          <Controller
-            name="version"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Выберите версию игры</FormLabel>
-                <FormCombobox
-                  name={field.name}
-                  value={field.value}
-                  placeholder="Выберите версию игры"
-                  placeholderInputSearch="Поиск версий"
-                  options={versions && versions.data}
-                  isLoading={versions.isLoading}
-                  setValue={form.setValue}
-                />
-                {form.formState.errors.version && (
-                  <FormMessage>{form.formState.errors.version.message}</FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
+          <div className="flex gap-5">
+            <Controller
+              name="version"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Версия игры</FormLabel>
+                  <FormCombobox
+                    name={field.name}
+                    value={field.value}
+                    placeholder="Выберите версию игры"
+                    placeholderInputSearch="Поиск версий"
+                    options={versions && versions.data}
+                    isLoading={versions.isLoading}
+                    setValue={form.setValue}
+                  />
+                  {form.formState.errors.version && (
+                    <FormMessage>{form.formState.errors.version.message}</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
 
-          <Controller
-            name="gameLoader"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Выберите игровой загрузчик</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={!form.getFieldState('version').isDirty || loaderVersion.isFetching}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Выберите игровой загрузчик" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {enumValues(GameLoaderOption).map(([loader, value]) => (
-                        <SelectItem key={loader} value={String(value)}>
-                          {convertGameLoaderImage(value as GameLoaderOption)}
-                          {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                {form.formState.errors.gameLoader && (
-                  <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
-                )}
-              </FormItem>
-            )}
-          />
+            <Controller
+              name="gameLoader"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Загрузчик</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={!form.getFieldState('version').isDirty || loaderVersion.isFetching}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите игровой загрузчик" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {enumValues(GameLoaderOption).map(([loader, value]) => (
+                          <SelectItem key={loader} value={String(value)}>
+                            {convertGameLoaderImage(value as GameLoaderOption)}
+                            {GameLoaderOption[loader as keyof typeof GameLoaderOption]}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  {form.formState.errors.gameLoader && (
+                    <FormMessage>{form.formState.errors.gameLoader.message}</FormMessage>
+                  )}
+                </FormItem>
+              )}
+            />
+          </div>
 
           {form.watch('gameLoader') !== GameLoaderOption.VANILLA.toString() && (
             <Controller
               name="loaderVersion"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Выберите версию загрузчика</FormLabel>
+                  <FormLabel>Версия</FormLabel>
                   <FormCombobox
                     name={field.name}
                     value={field.value}

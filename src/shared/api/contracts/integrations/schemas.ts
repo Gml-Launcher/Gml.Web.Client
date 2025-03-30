@@ -1,9 +1,23 @@
 import { AuthenticationType } from '@/shared/enums';
+import { NewsTypeEnum } from '@/shared/enums/news-type';
 
 export type AuthIntegrationBaseEntity = {
   name: string;
   authType: AuthenticationType;
   endpoint: string | null;
+};
+
+export type NewsIntegrationBaseEntity = {
+  type: NewsTypeEnum;
+  url: string | null;
+  name: string;
+};
+
+export type NewsEntity = {
+  title: string;
+  content: string;
+  date: string;
+  type: NewsTypeEnum;
 };
 
 export type BranchBaseEntity = {

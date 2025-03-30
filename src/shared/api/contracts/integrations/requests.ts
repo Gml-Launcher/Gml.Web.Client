@@ -4,11 +4,14 @@ import {
   DiscordBaseEntity,
   LauncherActualVersionBaseEntity,
   LauncherBuildsBaseEntity,
+  NewsEntity,
+  NewsIntegrationBaseEntity,
   SentryBaseEntity,
   TextureServiceBaseEntity,
 } from '@/shared/api/contracts';
 import { TexturesServiceType } from '@/shared/enums';
-import { ResponseBaseEntity } from '@/shared/api/schemas'; // Получение списка серверов для авторизации
+import { ResponseBaseEntity } from '@/shared/api/schemas';
+import { NewsTypeEnum } from '@/shared/enums/news-type'; // Получение списка серверов для авторизации
 
 // Получение списка серверов для авторизации
 export type TGetAuthIntegrationsRequest = {};
@@ -20,6 +23,24 @@ export type TGetAuthIntegrationsResponse = ResponseBaseEntity & {
 export type TGetActiveAuthIntegrationsRequest = {};
 export type TGetActiveAuthIntegrationsResponse = ResponseBaseEntity & {
   data: AuthIntegrationBaseEntity;
+};
+
+// Получение новостных провайдеров
+export type TGetNewsProvidersIntegrationsRequest = {};
+export type TGetNewsProvidersIntegrationsResponse = ResponseBaseEntity & {
+  data: NewsIntegrationBaseEntity[];
+};
+
+// Получение списка новостей
+export type TGetNewsRequest = {};
+export type TGetNewsResponse = ResponseBaseEntity & {
+  data: NewsEntity[];
+};
+
+// Удаление новостного провайдера
+export type TDeleteNewsProvidersIntegrationsRequest = {};
+export type TDeleteNewsProvidersIntegrationsResponse = ResponseBaseEntity & {
+  data: NewsIntegrationBaseEntity[];
 };
 
 // Получение списка веток
@@ -56,6 +77,13 @@ export type TPostAuthIntegrationsRequest = {
   endpoint: string;
 };
 export type TPostAuthIntegrationsResponse = ResponseBaseEntity & {};
+
+// Добавление новостного провайдера
+export type TPostNewsIntegrationsRequest = {
+  url: string;
+  type: NewsTypeEnum;
+};
+export type TPostNewsIntegrationsResponse = ResponseBaseEntity & {};
 
 // Получение активного сервиса авторизации
 export type TGetSentryConnectRequest = {};

@@ -16,6 +16,10 @@ export const CreateProfileSchema = z.object({
     .string()
     .min(2, { message: 'Длина имени должна быть больше 2 символов' })
     .max(100, { message: 'Длина имени не должна быть больше 100 символов' }),
+  displayName: z
+    .string()
+    .min(2, { message: 'Длина имени должна быть больше 2 символов' })
+    .max(100, { message: 'Длина имени не должна быть больше 100 символов' }),
   description: z
     .string()
     .min(2, { message: 'Длина описания должна быть больше 2 символов' })
@@ -37,6 +41,10 @@ export const EditProfileSchema = z.object({
     .string()
     .min(2, { message: 'Длина имени должна быть больше 2 символов' })
     .max(100, { message: 'Длина имени не должна быть больше 100 символов' }),
+  displayName: z
+    .string()
+    .min(2, { message: 'Длина имени должна быть больше 2 символов' })
+    .max(100, { message: 'Длина имени не должна быть больше 100 символов' }),
   description: z
     .string()
     .min(2, { message: 'Длина описания должна быть больше 2 символов' })
@@ -45,6 +53,7 @@ export const EditProfileSchema = z.object({
     }),
   jvmArguments: z.string().optional(),
   gameArguments: z.string().optional(),
+  priority: z.coerce.number().optional(),
   icon: z.any(),
   isEnabled: z.boolean().default(true).optional(),
   background: z.any(),

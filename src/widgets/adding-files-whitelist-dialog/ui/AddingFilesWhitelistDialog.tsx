@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { ExclamationTriangleIcon, PlusIcon } from '@radix-ui/react-icons';
 
 import {
   Dialog,
@@ -59,7 +59,10 @@ export function AddingFilesWhitelistDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="w-fit">Добавить файлов</Button>
+        <Button className="w-fit gap-2">
+          <PlusIcon width={16} height={16} />
+          Добавить файл
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>

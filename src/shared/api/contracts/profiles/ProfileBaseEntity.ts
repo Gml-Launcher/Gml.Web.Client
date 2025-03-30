@@ -3,7 +3,9 @@ import { PlayerBaseEntity } from '@/shared/api/contracts';
 
 export type ProfileBaseEntity = {
   name: string;
+  displayName: string;
   loader: number;
+  priority: number;
   createDate: string;
   description: string;
   gameVersion: string;
@@ -16,10 +18,12 @@ export type ProfileBaseEntity = {
 export type ProfileExtendedBaseEntity = {
   javaPath: string;
   profileName: string;
+  displayName: string;
   minecraftVersion: string;
   clientVersion: string;
   launchVersion: string;
   iconBase64: string;
+  priority: number;
   background: string;
   description: string;
   arguments: string;
