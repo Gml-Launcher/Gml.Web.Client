@@ -3,10 +3,11 @@ import { useTheme } from 'next-themes';
 import { Edit2Icon } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Tooltip, TooltipProvider, TooltipTrigger } from '@radix-ui/react-tooltip';
+import React from 'react';
 
 import classes from './styles.module.css';
 
-import { ClientState } from '@/widgets/client-hub';
 import { InputFile } from '@/shared/ui/input';
 import { Form, FormMessage } from '@/shared/ui/form';
 import { useEditProfile } from '@/shared/hooks';
@@ -26,8 +27,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui/dialog';
-import defaultProfileIcon from '@/assets/logos/minecraft.png';
 import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
+import { TooltipContent } from '@/shared/ui/tooltip';
+import { ClientState } from '@/widgets/client-hub';
 
 interface ProfileCardParams {
   profile: ProfileExtendedBaseEntity;
@@ -48,6 +50,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     const formUpdate = new FormData();
 
     formUpdate.append('name', profile?.profileName);
+    formUpdate.append('displayName', profile?.displayName);
     formUpdate.append('originalName', profile?.profileName);
     formUpdate.append('description', profile?.description);
     formUpdate.append('enabled', profile?.isEnabled.toString());
@@ -64,7 +67,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
 
     await mutateAsync(formUpdate);
 
-    // TODO: исправить кастыль
+    // TODO: исправить костыль
     window.location.reload();
   };
 
@@ -82,14 +85,14 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     >
       {/* Кнопка редактирования */}
       <div className={classes['profile-card__edit-button']}>
+        <div className={classes['profile-card__info-state']}>
+          <ClientState state={state || profile.state} />
+        </div>
         <Dialog>
           <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className={classes['profile-card__edit-button-full']}
-            >
-              <Edit2Icon size={16} />
+            <Button variant="outline" className={classes['profile-card__edit-button-full']}>
+              <Edit2Icon size={14} />
+              Оформление
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[625px]">
@@ -102,12 +105,38 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-3">
                   <h6 className="text-sm font-bold">Иконка</h6>
-                  <InputFile fileTypes={['PNG']} {...form.register('icon')} />
+                  {form.watch('icon') && form.watch('icon')[0] ? (
+                    <div className="mt-2">
+                      <Image
+                        alt="Preview Icon"
+                        src={URL.createObjectURL(form.watch('icon')[0])}
+                        width={48}
+                        height={48}
+                        className="rounded-md"
+                      />
+                    </div>
+                  ) : (
+                    <InputFile fileTypes={['PNG']} {...form.register('icon')} />
+                  )}
                   {form.formState.errors.icon && (
                     <FormMessage>{form.formState.errors.icon.message?.toString()}</FormMessage>
                   )}
+
                   <h6 className="text-sm font-bold">Задний фон</h6>
-                  <InputFile fileTypes={['PNG']} {...form.register('background')} />
+                  {form.watch('background') && form.watch('background')[0] ? (
+                    <div className="mt-2">
+                      <Image
+                        alt="Background Preview"
+                        src={URL.createObjectURL(form.watch('background')[0])}
+                        layout="responsive"
+                        width={300}
+                        height={150}
+                        className="rounded-md"
+                      />
+                    </div>
+                  ) : (
+                    <InputFile fileTypes={['PNG']} {...form.register('background')} />
+                  )}
                   {form.formState.errors.background && (
                     <FormMessage>
                       {form.formState.errors.background.message?.toString()}
@@ -130,25 +159,38 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
 
       {/* Профиль */}
       <div className={classes['profile-card__info']}>
-        <div className={classes['profile-card__info-state']}>
-          <ClientState state={state || profile.state} />
-        </div>
         <div className={classes['profile-card__info-icon-wrapper']}>
-          <Image
-            className={classes['profile-card__info-icon']}
-            src={
-              profile.iconBase64
-                ? `data:text/plain;base64,${profile.iconBase64}`
-                : defaultProfileIcon
-            }
-            alt={profile.profileName}
-            width={64}
-            height={64}
-          />
+          {profile.iconBase64 ? (
+            <Image
+              className="min-w-12 min-h-12 h-12 w-12"
+              src={`data:image/png;base64,${profile.iconBase64}`}
+              alt={profile.profileName || 'Profile Icon'}
+              width={48}
+              height={48}
+            />
+          ) : (
+            <div className="flex items-center justify-center min-w-12 min-h-12 h-12 w-12 bg-gray-200/5 rounded-xl">
+              {profile.profileName.substring(0, 2).toUpperCase()}
+            </div>
+          )}
 
           {/* Текст профиля */}
           <div className={classes['profile-card__info-text']}>
-            <h3 className={classes['profile-card__info-name']}>{profile.profileName}</h3>
+            <h3 className={classes['profile-card__info-name']}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="flex flex-col">
+                      <p className="text-sm text-muted-foreground">{profile.profileName}</p>
+                      <p className="truncate">{profile.displayName}</p>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{profile.displayName}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </h3>
             <p className={classes['profile-card__info-version']}>
               <span className={classes['profile-card__info-version-minecraft']}>
                 {profile.minecraftVersion}

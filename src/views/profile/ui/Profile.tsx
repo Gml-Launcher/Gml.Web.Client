@@ -37,7 +37,6 @@ import { FolderTable } from '@/widgets/folder-table';
 import { GamePlayers } from '@/widgets/game-players';
 import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
 import { GameMods } from '@/widgets/game-mods';
-import { Badge } from '@/shared/ui/badge';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -134,9 +133,6 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           </TabsTrigger>
           <TabsTrigger className="w-full h-10" value="mods">
             Моды
-            <Badge className="cursor-pointer text-sm dark:bg-white dark:bg-opacity-10 dark:text-white text-opacity-90 dark:hover:bg-opacity-10 dark:hover:bg-white ml-2">
-              Beta
-            </Badge>
           </TabsTrigger>
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>

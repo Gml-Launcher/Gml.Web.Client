@@ -8,13 +8,15 @@ import { Dependency, ModInfoEntity } from '@/shared/api/contracts/mods/schemas';
 import { modService } from '@/shared/services';
 import { Badge } from '@/shared/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
+import { ModType } from '@/shared/enums';
 
 interface ModsDependencyDialog {
   profile?: ProfileExtendedBaseEntity;
   dependencies?: Dependency[];
+  modType?: ModType;
 }
 
-export function ModsDependencyTooltip({ profile, dependencies }: ModsDependencyDialog) {
+export function ModsDependencyTooltip({ profile, dependencies, modType }: ModsDependencyDialog) {
   const [dependencyInfo, setDependencyInfo] = useState<ModInfoEntity[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null); // Храним текущий AbortController
@@ -37,6 +39,7 @@ export function ModsDependencyTooltip({ profile, dependencies }: ModsDependencyD
         dependencies.map(async (dependency): Promise<ModInfoEntity | undefined> => {
           const response = await modService.getModInfo({
             modId: dependency.projectId,
+            modType: modType ?? ModType.MODRINTH,
             profileName: profile?.profileName ?? '',
             signal: abortController.signal,
           });

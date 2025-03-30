@@ -232,7 +232,7 @@ export const SentryAnalytics = () => {
                                 variant="secondary"
                               >
                                 <CopyIcon />
-                                Копировать
+                                Копировать всё
                               </Button>
                             </TableCell>
                           </TableRow>

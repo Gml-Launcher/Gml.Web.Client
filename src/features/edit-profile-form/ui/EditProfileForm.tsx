@@ -35,6 +35,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
       jvmArguments: profile?.jvmArguments || '',
       gameArguments: profile?.gameArguments || '',
       icon: profile?.iconBase64 || '',
+      priority: profile?.priority || 0,
       background: profile?.background || '',
       isEnabled: profile?.isEnabled,
     },
@@ -51,6 +52,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     formUpdate.append('description', body.description);
     formUpdate.append('icon', body.icon?.[0]);
     formUpdate.append('enabled', body.isEnabled?.toString() ?? 'true');
+    formUpdate.append('priority', body.priority?.toString() ?? '0');
 
     if (body.background && body.background[0]) {
       formUpdate.append('background', body.background[0]);
@@ -178,6 +180,20 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               />
               {form.formState.errors.gameArguments && (
                 <FormMessage>{form.formState.errors.gameArguments.message?.toString()}</FormMessage>
+              )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <h6 className="text-sm font-bold">Приоритет</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Чем выше число, тем выше профиль в списке
+              </p>
+            </div>
+            <div className="flex flex-col gap-y-1 min-w-96 mb-2 lg:mb-0">
+              <Input type="number" placeholder="Смените приоритет" {...form.register('priority')} />
+              {form.formState.errors.priority && (
+                <FormMessage>{form.formState.errors.priority.message?.toString()}</FormMessage>
               )}
             </div>
           </div>

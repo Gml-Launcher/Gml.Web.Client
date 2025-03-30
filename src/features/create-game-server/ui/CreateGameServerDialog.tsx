@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusIcon } from '@radix-ui/react-icons';
 
 import {
   Dialog,
@@ -49,7 +50,10 @@ export const CreateGameServerDialog = ({ profile }: AddGameServerDialogParams) =
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button className="w-fit">Добавить сервер</Button>
+        <Button className="w-fit gap-2">
+          <PlusIcon width={16} height={16} />
+          Добавить сервер
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

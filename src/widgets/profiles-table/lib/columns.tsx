@@ -16,7 +16,6 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { Icons } from '@/shared/ui/icons';
 import { getFormatDate } from '@/shared/lib/utils';
 import { profileKeys } from '@/shared/hooks';
-import defaultProfileIcon from '@/assets/logos/minecraft.png';
 import { convertApiGameLoaderImage } from '@/shared/converters';
 
 enum ColumnHeader {
@@ -26,6 +25,7 @@ enum ColumnHeader {
   VERSION_LAUNCHER = 'Запускаемая версия',
   LOADER_LAUNCHER = '',
   GAME_VERSION = 'Версия',
+  PRIORITY = 'Приоритет',
   PROFILE_STATE = 'Статус',
 }
 
@@ -74,27 +74,35 @@ export const useColumns = (props: UseColumnsProps) => {
     columnsHelper.accessor('iconBase64', {
       size: 64,
       header: ColumnHeader.ICON,
+      cell: ({ row }) =>
+        row.original.iconBase64 ? (
+          <Image
+            className="min-w-12 min-h-12 h-12 w-12"
+            src={`data:image/png;base64,${row.original.iconBase64}`}
+            alt={row.original.name || 'Profile Icon'}
+            width={48}
+            height={48}
+          />
+        ) : (
+          <div className="flex items-center justify-center min-w-12 min-h-12 h-12 w-12 bg-gray-200/5 rounded-xl">
+            {row.original.name.substring(0, 2).toUpperCase()}
+          </div>
+        ),
+    }),
+
+    columnsHelper.display({
+      size: 400,
+      id: 'name',
+      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
       cell: ({ row }) => (
-        <Image
-          className="min-w-12 min-h-12 h-12 w-12"
-          src={
-            row.original.iconBase64
-              ? `data:text/plain;base64,${row.original.iconBase64}`
-              : defaultProfileIcon.src
-          }
-          alt={row.original.name}
-          width={48}
-          height={48}
-        />
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-muted-foreground">{row.original.name}</p>
+          <h3>{row.original.displayName}</h3>
+        </div>
       ),
     }),
-    columnsHelper.accessor('name', {
-      size: 500,
-      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
-      cell: ({ getValue }) => getValue(),
-    }),
     columnsHelper.accessor('loader', {
-      size: 50,
+      size: 70,
       enableSorting: false,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.LOADER_LAUNCHER} />
@@ -122,6 +130,13 @@ export const useColumns = (props: UseColumnsProps) => {
         <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
       ),
       cell: ({ getValue }) => getFormatDate(getValue()),
+    }),
+    columnsHelper.accessor('priority', {
+      size: 150,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={ColumnHeader.PRIORITY} />
+      ),
+      cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor('state', {
       size: 270,

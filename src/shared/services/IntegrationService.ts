@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { $api } from '@/services/api.service';
 import {
+  TDeleteNewsProvidersIntegrationsResponse,
   TGetActiveAuthIntegrationsRequest,
   TGetActiveAuthIntegrationsResponse,
   TGetAuthIntegrationsRequest,
@@ -14,12 +15,18 @@ import {
   TGetLauncherBuildPlatformsResponse,
   TGetLauncherBuildVersionsResponse,
   TGetLauncherGithubVersionsResponse,
+  TGetNewsProvidersIntegrationsRequest,
+  TGetNewsProvidersIntegrationsResponse,
+  TGetNewsRequest,
+  TGetNewsResponse,
   TGetSentryConnectRequest,
   TGetSentryConnectResponse,
   TPostAuthIntegrationsRequest,
   TPostAuthIntegrationsResponse,
   TPostLauncherUploadRequest,
   TPostLauncherUploadResponse,
+  TPostNewsIntegrationsRequest,
+  TPostNewsIntegrationsResponse,
   TPutConnectDiscordRequest,
   TPutConnectDiscordResponse,
   TPutConnectTexturesRequest,
@@ -27,10 +34,12 @@ import {
   TPutSentryConnectRequest,
   TPutSentryConnectResponse,
 } from '@/shared/api/contracts';
+import { NewsTypeEnum } from '@/shared/enums/news-type';
 
 class IntegrationService {
   private BASE_URL = '/integrations';
   private BASE_URL_AUTH = `${this.BASE_URL}/auth`;
+  private BASE_URL_NEWS = `${this.BASE_URL}/news`;
   private BASE_URL_GITHUB = `${this.BASE_URL}/github`;
   private BASE_URL_SENTRY = `${this.BASE_URL}/sentry/dsn`;
   private BASE_URL_TEXTURE = `${this.BASE_URL}/texture`;
@@ -51,6 +60,44 @@ class IntegrationService {
       TGetActiveAuthIntegrationsRequest,
       AxiosResponse<TGetActiveAuthIntegrationsResponse>
     >(`${this.BASE_URL_AUTH}/active`);
+
+    return data;
+  }
+
+  async getNewsIntegration(): Promise<TGetNewsProvidersIntegrationsResponse> {
+    const { data } = await $api.get<
+      TGetNewsProvidersIntegrationsRequest,
+      AxiosResponse<TGetNewsProvidersIntegrationsResponse>
+    >(`${this.BASE_URL_NEWS}/providers`);
+
+    return data;
+  }
+
+  async getNews(): Promise<TGetNewsResponse> {
+    const { data } = await $api.get<TGetNewsRequest, AxiosResponse<TGetNewsResponse>>(
+      `${this.BASE_URL_NEWS}/list`,
+    );
+
+    return data;
+  }
+
+  async deleteNewsProvider({
+    type,
+  }: {
+    type: NewsTypeEnum;
+  }): Promise<AxiosResponse<TDeleteNewsProvidersIntegrationsResponse>> {
+    return await $api.delete<TDeleteNewsProvidersIntegrationsResponse>(
+      `${this.BASE_URL_NEWS}/${type}`,
+    );
+  }
+
+  async postNewsIntegration(
+    body: TPostNewsIntegrationsRequest,
+  ): Promise<TPostNewsIntegrationsResponse> {
+    const { data } = await $api.post<
+      TPostNewsIntegrationsRequest,
+      AxiosResponse<TPostNewsIntegrationsResponse>
+    >(`${this.BASE_URL_NEWS}`, body);
 
     return data;
   }

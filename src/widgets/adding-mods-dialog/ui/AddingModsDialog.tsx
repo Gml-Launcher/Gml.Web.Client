@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { DownloadIcon, FileIcon, HeartFilledIcon, PlusIcon } from '@radix-ui/react-icons';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { useInView } from 'react-intersection-observer';
+import { debounce } from 'lodash';
 
 import { Button } from '@/shared/ui/button';
 import {
@@ -25,17 +26,28 @@ import { SearchFormSchemaType } from '@/widgets/adding-mods-dialog/lib/static';
 import { Card } from '@/shared/ui/card';
 import { AddingModsSelectVersionDialog } from '@/widgets/adding-mods-select-version-dialog';
 import modrinth from '@/assets/logos/modrinth.png';
+import curseforge from '@/assets/logos/curseforge.ico';
 import { formatNumber } from '@/shared/lib/utils';
+import { ModType } from '@/shared/enums';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
-  modType?: string;
+  modDirection: string;
+  modType: ModType;
 }
 
-export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
+export function AddingModsDialog({ profile, modDirection, modType }: ProfileModDialog) {
   const form = useForm<SearchFormSchemaType>();
-  const [modName, setModName] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { ref, inView } = useInView();
+
+  // Используем useCallback для мемоизации функции поиска
+  const handleSearch = useCallback(
+    debounce((query: string) => {
+      setSearchQuery(query);
+    }, 300),
+    [],
+  );
 
   const {
     data: searchMods,
@@ -43,25 +55,40 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
     error,
     fetchNextPage,
     refetch,
-  } = useSearchMods(profile?.profileName ?? '', modName);
+  } = useSearchMods(profile?.profileName ?? '', searchQuery, modType);
 
-  const onSubmit: SubmitHandler<SearchFormSchemaType> = async (content: SearchFormSchemaType) => {
-    setModName(content.name);
-    refetch();
-    refetch();
-  };
+  // Эффект для автоматического поиска при изменении searchQuery
+  useEffect(() => {
+    if (searchQuery) {
+      refetch();
+    }
+  }, [searchQuery, refetch]);
 
+  // Эффект для пагинации
   useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
 
+  const onSubmit: SubmitHandler<SearchFormSchemaType> = (content: SearchFormSchemaType) => {
+    handleSearch(content.name);
+  };
+
+  // Добавляем обработчик изменений инпута для живого поиска
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleSearch(e.target.value);
+  };
+
   return (
     <Drawer>
       <DrawerTrigger className="flex items-start">
         <Button variant="secondary" className="w-max gap-2">
-          <Image src={modrinth} alt="Modrinth" className="w-4 h-4" />
+          {modType === 1 ? (
+            <Image src={modrinth} alt="Modrinth" className="w-4 h-4" />
+          ) : (
+            <Image src={curseforge} alt="Curseforge" className="w-4 h-4" />
+          )}
           Добавить
           <PlusIcon width={16} height={16} />
         </Button>
@@ -71,7 +98,20 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
           <DrawerTitle className="gap-2 flex items-center flex-wrap">
             Мастер добавления модификаций
             <Badge className="cursor-pointer text-sm bg-blue-500 text-white hover:bg-opacity-100 hover:bg-blue-500">
-              {modType}
+              {modDirection}
+            </Badge>
+            <Badge className="cursor-pointer h-7 text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+              {modType === 1 ? (
+                <>
+                  <Image src={modrinth} alt="Modrinth" className="w-4 h-4 mr-2" />
+                  Modrinth
+                </>
+              ) : (
+                <>
+                  <Image src={curseforge} alt="Curseforge" className="w-4 h-4 mr-2" />
+                  CurseForge
+                </>
+              )}
             </Badge>
             <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               Minecraft: {profile?.minecraftVersion}
@@ -87,15 +127,18 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
             <form className="flex gap-3 items-end mt-3" onSubmit={form.handleSubmit(onSubmit)}>
               <FormItem className="w-full">
                 <FormControl>
-                  <Input placeholder="Начните искать мод" {...form.register('name')} />
+                  <Input
+                    placeholder="Начните искать мод"
+                    {...form.register('name')}
+                    onChange={(e) => {
+                      form.register('name').onChange(e); // Для react-hook-form
+                      handleInputChange(e); // Для живого поиска
+                    }}
+                  />
                 </FormControl>
               </FormItem>
 
-              <Button
-                type="submit"
-                className="w-fit ml-auto"
-                disabled={status === 'pending' || !form.formState.isDirty}
-              >
+              <Button type="submit" className="w-fit ml-auto" disabled={status === 'pending'}>
                 {status === 'pending' && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
                 Поиск
               </Button>
@@ -129,15 +172,17 @@ export function AddingModsDialog({ profile, modType }: ProfileModDialog) {
                       <p className="text-muted-foreground mb-3">{mod?.description}</p>
                       <AddingModsSelectVersionDialog
                         profile={profile}
-                        modType={modType}
-                        mod={mod}
+                        modDirection={modDirection}
+                        modData={mod}
                       />
                     </div>
                   </div>
                 </Card>
               ))}
 
-              <div ref={ref} style={{ height: '10px' }} className="bg-red-500" />
+              <div ref={ref} className="flex items-center justify-center p-5">
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">

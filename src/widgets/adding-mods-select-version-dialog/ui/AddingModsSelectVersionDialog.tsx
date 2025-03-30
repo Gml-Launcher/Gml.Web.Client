@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowDownIcon, DownloadIcon, FileIcon } from '@radix-ui/react-icons';
 import { FilesIcon } from 'lucide-react';
 
@@ -23,19 +23,26 @@ import { ModsDependencyTooltip } from '@/widgets/mods-dependency-tooltip';
 import { useLoadProfileModsByUrl } from '@/shared/hooks';
 import { Icons } from '@/shared/ui/icons';
 import { formatNumber, timeAgo } from '@/shared/lib/utils';
+import { ModType } from '@/shared/enums';
 
 interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
-  modType?: string;
-  mod?: ModEntity;
+  modDirection?: string;
+  modData?: ModEntity;
 }
 
-export function AddingModsSelectVersionDialog({ profile, modType, mod }: ProfileModDialog) {
+export function AddingModsSelectVersionDialog({
+  profile,
+  modDirection,
+  modData,
+}: ProfileModDialog) {
+  const [open, setOpen] = useState(false);
   const loadModsMutate = useLoadProfileModsByUrl();
 
   const { data: modInfo } = useModInfo({
     profileName: profile?.profileName ?? '',
-    modId: mod?.id ?? '',
+    modId: modData?.id ?? '',
+    modType: modData?.type ?? ModType.CURSE_FORGE,
   });
 
   const loadFilesByUrl = async (files: string[]) => {
@@ -43,13 +50,15 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
       .mutateAsync({
         profileName: profile?.profileName ?? '',
         links: files,
-        isOptional: modType === 'optional',
+        isOptional: modDirection === 'optional',
       })
-      .then(() => {});
+      .then(() => {
+        setOpen(false);
+      });
   };
 
   return (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger className="w-max mt-auto">
         <Button variant="secondary" className="w-max gap-2">
           Выбрать
@@ -59,12 +68,12 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
         <DrawerHeader>
           <DrawerTitle className="gap-2 flex items-center flex-wrap">
             <Avatar className="w-8 h-8">
-              <AvatarImage src={mod?.iconUrl} alt="Icon" />
+              <AvatarImage src={modData?.iconUrl} alt="Icon" />
               <AvatarFallback>
                 <FileIcon />
               </AvatarFallback>
             </Avatar>
-            {mod?.name}
+            {modData?.name}
             <Separator orientation="vertical" />
             <span className="text-muted-foreground">Выберите версию</span>
           </DrawerTitle>
@@ -108,6 +117,7 @@ export function AddingModsSelectVersionDialog({ profile, modType, mod }: Profile
                         <>
                           <ModsDependencyTooltip
                             profile={profile}
+                            modType={modData?.type ?? ModType.MODRINTH}
                             dependencies={mod.dependencies}
                           />
                         </>
