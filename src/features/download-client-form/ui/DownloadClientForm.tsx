@@ -109,7 +109,7 @@ export function DownloadClientForm({
             {isDownload && (
               <div className="w-full flex flex-col gap-y-1">
                 <p className="text-gray-700 dark:text-gray-200 text-sm">
-                  Сборка завершена на {percent}% из 100%
+                  Загрузка завершена на {percent}% из 100%
                 </p>
                 <Progress className="h-2" value={percent} />
               </div>
