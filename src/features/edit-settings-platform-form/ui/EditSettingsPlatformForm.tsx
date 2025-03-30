@@ -328,7 +328,7 @@ export const EditSettingsPlatformForm = () => {
                         <FormMessage />
                         <Button variant="link" asChild className="p-0">
                           <a
-                            href="https://oauth.vk.com/authorize?client_id=6121396&scope=groups,wall&redirect_uri=https://oauth.vk.com/blank.html&display=page&response_type=token&revoke=1"
+                            href="https://dev.vk.com/ru/admin/apps-list"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
