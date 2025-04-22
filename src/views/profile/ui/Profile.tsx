@@ -72,9 +72,9 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   if (isPending || !profile) return <ProfileLoading />;
 
   const onSubmitDeleteFiles = () => {
-    const hashFiles = Object.entries(rowSelection).map(([hash, _]) => ({
+    const hashFiles = Object.entries(rowSelection).map(([directory, _]) => ({
       profileName: profile.profileName,
-      hash,
+      directory,
     })) as WhitelistFileBaseEntity[];
 
     mutateDeleteFilesWhitelist(hashFiles);

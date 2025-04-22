@@ -46,12 +46,12 @@ export function AddingFilesWhitelistDialog({
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const onSubmit = () => {
-    const hashFiles = Object.entries(rowSelection).map(([hash, _]) => ({
+    const files = Object.entries(rowSelection).map(([directory, _]) => ({
       profileName,
-      hash,
+      directory,
     })) as WhitelistFileBaseEntity[];
 
-    mutate(hashFiles);
+    mutate(files);
 
     onOpenChange();
   };
@@ -66,7 +66,7 @@ export function AddingFilesWhitelistDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Выбор папок в «Белый список»</DialogTitle>
+          <DialogTitle>Выбор файлов в «Белый список»</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="files" value={tab}>
           <TabsContent value="files">
@@ -82,18 +82,18 @@ export function AddingFilesWhitelistDialog({
               <ExclamationTriangleIcon className="h-4 w-4" />
               <AlertTitle>Внимание!</AlertTitle>
               <AlertDescription>
-                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> файлов, которые будут
-                добавлены в WhiteList
+                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> файл(а/ов), которые
+                будут добавлены в WhiteList
               </AlertDescription>
             </Alert>
 
             <ScrollArea className="h-72 rounded-md border mt-4">
               <div className="p-4">
-                <h4 className="mb-4 text-sm font-medium leading-none">Список хешей файлов:</h4>
-                {Object.keys(rowSelection).map((hash) => (
+                <h4 className="mb-4 text-sm font-medium leading-none">Список файлов:</h4>
+                {Object.keys(rowSelection).map((directory) => (
                   <>
-                    <div key={hash} className="text-sm">
-                      {hash}
+                    <div key={directory} className="text-sm">
+                      {directory}
                     </div>
                     <Separator className="my-2" />
                   </>

@@ -10,7 +10,7 @@ import { Checkbox } from '@/shared/ui/checkbox';
 
 enum ColumnHeader {
   NAME = 'Название',
-  DIRECTORY = 'Директория',
+  DIRECTORY = 'Файл',
   FILE_SIZE = 'Размер файла',
   ADDITIONAL = '',
 }
@@ -43,11 +43,11 @@ export const useColumns = (profile: ProfileExtendedBaseEntity) => {
       enableSorting: false,
       enableHiding: false,
     }),
-    columnsHelper.accessor('name', {
-      size: 500,
-      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
-      cell: ({ getValue }) => getValue(),
-    }),
+    // columnsHelper.accessor('name', {
+    //   size: 500,
+    //   header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
+    //   cell: ({ getValue }) => getValue(),
+    // }),
     columnsHelper.accessor('directory', {
       size: 500,
       header: ({ column }) => (
