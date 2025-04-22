@@ -49,6 +49,7 @@ export const SentryAnalytics = () => {
     const dataFromYear = startOfYear(todayDate);
     const dataToYear = endOfYear(todayDate);
 
+
     switch (tab) {
       case AnalyticsInterval.ANALYTICS_INTERVAL_FIVE_MINUTES: {
         const dateFrom = format(subMinutes(new Date(), 5), "yyyy-MM-dd'T'HH:mm:ss");
@@ -127,6 +128,21 @@ export const SentryAnalytics = () => {
         console.error('Unknown tab:', tab);
     }
   }, [mutate, tab, date, projectType]);
+
+  const copyText = async (content: string) => {
+    try {
+      await navigator.clipboard.writeText(bug.stackTrace);
+      toast('Текст успешно скопирован', {
+        duration: 500,
+        onAutoClose: () => true,
+      });
+    } catch (error) {
+      console.error(error);
+      toast('Ошибка копирования. Подробности в консоли браузера', {
+        duration: 2000,
+      });
+    }
+  }
 
   return (
     <>
@@ -222,13 +238,7 @@ export const SentryAnalytics = () => {
                             <TableCell width="110">
                               <Button
                                 className="gap-3"
-                                onClick={async () => {
-                                  await navigator.clipboard.writeText(bug.stackTrace);
-                                  toast('Текст успешно скопирован', {
-                                    duration: 500,
-                                    onAutoClose: () => true,
-                                  });
-                                }}
+                                onClick={copyText(bug.stackTrace)}
                                 variant="secondary"
                               >
                                 <CopyIcon />
