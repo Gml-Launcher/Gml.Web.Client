@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
 import { ExclamationTriangleIcon, PlusIcon } from '@radix-ui/react-icons';
+
+import { FilesListContextProvider, useFilesListContext } from '../lib';
+
+import { AddingAnyFilesForm } from './AddingAnyFilesForm';
 
 import {
   Dialog,
@@ -13,12 +17,12 @@ import {
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
 import {
+  FileListBaseEntity,
   ProfileExtendedBaseEntity,
   ProfileFileBaseEntity,
-  WhitelistFileBaseEntity,
 } from '@/shared/api/contracts';
 import { FilesTable } from '@/widgets/files-table';
-import { Tabs, TabsContent } from '@/shared/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useAddingFilesWhitelist } from '@/shared/hooks';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { ScrollArea } from '@/shared/ui/scroll-area';
@@ -35,6 +39,7 @@ export function AddingFilesWhitelistDialog({
   files,
   profile,
 }: AddingFilesWhitelistDialogProps) {
+  const { directories, onChangeDirectories } = useFilesListContext();
   const { mutate } = useAddingFilesWhitelist();
 
   const [open, setOpen] = useState(false);
@@ -44,80 +49,107 @@ export function AddingFilesWhitelistDialog({
   const onChangeTab = (currentTab: string) => () => setTab(currentTab);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const rowSelectionConfig = { rowSelection, setRowSelection };
 
   const onSubmit = () => {
-    const files = Object.entries(rowSelection).map(([directory, _]) => ({
-      profileName,
-      directory,
-    })) as WhitelistFileBaseEntity[];
+    const filesFromList: FileListBaseEntity[] = Object.entries(rowSelection).map(
+      ([directory, _]) => ({
+        profileName,
+        directory,
+      }),
+    );
 
-    mutate(files);
+    onChangeDirectories(filesFromList);
+
+    mutate(directories);
 
     onOpenChange();
   };
 
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button className="w-fit gap-2">
-          <PlusIcon width={16} height={16} />
-          Добавить файл
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
-        <DialogHeader>
-          <DialogTitle>Выбор файлов в «Белый список»</DialogTitle>
-        </DialogHeader>
-        <Tabs defaultValue="files" value={tab}>
-          <TabsContent value="files">
-            <FilesTable
-              files={files}
-              profile={profile}
-              rowSelection={rowSelection}
-              setRowSelection={setRowSelection}
-            />
-          </TabsContent>
-          <TabsContent value="checkout">
-            <Alert variant="destructive">
-              <ExclamationTriangleIcon className="h-4 w-4" />
-              <AlertTitle>Внимание!</AlertTitle>
-              <AlertDescription>
-                Вы выбрали <strong>{Object.keys(rowSelection).length}</strong> файл(а/ов), которые
-                будут добавлены в WhiteList
-              </AlertDescription>
-            </Alert>
+  const selectedFilesList = useMemo(
+    () => [...Object.keys(rowSelection), ...directories.map(({ directory }) => directory)],
+    [directories, rowSelection],
+  );
+  const selectedFilesCount = selectedFilesList.length;
 
-            <ScrollArea className="h-72 rounded-md border mt-4">
-              <div className="p-4">
-                <h4 className="mb-4 text-sm font-medium leading-none">Список файлов:</h4>
-                {Object.keys(rowSelection).map((directory) => (
-                  <>
-                    <div key={directory} className="text-sm">
-                      {directory}
-                    </div>
-                    <Separator className="my-2" />
-                  </>
-                ))}
-              </div>
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
-        <div className="flex justify-end gap-x-4">
-          <Button className="w-fit" onClick={onChangeTab('files')} disabled={tab === 'files'}>
-            Назад
+  return (
+    <FilesListContextProvider>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogTrigger asChild>
+          <Button className="w-fit gap-2">
+            <PlusIcon width={16} height={16} />
+            Добавить файл
           </Button>
-          {tab === 'files' && (
-            <Button className="w-fit" onClick={onChangeTab('checkout')}>
-              Далее
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[1200px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>Добавление файлов в «Белый список»</DialogTitle>
+          </DialogHeader>
+          <Tabs defaultValue="files" value={tab}>
+            <TabsContent value="files">
+              <Tabs defaultValue="file-from-list">
+                <TabsList>
+                  <TabsTrigger value="file-from-list">Из списка</TabsTrigger>
+                  <TabsTrigger value="file-any">Добавить свой файл</TabsTrigger>
+                </TabsList>
+                <TabsContent value="file-from-list">
+                  <FilesTable
+                    files={files}
+                    profile={profile}
+                    rowSelection={rowSelectionConfig.rowSelection}
+                    setRowSelection={rowSelectionConfig.setRowSelection}
+                  />
+                </TabsContent>
+                <TabsContent value="file-any">
+                  <AddingAnyFilesForm profile={profileName} />
+                  <Separator className="my-2" />
+                  Вы выбрали <strong>{selectedFilesCount}</strong> файл(а/ов), которые будут
+                  добавлены в WhiteList
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
+            <TabsContent value="checkout">
+              <Alert variant="destructive">
+                <ExclamationTriangleIcon className="h-4 w-4" />
+                <AlertTitle>Внимание!</AlertTitle>
+                <AlertDescription>
+                  Вы выбрали <strong>{selectedFilesCount}</strong> файл(а/ов), которые будут
+                  добавлены в WhiteList
+                </AlertDescription>
+              </Alert>
+
+              <ScrollArea className="h-72 rounded-md border mt-4">
+                <div className="p-4">
+                  <h4 className="mb-4 text-sm font-medium leading-none">Список файлов:</h4>
+                  {selectedFilesList.map((directory) => (
+                    <>
+                      <div key={directory} className="text-sm">
+                        {directory}
+                      </div>
+                      <Separator className="my-2" />
+                    </>
+                  ))}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
+          <div className="flex justify-end gap-x-4">
+            <Button className="w-fit" onClick={onChangeTab('files')} disabled={tab === 'files'}>
+              Назад
             </Button>
-          )}
-          {tab === 'checkout' && (
-            <Button className="w-fit" onClick={onSubmit}>
-              Добавить
-            </Button>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
+            {tab === 'files' && (
+              <Button className="w-fit" onClick={onChangeTab('checkout')}>
+                Далее
+              </Button>
+            )}
+            {tab === 'checkout' && (
+              <Button className="w-fit" onClick={onSubmit}>
+                Добавить
+              </Button>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+    </FilesListContextProvider>
   );
 }

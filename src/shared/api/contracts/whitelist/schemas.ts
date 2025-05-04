@@ -1,9 +1,9 @@
-export type WhitelistFileBaseEntity = {
+export type FileListBaseEntity = {
   profileName: string;
   directory: string;
 };
 
-export type WhitelistFolderBaseEntity = {
+export type FileListFolderBaseEntity = {
   profileName: string;
   path: string;
 };

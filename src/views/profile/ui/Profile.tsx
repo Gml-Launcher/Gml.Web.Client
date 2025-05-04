@@ -18,7 +18,7 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
 import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from '@/shared/hooks';
 import { getStorageAccessToken, getStorageProfile } from '@/shared/services';
-import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { FileListBaseEntity, FileListFolderBaseEntity } from '@/shared/api/contracts';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Button } from '@/shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -75,7 +75,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     const hashFiles = Object.entries(rowSelection).map(([directory, _]) => ({
       profileName: profile.profileName,
       directory,
-    })) as WhitelistFileBaseEntity[];
+    })) as FileListBaseEntity[];
 
     mutateDeleteFilesWhitelist(hashFiles);
   };
@@ -84,7 +84,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     const folders = Object.entries(rowSelection).map(([path, _]) => ({
       profileName: profile.profileName,
       path,
-    })) as WhitelistFolderBaseEntity[];
+    })) as FileListFolderBaseEntity[];
 
     mutateDeleteFoldersWhitelist(folders);
   };
