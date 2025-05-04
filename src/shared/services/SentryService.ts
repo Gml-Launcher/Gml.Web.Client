@@ -11,6 +11,7 @@ import {
   TPostSentryFilterErrorsRequest,
   TPostSentryFilterErrorsResponse,
 } from '@/shared/api/contracts/sentry/requests';
+import { TPutSentryConnectResponse } from '@/shared/api/contracts';
 
 class SentryService {
   private BASE_URL = '/sentry';
@@ -40,6 +41,12 @@ class SentryService {
     exception: string;
   }): Promise<AxiosResponse<TGetSentryExceptionResponse>> {
     return await $api.get<TGetSentryExceptionResponse>(`${this.BASE_URL}/${exception}`);
+  }
+
+  async solveSentryErrors(): Promise<TPutSentryConnectResponse> {
+    const { data } = await $api.post<TPutSentryConnectResponse>(`${this.BASE_URL}/clear`);
+
+    return data;
   }
 
   async getSentryStats(): Promise<AxiosResponse<TGetSentryStatsResponse>> {

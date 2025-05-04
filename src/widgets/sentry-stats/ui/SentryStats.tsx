@@ -5,6 +5,7 @@ import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/shared/ui/chart';
 import { BaseSentryStats, BaseSentrySummary } from '@/shared/api/contracts/sentry/schemas';
+import { SolveAllErrorsButton } from '@/widgets/sentry-stats/ui/SolveAllErrorsButton';
 
 const chartConfig = {
   views: {
@@ -166,6 +167,8 @@ export const SentryStats = ({ chartData, summaryData }: SentryStatsProps) => {
           </ChartContainer>
         </CardContent>
       </Card>
+
+      <SolveAllErrorsButton />
     </div>
   );
 };

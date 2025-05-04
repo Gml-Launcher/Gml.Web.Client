@@ -34,6 +34,7 @@ export const integrationsKeys = {
 
   sentry: () => [...integrationsKeys.all, 'sentry'] as const,
   sentryEditing: () => [...integrationsKeys.sentry(), 'editing'] as const,
+  sentrySolve: () => [...integrationsKeys.sentry(), 'solve'] as const,
 
   textures: () => [...integrationsKeys.all, 'textures'] as const,
   texturesEditing: (type: TexturesServiceType) =>
