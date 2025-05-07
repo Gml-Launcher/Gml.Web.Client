@@ -39,7 +39,7 @@ export function ConnectTexturesDialog() {
           Настроить
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="max-w-full sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Подключение сервиса скинов и плащей</DialogTitle>
         </DialogHeader>
