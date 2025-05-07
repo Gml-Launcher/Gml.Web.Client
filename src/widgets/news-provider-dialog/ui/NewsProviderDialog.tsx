@@ -100,7 +100,7 @@ export function NewsProviderDialog() {
                   {isLoadingNewsProviders ? (
                     <div>Loading...</div>
                   ) : (
-                    <div className="grid grid-cols-1 gap-4 h-[300px] overflow-auto md:h-full">
+                    <div className="grid grid-cols-1 gap-4 h-[100px] overflow-auto md:h-full">
                       {Array.isArray(newsProviders) && newsProviders.length > 0 ? (
                         newsProviders.map((social) => (
                           <Card key={social.type} className="relative">
