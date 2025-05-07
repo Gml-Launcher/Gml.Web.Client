@@ -79,7 +79,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
           'blur-sm': canEditModsList,
         })}
       >
-        <div className="flex flex-col gap-3 w-[calc(100vw-35px)] md:full">
+        <div className="flex flex-col gap-3 w-[calc(100vw-35px)] md:w-full">
           <div className="text-xl font-bold">Список модов</div>
           <Table className="border border-dashed rounded-2xl">
             <TableBody>
@@ -132,7 +132,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
             <AddingModsDialog profile={profile} modDirection="mods" modType={ModType.CURSE_FORGE} />
           </div>
         </div>
-        <div className="flex flex-col gap-3 w-[calc(100vw-35px)] md:full">
+        <div className="flex flex-col gap-3 w-[calc(100vw-35px)] md:w-full">
           <div className="text-xl">Опциональные моды</div>
           <Table className="border border-dashed rounded-2xl overflow-x-hidden">
             <TableBody>

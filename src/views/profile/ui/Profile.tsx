@@ -154,7 +154,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             title="Белый список файлов"
             subtitle="Белый список необходим для того чтобы исключить выбранные файлы из автоматического удаления"
           >
-            <div className="hidden md:block">
+            <div className="hidden md:flex flex-col gap-3">
               <div className={classes.tabs__whitelist}>
                 <AddingFilesWhitelistDialog
                   profile={profile}
@@ -206,7 +206,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             title="Белый список папок"
             subtitle="Белый список необходим для того чтобы исключить выбранные папки из автоматического удаления"
           >
-            <div className="hidden md:block">
+            <div className="hidden md:flex flex-col gap-3">
               <div className={classes.tabs__whitelist}>
                 <AddingFoldersWhitelistDialog profileName={profile.profileName} />
                 {!!Object.keys(rowSelection).length && (
