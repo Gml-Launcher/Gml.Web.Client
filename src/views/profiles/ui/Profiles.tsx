@@ -2,6 +2,7 @@ import { CreateProfileDialog } from '@/widgets/create-profile-dialog';
 import { ProfilesTable } from '@/widgets/profiles-table';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { DASHBOARD_PAGES } from '@/shared/routes';
+import { ProfilesCard } from '@/widgets/profiles-table/ui/ProfilesCard';
 
 export const ProfilesPage = () => {
   return (
@@ -15,8 +16,11 @@ export const ProfilesPage = () => {
           <h1 className="text-xl font-bold mb-8">Профили</h1>
           <CreateProfileDialog />
         </div>
-        <div className="flex flex-col gap-y-6 w-full">
+        <div className="flex-col gap-y-6 w-full hidden md:flex">
           <ProfilesTable />
+        </div>
+        <div className="flex-col gap-y-6 w-full md:hidden">
+          <ProfilesCard />
         </div>
       </div>
     </>
