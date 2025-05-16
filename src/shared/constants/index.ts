@@ -1,5 +1,11 @@
 export const HREF_GET_DATALIFE_ENGINE_AUTH_PHP =
   'https://raw.githubusercontent.com/GamerVII-NET/Gml.Modules.Auth/master/DLE/auth.php';
+export const HREF_GET_NAMELESS_MC_AUTH_PHP =
+  'https://github.com/GamerVII-NET/Gml.Modules.Auth/tree/master/NamelessMC';
+export const HREF_GET_WEBMCR_RELOADED_AUTH_PHP =
+  'https://github.com/GamerVII-NET/Gml.Modules.Auth/tree/master/WebMCR%20Reload';
+export const HREF_GET_WORDPRESS_AUTH_PHP =
+  'https://github.com/GamerVII-NET/Gml.Modules.Auth/tree/master/WordPress';
 export const HREF_DOCUMENTATION_CUSTOM_ENDPOINT =
   'https://gml-launcher.github.io/Gml.Docs/integrations-auth-custom.html';
 export const HREF_DISCORD = 'https://discord.com/invite/b5xgqfWgNt';
