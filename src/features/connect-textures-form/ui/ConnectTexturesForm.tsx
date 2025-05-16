@@ -90,7 +90,7 @@ export function ConnectTexturesForm({
 
   return (
     <div className="grid gap-4" {...props}>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {textureServices.map((service) => (
           <Button
             key={service.key}
@@ -137,7 +137,7 @@ export function ConnectTexturesForm({
             )}
           />
 
-          <Alert variant="warning">
+          <Alert variant="warning" className="hidden md:block">
             <InfoIcon className="h-4 w-4" />
             <AlertTitle>Обратите внимание!</AlertTitle>
             <AlertDescription className="mb-2">

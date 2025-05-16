@@ -85,7 +85,7 @@ export function AddingModsSelectVersionDialog({
                 <div className="flex gap-4">
                   <div className="flex flex-col">
                     <h3 className="flex items-center font-bold text-sm gap-2">{mod.versionName}</h3>
-                    <div className="flex gap-2 items-center mt-3">
+                    <div className="flex flex-wrap md:flex-row gap-2 items-center mt-3">
                       <Button
                         className="w-max gap-2"
                         variant="secondary"

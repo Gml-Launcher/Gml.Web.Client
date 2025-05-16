@@ -86,7 +86,7 @@ export function NewsProviderDialog() {
           Подключить
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[1000px]">
+      <DialogContent className="max-w-full sm:max-w-[1000px]">
         <DialogTitle></DialogTitle>
         <Section title="Новостные провайдеры" subtitle="Настройте поставщики данных ваших новостей">
           <Tabs defaultValue="connect">
@@ -95,12 +95,12 @@ export function NewsProviderDialog() {
               <TabsTrigger value="view">Предпросмотр новостей</TabsTrigger>
             </TabsList>
             <TabsContent value="connect">
-              <div className="flex gap-12">
+              <div className="flex flex-col md:flex-row gap-12">
                 <div className="flex flex-col gap-3 w-full">
                   {isLoadingNewsProviders ? (
                     <div>Loading...</div>
                   ) : (
-                    <div className="grid grid-cols-1 gap-4 h-full">
+                    <div className="grid grid-cols-1 gap-4 h-[100px] overflow-auto md:h-full">
                       {Array.isArray(newsProviders) && newsProviders.length > 0 ? (
                         newsProviders.map((social) => (
                           <Card key={social.type} className="relative">

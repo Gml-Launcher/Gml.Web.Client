@@ -75,7 +75,7 @@ export const useColumns = (profile: ProfileExtendedBaseEntity) => {
           (file: ProfileFileBaseEntity) => file.hash === fileHash,
         );
 
-        if (!fileExists)
+        if (!fileExists && fileHash != undefined)
           return (
             <div
               className={`flex items-center gap-2 ${fileExists ? 'text-green-500' : 'text-red-500'} font-bold`}
