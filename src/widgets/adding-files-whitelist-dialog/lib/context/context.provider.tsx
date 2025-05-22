@@ -14,8 +14,8 @@ export const FilesListContext = createContext<FilesListContextType>(FilesListCon
 export const FilesListContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [directories, setDirectories] = useState<FileListBaseEntity[]>([]);
 
-  const onChangeDirectories = useCallback((directories: FileListBaseEntity[]) => {
-    setDirectories((prev) => (prev ? [...prev, ...directories] : [...directories]));
+  const onChangeDirectories = useCallback((directoriesRaw: FileListBaseEntity[]) => {
+    setDirectories((prev) => (prev ? [...prev, ...directoriesRaw] : [...directoriesRaw]));
   }, []);
 
   const contextValue: FilesListContextType = useMemo(

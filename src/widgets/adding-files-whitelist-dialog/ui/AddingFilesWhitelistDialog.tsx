@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { SetStateAction, useMemo, useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
 import { ExclamationTriangleIcon, PlusIcon } from '@radix-ui/react-icons';
 
-import { FilesListContextProvider, useFilesListContext } from '../lib';
+import { FilesListContextProvider } from '../lib';
 
 import { AddingAnyFilesForm } from './AddingAnyFilesForm';
 
@@ -16,17 +16,14 @@ import {
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
-import {
-  FileListBaseEntity,
-  ProfileExtendedBaseEntity,
-  ProfileFileBaseEntity,
-} from '@/shared/api/contracts';
+import { ProfileExtendedBaseEntity, ProfileFileBaseEntity } from '@/shared/api/contracts';
 import { FilesTable } from '@/widgets/files-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { useAddingFilesWhitelist } from '@/shared/hooks';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import { Separator } from '@/shared/ui/separator';
+import { useFilesListStore } from '@/widgets/adding-files-whitelist-dialog/lib/store';
 
 interface AddingFilesWhitelistDialogProps {
   profileName: string;
@@ -39,7 +36,8 @@ export function AddingFilesWhitelistDialog({
   files,
   profile,
 }: AddingFilesWhitelistDialogProps) {
-  const { directories, onChangeDirectories } = useFilesListContext();
+  // const { directories, onChangeDirectories } = useFilesListContext();
+  const { directories, setDirectories, clear, count: selectedFilesCount } = useFilesListStore();
   const { mutate } = useAddingFilesWhitelist();
 
   const [open, setOpen] = useState(false);
@@ -49,28 +47,32 @@ export function AddingFilesWhitelistDialog({
   const onChangeTab = (currentTab: string) => () => setTab(currentTab);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const rowSelectionConfig = { rowSelection, setRowSelection };
+  const rowSelectionConfig = {
+    rowSelection,
+    setRowSelection: (value: SetStateAction<RowSelectionState>) => {
+      const newSelection = typeof value === 'function' ? value(rowSelection) : value;
+      setRowSelection(newSelection);
+      const selectedFiles = Object.entries(newSelection)
+        .filter(([_, selected]) => selected)
+        .map(([directory]) => ({
+          profileName,
+          directory,
+        }));
+      setDirectories(selectedFiles);
+    },
+  };
 
   const onSubmit = () => {
-    const filesFromList: FileListBaseEntity[] = Object.entries(rowSelection).map(
-      ([directory, _]) => ({
-        profileName,
-        directory,
-      }),
-    );
-
-    onChangeDirectories(filesFromList);
-
     mutate(directories);
 
     onOpenChange();
+    clear();
   };
 
   const selectedFilesList = useMemo(
     () => [...Object.keys(rowSelection), ...directories.map(({ directory }) => directory)],
     [directories, rowSelection],
   );
-  const selectedFilesCount = selectedFilesList.length;
 
   return (
     <FilesListContextProvider>

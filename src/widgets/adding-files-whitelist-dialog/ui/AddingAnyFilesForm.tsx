@@ -2,14 +2,13 @@
 
 import { useState } from 'react';
 
-import { useFilesListContext } from '../lib';
-
 import { FormControl, FormDescription, FormItem, FormLabel } from '@/shared/ui/form';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
+import { useFilesListStore } from '@/widgets/adding-files-whitelist-dialog/lib/store';
 
 export function AddingAnyFilesForm({ profile }: { profile: string }) {
-  const { onChangeDirectories } = useFilesListContext();
+  const { addDirectory } = useFilesListStore();
 
   const [value, setValue] = useState<string | undefined>(undefined);
   const onChangeValue = (directory: string) => {
@@ -17,16 +16,14 @@ export function AddingAnyFilesForm({ profile }: { profile: string }) {
   };
 
   const onAddDirectoriesCollection = () => {
-    if (!value) return;
+    if (!value?.trim()) return;
 
     const directory = {
       profileName: profile,
       directory: value,
     };
 
-    onChangeDirectories([directory]);
-
-    setValue(undefined);
+    addDirectory(directory);
   };
 
   return (
@@ -37,7 +34,7 @@ export function AddingAnyFilesForm({ profile }: { profile: string }) {
           <FormControl>
             <Input
               placeholder="Введите абсолютный путь"
-              value={value}
+              value={value || ''}
               onChange={(event) => onChangeValue(event.target.value)}
             />
           </FormControl>
@@ -47,7 +44,7 @@ export function AddingAnyFilesForm({ profile }: { profile: string }) {
           </FormDescription>
         </FormItem>
 
-        <Button onClick={onAddDirectoriesCollection}>Submit</Button>
+        <Button onClick={onAddDirectoriesCollection}>Добавить</Button>
       </div>
     </div>
   );
