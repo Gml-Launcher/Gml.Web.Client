@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from '@/shared/ui/dialog';
 import { Button } from '@/shared/ui/button';
@@ -39,15 +40,25 @@ export function ConnectTexturesDialog() {
           Настроить
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-full sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Подключение сервиса скинов и плащей</DialogTitle>
+          <div className="flex items-center gap-2">
+            <div className="rounded-full bg-blue-100 p-2 dark:bg-blue-900">
+              <WallpaperIcon className="h-5 w-5 text-blue-600 dark:text-blue-300" />
+            </div>
+            <DialogTitle className="text-xl">Подключение сервиса скинов и плащей</DialogTitle>
+          </div>
+          <DialogDescription className="text-muted-foreground">
+            Настройте интеграцию с сервисами скинов и плащей для вашего проекта
+          </DialogDescription>
         </DialogHeader>
-        <ConnectTexturesForm
-          skins={textures_skins}
-          cloaks={textures_cloaks}
-          onOpenChange={onOpenChange}
-        />
+        <div className="mt-4">
+          <ConnectTexturesForm
+            skins={textures_skins}
+            cloaks={textures_cloaks}
+            onOpenChange={onOpenChange}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );
