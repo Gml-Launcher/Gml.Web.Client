@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
 import { Laptop2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import classes from './styles.module.css';
 
@@ -19,7 +20,7 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
 import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from '@/shared/hooks';
 import { getStorageAccessToken, getStorageProfile } from '@/shared/services';
-import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { FileListBaseEntity, FileListFolderBaseEntity } from '@/shared/api/contracts';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Button } from '@/shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -45,11 +46,14 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const { data, mutate, isPending } = useProfile();
   const { setPlayers } = useGamePlayerStore();
   const profile = data?.data.data;
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
   const { mutate: mutateDeleteFoldersWhitelist } = useDeleteFolderWhitelist();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [activeTab, setActiveTab] = useState<string>(searchParams.get('tab') || 'main');
 
   useEffect(() => {
     if (account && accessToken) {
@@ -76,7 +80,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     const hashFiles = Object.entries(rowSelection).map(([directory, _]) => ({
       profileName: profile.profileName,
       directory,
-    })) as WhitelistFileBaseEntity[];
+    })) as FileListBaseEntity[];
 
     mutateDeleteFilesWhitelist(hashFiles);
   };
@@ -85,7 +89,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     const folders = Object.entries(rowSelection).map(([path, _]) => ({
       profileName: profile.profileName,
       path,
-    })) as WhitelistFolderBaseEntity[];
+    })) as FileListFolderBaseEntity[];
 
     mutateDeleteFoldersWhitelist(folders);
   };
@@ -108,12 +112,16 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       </div>
 
       <Tabs
-        defaultValue="main"
+        value={activeTab}
+        onValueChange={(value) => {
+          setActiveTab(value);
+          router.push(`/dashboard/profile/${params.name}?tab=${value}`, { scroll: false });
+        }}
         aria-orientation="vertical"
         orientation="vertical"
         className="flex flex-col md:flex-row gap-6 items-start"
       >
-        <TabsList defaultValue="main" className={classes.tabs__list}>
+        <TabsList className={classes.tabs__list}>
           <TabsTrigger className="w-full h-10" value="main">
             Основные
           </TabsTrigger>
