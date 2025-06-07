@@ -6,6 +6,9 @@ export enum AuthenticationType {
   AUTHENTICATION_TYPE_EASY_CABINET = 4, //  Авторизация через EasyCabinet
   AUTHENTICATION_TYPE_UNICORECMS = 5, //  Авторизация через UniCoreCMS
   AUTHENTICATION_TYPE_CUSTOM = 6, // Авторизация через свой endpoint
+  AUTHENTICATION_TYPE_NAMELESS_MC = 7, // Авторизация через NamelessMC
+  AUTHENTICATION_TYPE_WEB_MCR_RELOADED = 8, // Авторизация через WebMCRReloaded
+  AUTHENTICATION_TYPE_WORDPRESS = 9, // Авторизация через WordPress
 }
 
 export enum AuthenticationTypeOption {
@@ -16,4 +19,7 @@ export enum AuthenticationTypeOption {
   'OPTION_4' = 'EasyCabinet', // Авторизация через EasyCabinet
   'OPTION_5' = 'UniCoreCMS', // Авторизация через UniCoreCMS
   'OPTION_6' = 'Собственная Авторизация', // Авторизация через свой endpoint
+  'OPTION_7' = 'NamelessMC', // Авторизация через NamelessMC
+  'OPTION_8' = 'WebMCRReloaded', // Авторизация через WebMCRReloaded
+  'OPTION_9' = 'WordPress', // Авторизация через WordPress
 }

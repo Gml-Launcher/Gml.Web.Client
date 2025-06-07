@@ -62,9 +62,24 @@ export const useSentryStats = () => {
   });
 };
 
+export const useSolveSentryErrors = () => {
+  return useMutation({
+    mutationKey: sentryKeys.summary(),
+    mutationFn: () => sentryService.solveSentryErrors(),
+    onSuccess: async (data) => {
+      toast.success('Успешно', {
+        description: data.message,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
 export const useSentrySummary = () => {
   return useQuery({
-    queryKey: sentryKeys.summary(),
+    queryKey: sentryKeys.all,
     queryFn: () => sentryService.getSentrySummary(),
     select: (data) => data.data.data,
   });

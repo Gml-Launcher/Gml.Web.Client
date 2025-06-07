@@ -1,18 +1,18 @@
-import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { FileListBaseEntity, FileListFolderBaseEntity } from '@/shared/api/contracts';
 import { ResponseBaseEntity } from '@/shared/api/schemas';
 
 // Добавление файлов в whitelist
-export type TPostWhitelistFileRequest = WhitelistFileBaseEntity[];
+export type TPostWhitelistFileRequest = FileListBaseEntity[];
 export type TPostWhitelistFileResponse = ResponseBaseEntity & {};
 
 // Удаление файлов в whitelist
-export type TDeleteWhitelistFileRequest = WhitelistFileBaseEntity[];
+export type TDeleteWhitelistFileRequest = FileListBaseEntity[];
 export type TDeleteWhitelistFileResponse = ResponseBaseEntity & {};
 
 // Добавление папок в whitelist
-export type TPostWhitelistFolderRequest = WhitelistFolderBaseEntity[];
+export type TPostWhitelistFolderRequest = FileListFolderBaseEntity[];
 export type TPostWhitelistFolderResponse = ResponseBaseEntity & {};
 
 // Удаление папок в whitelist
-export type TDeleteWhitelistFolderRequest = WhitelistFolderBaseEntity[];
+export type TDeleteWhitelistFolderRequest = FileListFolderBaseEntity[];
 export type TDeleteWhitelistFolderResponse = ResponseBaseEntity & {};

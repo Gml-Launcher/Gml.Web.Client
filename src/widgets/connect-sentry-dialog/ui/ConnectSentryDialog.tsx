@@ -1,6 +1,6 @@
 'use client';
 
-import { PencilIcon, PlugIcon } from 'lucide-react';
+import { PencilIcon, PlugIcon, ActivityIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from '@/shared/ui/dialog';
 import { useSentry } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
@@ -35,9 +36,17 @@ export function ConnectSentryDialog() {
           {connectionText}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Подключение Sentry</DialogTitle>
+          <div className="flex items-center gap-2">
+            <div className="rounded-full bg-red-100 p-2 dark:bg-red-900">
+              <ActivityIcon className="h-5 w-5 text-red-600 dark:text-red-300" />
+            </div>
+            <DialogTitle className="text-xl">Подключение Sentry</DialogTitle>
+          </div>
+          <DialogDescription className="text-muted-foreground">
+            Настройте интеграцию с Sentry для отслеживания ошибок и производительности вашего приложения
+          </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-x-8">
           <ConnectSentryForm onOpenChange={onOpenChange} />

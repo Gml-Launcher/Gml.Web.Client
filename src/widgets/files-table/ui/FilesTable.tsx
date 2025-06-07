@@ -56,7 +56,7 @@ export function FilesTable({ files, profile, rowSelection, setRowSelection }: Fi
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onRowSelectionChange: setRowSelection,
-    getRowId: ({ hash }) => hash,
+    getRowId: ({ directory }) => directory,
     state: {
       sorting,
       columnFilters,

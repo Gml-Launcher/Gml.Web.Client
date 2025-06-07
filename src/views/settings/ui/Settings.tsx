@@ -17,7 +17,7 @@ export const SettingsPage = () => {
       </div>
       <div className="mx-auto grid w-full items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
         <Tabs
-          className="flex gap-6 items-start"
+          className="flex flex-col md:flex-row gap-6 items-start"
           defaultValue="settings"
           aria-orientation="vertical"
           orientation="vertical"

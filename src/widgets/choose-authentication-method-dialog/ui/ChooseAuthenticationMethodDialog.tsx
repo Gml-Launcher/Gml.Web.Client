@@ -21,6 +21,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { AuthenticationType, AuthenticationTypeOption } from '@/shared/enums';
 import { useActiveAuthIntegrations, useAuthIntegrations } from '@/shared/hooks';
 import { Button } from '@/shared/ui/button';
+import { AuthenticationFormNamelessMC } from '@/features/authentication-nameless-mc-form/ui/AuthenticationFormNamelessMC';
+import { AuthenticationFormWebMCRReloaded } from '@/features/authentication-webmcr-reloaded-form';
+import { AuthenticationFormWordpress } from '@/features/authentication-wordpress-form';
 
 export function ChooseAuthenticationMethodDialog() {
   const [open, setOpen] = useState(false);
@@ -42,6 +45,12 @@ export function ChooseAuthenticationMethodDialog() {
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_UNDEFINED;
   const isFormDatalife =
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_DATALIFE_ENGINE;
+  const isNamelessMC =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_NAMELESS_MC;
+  const isWebMCR =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_WEB_MCR_RELOADED;
+  const isWordPress =
+    Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_WORDPRESS;
   const isFormAzuriom =
     Number(authenticationTab) === AuthenticationType.AUTHENTICATION_TYPE_AZURIOM;
   const isFormEasyCabinet =
@@ -98,6 +107,9 @@ export function ChooseAuthenticationMethodDialog() {
           {isFormEasyCabinet && <AuthenticationFormEasycabinet onOpenChange={onOpenChange} />}
           {isFormUniCoreCMS && <AuthenticationFormUniCoreCMS onOpenChange={onOpenChange} />}
           {isFormCustom && <AuthenticationFormCustom onOpenChange={onOpenChange} />}
+          {isNamelessMC && <AuthenticationFormNamelessMC onOpenChange={onOpenChange} />}
+          {isWebMCR && <AuthenticationFormWebMCRReloaded onOpenChange={onOpenChange} />}
+          {isWordPress && <AuthenticationFormWordpress onOpenChange={onOpenChange} />}
         </div>
       </DialogContent>
     </Dialog>

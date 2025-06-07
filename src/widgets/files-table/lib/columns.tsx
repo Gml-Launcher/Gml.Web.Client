@@ -10,7 +10,7 @@ import { Checkbox } from '@/shared/ui/checkbox';
 
 enum ColumnHeader {
   NAME = 'Название',
-  DIRECTORY = 'Директория',
+  DIRECTORY = 'Файл',
   FILE_SIZE = 'Размер файла',
   ADDITIONAL = '',
 }
@@ -43,25 +43,17 @@ export const useColumns = (profile: ProfileExtendedBaseEntity) => {
       enableSorting: false,
       enableHiding: false,
     }),
-    columnsHelper.accessor('name', {
-      size: 500,
-      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
-      cell: ({ getValue }) => getValue(),
-    }),
+    // columnsHelper.accessor('name', {
+    //   size: 500,
+    //   header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
+    //   cell: ({ getValue }) => getValue(),
+    // }),
     columnsHelper.accessor('directory', {
       size: 500,
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.DIRECTORY} />
       ),
       cell: ({ getValue }) => getValue(),
-    }),
-    columnsHelper.accessor('size', {
-      size: 500,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.FILE_SIZE} />
-      ),
-      cell: ({ getValue }) => getValue(),
-      enableColumnFilter: false,
     }),
     columnsHelper.accessor('size', {
       size: 500,
@@ -75,7 +67,7 @@ export const useColumns = (profile: ProfileExtendedBaseEntity) => {
           (file: ProfileFileBaseEntity) => file.hash === fileHash,
         );
 
-        if (!fileExists)
+        if (!fileExists && fileHash != undefined)
           return (
             <div
               className={`flex items-center gap-2 ${fileExists ? 'text-green-500' : 'text-red-500'} font-bold`}

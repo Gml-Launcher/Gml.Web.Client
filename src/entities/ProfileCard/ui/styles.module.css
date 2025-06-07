@@ -3,7 +3,7 @@
 }
 
 .profile-card__edit-button {
-    @apply flex justify-between w-full;
+    @apply flex flex-col-reverse gap-3 md:flex-row md:justify-between w-full;
 }
 
 .profile-card__edit-button-full {

@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
+import { Laptop2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import classes from './styles.module.css';
 
@@ -18,7 +20,7 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
 import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from '@/shared/hooks';
 import { getStorageAccessToken, getStorageProfile } from '@/shared/services';
-import { WhitelistFileBaseEntity, WhitelistFolderBaseEntity } from '@/shared/api/contracts';
+import { FileListBaseEntity, FileListFolderBaseEntity } from '@/shared/api/contracts';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Button } from '@/shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -44,11 +46,14 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const { data, mutate, isPending } = useProfile();
   const { setPlayers } = useGamePlayerStore();
   const profile = data?.data.data;
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
   const { mutate: mutateDeleteFoldersWhitelist } = useDeleteFolderWhitelist();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [activeTab, setActiveTab] = useState<string>(searchParams.get('tab') || 'main');
 
   useEffect(() => {
     if (account && accessToken) {
@@ -72,10 +77,10 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   if (isPending || !profile) return <ProfileLoading />;
 
   const onSubmitDeleteFiles = () => {
-    const hashFiles = Object.entries(rowSelection).map(([hash, _]) => ({
+    const hashFiles = Object.entries(rowSelection).map(([directory, _]) => ({
       profileName: profile.profileName,
-      hash,
-    })) as WhitelistFileBaseEntity[];
+      directory,
+    })) as FileListBaseEntity[];
 
     mutateDeleteFilesWhitelist(hashFiles);
   };
@@ -84,7 +89,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
     const folders = Object.entries(rowSelection).map(([path, _]) => ({
       profileName: profile.profileName,
       path,
-    })) as WhitelistFolderBaseEntity[];
+    })) as FileListFolderBaseEntity[];
 
     mutateDeleteFoldersWhitelist(folders);
   };
@@ -107,12 +112,16 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       </div>
 
       <Tabs
-        defaultValue="main"
+        value={activeTab}
+        onValueChange={(value) => {
+          setActiveTab(value);
+          router.push(`/dashboard/profile/${params.name}?tab=${value}`, { scroll: false });
+        }}
         aria-orientation="vertical"
         orientation="vertical"
         className="flex flex-col md:flex-row gap-6 items-start"
       >
-        <TabsList defaultValue="main" className={classes.tabs__list}>
+        <TabsList className={classes.tabs__list}>
           <TabsTrigger className="w-full h-10" value="main">
             Основные
           </TabsTrigger>
@@ -153,38 +162,51 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             title="Белый список файлов"
             subtitle="Белый список необходим для того чтобы исключить выбранные файлы из автоматического удаления"
           >
-            <div className={classes.tabs__whitelist}>
-              <AddingFilesWhitelistDialog
+            <div className="hidden md:flex flex-col gap-3">
+              <div className={classes.tabs__whitelist}>
+                <AddingFilesWhitelistDialog
+                  profile={profile}
+                  profileName={profile.profileName}
+                  files={profile.files}
+                />
+                {!!Object.keys(rowSelection).length && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline">Удалить выбранные файлы</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Удаление файлов из белого списка</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} файлы(ов) из белого списка?`}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Отмена</AlertDialogCancel>
+                        <AlertDialogAction onClick={onSubmitDeleteFiles}>Удалить</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+              </div>
+              <FilesTable
+                files={profile.whiteListFiles}
                 profile={profile}
-                profileName={profile.profileName}
-                files={profile.files}
+                rowSelection={rowSelection}
+                setRowSelection={setRowSelection}
               />
-              {!!Object.keys(rowSelection).length && (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline">Удалить выбранные файлы</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Удаление файлов из белого списка</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} файлы(ов) из белого списка?`}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Отмена</AlertDialogCancel>
-                      <AlertDialogAction onClick={onSubmitDeleteFiles}>Удалить</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )}
             </div>
-            <FilesTable
-              files={profile.whiteListFiles}
-              profile={profile}
-              rowSelection={rowSelection}
-              setRowSelection={setRowSelection}
-            />
+            <div className="block md:hidden">
+              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg bg-card">
+                <div className="mb-4">
+                  <Laptop2 />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold">Доступно только на компьютерах</h3>
+                <p className="text-sm text-muted-foreground">
+                  Пожалуйста, используйте десктопную версию для управления файлами
+                </p>
+              </div>
+            </div>
           </Section>
         </TabsContent>
         <TabsContent value="folders" className={classes.tabs__content}>
@@ -192,34 +214,50 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             title="Белый список папок"
             subtitle="Белый список необходим для того чтобы исключить выбранные папки из автоматического удаления"
           >
-            <div className={classes.tabs__whitelist}>
-              <AddingFoldersWhitelistDialog profileName={profile.profileName} />
-              {!!Object.keys(rowSelection).length && (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline">Удалить выбранные папки</Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Удаление папок из белого списка</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} папку(и) из белого списка?`}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Отмена</AlertDialogCancel>
-                      <AlertDialogAction onClick={onSubmitDeleteFolders}>Удалить</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )}
+            <div className="hidden md:flex flex-col gap-3">
+              <div className={classes.tabs__whitelist}>
+                <AddingFoldersWhitelistDialog profileName={profile.profileName} />
+                {!!Object.keys(rowSelection).length && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline">Удалить выбранные папки</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Удаление папок из белого списка</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {`Вы уверены что хотите удалить ${Object.keys(rowSelection).length} папку(и) из белого списка?`}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Отмена</AlertDialogCancel>
+                        <AlertDialogAction onClick={onSubmitDeleteFolders}>
+                          Удалить
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
+              </div>
+              <FolderTable
+                folders={profile.whiteListFolders}
+                profile={profile}
+                rowSelection={rowSelection}
+                setRowSelection={setRowSelection}
+              />
             </div>
-            <FolderTable
-              folders={profile.whiteListFolders}
-              profile={profile}
-              rowSelection={rowSelection}
-              setRowSelection={setRowSelection}
-            />
+
+            <div className="block md:hidden">
+              <div className="flex flex-col items-center justify-center p-8 text-center border rounded-lg bg-card">
+                <div className="mb-4">
+                  <Laptop2 />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold">Доступно только на компьютерах</h3>
+                <p className="text-sm text-muted-foreground">
+                  Пожалуйста, используйте десктопную версию для управления файлами
+                </p>
+              </div>
+            </div>
           </Section>
         </TabsContent>
         <TabsContent value="servers" className={classes.tabs__content}>
