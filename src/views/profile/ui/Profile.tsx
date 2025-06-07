@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { RowSelectionState } from '@tanstack/react-table';
 import { Laptop2 } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import classes from './styles.module.css';
 
@@ -45,11 +46,14 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const { data, mutate, isPending } = useProfile();
   const { setPlayers } = useGamePlayerStore();
   const profile = data?.data.data;
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const { mutate: mutateDeleteFilesWhitelist } = useDeleteFilesWhitelist();
   const { mutate: mutateDeleteFoldersWhitelist } = useDeleteFolderWhitelist();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [activeTab, setActiveTab] = useState<string>(searchParams.get('tab') || 'main');
 
   useEffect(() => {
     if (account && accessToken) {
@@ -108,12 +112,16 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       </div>
 
       <Tabs
-        defaultValue="main"
+        value={activeTab}
+        onValueChange={(value) => {
+          setActiveTab(value);
+          router.push(`/dashboard/profile/${params.name}?tab=${value}`, { scroll: false });
+        }}
         aria-orientation="vertical"
         orientation="vertical"
         className="flex flex-col md:flex-row gap-6 items-start"
       >
-        <TabsList defaultValue="main" className={classes.tabs__list}>
+        <TabsList className={classes.tabs__list}>
           <TabsTrigger className="w-full h-10" value="main">
             Основные
           </TabsTrigger>

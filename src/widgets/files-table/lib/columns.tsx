@@ -58,14 +58,6 @@ export const useColumns = (profile: ProfileExtendedBaseEntity) => {
     columnsHelper.accessor('size', {
       size: 500,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.FILE_SIZE} />
-      ),
-      cell: ({ getValue }) => getValue(),
-      enableColumnFilter: false,
-    }),
-    columnsHelper.accessor('size', {
-      size: 500,
-      header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.ADDITIONAL} />
       ),
       cell: ({ row }) => {
