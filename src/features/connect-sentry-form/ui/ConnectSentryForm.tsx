@@ -44,7 +44,7 @@ export function ConnectSentryForm({ className, onOpenChange, ...props }: SignInF
         return {
           protocol,
           color: protocol === 'HTTPS' ? 'green' : 'yellow',
-          secure: protocol === 'HTTPS'
+          secure: protocol === 'HTTPS',
         };
       }
       return null;
@@ -66,10 +66,10 @@ export function ConnectSentryForm({ className, onOpenChange, ...props }: SignInF
           <FormItem>
             <FormLabel className="text-sm font-medium">Введите эндпоинт</FormLabel>
             <FormControl>
-              <Input 
-                placeholder="https://xxxxx@sentry.io/xxxxx" 
+              <Input
+                placeholder="https://xxxxx@sentry.io/xxxxx"
                 className="focus-visible:ring-offset-1 focus-visible:ring-2"
-                {...form.register('url')} 
+                {...form.register('url')}
               />
             </FormControl>
             <p className="text-xs text-muted-foreground mt-1">
@@ -88,20 +88,19 @@ export function ConnectSentryForm({ className, onOpenChange, ...props }: SignInF
                   <span className="text-sm text-muted-foreground">Информация о протоколе:</span>
                 </div>
                 <div className="mt-2 flex items-center gap-2">
-                  <Badge 
-                    variant={protocolInfo.secure ? "success" : "warning"}
+                  <Badge
+                    variant={protocolInfo.secure ? 'default' : 'destructive'}
                     className={cn(
-                      "px-2 py-0.5 text-xs font-medium",
-                      protocolInfo.secure ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300" : 
-                      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
+                      'px-2 py-0.5 text-xs font-medium',
+                      protocolInfo.secure
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                        : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
                     )}
                   >
                     {protocolInfo.protocol}
                   </Badge>
                   <span className="text-sm">
-                    {protocolInfo.secure 
-                      ? "Безопасное соединение" 
-                      : "Небезопасное соединение"}
+                    {protocolInfo.secure ? 'Безопасное соединение' : 'Небезопасное соединение'}
                   </span>
                 </div>
               </CardContent>
