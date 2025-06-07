@@ -14,7 +14,6 @@ import { Tabs, TabsContent } from '@/shared/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { Input } from '@/shared/ui/input';
 import { useAddingFolderWhitelist } from '@/shared/hooks';
-import { FileListBaseEntity } from '@/shared/api/contracts';
 
 interface AddingFoldersWhitelistDialogProps {
   profileName: string;
@@ -49,8 +48,9 @@ export const AddingFoldersWhitelistDialog = ({
   const onSubmit = () => {
     const folderPaths = folders.map((folder) => ({
       profileName,
+      directory: folder,
       path: folder,
-    })) as FileListBaseEntity[];
+    }));
 
     mutate(folderPaths);
 
