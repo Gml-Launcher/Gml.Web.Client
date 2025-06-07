@@ -8,6 +8,7 @@ interface FilesList {
   setDirectories: (directory: FileListBaseEntity[]) => void;
   addDirectories: (directories: FileListBaseEntity[]) => void;
   addDirectory: (directory: FileListBaseEntity) => void;
+  removeDirectory: (directoryPath: string) => void;
   clear: () => void;
 }
 
@@ -25,5 +26,15 @@ export const useFilesListStore = create<FilesList>((set) => ({
       directories: [...state.directories, directory],
       count: state.directories.length + 1,
     })),
+  removeDirectory: (directoryPath: string) =>
+    set((state) => {
+      const newDirectories = state.directories.filter(
+        (dir) => dir.directory !== directoryPath
+      );
+      return {
+        directories: newDirectories,
+        count: newDirectories.length,
+      };
+    }),
   clear: () => set(() => ({ directories: [], count: 0 })),
 }));
