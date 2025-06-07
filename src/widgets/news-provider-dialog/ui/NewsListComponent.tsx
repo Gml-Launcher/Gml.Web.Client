@@ -7,7 +7,7 @@ import { CalendarIcon, Loader2Icon, NewspaperIcon } from 'lucide-react';
 import { socialNetworkLogos } from './NewsProviderDialog';
 
 import { useNews } from '@/shared/hooks';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 
 export function NewsListComponent() {
@@ -31,7 +31,7 @@ export function NewsListComponent() {
         <div className="text-center">
           <p className="text-sm font-medium">Новостей нет</p>
           <p className="text-xs text-muted-foreground mt-1">
-            Добавьте провайдер новостей на вкладке "Подключение"
+            Добавьте провайдер новостей на вкладке &quot;Подключение&quot;
           </p>
         </div>
       </div>
