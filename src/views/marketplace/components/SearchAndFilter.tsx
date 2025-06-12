@@ -1,10 +1,12 @@
 "use client";
 
-import { SearchIcon, FilterIcon } from 'lucide-react';
+import { SearchIcon, FilterIcon, SlidersHorizontal, TagsIcon } from 'lucide-react';
 
 import { Input } from '@/shared/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { categories } from '../data';
+import { Badge } from '@/shared/ui/badge';
+import { Separator } from '@/shared/ui/separator';
 
 interface SearchAndFilterProps {
   searchQuery: string;
@@ -13,6 +15,7 @@ interface SearchAndFilterProps {
   setSelectedCategory: (category: string) => void;
   sortOrder: string;
   setSortOrder: (order: string) => void;
+  isVertical?: boolean;
 }
 
 export const SearchAndFilter = ({
@@ -22,45 +25,121 @@ export const SearchAndFilter = ({
   setSelectedCategory,
   sortOrder,
   setSortOrder,
+  isVertical = false,
 }: SearchAndFilterProps) => {
+  // Popular tags for quick filtering
+  const popularTags = ['безопасность', 'платежи', 'геймплей', 'аналитика'];
+
   return (
-    <div className="w-full mb-6 flex flex-col md:flex-row gap-4">
-      <div className="relative flex-grow">
-        <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+    <div className={`w-full ${isVertical ? 'space-y-5' : 'mb-6 flex flex-col md:flex-row gap-4'}`}>
+      {/* Search input */}
+      <div className="relative w-full">
+        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           placeholder="Поиск модулей..."
-          className="pl-8"
+          className="pl-9 bg-background/50 backdrop-blur-sm border-input/50 focus:border-primary transition-all"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       </div>
-      <div className="flex gap-2">
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-          <SelectTrigger className="w-[180px]">
-            <FilterIcon className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Категория" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((category) => (
-              <SelectItem key={category.value} value={category.value}>
-                {category.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={sortOrder} onValueChange={setSortOrder}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Сортировка" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="default">По умолчанию</SelectItem>
-            <SelectItem value="price-asc">Цена (по возрастанию)</SelectItem>
-            <SelectItem value="price-desc">Цена (по убыванию)</SelectItem>
-            <SelectItem value="name-asc">Название (А-Я)</SelectItem>
-            <SelectItem value="name-desc">Название (Я-А)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+
+      {isVertical && (
+        <>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <FilterIcon className="h-4 w-4 text-primary" />
+              <h3 className="font-medium">Категории</h3>
+            </div>
+            <div className="grid grid-cols-1 gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category.value}
+                  className={`text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                    selectedCategory === category.value
+                      ? 'bg-primary/10 text-primary font-medium'
+                      : 'hover:bg-muted'
+                  }`}
+                  onClick={() => setSelectedCategory(category.value)}
+                >
+                  {category.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <SlidersHorizontal className="h-4 w-4 text-primary" />
+              <h3 className="font-medium">Сортировка</h3>
+            </div>
+            <Select value={sortOrder} onValueChange={setSortOrder}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Сортировка" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="default">По умолчанию</SelectItem>
+                <SelectItem value="price-asc">Цена (по возрастанию)</SelectItem>
+                <SelectItem value="price-desc">Цена (по убыванию)</SelectItem>
+                <SelectItem value="name-asc">Название (А-Я)</SelectItem>
+                <SelectItem value="name-desc">Название (Я-А)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <TagsIcon className="h-4 w-4 text-primary" />
+              <h3 className="font-medium">Популярные теги</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {popularTags.map((tag) => (
+                <Badge 
+                  key={tag} 
+                  variant="outline" 
+                  className="cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors"
+                  onClick={() => setSearchQuery(tag)}
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {!isVertical && (
+        <div className="flex gap-2">
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-[180px]">
+              <FilterIcon className="mr-2 h-4 w-4" />
+              <SelectValue placeholder="Категория" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category) => (
+                <SelectItem key={category.value} value={category.value}>
+                  {category.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={sortOrder} onValueChange={setSortOrder}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Сортировка" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">По умолчанию</SelectItem>
+              <SelectItem value="price-asc">Цена (по возрастанию)</SelectItem>
+              <SelectItem value="price-desc">Цена (по убыванию)</SelectItem>
+              <SelectItem value="name-asc">Название (А-Я)</SelectItem>
+              <SelectItem value="name-desc">Название (Я-А)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
     </div>
   );
 };

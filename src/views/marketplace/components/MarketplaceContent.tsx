@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 
+import { Module } from '../data';
+
 import { SearchAndFilter } from './SearchAndFilter';
 import { MarketplaceTabs } from './MarketplaceTabs';
-import { Module } from '../data';
 
 interface MarketplaceContentProps {
   modules: Module[];
@@ -14,13 +15,14 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState('default');
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   // Filter modules based on search query and category
   const filteredModules = modules.filter((module) => {
-    const matchesSearch = 
-      module.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch =
+      module.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       module.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      module.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      module.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesCategory = selectedCategory === 'all' || module.category === selectedCategory;
 
@@ -37,25 +39,59 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
   });
 
   return (
-    <div className="flex flex-col items-start py-4">
-      <div className="flex justify-between w-full">
-        <h1 className="text-xl font-bold mb-8">Маркетплейс модулей</h1>
+    <div className="container mx-auto px-4 py-6">
+      {/* Header with title and mobile filter toggle */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold">Маркетплейс модулей</h1>
+        <button
+          className="md:hidden flex items-center gap-2 px-4 py-2 rounded-lg border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+          onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+          </svg>
+          Фильтры
+        </button>
       </div>
 
-      <SearchAndFilter
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
-      />
+      {/* Main content with sidebar and modules grid */}
+      <div className="flex flex-col md:flex-row gap-6">
+        {/* Sidebar with filters - hidden on mobile unless toggled */}
+        <div
+          className={`${isMobileFilterOpen ? 'block' : 'hidden'} md:block md:w-1/4 lg:w-1/5 shrink-0`}
+        >
+          <div className="sticky top-4 bg-card rounded-xl border border-border p-4 shadow-sm">
+            <SearchAndFilter
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              isVertical={true}
+            />
+          </div>
+        </div>
 
-      <MarketplaceTabs
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        sortedModules={sortedModules}
-      />
+        {/* Main content area */}
+        <div className="flex-1">
+          <MarketplaceTabs
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            sortedModules={sortedModules}
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,49 +1,97 @@
-"use client";
+'use client';
 
-import { TagIcon } from 'lucide-react';
+import { ExternalLink, ShoppingCart, Star, TagIcon } from 'lucide-react';
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Module } from '../data';
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Module } from '../data';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/shared/ui/tooltip';
 
 interface ModuleCardProps {
   module: Module;
 }
 
 export const ModuleCard = ({ module }: ModuleCardProps) => {
+  // Generate a random rating between 4.0 and 5.0 for demo purposes
+  const rating = (4 + Math.random()).toFixed(1);
+
   return (
-    <Card key={module.id} className="overflow-hidden flex flex-col">
-      <div className="h-[200px] bg-muted relative">
-        <img 
-          src={module.image} 
-          alt={module.title} 
-          className="w-full h-full object-cover"
-        />
-      </div>
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <CardTitle>{module.title}</CardTitle>
-          <Badge variant="secondary">{module.price} ₽</Badge>
-        </div>
-        <CardDescription>{module.description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-wrap gap-2">
-          {module.tags.map((tag) => (
-            <Badge key={tag} variant="outline" className="flex items-center gap-1">
-              <TagIcon className="h-3 w-3" />
-              {tag}
+    <TooltipProvider>
+      <Card
+        key={module.id}
+        className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:translate-y-[-2px]"
+      >
+        <div className="h-[200px] bg-muted relative overflow-hidden">
+          <img
+            src={module.image}
+            alt={module.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <div className="absolute top-3 right-3">
+            <Badge
+              variant="secondary"
+              className="font-medium bg-background/80 backdrop-blur-sm border shadow-sm"
+            >
+              {module.price.toLocaleString('ru-RU')} ₽
             </Badge>
-          ))}
+          </div>
         </div>
-      </CardContent>
-      <CardFooter className="mt-auto">
-        <div className="flex gap-2 w-full">
-          <Button variant="outline" className="flex-1">Подробнее</Button>
-          <Button className="flex-1">Купить</Button>
-        </div>
-      </CardFooter>
-    </Card>
+
+        <CardHeader className="pb-2">
+          <div className="flex justify-between items-start">
+            <CardTitle className="text-lg font-semibold">{module.title}</CardTitle>
+          </div>
+          <div className="flex items-center gap-1 mt-1 mb-2">
+            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            <span className="text-sm font-medium">{rating}</span>
+            <span className="text-xs text-muted-foreground ml-1">(24 отзыва)</span>
+          </div>
+          <CardDescription className="line-clamp-2">{module.description}</CardDescription>
+        </CardHeader>
+
+        <CardContent className="pb-2">
+          <div className="flex flex-wrap gap-1.5">
+            {module.tags.map((tag) => (
+              <Tooltip key={tag}>
+                <TooltipTrigger asChild>
+                  <Badge
+                    variant="outline"
+                    className="flex items-center gap-1 text-xs bg-primary/5 hover:bg-primary/10 transition-colors"
+                  >
+                    <TagIcon className="h-3 w-3" />
+                    {tag}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Поиск по тегу: {tag}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </CardContent>
+
+        <CardFooter className="mt-auto pt-4">
+          <div className="flex gap-2 w-full">
+            <Button variant="outline" className="flex-1 gap-1.5 hover:bg-background">
+              <ExternalLink className="h-4 w-4" />
+              Подробнее
+            </Button>
+            <Button className="flex-1 gap-1.5">
+              <ShoppingCart className="h-4 w-4" />
+              Купить
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+    </TooltipProvider>
   );
 };
