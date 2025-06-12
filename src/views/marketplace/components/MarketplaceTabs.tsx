@@ -1,9 +1,10 @@
 'use client';
 
-import { Package, PackageOpen } from 'lucide-react';
-import { useState } from 'react';
+import { AlertCircle, Package, PackageOpen } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Module } from '../data';
+import { fetchInstalledPlugins, Plugin } from '../api/plugins';
 
 import { ModuleCard } from './ModuleCard';
 
@@ -32,6 +33,36 @@ export const MarketplaceTabs = ({
 
   // State to track which main tab is active
   const [activeMainTab, setActiveMainTab] = useState<'store' | 'installed'>('store');
+
+  // State for installed plugins
+  const [installedPlugins, setInstalledPlugins] = useState<Plugin[]>([]);
+  const [isLoadingInstalledPlugins, setIsLoadingInstalledPlugins] = useState(false);
+  const [installedPluginsError, setInstalledPluginsError] = useState<string | null>(null);
+
+  // Fetch installed plugins when the component mounts or when the installed tab is selected
+  useEffect(() => {
+    // Only fetch if the installed tab is active
+    if (activeMainTab !== 'installed') return;
+
+    const fetchPlugins = async () => {
+      try {
+        setIsLoadingInstalledPlugins(true);
+        setInstalledPluginsError(null);
+
+        const response = await fetchInstalledPlugins();
+        setInstalledPlugins(response.data || []);
+      } catch (error) {
+        console.error('Failed to fetch installed plugins:', error);
+        setInstalledPluginsError(
+          error instanceof Error ? error.message : 'Не удалось загрузить установленные расширения',
+        );
+      } finally {
+        setIsLoadingInstalledPlugins(false);
+      }
+    };
+
+    fetchPlugins();
+  }, [activeMainTab]); // Re-fetch when tab changes
 
   return (
     <div className="w-full">
@@ -153,13 +184,122 @@ export const MarketplaceTabs = ({
 
         {/* Installed Extensions Tab Content */}
         <TabsContent value="installed" className="mt-0">
-          <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
-            <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium mb-2">Установленные расширения</h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
-              Здесь будут отображаться ваши установленные расширения.
-            </p>
-          </div>
+          {isLoadingInstalledPlugins ? (
+            <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
+              <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-pulse" />
+              <h3 className="text-lg font-medium mb-2">Загрузка установленных расширений...</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                Пожалуйста, подождите, идет загрузка данных.
+              </p>
+            </div>
+          ) : installedPluginsError ? (
+            <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
+              <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+              <h3 className="text-lg font-medium mb-2">Ошибка загрузки</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">{installedPluginsError}</p>
+              <button
+                onClick={() => setActiveMainTab('installed')}
+                className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+              >
+                Попробовать снова
+              </button>
+            </div>
+          ) : installedPlugins.length === 0 ? (
+            <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
+              <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-medium mb-2">Нет установленных расширений</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                У вас пока нет установленных расширений. Перейдите на вкладку &quot;Магазин
+                расширений&quot;, чтобы найти и установить расширения.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <div className="mb-4">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    {`Установлено ${installedPlugins.length} ${
+                      installedPlugins.length === 1
+                        ? 'расширение'
+                        : installedPlugins.length < 5
+                          ? 'расширения'
+                          : 'расширений'
+                    }`}
+                  </p>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {installedPlugins.map((plugin) => (
+                  <div
+                    key={plugin.id}
+                    className="bg-card rounded-lg border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="aspect-video bg-muted relative overflow-hidden">
+                      {plugin.imageUrl ? (
+                        <img
+                          src={plugin.imageUrl}
+                          alt={plugin.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Replace broken image with a placeholder
+                            (e.target as HTMLImageElement).src =
+                              'https://placehold.co/600x400?text=No+Image';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-muted">
+                          <Package className="h-12 w-12 text-muted-foreground" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-semibold mb-2 line-clamp-1">{plugin.name}</h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                        {plugin.description}
+                      </p>
+
+                      {/* Categories */}
+                      {plugin.categories && plugin.categories.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          {plugin.categories.map((category) => (
+                            <span
+                              key={category.id}
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                            >
+                              {category.name}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Price */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          {plugin.isFree ? (
+                            <span className="text-sm font-medium text-green-600">Бесплатно</span>
+                          ) : (
+                            <span className="text-sm font-medium">{plugin.price} ₽</span>
+                          )}
+                        </div>
+
+                        {/* Project link */}
+                        {plugin.projectLink && (
+                          <a
+                            href={plugin.projectLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-primary hover:underline"
+                          >
+                            Подробнее
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>
