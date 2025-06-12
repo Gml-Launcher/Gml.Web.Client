@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink, FolderIcon, ShoppingCart, Star, TagIcon } from 'lucide-react';
+import { Download, ExternalLink, FolderIcon, ShoppingCart, Star, TagIcon } from 'lucide-react';
 
 import { Module } from '../data';
 
@@ -38,10 +38,14 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
           />
           <div className="absolute top-3 right-3">
             <Badge
-              variant="secondary"
-              className="font-medium bg-background/80 backdrop-blur-sm border shadow-sm"
+              variant={module.isFree ? 'default' : 'secondary'}
+              className={`font-medium backdrop-blur-sm border shadow-sm ${
+                module.isFree
+                  ? 'bg-green-100/80 text-green-800 border-green-200'
+                  : 'bg-background/80'
+              }`}
             >
-              {module.price.toLocaleString('ru-RU')} ₽
+              {module.isFree ? 'Бесплатно' : `${module.price.toLocaleString('ru-RU')} ₽`}
             </Badge>
           </div>
         </div>
@@ -104,13 +108,21 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
 
         <CardFooter className="mt-auto pt-4">
           <div className="flex gap-2 w-full">
-            <Button variant="outline" className="flex-1 gap-1.5 hover:bg-background">
-              <ExternalLink className="h-4 w-4" />
-              Подробнее
-            </Button>
-            <Button className="flex-1 gap-1.5">
-              <ShoppingCart className="h-4 w-4" />
-              Купить
+            <a href={module.projectLink} target="_blank">
+              <Button variant="outline" className="flex-1 gap-1.5 hover:bg-background">
+                <ExternalLink className="h-4 w-4" />
+                Подробнее
+              </Button>
+            </a>
+            <Button
+              className={`flex-1 gap-1.5 ${module.isFree ? 'bg-blue-500 hover:bg-blue-500/80 text-white' : ''}`}
+            >
+              {module.isFree ? (
+                <Download className="h-4 w-4" />
+              ) : (
+                <ShoppingCart className="h-4 w-4" />
+              )}
+              {module.isFree ? 'Установить' : 'Купить'}
             </Button>
           </div>
         </CardFooter>

@@ -18,7 +18,10 @@ export type MarketplaceProductEntity = {
   name: string;
   description: string;
   projectLink: string;
+  imageUrl: string;
   categories: MarketplaceCategoryEntity[];
+  isFree: boolean;
+  price: number;
 };
 
 // Response type for getting marketplace products

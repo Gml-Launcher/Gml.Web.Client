@@ -244,13 +244,6 @@ export const MarketplacePage = () => {
     }
   }, [handleAuthenticated, checkMarketplaceStatus, setMarketplaceStatus, setErrorMessage]); // Include all necessary dependencies
 
-  // Log current state before rendering
-  console.log('Rendering with state:', {
-    isAuthenticated,
-    marketplaceStatus,
-    modulesCount: modules.length,
-  });
-
   return (
     <>
       <Breadcrumbs
