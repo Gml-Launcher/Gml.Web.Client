@@ -116,7 +116,7 @@ export const MarketplaceTabs = ({
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 3xl:grid-cols-4 gap-6">
                   {sortedModules.map((module) => (
                     <ModuleCard key={module.id} module={module} />
                   ))}

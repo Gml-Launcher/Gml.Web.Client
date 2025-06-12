@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { SearchIcon, FilterIcon, SlidersHorizontal, TagsIcon } from 'lucide-react';
+import { FilterIcon, SearchIcon, SlidersHorizontal } from 'lucide-react';
+
+import { CategoryOption } from '../api/categories';
 
 import { Input } from '@/shared/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { Badge } from '@/shared/ui/badge';
 import { Separator } from '@/shared/ui/separator';
-import { CategoryOption } from '../api/categories';
 
 interface SearchAndFilterProps {
   searchQuery: string;
@@ -31,9 +31,6 @@ export const SearchAndFilter = ({
   categories,
   isLoadingCategories = false,
 }: SearchAndFilterProps) => {
-  // Popular tags for quick filtering
-  const popularTags = ['безопасность', 'платежи', 'геймплей', 'аналитика'];
-
   return (
     <div className={`w-full ${isVertical ? 'space-y-5' : 'mb-6 flex flex-col md:flex-row gap-4'}`}>
       {/* Search input */}
@@ -94,27 +91,6 @@ export const SearchAndFilter = ({
                 <SelectItem value="name-desc">Название (Я-А)</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-
-          <Separator />
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <TagsIcon className="h-4 w-4 text-primary" />
-              <h3 className="font-medium">Популярные теги</h3>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {popularTags.map((tag) => (
-                <Badge 
-                  key={tag} 
-                  variant="outline" 
-                  className="cursor-pointer hover:bg-primary/10 hover:text-primary transition-colors"
-                  onClick={() => setSearchQuery(tag)}
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
           </div>
         </>
       )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Module } from '../data';
 import { CategoryOption, fetchCategories } from '../api/categories';
@@ -19,7 +19,7 @@ export const MarketplaceContent = ({ modules: initialModules }: MarketplaceConte
   const [sortOrder, setSortOrder] = useState('default');
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [categories, setCategories] = useState<CategoryOption[]>([
-    { value: 'all', label: 'Все категории' } // Default category while loading
+    { value: 'all', label: 'Все категории' }, // Default category while loading
   ]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [modules, setModules] = useState<Module[]>(initialModules);
@@ -72,10 +72,10 @@ export const MarketplaceContent = ({ modules: initialModules }: MarketplaceConte
     // Check if the module matches the selected category
     // Either the selected category is 'all', or the module's primary category matches,
     // or any of the module's categories match the selected category
-    const matchesCategory = 
-      selectedCategory === 'all' || 
+    const matchesCategory =
+      selectedCategory === 'all' ||
       module.category === selectedCategory ||
-      (module.categories && module.categories.some(cat => cat.id === selectedCategory));
+      (module.categories && module.categories.some((cat) => cat.id === selectedCategory));
 
     return matchesSearch && matchesCategory;
   });
@@ -90,7 +90,7 @@ export const MarketplaceContent = ({ modules: initialModules }: MarketplaceConte
   });
 
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="">
       {/* Header with title and mobile filter toggle */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Маркетплейс модулей</h1>
@@ -119,7 +119,7 @@ export const MarketplaceContent = ({ modules: initialModules }: MarketplaceConte
       <div className="flex flex-col md:flex-row gap-6">
         {/* Sidebar with filters - hidden on mobile unless toggled */}
         <div
-          className={`${isMobileFilterOpen ? 'block' : 'hidden'} md:block md:w-1/4 lg:w-1/5 shrink-0`}
+          className={`${isMobileFilterOpen ? 'block' : 'hidden'} md:block md:w-1/4 lg:w-1/4 2xl:w-1/6 shrink-0`}
         >
           <div className="sticky top-4 bg-card rounded-xl border border-border p-4 shadow-sm">
             <SearchAndFilter
