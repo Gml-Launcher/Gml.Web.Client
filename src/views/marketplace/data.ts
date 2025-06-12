@@ -4,7 +4,8 @@ export interface Module {
   title: string;
   description: string;
   price: number;
-  category: string;
+  category: string; // Kept for backward compatibility
+  categories?: { id: string; name: string }[]; // New field for multiple categories
   tags: string[];
   image: string;
 }

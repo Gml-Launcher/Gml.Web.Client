@@ -1,6 +1,6 @@
 'use client';
 
-import { ExternalLink, ShoppingCart, Star, TagIcon } from 'lucide-react';
+import { ExternalLink, FolderIcon, ShoppingCart, Star, TagIcon } from 'lucide-react';
 
 import { Module } from '../data';
 
@@ -59,6 +59,29 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
         </CardHeader>
 
         <CardContent className="pb-2">
+          {/* Display categories if available */}
+          {module.categories && module.categories.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {module.categories.map((category) => (
+                <Tooltip key={category.id}>
+                  <TooltipTrigger asChild>
+                    <Badge
+                      variant="outline"
+                      className="flex items-center gap-1 text-xs bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 transition-colors"
+                    >
+                      <FolderIcon className="h-3 w-3" />
+                      {category.name}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Категория: {category.name}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          )}
+
+          {/* Display tags */}
           <div className="flex flex-wrap gap-1.5">
             {module.tags.map((tag) => (
               <Tooltip key={tag}>

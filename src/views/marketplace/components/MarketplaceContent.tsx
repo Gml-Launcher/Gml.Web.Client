@@ -4,15 +4,16 @@ import { useState, useEffect } from 'react';
 
 import { Module } from '../data';
 import { CategoryOption, fetchCategories } from '../api/categories';
+import { fetchProducts } from '../api/products';
 
 import { SearchAndFilter } from './SearchAndFilter';
 import { MarketplaceTabs } from './MarketplaceTabs';
 
 interface MarketplaceContentProps {
-  modules: Module[];
+  modules: Module[]; // Keep for backward compatibility
 }
 
-export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
+export const MarketplaceContent = ({ modules: initialModules }: MarketplaceContentProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState('default');
@@ -21,6 +22,8 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
     { value: 'all', label: 'Все категории' } // Default category while loading
   ]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [modules, setModules] = useState<Module[]>(initialModules);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
 
   // Fetch categories when component mounts
   useEffect(() => {
@@ -39,6 +42,26 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
     loadCategories();
   }, []);
 
+  // Fetch products when component mounts
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setIsLoadingProducts(true);
+        const fetchedProducts = await fetchProducts();
+        // If we have fetched products, use them; otherwise, fall back to initial modules
+        if (fetchedProducts.length > 0) {
+          setModules(fetchedProducts);
+        }
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      } finally {
+        setIsLoadingProducts(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
   // Filter modules based on search query and category
   const filteredModules = modules.filter((module) => {
     const matchesSearch =
@@ -46,7 +69,13 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
       module.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       module.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    const matchesCategory = selectedCategory === 'all' || module.category === selectedCategory;
+    // Check if the module matches the selected category
+    // Either the selected category is 'all', or the module's primary category matches,
+    // or any of the module's categories match the selected category
+    const matchesCategory = 
+      selectedCategory === 'all' || 
+      module.category === selectedCategory ||
+      (module.categories && module.categories.some(cat => cat.id === selectedCategory));
 
     return matchesSearch && matchesCategory;
   });
@@ -115,6 +144,7 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
             sortedModules={sortedModules}
             categories={categories}
             isLoadingCategories={isLoadingCategories}
+            isLoadingProducts={isLoadingProducts}
           />
         </div>
       </div>

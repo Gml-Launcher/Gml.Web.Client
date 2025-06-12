@@ -12,6 +12,7 @@ interface MarketplaceTabsProps {
   sortedModules: Module[];
   categories: CategoryOption[];
   isLoadingCategories?: boolean;
+  isLoadingProducts?: boolean;
 }
 
 export const MarketplaceTabs = ({
@@ -20,6 +21,7 @@ export const MarketplaceTabs = ({
   sortedModules,
   categories,
   isLoadingCategories = false,
+  isLoadingProducts = false,
 }: MarketplaceTabsProps) => {
   // Get all unique categories from the modules
   const availableCategories = ['all', ...categories.map(c => c.value).filter(c => c !== 'all')];
@@ -68,7 +70,11 @@ export const MarketplaceTabs = ({
         </div>
 
         <TabsContent value="all" className="mt-0">
-          {sortedModules.length === 0 ? (
+          {isLoadingProducts ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Загрузка модулей...</p>
+            </div>
+          ) : sortedModules.length === 0 ? (
             <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
               <PackageOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-medium mb-2">Модули не найдены</h3>
@@ -89,6 +95,10 @@ export const MarketplaceTabs = ({
         {isLoadingCategories ? (
           <div className="text-center py-6">
             <p className="text-muted-foreground">Загрузка категорий...</p>
+          </div>
+        ) : isLoadingProducts ? (
+          <div className="text-center py-6">
+            <p className="text-muted-foreground">Загрузка модулей...</p>
           </div>
         ) : (
           availableCategories.filter(c => c !== 'all').map((category) => (
