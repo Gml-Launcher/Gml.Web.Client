@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@/shared/ui/button';
-import { setStorageProfile, setStorageRecloudIDAccessToken } from '@/shared/services';
 
 interface AuthenticationRecloudIDProps {
   onAuthenticated?: () => void;
@@ -13,65 +12,16 @@ interface AuthenticationRecloudIDProps {
 export function AuthenticationRecloudID({ onAuthenticated }: AuthenticationRecloudIDProps) {
   const router = useRouter();
 
-  // Handle OAuth callback
+  // We no longer handle the callback here as it's now handled by the MarketplaceCallbackPage component
   useEffect(() => {
-    // Check if we're in the callback URL with a code parameter
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-
-    if (code) {
-      // Exchange the code for a token
-      fetch('https://oauth.recloud.tech/connect/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          client_id: 'GmlMarket',
-          code: code,
-          redirect_uri: 'https://gmlf.unicorecms2.ru/api/v1/users/oauth2/callback',
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Store the token
-          setStorageRecloudIDAccessToken(data.access_token);
-
-          // Get user info
-          return fetch('https://oauth.recloud.tech/connect/userinfo', {
-            headers: {
-              Authorization: `Bearer ${data.access_token}`,
-            },
-          });
-        })
-        .then((response) => response.json())
-        .then((userInfo) => {
-          // Store user profile
-          setStorageProfile({
-            id: userInfo.sub,
-            email: userInfo.email,
-            username: userInfo.name || userInfo.email,
-          });
-
-          // Notify parent component that authentication is complete
-          if (onAuthenticated) {
-            onAuthenticated();
-          }
-
-          // Clear the URL parameters
-          window.history.replaceState({}, document.title, window.location.pathname);
-        })
-        .catch((error) => {
-          console.error('Authentication error:', error);
-        });
-    }
-  }, [onAuthenticated]);
+    // This component now only handles the initial authentication redirect
+    // The callback is processed by the dedicated callback page
+  }, []);
 
   const handleLogin = () => {
     // Redirect to RecloudID OAuth authorization endpoint
-    const authUrl =
-      'https://oauth.recloud.tech/connect/authorize?response_type=code&client_id=GmlMarket&redirect_uri=https://gmlf.unicorecms2.ru/api/v1/users/oauth2/callback&scope=email profile roles phone offline_access&state=42e4885a3fff07222f79e85d40a65293d9390a6c1bf078b4';
+    const redirectUri = `${window.location.origin}/dashboard/marketplace/callback`;
+    const authUrl = `https://oauth.recloud.tech/connect/authorize?response_type=code&client_id=GmlMarket&redirect_uri=${encodeURIComponent(redirectUri)}&scope=email profile roles phone offline_access&state=42e4885a3fff07222f79e85d40a65293d9390a6c1bf078b4`;
     window.location.href = authUrl;
   };
 
@@ -84,7 +34,7 @@ export function AuthenticationRecloudID({ onAuthenticated }: AuthenticationReclo
       />
       <div className="flex flex-col items-center gap-2">
         <h1 className="text-2xl font-bold text-headline-500 text-headline-500">
-          С возвращением
+          Добро пожаловать!
         </h1>
         <p className="text-sm text-muted-foreground">Войдите в свой аккаунт, чтобы продолжить</p>
       </div>

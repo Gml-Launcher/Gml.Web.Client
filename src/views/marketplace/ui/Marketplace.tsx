@@ -1,123 +1,254 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from 'react';
-import { SearchIcon, TagIcon, FilterIcon } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import { modules } from '../data';
+import {
+  AuthenticationState,
+  LoadingState,
+  MarketplaceContent,
+  UnauthorizedState,
+  UnavailableState,
+} from '../components';
 
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { DASHBOARD_PAGES } from '@/shared/routes';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { Button } from '@/shared/ui/button';
-import { Input } from '@/shared/ui/input';
-import { Badge } from '@/shared/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { getStorageRecloudIDAccessToken } from '@/shared/services';
-import { AuthenticationRecloudID } from '@/features/authentication-recloud-id';
-
-// Mock data for marketplace modules
-const modules = [
-  {
-    id: 1,
-    title: 'Система авторизации',
-    description: 'Расширенная система авторизации с поддержкой OAuth и двухфакторной аутентификации.',
-    price: 2500,
-    category: 'security',
-    tags: ['авторизация', 'безопасность', 'oauth'],
-    image: 'https://via.placeholder.com/300x200',
-  },
-  {
-    id: 2,
-    title: 'Система платежей',
-    description: 'Интеграция с популярными платежными системами для приема платежей от игроков.',
-    price: 3000,
-    category: 'payments',
-    tags: ['платежи', 'интеграция', 'финансы'],
-    image: 'https://via.placeholder.com/300x200',
-  },
-  {
-    id: 3,
-    title: 'Аналитика игроков',
-    description: 'Расширенная аналитика поведения игроков с визуализацией данных и отчетами.',
-    price: 1800,
-    category: 'analytics',
-    tags: ['аналитика', 'статистика', 'отчеты'],
-    image: 'https://via.placeholder.com/300x200',
-  },
-  {
-    id: 4,
-    title: 'Система достижений',
-    description: 'Создавайте и управляйте достижениями для игроков с настраиваемыми наградами.',
-    price: 1500,
-    category: 'gameplay',
-    tags: ['достижения', 'награды', 'геймплей'],
-    image: 'https://via.placeholder.com/300x200',
-  },
-  {
-    id: 5,
-    title: 'Чат-бот поддержки',
-    description: 'Автоматизированный чат-бот для ответов на часто задаваемые вопросы игроков.',
-    price: 2200,
-    category: 'support',
-    tags: ['поддержка', 'чат', 'автоматизация'],
-    image: 'https://via.placeholder.com/300x200',
-  },
-  {
-    id: 6,
-    title: 'Система рейтингов',
-    description: 'Создавайте рейтинговые таблицы для игроков на основе различных показателей.',
-    price: 1700,
-    category: 'gameplay',
-    tags: ['рейтинги', 'соревнования', 'геймплей'],
-    image: 'https://via.placeholder.com/300x200',
-  },
-];
-
-// Categories for filtering
-const categories = [
-  { value: 'all', label: 'Все категории' },
-  { value: 'security', label: 'Безопасность' },
-  { value: 'payments', label: 'Платежи' },
-  { value: 'analytics', label: 'Аналитика' },
-  { value: 'gameplay', label: 'Геймплей' },
-  { value: 'support', label: 'Поддержка' },
-];
 
 export const MarketplacePage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [sortOrder, setSortOrder] = useState('default');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [marketplaceStatus, setMarketplaceStatus] = useState<
+    'loading' | 'available' | 'unauthorized' | 'unavailable'
+  >('loading');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const statusCheckedRef = useRef(false);
 
-  // Check if user is authenticated
-  useEffect(() => {
-    const accessToken = getStorageRecloudIDAccessToken();
-    setIsAuthenticated(!!accessToken);
-  }, []);
+  // Function to check marketplace status with retry capability
+  const checkMarketplaceStatus = useCallback(
+    async (retryCount = 0, maxRetries = 2, forceCheck = false) => {
+      console.log('Starting marketplace status check...');
+      if (!isAuthenticated) {
+        console.log('User is not authenticated');
+        return;
+      }
+
+      // Skip if we've already checked the status and not forcing a check
+      if (statusCheckedRef.current && !forceCheck) {
+        console.log('Status already checked, skipping');
+        return;
+      }
+
+      setMarketplaceStatus('loading');
+      setErrorMessage(null);
+      console.log('Set marketplace status to loading');
+
+      try {
+        // Create an AbortController to timeout the request
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        console.log('Created AbortController with 5s timeout');
+
+        console.log(
+          `Using token: ${getStorageRecloudIDAccessToken() ? 'Token exists' : 'No token'}`,
+        );
+
+        // Add a fallback mechanism - if the HTTPS request fails, try HTTP
+        let response;
+        try {
+          console.log('Attempting primary fetch request');
+          response = await fetch(
+            `${process.env.NEXT_PUBLIC_MARKETPLACE_URL}/api/v1/marketplace/status`,
+            {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${getStorageRecloudIDAccessToken()}`,
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              credentials: 'same-origin',
+              signal: controller.signal,
+            },
+          );
+          console.log('Primary fetch request completed');
+        } catch (fetchError: unknown) {
+          console.log(
+            `Primary fetch failed: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}, trying fallback`,
+          );
+
+          // Try fallback to HTTP if HTTPS fails (only if using localhost)
+          if (process.env.NEXT_PUBLIC_MARKETPLACE_URL?.includes('localhost')) {
+            try {
+              console.log('Attempting fallback HTTP request');
+              const fallbackUrl = process.env.NEXT_PUBLIC_MARKETPLACE_URL.replace(
+                'https://',
+                'http://',
+              );
+              console.log(`Fallback URL: ${fallbackUrl}/api/v1/marketplace/status`);
+
+              response = await fetch(`${fallbackUrl}/api/v1/marketplace/status`, {
+                method: 'GET',
+                headers: {
+                  Authorization: `Bearer ${getStorageRecloudIDAccessToken()}`,
+                  'Content-Type': 'application/json',
+                  Accept: 'application/json',
+                },
+                credentials: 'same-origin',
+                signal: controller.signal,
+              });
+              console.log('Fallback fetch request completed');
+            } catch (fallbackError: unknown) {
+              console.log(
+                `Fallback fetch also failed: ${fallbackError instanceof Error ? fallbackError.message : String(fallbackError)}`,
+              );
+              throw fallbackError; // Re-throw to be caught by the outer catch
+            }
+          } else {
+            // If not using localhost or fallback fails, throw the original error
+            throw fetchError;
+          }
+        }
+
+        clearTimeout(timeoutId); // Clear the timeout if the request completes
+
+        // Check if the response is successful
+        if (!response.ok) {
+          console.log(`Response not OK: ${response.status} ${response.statusText}`);
+          throw new Error(`Server responded with status: ${response.status}`);
+        }
+
+        console.log('Received successful response with status:', response.status);
+        console.log('Setting marketplaceStatus to available');
+        setMarketplaceStatus('available');
+        statusCheckedRef.current = true;
+        console.log('Current marketplaceStatus after update:', 'available');
+      } catch (error: unknown) {
+        console.log(
+          `Caught error during fetch: ${error instanceof Error ? `${error.name} - ${error.message}` : String(error)}`,
+        );
+
+        // If we haven't reached max retries, try again after a delay
+        if (retryCount < maxRetries) {
+          console.log(
+            `Marketplace status check failed with error: ${error instanceof Error ? error.message : String(error)}. Retrying (${retryCount + 1}/${maxRetries})...`,
+          );
+          setTimeout(() => checkMarketplaceStatus(retryCount + 1, maxRetries), 1000); // Retry after 1 second
+          return;
+        }
+
+        console.log('All retries exhausted after error, setting status to unavailable');
+        setMarketplaceStatus('unavailable');
+
+        if (error instanceof Error) {
+          if (error.name === 'AbortError') {
+            console.log('Request timed out (AbortError)');
+            setErrorMessage('Запрос превысил время ожидания. Сервер маркетплейса не отвечает.');
+          } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+            console.log('Network error (Failed to fetch)');
+            setErrorMessage(
+              'Не удалось подключиться к серверу маркетплейса. Возможно, проблема с сетевым подключением или сертификатом HTTPS.',
+            );
+          } else if (error.name === 'SyntaxError') {
+            console.log('Invalid response format (SyntaxError)');
+            setErrorMessage('Получен некорректный ответ от сервера маркетплейса.');
+          } else {
+            console.error('Marketplace status check error:', error);
+            setErrorMessage(error.message);
+          }
+        } else {
+          console.error('Marketplace status check error:', error);
+          setErrorMessage('Неизвестная ошибка');
+        }
+      }
+    },
+    [isAuthenticated, setMarketplaceStatus, setErrorMessage],
+  );
 
   // Handle successful authentication
-  const handleAuthenticated = () => {
+  const handleAuthenticated = useCallback(() => {
+    console.log('handleAuthenticated called - user successfully authenticated');
     setIsAuthenticated(true);
-  };
+    console.log('isAuthenticated set to true, calling checkMarketplaceStatus');
+    // Reset the status check flag when authenticating
+    statusCheckedRef.current = false;
+    checkMarketplaceStatus(0, 2, true);
 
-  // Filter modules based on search query and category
-  const filteredModules = modules.filter((module) => {
-    const matchesSearch = 
-      module.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      module.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      module.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    // Safety timeout for authentication flow as well
+    setTimeout(() => {
+      console.log('Authentication safety timeout triggered');
+      setMarketplaceStatus((currentStatus) => {
+        if (currentStatus === 'loading') {
+          console.log('Still in loading state after authentication, setting to unavailable');
+          setErrorMessage(
+            'Превышено время ожидания ответа от сервера маркетплейса после авторизации.',
+          );
+          return 'unavailable';
+        }
+        return currentStatus;
+      });
+    }, 10000);
+  }, [checkMarketplaceStatus, setErrorMessage, setMarketplaceStatus]);
 
-    const matchesCategory = selectedCategory === 'all' || module.category === selectedCategory;
+  // Check for auth=success in URL (runs only once on mount)
+  useEffect(() => {
+    console.log('Checking for auth=success in URL');
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const authSuccess = urlParams.get('auth') === 'success';
 
-    return matchesSearch && matchesCategory;
-  });
+      if (authSuccess) {
+        // Clear the auth parameter from the URL
+        window.history.replaceState({}, document.title, window.location.pathname);
 
-  // Sort modules based on selected sort order
-  const sortedModules = [...filteredModules].sort((a, b) => {
-    if (sortOrder === 'price-asc') return a.price - b.price;
-    if (sortOrder === 'price-desc') return b.price - a.price;
-    if (sortOrder === 'name-asc') return a.title.localeCompare(b.title);
-    if (sortOrder === 'name-desc') return b.title.localeCompare(a.title);
-    return 0; // default order (as in the original array)
+        const accessToken = getStorageRecloudIDAccessToken();
+        if (accessToken) {
+          console.log('Returning from successful authentication with valid token');
+          // Reset the status check flag for fresh authentication
+          statusCheckedRef.current = false;
+          handleAuthenticated();
+        }
+      }
+    }
+  }, []); // Empty dependency array to run only once on mount
+
+  // Check if user is authenticated (runs on mount and when handleAuthenticated changes)
+  useEffect(() => {
+    console.log('Authentication check useEffect running');
+    const accessToken = getStorageRecloudIDAccessToken();
+    console.log(`RecloudID token exists: ${!!accessToken}`);
+    const isAuth = !!accessToken;
+    setIsAuthenticated(isAuth);
+
+    if (isAuth && !statusCheckedRef.current) {
+      console.log(
+        'User is authenticated and status not checked yet, calling checkMarketplaceStatus',
+      );
+      checkMarketplaceStatus();
+
+      // Safety timeout - if we're still in loading state after 10 seconds, show unavailable
+      const safetyTimeoutId = setTimeout(() => {
+        console.log('Safety timeout triggered');
+        setMarketplaceStatus((currentStatus) => {
+          if (currentStatus === 'loading') {
+            console.log('Still in loading state after timeout, setting to unavailable');
+            setErrorMessage('Превышено время ожидания ответа от сервера маркетплейса.');
+            return 'unavailable';
+          }
+          return currentStatus;
+        });
+      }, 10000);
+
+      // Clean up the safety timeout if component unmounts
+      return () => clearTimeout(safetyTimeoutId);
+    } else {
+      console.log('User is not authenticated or status already checked');
+    }
+  }, [handleAuthenticated, checkMarketplaceStatus, setMarketplaceStatus, setErrorMessage]); // Include all necessary dependencies
+
+  // Log current state before rendering
+  console.log('Rendering with state:', {
+    isAuthenticated,
+    marketplaceStatus,
+    modulesCount: modules.length,
   });
 
   return (
@@ -128,152 +259,15 @@ export const MarketplacePage = () => {
       />
 
       {!isAuthenticated ? (
-        <div className="flex justify-center items-center py-10">
-          <AuthenticationRecloudID onAuthenticated={handleAuthenticated} />
-        </div>
+        <AuthenticationState onAuthenticated={handleAuthenticated} />
+      ) : marketplaceStatus === 'loading' ? (
+        <LoadingState />
+      ) : marketplaceStatus === 'unauthorized' ? (
+        <UnauthorizedState onAuthenticated={handleAuthenticated} />
+      ) : marketplaceStatus === 'unavailable' ? (
+        <UnavailableState errorMessage={errorMessage} onRetry={checkMarketplaceStatus} />
       ) : (
-        <div className="flex flex-col items-start py-4">
-          <div className="flex justify-between w-full">
-            <h1 className="text-xl font-bold mb-8">Маркетплейс модулей</h1>
-          </div>
-
-          {/* Filters and search */}
-          <div className="w-full mb-6 flex flex-col md:flex-row gap-4">
-            <div className="relative flex-grow">
-              <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Поиск модулей..."
-                className="pl-8"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-2">
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-[180px]">
-                  <FilterIcon className="mr-2 h-4 w-4" />
-                  <SelectValue placeholder="Категория" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category.value} value={category.value}>
-                      {category.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select value={sortOrder} onValueChange={setSortOrder}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Сортировка" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="default">По умолчанию</SelectItem>
-                  <SelectItem value="price-asc">Цена (по возрастанию)</SelectItem>
-                  <SelectItem value="price-desc">Цена (по убыванию)</SelectItem>
-                  <SelectItem value="name-asc">Название (А-Я)</SelectItem>
-                  <SelectItem value="name-desc">Название (Я-А)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {/* Tabs for different module categories */}
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="mb-6">
-              <TabsTrigger value="all" onClick={() => setSelectedCategory('all')}>Все модули</TabsTrigger>
-              <TabsTrigger value="security" onClick={() => setSelectedCategory('security')}>Безопасность</TabsTrigger>
-              <TabsTrigger value="payments" onClick={() => setSelectedCategory('payments')}>Платежи</TabsTrigger>
-              <TabsTrigger value="gameplay" onClick={() => setSelectedCategory('gameplay')}>Геймплей</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="all" className="mt-0">
-              {sortedModules.length === 0 ? (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Модули не найдены. Попробуйте изменить параметры поиска.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sortedModules.map((module) => (
-                    <Card key={module.id} className="overflow-hidden flex flex-col">
-                      <div className="h-[200px] bg-muted relative">
-                        <img 
-                          src={module.image} 
-                          alt={module.title} 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <CardTitle>{module.title}</CardTitle>
-                          <Badge variant="secondary">{module.price} ₽</Badge>
-                        </div>
-                        <CardDescription>{module.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                          {module.tags.map((tag) => (
-                            <Badge key={tag} variant="outline" className="flex items-center gap-1">
-                              <TagIcon className="h-3 w-3" />
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                      <CardFooter className="mt-auto">
-                        <div className="flex gap-2 w-full">
-                          <Button variant="outline" className="flex-1">Подробнее</Button>
-                          <Button className="flex-1">Купить</Button>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </TabsContent>
-
-            {/* Other tab contents will be filtered by the category selector */}
-            {['security', 'payments', 'gameplay'].map((category) => (
-              <TabsContent key={category} value={category} className="mt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {sortedModules.map((module) => (
-                    <Card key={module.id} className="overflow-hidden flex flex-col">
-                      <div className="h-[200px] bg-muted relative">
-                        <img 
-                          src={module.image} 
-                          alt={module.title} 
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <CardTitle>{module.title}</CardTitle>
-                          <Badge variant="secondary">{module.price} ₽</Badge>
-                        </div>
-                        <CardDescription>{module.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex flex-wrap gap-2">
-                          {module.tags.map((tag) => (
-                            <Badge key={tag} variant="outline" className="flex items-center gap-1">
-                              <TagIcon className="h-3 w-3" />
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </CardContent>
-                      <CardFooter className="mt-auto">
-                        <div className="flex gap-2 w-full">
-                          <Button variant="outline" className="flex-1">Подробнее</Button>
-                          <Button className="flex-1">Купить</Button>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  ))}
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
-        </div>
+        <MarketplaceContent modules={modules} />
       )}
     </>
   );
