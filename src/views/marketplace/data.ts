@@ -1,6 +1,7 @@
 // Type definition for a marketplace module
 export interface Module {
   id: number;
+  originalId?: string; // Original UUID from the API
   title: string;
   description: string;
   price: number;

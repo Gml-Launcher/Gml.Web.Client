@@ -14,6 +14,7 @@ const mapProductToModule = (product: MarketplaceProductEntity): Module => {
 
   return {
     id: parseInt(product.id.split('-')[0], 16) || 0, // Convert part of UUID to number or use 0
+    originalId: product.id, // Preserve the original UUID for API calls
     title: product.name,
     projectLink: product.projectLink,
     description: product.description,
@@ -23,8 +24,6 @@ const mapProductToModule = (product: MarketplaceProductEntity): Module => {
     categories: product.categories, // Include all categories
     tags: [], // Default empty tags as they're not in the API response
     image: product.imageUrl || 'https://via.placeholder.com/300x200', // Use imageUrl from API or fallback to placeholder
-    // projectLink is available in the API but not in the Module interface
-    // We could add it if needed, but for now we'll ignore it
   };
 };
 

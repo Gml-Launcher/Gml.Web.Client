@@ -1,8 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { Download, ExternalLink, FolderIcon, ShoppingCart, Star, TagIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { Module } from '../data';
+import { installPlugin } from '../api/plugins';
 
 import {
   Card,
@@ -21,8 +24,37 @@ interface ModuleCardProps {
 }
 
 export const ModuleCard = ({ module }: ModuleCardProps) => {
+  // State for tracking installation status
+  const [isInstalling, setIsInstalling] = useState(false);
+
   // Generate a random rating between 4.0 and 5.0 for demo purposes
   const rating = (4 + Math.random()).toFixed(1);
+
+  // Function to handle plugin installation
+  const handleInstall = async () => {
+    // Check if originalId is available
+    if (!module.originalId) {
+      toast('Ошибка установки', {
+        description: 'Идентификатор модуля не найден',
+      });
+      return;
+    }
+
+    try {
+      setIsInstalling(true);
+      await installPlugin(module.originalId);
+      toast('Успешно', {
+        description: `Модуль "${module.title}" успешно установлен`,
+      });
+    } catch (error) {
+      console.error('Error installing plugin:', error);
+      toast('Ошибка установки', {
+        description: error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+      });
+    } finally {
+      setIsInstalling(false);
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -116,13 +148,17 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
             </a>
             <Button
               className={`flex-1 gap-1.5 ${module.isFree ? 'bg-blue-500 hover:bg-blue-500/80 text-white' : ''}`}
+              onClick={module.isFree ? handleInstall : undefined}
+              disabled={isInstalling}
             >
-              {module.isFree ? (
+              {isInstalling ? (
+                <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+              ) : module.isFree ? (
                 <Download className="h-4 w-4" />
               ) : (
                 <ShoppingCart className="h-4 w-4" />
               )}
-              {module.isFree ? 'Установить' : 'Купить'}
+              {isInstalling ? 'Установка...' : module.isFree ? 'Установить' : 'Купить'}
             </Button>
           </div>
         </CardFooter>
