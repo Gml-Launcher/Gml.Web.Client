@@ -4,9 +4,9 @@ import { SearchIcon, FilterIcon, SlidersHorizontal, TagsIcon } from 'lucide-reac
 
 import { Input } from '@/shared/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
-import { categories } from '../data';
 import { Badge } from '@/shared/ui/badge';
 import { Separator } from '@/shared/ui/separator';
+import { CategoryOption } from '../api/categories';
 
 interface SearchAndFilterProps {
   searchQuery: string;
@@ -16,6 +16,8 @@ interface SearchAndFilterProps {
   sortOrder: string;
   setSortOrder: (order: string) => void;
   isVertical?: boolean;
+  categories: CategoryOption[];
+  isLoadingCategories?: boolean;
 }
 
 export const SearchAndFilter = ({
@@ -26,6 +28,8 @@ export const SearchAndFilter = ({
   sortOrder,
   setSortOrder,
   isVertical = false,
+  categories,
+  isLoadingCategories = false,
 }: SearchAndFilterProps) => {
   // Popular tags for quick filtering
   const popularTags = ['безопасность', 'платежи', 'геймплей', 'аналитика'];
@@ -51,19 +55,23 @@ export const SearchAndFilter = ({
               <h3 className="font-medium">Категории</h3>
             </div>
             <div className="grid grid-cols-1 gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category.value}
-                  className={`text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                    selectedCategory === category.value
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'hover:bg-muted'
-                  }`}
-                  onClick={() => setSelectedCategory(category.value)}
-                >
-                  {category.label}
-                </button>
-              ))}
+              {isLoadingCategories ? (
+                <div className="text-sm text-muted-foreground py-2">Загрузка категорий...</div>
+              ) : (
+                categories.map((category) => (
+                  <button
+                    key={category.value}
+                    className={`text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                      selectedCategory === category.value
+                        ? 'bg-primary/10 text-primary font-medium'
+                        : 'hover:bg-muted'
+                    }`}
+                    onClick={() => setSelectedCategory(category.value)}
+                  >
+                    {category.label}
+                  </button>
+                ))
+              )}
             </div>
           </div>
 
@@ -119,11 +127,15 @@ export const SearchAndFilter = ({
               <SelectValue placeholder="Категория" />
             </SelectTrigger>
             <SelectContent>
-              {categories.map((category) => (
-                <SelectItem key={category.value} value={category.value}>
-                  {category.label}
-                </SelectItem>
-              ))}
+              {isLoadingCategories ? (
+                <div className="text-sm text-muted-foreground p-2">Загрузка категорий...</div>
+              ) : (
+                categories.map((category) => (
+                  <SelectItem key={category.value} value={category.value}>
+                    {category.label}
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
           <Select value={sortOrder} onValueChange={setSortOrder}>

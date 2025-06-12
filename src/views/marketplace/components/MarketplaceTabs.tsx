@@ -3,19 +3,23 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { ModuleCard } from './ModuleCard';
 import { Module } from '../data';
-import { categories } from '../data';
+import { CategoryOption } from '../api/categories';
 import { PackageOpen } from 'lucide-react';
 
 interface MarketplaceTabsProps {
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
   sortedModules: Module[];
+  categories: CategoryOption[];
+  isLoadingCategories?: boolean;
 }
 
 export const MarketplaceTabs = ({
   selectedCategory,
   setSelectedCategory,
   sortedModules,
+  categories,
+  isLoadingCategories = false,
 }: MarketplaceTabsProps) => {
   // Get all unique categories from the modules
   const availableCategories = ['all', ...categories.map(c => c.value).filter(c => c !== 'all')];
@@ -30,15 +34,19 @@ export const MarketplaceTabs = ({
       >
         <div className="border-b mb-6">
           <TabsList className="bg-transparent h-auto p-0 mb-0">
-            {availableCategories.map((category) => (
-              <TabsTrigger 
-                key={category}
-                value={category}
-                className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 py-3 h-auto"
-              >
-                {categories.find(c => c.value === category)?.label || 'Все модули'}
-              </TabsTrigger>
-            ))}
+            {isLoadingCategories ? (
+              <div className="text-sm text-muted-foreground p-2">Загрузка категорий...</div>
+            ) : (
+              availableCategories.map((category) => (
+                <TabsTrigger 
+                  key={category}
+                  value={category}
+                  className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 py-3 h-auto"
+                >
+                  {categories.find(c => c.value === category)?.label || 'Все модули'}
+                </TabsTrigger>
+              ))
+            )}
           </TabsList>
         </div>
 
@@ -78,17 +86,23 @@ export const MarketplaceTabs = ({
         </TabsContent>
 
         {/* Other tab contents will be filtered by the category selector */}
-        {availableCategories.filter(c => c !== 'all').map((category) => (
-          <TabsContent key={category} value={category} className="mt-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {sortedModules
-                .filter((module) => module.category === category)
-                .map((module) => (
-                  <ModuleCard key={module.id} module={module} />
-                ))}
-            </div>
-          </TabsContent>
-        ))}
+        {isLoadingCategories ? (
+          <div className="text-center py-6">
+            <p className="text-muted-foreground">Загрузка категорий...</p>
+          </div>
+        ) : (
+          availableCategories.filter(c => c !== 'all').map((category) => (
+            <TabsContent key={category} value={category} className="mt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {sortedModules
+                  .filter((module) => module.category === category)
+                  .map((module) => (
+                    <ModuleCard key={module.id} module={module} />
+                  ))}
+              </div>
+            </TabsContent>
+          ))
+        )}
       </Tabs>
     </div>
   );

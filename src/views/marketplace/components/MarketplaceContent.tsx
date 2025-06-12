@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Module } from '../data';
+import { CategoryOption, fetchCategories } from '../api/categories';
 
 import { SearchAndFilter } from './SearchAndFilter';
 import { MarketplaceTabs } from './MarketplaceTabs';
@@ -16,6 +17,27 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState('default');
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [categories, setCategories] = useState<CategoryOption[]>([
+    { value: 'all', label: 'Все категории' } // Default category while loading
+  ]);
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+
+  // Fetch categories when component mounts
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        setIsLoadingCategories(true);
+        const fetchedCategories = await fetchCategories();
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error('Failed to load categories:', error);
+      } finally {
+        setIsLoadingCategories(false);
+      }
+    };
+
+    loadCategories();
+  }, []);
 
   // Filter modules based on search query and category
   const filteredModules = modules.filter((module) => {
@@ -79,6 +101,8 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
               sortOrder={sortOrder}
               setSortOrder={setSortOrder}
               isVertical={true}
+              categories={categories}
+              isLoadingCategories={isLoadingCategories}
             />
           </div>
         </div>
@@ -89,6 +113,8 @@ export const MarketplaceContent = ({ modules }: MarketplaceContentProps) => {
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             sortedModules={sortedModules}
+            categories={categories}
+            isLoadingCategories={isLoadingCategories}
           />
         </div>
       </div>
