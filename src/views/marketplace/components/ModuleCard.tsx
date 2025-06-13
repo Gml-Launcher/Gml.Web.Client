@@ -42,10 +42,21 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
 
     try {
       setIsInstalling(true);
-      await installPlugin(module.originalId);
-      toast('Успешно', {
-        description: `Модуль "${module.title}" успешно установлен`,
-      });
+      const response = await installPlugin(module.originalId);
+
+      // Check if the response was successful based on the status code
+      if (response.ok && (response.statusCode === 200 || response.statusCode === 201)) {
+        toast('Успешно', {
+          description: `Модуль "${module.title}" успешно установлен`,
+        });
+      } else {
+        // Handle error response
+        const errorMessage = response.message || `Ошибка установки (${response.statusCode})`;
+        toast('Ошибка установки', {
+          description: errorMessage,
+        });
+        console.error('Installation error:', response);
+      }
     } catch (error) {
       console.error('Error installing plugin:', error);
       toast('Ошибка установки', {

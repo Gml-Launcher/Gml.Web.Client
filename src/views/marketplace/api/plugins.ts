@@ -9,10 +9,14 @@ export type PluginInstallRequest = {
   Id: string; // GUID of the plugin to install
 };
 
-// Response type for plugin installation
-export type PluginInstallResponse = ResponseBaseEntity & {
+// Response type for plugin installation and deletion
+export type PluginResponse = ResponseBaseEntity & {
   data: any; // Adjust this based on the actual response structure
+  statusCode?: number; // HTTP status code
+  ok?: boolean; // Whether the request was successful
 };
+
+export type PluginInstallResponse = PluginResponse;
 
 // Type for a plugin category
 export type PluginCategory = {
@@ -83,14 +87,16 @@ export const installPlugin = async (pluginId: string): Promise<PluginInstallResp
 
     clearTimeout(timeoutId); // Clear the timeout if the request completes
 
-    // Check if the response is successful
-    if (!response.ok) {
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-
-    // Parse and return the response
+    // Parse the response
     const data = await response.json();
-    return data;
+
+    // Return the response data even if it's an error response
+    // This allows the caller to check the status code and message
+    return {
+      ...data,
+      statusCode: response.status,
+      ok: response.ok
+    };
   } catch (error) {
     console.error('Error installing plugin:', error);
     // Re-throw the error to be handled by the caller
@@ -143,6 +149,58 @@ export const fetchInstalledPlugins = async (): Promise<PluginsResponse> => {
     return data;
   } catch (error) {
     console.error('Error fetching installed plugins:', error);
+    // Re-throw the error to be handled by the caller
+    throw error;
+  }
+};
+
+// Function to delete a plugin
+export const deletePlugin = async (pluginId: string): Promise<PluginResponse> => {
+  try {
+    // Create an AbortController to timeout the request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    // Get the GmlBackend URL using the helper function
+    const gmlBackendUrl = getApiBaseUrl();
+    if (!gmlBackendUrl) {
+      throw new Error('GML Backend URL is not defined');
+    }
+
+    // Get the access token
+    const accessToken = getStorageAccessToken();
+    if (!accessToken) {
+      throw new Error('Access token is not available');
+    }
+
+    // Get the RecloudID token
+    const recloudIdToken = getStorageRecloudIDAccessToken();
+
+    // Make the API request
+    const response = await fetch(`${gmlBackendUrl}/api/v1/plugins/${pluginId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+        ...(recloudIdToken && { 'recloud_id_token': recloudIdToken }) // Include if available
+      },
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId); // Clear the timeout if the request completes
+
+    // Parse the response
+    const data = await response.json();
+
+    // Return the response data even if it's an error response
+    // This allows the caller to check the status code and message
+    return {
+      ...data,
+      statusCode: response.status,
+      ok: response.ok
+    };
+  } catch (error) {
+    console.error('Error deleting plugin:', error);
     // Re-throw the error to be handled by the caller
     throw error;
   }

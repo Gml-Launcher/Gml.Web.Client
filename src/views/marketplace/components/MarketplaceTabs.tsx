@@ -1,15 +1,16 @@
 'use client';
 
-import { AlertCircle, Package, PackageOpen } from 'lucide-react';
+import { AlertCircle, Package, PackageOpen, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Module } from '../data';
-import { fetchInstalledPlugins, Plugin } from '../api/plugins';
+import { fetchInstalledPlugins, deletePlugin, Plugin } from '../api/plugins';
 
 import { ModuleCard } from './ModuleCard';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { CategoryOption } from '@/views/marketplace/api/categories';
+import { toast } from 'sonner';
 
 interface MarketplaceTabsProps {
   selectedCategory: string;
@@ -38,6 +39,45 @@ export const MarketplaceTabs = ({
   const [installedPlugins, setInstalledPlugins] = useState<Plugin[]>([]);
   const [isLoadingInstalledPlugins, setIsLoadingInstalledPlugins] = useState(false);
   const [installedPluginsError, setInstalledPluginsError] = useState<string | null>(null);
+
+  // State to track which plugin is being deleted
+  const [deletingPluginId, setDeletingPluginId] = useState<string | null>(null);
+
+  // Function to handle plugin deletion
+  const handleDeletePlugin = async (pluginId: string, pluginName: string) => {
+    try {
+      setDeletingPluginId(pluginId);
+
+      const response = await deletePlugin(pluginId);
+
+      // Check if the response was successful
+      if (response.ok && (response.statusCode === 200 || response.statusCode === 204)) {
+        // Remove the deleted plugin from the list
+        setInstalledPlugins((prevPlugins) => 
+          prevPlugins.filter((plugin) => plugin.id !== pluginId)
+        );
+
+        // Show success message
+        toast('Успешно', {
+          description: `Расширение "${pluginName}" успешно удалено`,
+        });
+      } else {
+        // Handle error response
+        const errorMessage = response.message || `Ошибка удаления (${response.statusCode})`;
+        toast('Ошибка удаления', {
+          description: errorMessage,
+        });
+        console.error('Deletion error:', response);
+      }
+    } catch (error) {
+      console.error('Error deleting plugin:', error);
+      toast('Ошибка удаления', {
+        description: error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+      });
+    } finally {
+      setDeletingPluginId(null);
+    }
+  };
 
   // Fetch installed plugins when the component mounts or when the installed tab is selected
   useEffect(() => {
@@ -284,15 +324,31 @@ export const MarketplaceTabs = ({
 
                         {/* Project link */}
                         {plugin.projectLink && (
-                          <a
-                            href={plugin.projectLink}
-                            target="_blank"
+                          <a 
+                            href={plugin.projectLink} 
+                            target="_blank" 
                             rel="noopener noreferrer"
                             className="text-sm text-primary hover:underline"
                           >
                             Подробнее
                           </a>
                         )}
+                      </div>
+
+                      {/* Delete button */}
+                      <div className="mt-4 flex justify-end">
+                        <button
+                          onClick={() => handleDeletePlugin(plugin.id, plugin.name)}
+                          disabled={deletingPluginId === plugin.id}
+                          className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
+                        >
+                          {deletingPluginId === plugin.id ? (
+                            <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                          {deletingPluginId === plugin.id ? 'Удаление...' : 'Удалить'}
+                        </button>
                       </div>
                     </div>
                   </div>
