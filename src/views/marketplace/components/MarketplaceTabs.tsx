@@ -2,15 +2,15 @@
 
 import { AlertCircle, Package, PackageOpen, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { Module } from '../data';
-import { fetchInstalledPlugins, deletePlugin, Plugin } from '../api/plugins';
+import { deletePlugin, fetchInstalledPlugins, Plugin } from '../api/plugins';
 
 import { ModuleCard } from './ModuleCard';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { CategoryOption } from '@/views/marketplace/api/categories';
-import { toast } from 'sonner';
 
 interface MarketplaceTabsProps {
   selectedCategory: string;
@@ -53,8 +53,8 @@ export const MarketplaceTabs = ({
       // Check if the response was successful
       if (response.ok && (response.statusCode === 200 || response.statusCode === 204)) {
         // Remove the deleted plugin from the list
-        setInstalledPlugins((prevPlugins) => 
-          prevPlugins.filter((plugin) => plugin.id !== pluginId)
+        setInstalledPlugins((prevPlugins) =>
+          prevPlugins.filter((plugin) => plugin.id !== pluginId),
         );
 
         // Show success message
@@ -187,7 +187,7 @@ export const MarketplaceTabs = ({
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 3xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {sortedModules.map((module) => (
                     <ModuleCard key={module.id} module={module} />
                   ))}
@@ -312,43 +312,33 @@ export const MarketplaceTabs = ({
                         </div>
                       )}
 
-                      {/* Price */}
-                      <div className="flex items-center justify-between">
-                        <div>
-                          {plugin.isFree ? (
-                            <span className="text-sm font-medium text-green-600">Бесплатно</span>
-                          ) : (
-                            <span className="text-sm font-medium">{plugin.price} ₽</span>
-                          )}
-                        </div>
-
+                      <div className="flex justify-between items-center">
                         {/* Project link */}
                         {plugin.projectLink && (
-                          <a 
-                            href={plugin.projectLink} 
-                            target="_blank" 
+                          <a
+                            href={plugin.projectLink}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="text-sm text-primary hover:underline"
                           >
                             Подробнее
                           </a>
                         )}
-                      </div>
-
-                      {/* Delete button */}
-                      <div className="mt-4 flex justify-end">
-                        <button
-                          onClick={() => handleDeletePlugin(plugin.id, plugin.name)}
-                          disabled={deletingPluginId === plugin.id}
-                          className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-                        >
-                          {deletingPluginId === plugin.id ? (
-                            <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                          {deletingPluginId === plugin.id ? 'Удаление...' : 'Удалить'}
-                        </button>
+                        {/* Delete button */}
+                        <div className="flex justify-end">
+                          <button
+                            onClick={() => handleDeletePlugin(plugin.id, plugin.name)}
+                            disabled={deletingPluginId === plugin.id}
+                            className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
+                          >
+                            {deletingPluginId === plugin.id ? (
+                              <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+                            ) : (
+                              <Trash2 className="h-4 w-4" />
+                            )}
+                            {deletingPluginId === plugin.id ? 'Удаление...' : 'Удалить'}
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -21,7 +21,7 @@ const config = {
       lg: '1024px',
       xl: '1280px',
       '2xl': '1636px',
-      '3xl': '1920px',
+      xl3: '1920px',
     },
     extend: {
       colors: {
