@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+
 import { getApiBaseUrl } from '@/views/marketplace/api/plugins';
 
 export function GmlContextInitializer() {
@@ -9,7 +10,7 @@ export function GmlContextInitializer() {
     if (typeof window !== 'undefined') {
       // Initialize GmlContext if it doesn't exist
       window.GmlContext = window.GmlContext || {};
-      
+
       // Add getApiBaseUrl function to GmlContext
       window.GmlContext.getApiBaseUrl = getApiBaseUrl;
     }
