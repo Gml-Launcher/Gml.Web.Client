@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Download, ExternalLink, FolderIcon, ShoppingCart, Star, TagIcon } from 'lucide-react';
+import { Download, ExternalLink, FolderIcon, ShoppingCart, TagIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Module } from '../data';
@@ -97,11 +97,11 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
           <div className="flex justify-between items-start">
             <CardTitle className="text-lg font-semibold">{module.title}</CardTitle>
           </div>
-          <div className="flex items-center gap-1 mt-1 mb-2">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{rating}</span>
-            <span className="text-xs text-muted-foreground ml-1">(24 отзыва)</span>
-          </div>
+          {/*<div className="flex items-center gap-1 mt-1 mb-2">*/}
+          {/*  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />*/}
+          {/*  <span className="text-sm font-medium">{rating}</span>*/}
+          {/*  <span className="text-xs text-muted-foreground ml-1">(24 отзыва)</span>*/}
+          {/*</div>*/}
           <CardDescription className="line-clamp-2">{module.description}</CardDescription>
         </CardHeader>
 
