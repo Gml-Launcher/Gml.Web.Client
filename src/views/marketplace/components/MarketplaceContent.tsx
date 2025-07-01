@@ -11,9 +11,10 @@ import { MarketplaceTabs } from './MarketplaceTabs';
 
 interface MarketplaceContentProps {
   modules: Module[]; // Keep for backward compatibility
+  onLogout?: () => void; // Function to handle logout
 }
 
-export const MarketplaceContent = ({ modules: initialModules }: MarketplaceContentProps) => {
+export const MarketplaceContent = ({ modules: initialModules, onLogout }: MarketplaceContentProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortOrder, setSortOrder] = useState('default');
@@ -91,28 +92,54 @@ export const MarketplaceContent = ({ modules: initialModules }: MarketplaceConte
 
   return (
     <div className="">
-      {/* Header with title and mobile filter toggle */}
+      {/* Header with title, logout button, and mobile filter toggle */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Маркетплейс модулей</h1>
-        <button
-          className="md:hidden flex items-center gap-2 px-4 py-2 rounded-lg border border-input bg-background hover:bg-accent hover:text-accent-foreground"
-          onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <div className="flex items-center gap-2">
+          {onLogout && (
+            <button
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+              onClick={onLogout}
+              title="Выйти из сессии Маркетплейса"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Выйти
+            </button>
+          )}
+          <button
+            className="md:hidden flex items-center gap-2 px-4 py-2 rounded-lg border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+            onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
           >
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-          </svg>
-          Фильтры
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            </svg>
+            Фильтры
+          </button>
+        </div>
       </div>
 
       {/* Main content with sidebar and modules grid */}

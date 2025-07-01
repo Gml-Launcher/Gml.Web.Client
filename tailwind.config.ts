@@ -73,10 +73,30 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'fade-in': {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        'scale-in': {
+          '0%': { transform: 'scale(0.8)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'loading-bar': {
+          '0%': { width: '0%' },
+          '100%': { width: '100%' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fadeIn': 'fade-in 0.5s ease-out forwards',
+        'scaleIn': 'scale-in 0.5s ease-out forwards',
+        'slideUp': 'slide-up 0.5s ease-out forwards',
+        'loading-bar': 'loading-bar 1.5s linear forwards',
       },
       fontFamily: {
         sans: ['var(--font-sans)', ...fontFamily.sans],

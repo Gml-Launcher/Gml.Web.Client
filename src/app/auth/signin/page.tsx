@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import classes from './styles.module.css';
 
-import { SignInForm } from '@/features/auth-credentials-form';
+import { SignInForm, LoginPluginScriptViewer } from '@/features/auth-credentials-form';
 import { AUTH_PAGES } from '@/shared/routes';
 import logo from '@/assets/logos/logo.svg';
 
@@ -27,6 +27,7 @@ export default function Page() {
                 Регистрация
               </Link>
             </div>
+            <LoginPluginScriptViewer />
           </div>
         </div>
         <div className={classes.login__banner}>

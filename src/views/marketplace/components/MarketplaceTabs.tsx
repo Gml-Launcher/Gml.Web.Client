@@ -1,16 +1,18 @@
 'use client';
 
 import { AlertCircle, Package, PackageOpen, Trash2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Module } from '../data';
 import { deletePlugin, fetchInstalledPlugins, Plugin } from '../api/plugins';
 
 import { ModuleCard } from './ModuleCard';
+import { PluginScriptViewer } from './PluginScriptViewer';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { CategoryOption } from '@/views/marketplace/api/categories';
+import { AuthenticationRecloudID } from '@/features/authentication-recloud-id';
 
 interface MarketplaceTabsProps {
   selectedCategory: string;
@@ -39,9 +41,52 @@ export const MarketplaceTabs = ({
   const [installedPlugins, setInstalledPlugins] = useState<Plugin[]>([]);
   const [isLoadingInstalledPlugins, setIsLoadingInstalledPlugins] = useState(false);
   const [installedPluginsError, setInstalledPluginsError] = useState<string | null>(null);
+  const [isAuthRequired, setIsAuthRequired] = useState(false);
 
   // State to track which plugin is being deleted
   const [deletingPluginId, setDeletingPluginId] = useState<string | null>(null);
+
+  // Function to fetch installed plugins
+  const fetchPlugins = useCallback(async () => {
+    try {
+      // Only show loading indicator when the installed tab is active
+      if (activeMainTab === 'installed') {
+        setIsLoadingInstalledPlugins(true);
+      }
+      setInstalledPluginsError(null);
+
+      const response = await fetchInstalledPlugins();
+      setInstalledPlugins(response.data || []);
+    } catch (error) {
+      console.error('Failed to fetch installed plugins:', error);
+
+      // Check if this is an authentication error
+      if (error instanceof Error && error.message.startsWith('UNAUTHORIZED:')) {
+        console.log('Authentication required for marketplace');
+        setIsAuthRequired(true);
+        setInstalledPluginsError(null); // Clear any previous error
+      } else {
+        setIsAuthRequired(false);
+        setInstalledPluginsError(
+          error instanceof Error
+            ? error.message
+            : 'Не удалось загрузить установленные расширения',
+        );
+      }
+    } finally {
+      if (activeMainTab === 'installed') {
+        setIsLoadingInstalledPlugins(false);
+      }
+    }
+  }, [activeMainTab]);
+
+  // Function to handle successful authentication
+  const handleAuthenticated = () => {
+    console.log('User authenticated successfully');
+    setIsAuthRequired(false);
+    // Refetch installed plugins after successful authentication
+    fetchPlugins();
+  };
 
   // Function to handle plugin deletion
   const handleDeletePlugin = async (pluginId: string, pluginName: string) => {
@@ -71,9 +116,16 @@ export const MarketplaceTabs = ({
       }
     } catch (error) {
       console.error('Error deleting plugin:', error);
-      toast('Ошибка удаления', {
-        description: error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
-      });
+
+      // Check if this is an authentication error
+      if (error instanceof Error && error.message.startsWith('UNAUTHORIZED:')) {
+        console.log('Authentication required for plugin deletion');
+        setIsAuthRequired(true);
+      } else {
+        toast('Ошибка удаления', {
+          description: error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+        });
+      }
     } finally {
       setDeletingPluginId(null);
     }
@@ -81,30 +133,8 @@ export const MarketplaceTabs = ({
 
   // Fetch installed plugins when the component mounts and when the installed tab is selected
   useEffect(() => {
-    const fetchPlugins = async () => {
-      try {
-        // Only show loading indicator when the installed tab is active
-        if (activeMainTab === 'installed') {
-          setIsLoadingInstalledPlugins(true);
-        }
-        setInstalledPluginsError(null);
-
-        const response = await fetchInstalledPlugins();
-        setInstalledPlugins(response.data || []);
-      } catch (error) {
-        console.error('Failed to fetch installed plugins:', error);
-        setInstalledPluginsError(
-          error instanceof Error ? error.message : 'Не удалось загрузить установленные расширения',
-        );
-      } finally {
-        if (activeMainTab === 'installed') {
-          setIsLoadingInstalledPlugins(false);
-        }
-      }
-    };
-
     fetchPlugins();
-  }, [activeMainTab]); // Re-fetch when tab changes
+  }, [activeMainTab, fetchPlugins]); // Re-fetch when tab changes or when fetchPlugins changes
 
   return (
     <div className="w-full">
@@ -244,6 +274,17 @@ export const MarketplaceTabs = ({
                 Пожалуйста, подождите, идет загрузка данных.
               </p>
             </div>
+          ) : isAuthRequired ? (
+            <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
+              <AlertCircle className="h-12 w-12 text-primary mx-auto mb-4" />
+              <h3 className="text-lg font-medium mb-2">Требуется авторизация</h3>
+              <p className="text-muted-foreground max-w-md mx-auto">
+                Для доступа к установленным расширениям необходимо авторизоваться через RecloudID.
+              </p>
+              <div className="mt-4">
+                <AuthenticationRecloudID onAuthenticated={handleAuthenticated} />
+              </div>
+            </div>
           ) : installedPluginsError ? (
             <div className="text-center py-12 bg-muted/30 rounded-lg border border-border">
               <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
@@ -280,78 +321,26 @@ export const MarketplaceTabs = ({
                   </p>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 {installedPlugins.map((plugin) => (
-                  <div
-                    key={plugin.id}
-                    className="bg-card rounded-lg border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="aspect-video bg-muted relative overflow-hidden">
-                      {plugin.imageUrl ? (
-                        <img
-                          src={plugin.imageUrl}
-                          alt={plugin.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            // Replace broken image with a placeholder
-                            (e.target as HTMLImageElement).src =
-                              'https://placehold.co/600x400?text=No+Image';
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-muted">
-                          <Package className="h-12 w-12 text-muted-foreground" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold mb-2 line-clamp-1">{plugin.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                        {plugin.description}
-                      </p>
+                  <div key={plugin.id} className="w-full">
+                    {/* Plugin Script Viewer */}
+                    <PluginScriptViewer plugin={plugin} />
 
-                      {/* Categories */}
-                      {plugin.categories && plugin.categories.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {plugin.categories.map((category) => (
-                            <span
-                              key={category.id}
-                              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
-                            >
-                              {category.name}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-
-                      <div className="flex justify-between items-center">
-                        {/* Project link */}
-                        {plugin.projectLink && (
-                          <a
-                            href={plugin.projectLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:underline"
-                          >
-                            Подробнее
-                          </a>
+                    {/* Delete button */}
+                    <div className="flex justify-end mt-2">
+                      <button
+                        onClick={() => handleDeletePlugin(plugin.id, plugin.name)}
+                        disabled={deletingPluginId === plugin.id}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
+                      >
+                        {deletingPluginId === plugin.id ? (
+                          <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+                        ) : (
+                          <Trash2 className="h-4 w-4" />
                         )}
-                        {/* Delete button */}
-                        <div className="flex justify-end">
-                          <button
-                            onClick={() => handleDeletePlugin(plugin.id, plugin.name)}
-                            disabled={deletingPluginId === plugin.id}
-                            className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-                          >
-                            {deletingPluginId === plugin.id ? (
-                              <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
-                            ) : (
-                              <Trash2 className="h-4 w-4" />
-                            )}
-                            {deletingPluginId === plugin.id ? 'Удаление...' : 'Удалить'}
-                          </button>
-                        </div>
-                      </div>
+                        {deletingPluginId === plugin.id ? 'Удаление...' : 'Удалить'}
+                      </button>
                     </div>
                   </div>
                 ))}

@@ -87,6 +87,11 @@ export const installPlugin = async (pluginId: string): Promise<PluginInstallResp
 
     clearTimeout(timeoutId); // Clear the timeout if the request completes
 
+    // Check for 401 Unauthorized specifically
+    if (response.status === 401) {
+      throw new Error('UNAUTHORIZED: Authentication required');
+    }
+
     // Parse the response
     const data = await response.json();
 
@@ -141,11 +146,16 @@ export const fetchInstalledPlugins = async (): Promise<PluginsResponse> => {
 
     // Check if the response is successful
     if (!response.ok) {
+      // Handle 401 Unauthorized specifically
+      if (response.status === 401) {
+        throw new Error('UNAUTHORIZED: Authentication required');
+      }
       throw new Error(`Server responded with status: ${response.status}`);
     }
 
-    // Parse and return the response
+    // Parse the response
     const data = await response.json();
+
     return data;
   } catch (error) {
     console.error('Error fetching installed plugins:', error);
@@ -188,6 +198,11 @@ export const deletePlugin = async (pluginId: string): Promise<PluginResponse> =>
     });
 
     clearTimeout(timeoutId); // Clear the timeout if the request completes
+
+    // Check for 401 Unauthorized specifically
+    if (response.status === 401) {
+      throw new Error('UNAUTHORIZED: Authentication required');
+    }
 
     // Parse the response
     const data = await response.json();

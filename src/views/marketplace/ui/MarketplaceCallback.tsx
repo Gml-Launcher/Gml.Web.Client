@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 
 import { setStorageRecloudIDAccessToken } from '@/shared/services';
 import { DASHBOARD_PAGES } from '@/shared/routes';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Icons } from '@/shared/ui/icons';
 
 export const MarketplaceCallbackPage = () => {
   const router = useRouter();
@@ -66,69 +68,102 @@ export const MarketplaceCallbackPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
       {status === 'loading' && (
-        <div className="text-center">
-          <div
-            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status"
-          >
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
-          </div>
-          <p className="mt-4 text-lg">Получение токена авторизации...</p>
-        </div>
+        <Card className="w-full max-w-md mx-auto animate-fadeIn py-10 rounded-3xl">
+          <CardHeader className="text-center pb-0">
+            <div className="flex justify-center mb-6">
+              <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 dark:bg-primary/20">
+                <Icons.spinner className="h-10 w-10 text-primary animate-spin" />
+              </div>
+            </div>
+            <CardTitle className="text-2xl animate-slideUp">Авторизация</CardTitle>
+            <div className="h-1 w-16 bg-primary/50 mx-auto my-4 rounded-full"></div>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-muted-foreground animate-slideUp">Получение токена авторизации...</p>
+          </CardContent>
+          <CardFooter className="flex justify-center pt-2">
+            <div className="w-16 h-1">
+              <div className="h-full bg-primary animate-pulse"></div>
+            </div>
+          </CardFooter>
+        </Card>
       )}
 
       {status === 'success' && (
-        <div className="text-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-4">
-            <svg
-              className="w-8 h-8 text-green-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              ></path>
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold mb-2">Авторизация успешна</h2>
-          <p className="text-gray-600">Перенаправление на страницу маркетплейса...</p>
-        </div>
+        <Card className="w-full max-w-md mx-auto animate-fadeIn py-10 rounded-3xl">
+          <CardHeader className="text-center pb-0">
+            <div className="flex justify-center mb-6">
+              <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-green-500/10 dark:bg-green-500/20 animate-scaleIn">
+                <svg
+                  className="w-10 h-10 text-green-500 dark:text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <CardTitle className="text-2xl animate-slideUp">Авторизация успешна</CardTitle>
+            <div className="h-1 w-16 bg-green-500/50 dark:bg-green-400/50 mx-auto my-4 rounded-full"></div>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-muted-foreground animate-slideUp">
+              Перенаправление на страницу маркетплейса...
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-center pt-2">
+            <div className="w-16 h-1 overflow-hidden">
+              <div className="h-full bg-green-500 dark:bg-green-400 animate-loading-bar"></div>
+            </div>
+          </CardFooter>
+        </Card>
       )}
 
       {status === 'error' && (
-        <div className="text-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 mb-4">
-            <svg
-              className="w-8 h-8 text-red-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+        <Card className="w-full max-w-md mx-auto animate-fadeIn">
+          <CardHeader className="text-center pb-0">
+            <div className="flex justify-center mb-6">
+              <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-destructive/10 dark:bg-destructive/20 animate-scaleIn">
+                <svg
+                  className="w-10 h-10 text-destructive"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <CardTitle className="text-2xl animate-slideUp">Ошибка авторизации</CardTitle>
+            <div className="h-1 w-16 bg-destructive/50 mx-auto my-4 rounded-full"></div>
+          </CardHeader>
+          <CardContent className="text-center">
+            <p className="text-destructive animate-slideUp">
+              {errorMessage || 'Произошла неизвестная ошибка'}
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-center pt-4">
+            <button
+              className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md transition-colors animate-slideUp"
+              onClick={() => router.push(DASHBOARD_PAGES.MARKETPLACE)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold mb-2">Ошибка авторизации</h2>
-          <p className="text-red-600">{errorMessage || 'Произошла неизвестная ошибка'}</p>
-          <button
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            onClick={() => router.push(DASHBOARD_PAGES.MARKETPLACE)}
-          >
-            Вернуться на страницу маркетплейса
-          </button>
-        </div>
+              Вернуться на страницу маркетплейса
+            </button>
+          </CardFooter>
+        </Card>
       )}
     </div>
   );

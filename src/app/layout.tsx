@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
 
 import { config } from '@/core/configs';
+import { GmlContextInitializer } from '@/core/components/GmlContextInitializer';
 import { QueryProvider, ThemeProvider, TooltipProvider } from '@/core/providers';
 import { cn } from '@/shared/lib/utils';
 import { Toaster } from '@/shared/ui/sonner';
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', manrope.variable)}>
+        <GmlContextInitializer />
         <QueryProvider>
           <ThemeProvider
             attribute="class"

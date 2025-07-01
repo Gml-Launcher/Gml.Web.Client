@@ -26,6 +26,7 @@ interface ModuleCardProps {
 export const ModuleCard = ({ module }: ModuleCardProps) => {
   // State for tracking installation status
   const [isInstalling, setIsInstalling] = useState(false);
+  const [isAuthRequired, setIsAuthRequired] = useState(false);
 
   // Generate a random rating between 4.0 and 5.0 for demo purposes
   const rating = (4 + Math.random()).toFixed(1);
@@ -59,9 +60,19 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
       }
     } catch (error) {
       console.error('Error installing plugin:', error);
-      toast('Ошибка установки', {
-        description: error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
-      });
+
+      // Check if this is an authentication error
+      if (error instanceof Error && error.message.startsWith('UNAUTHORIZED:')) {
+        console.log('Authentication required for plugin installation');
+        setIsAuthRequired(true);
+        toast('Требуется авторизация', {
+          description: 'Для установки расширения необходимо авторизоваться через RecloudID',
+        });
+      } else {
+        toast('Ошибка установки', {
+          description: error instanceof Error ? error.message : 'Произошла неизвестная ошибка',
+        });
+      }
     } finally {
       setIsInstalling(false);
     }
@@ -158,18 +169,33 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
               </Button>
             </a>
             <Button
-              className={`flex-1 gap-1.5 ${module.isFree ? 'bg-blue-500 hover:bg-blue-500/80 text-white' : ''}`}
-              onClick={module.isFree ? handleInstall : undefined}
+              className={`flex-1 gap-1.5 ${
+                module.isFree 
+                  ? isAuthRequired 
+                    ? 'bg-primary hover:bg-primary/80 text-white' 
+                    : 'bg-blue-500 hover:bg-blue-500/80 text-white' 
+                  : ''
+              }`}
+              onClick={module.isFree ? (isAuthRequired ? () => window.location.reload() : handleInstall) : undefined}
               disabled={isInstalling}
             >
               {isInstalling ? (
                 <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
+              ) : isAuthRequired ? (
+                <ExternalLink className="h-4 w-4" />
               ) : module.isFree ? (
                 <Download className="h-4 w-4" />
               ) : (
                 <ShoppingCart className="h-4 w-4" />
               )}
-              {isInstalling ? 'Установка...' : module.isFree ? 'Установить' : 'Купить'}
+              {isInstalling 
+                ? 'Установка...' 
+                : isAuthRequired 
+                  ? 'Авторизоваться' 
+                  : module.isFree 
+                    ? 'Установить' 
+                    : 'Купить'
+              }
             </Button>
           </div>
         </CardFooter>

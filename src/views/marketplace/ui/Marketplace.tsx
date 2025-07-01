@@ -13,7 +13,7 @@ import {
 
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { DASHBOARD_PAGES } from '@/shared/routes';
-import { getStorageRecloudIDAccessToken } from '@/shared/services';
+import { getStorageRecloudIDAccessToken, removeStorageRecloudIDAccessToken } from '@/shared/services';
 
 export const MarketplacePage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -113,6 +113,15 @@ export const MarketplacePage = () => {
         // Check if the response is successful
         if (!response.ok) {
           console.log(`Response not OK: ${response.status} ${response.statusText}`);
+
+          // Handle 401 Unauthorized specifically
+          if (response.status === 401) {
+            console.log('Received 401 Unauthorized, setting status to unauthorized');
+            setMarketplaceStatus('unauthorized');
+            statusCheckedRef.current = true;
+            return;
+          }
+
           throw new Error(`Server responded with status: ${response.status}`);
         }
 
@@ -244,6 +253,15 @@ export const MarketplacePage = () => {
     }
   }, [handleAuthenticated, checkMarketplaceStatus, setMarketplaceStatus, setErrorMessage]); // Include all necessary dependencies
 
+  const handleLogout = useCallback(() => {
+    console.log('Logging out from marketplace');
+    removeStorageRecloudIDAccessToken();
+    setIsAuthenticated(false);
+    statusCheckedRef.current = false;
+    // Refresh the page to reset the state
+    window.location.reload();
+  }, []);
+
   return (
     <>
       <Breadcrumbs
@@ -260,7 +278,7 @@ export const MarketplacePage = () => {
       ) : marketplaceStatus === 'unavailable' ? (
         <UnavailableState errorMessage={errorMessage} onRetry={checkMarketplaceStatus} />
       ) : (
-        <MarketplaceContent modules={modules} />
+        <MarketplaceContent modules={modules} onLogout={handleLogout} />
       )}
     </>
   );
