@@ -84,5 +84,5 @@ export const LoginPluginScriptViewer = () => {
   }
 
   // Only render if we have a component to render
-  return renderedComponent ? <div className="mt-4">{renderedComponent}</div> : null;
+  return renderedComponent ? <>{renderedComponent}</> : null;
 };
