@@ -79,14 +79,14 @@ export const MarketplaceTabs = ({
     }
   };
 
-  // Fetch installed plugins when the component mounts or when the installed tab is selected
+  // Fetch installed plugins when the component mounts and when the installed tab is selected
   useEffect(() => {
-    // Only fetch if the installed tab is active
-    if (activeMainTab !== 'installed') return;
-
     const fetchPlugins = async () => {
       try {
-        setIsLoadingInstalledPlugins(true);
+        // Only show loading indicator when the installed tab is active
+        if (activeMainTab === 'installed') {
+          setIsLoadingInstalledPlugins(true);
+        }
         setInstalledPluginsError(null);
 
         const response = await fetchInstalledPlugins();
@@ -97,7 +97,9 @@ export const MarketplaceTabs = ({
           error instanceof Error ? error.message : 'Не удалось загрузить установленные расширения',
         );
       } finally {
-        setIsLoadingInstalledPlugins(false);
+        if (activeMainTab === 'installed') {
+          setIsLoadingInstalledPlugins(false);
+        }
       }
     };
 
@@ -119,13 +121,23 @@ export const MarketplaceTabs = ({
               value="store"
               className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 py-3 h-auto"
             >
-              Магазин расширений
+              <div className="flex items-center gap-2">
+                Магазин расширений
+                <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  {sortedModules.length}
+                </span>
+              </div>
             </TabsTrigger>
             <TabsTrigger
               value="installed"
               className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-4 py-3 h-auto"
             >
-              Установленные расширения
+              <div className="flex items-center gap-2">
+                Установленные расширения
+                <span className="inline-flex items-center justify-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                  {installedPlugins.length}
+                </span>
+              </div>
             </TabsTrigger>
           </TabsList>
         </div>
