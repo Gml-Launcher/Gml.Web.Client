@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import classes from './styles.module.css';
 
-import { SignInForm } from '@/features/auth-credentials-form';
+import { LoginPluginScriptViewer, SignInForm } from '@/features/auth-credentials-form';
 import { AUTH_PAGES } from '@/shared/routes';
 import logo from '@/assets/logos/logo.svg';
 
@@ -21,6 +21,7 @@ export default function Page() {
               </p>
             </div>
             <SignInForm />
+            <LoginPluginScriptViewer />
             <div className={classes.login__registration}>
               Нет аккаунта?{' '}
               <Link href={AUTH_PAGES.SIGN_UP} className={classes.login__link}>

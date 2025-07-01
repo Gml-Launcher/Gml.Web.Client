@@ -6,6 +6,9 @@ export {
   removeStorageProfile,
   getStorageProfile,
   setStorageProfile,
+  getStorageRecloudIDAccessToken,
+  setStorageRecloudIDAccessToken,
+  removeStorageRecloudIDAccessToken,
 } from './AuthTokenService';
 export { profileService } from './ProfileService';
 export { modService } from './ModService';

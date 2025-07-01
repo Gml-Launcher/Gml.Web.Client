@@ -4,6 +4,7 @@ import {
   getStorageAccessToken,
   removeStorageProfile,
   removeStorageTokens,
+  removeStorageRecloudIDAccessToken,
 } from '@/shared/services';
 
 const OPTIONS: CreateAxiosDefaults = {
@@ -24,6 +25,7 @@ $api.interceptors.response.use((response) => {
   if (response.status === HttpStatusCode.Unauthorized) {
     removeStorageProfile();
     removeStorageTokens();
+    removeStorageRecloudIDAccessToken();
   }
 
   return response;

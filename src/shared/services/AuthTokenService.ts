@@ -27,3 +27,15 @@ export const setStorageAccessToken = (token: string) => {
 };
 
 export const removeStorageTokens = () => Cookies.remove('accessToken');
+
+// RecloudID specific token storage
+export const getStorageRecloudIDAccessToken = () => Cookies.get('recloudIDAccessToken') || null;
+export const setStorageRecloudIDAccessToken = (token: string) => {
+  Cookies.set('recloudIDAccessToken', token, {
+    domain: process.env.BASE_URL,
+    sameSite: 'strict',
+    expires: 1,
+  });
+};
+
+export const removeStorageRecloudIDAccessToken = () => Cookies.remove('recloudIDAccessToken');
