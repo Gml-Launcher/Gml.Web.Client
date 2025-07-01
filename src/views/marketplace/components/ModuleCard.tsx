@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Download, ExternalLink, FolderIcon, ShoppingCart, TagIcon } from 'lucide-react';
+import Image from 'next/image';
 import { toast } from 'sonner';
 
 import { Module } from '../data';
@@ -28,12 +29,9 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
   const [isInstalling, setIsInstalling] = useState(false);
   const [isAuthRequired, setIsAuthRequired] = useState(false);
 
-  // Generate a random rating between 4.0 and 5.0 for demo purposes
-  const rating = (4 + Math.random()).toFixed(1);
-
   // Function to handle plugin installation
   const handleInstall = async () => {
-    // Check if originalId is available
+    // Check if original Id is available
     if (!module.originalId) {
       toast('Ошибка установки', {
         description: 'Идентификатор модуля не найден',
@@ -85,10 +83,14 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
         className="overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:translate-y-[-2px]"
       >
         <div className="h-[200px] bg-muted relative overflow-hidden">
-          <img
+          <Image
             src={module.image}
             alt={module.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            width={400}
+            height={200}
+            priority
+            unoptimized
           />
           <div className="absolute top-3 right-3">
             <Badge
@@ -170,13 +172,19 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
             </a>
             <Button
               className={`flex-1 gap-1.5 ${
-                module.isFree 
-                  ? isAuthRequired 
-                    ? 'bg-primary hover:bg-primary/80 text-white' 
-                    : 'bg-blue-500 hover:bg-blue-500/80 text-white' 
+                module.isFree
+                  ? isAuthRequired
+                    ? 'bg-primary hover:bg-primary/80 text-white'
+                    : 'bg-blue-500 hover:bg-blue-500/80 text-white'
                   : ''
               }`}
-              onClick={module.isFree ? (isAuthRequired ? () => window.location.reload() : handleInstall) : undefined}
+              onClick={
+                module.isFree
+                  ? isAuthRequired
+                    ? () => window.location.reload()
+                    : handleInstall
+                  : undefined
+              }
               disabled={isInstalling}
             >
               {isInstalling ? (
@@ -188,14 +196,13 @@ export const ModuleCard = ({ module }: ModuleCardProps) => {
               ) : (
                 <ShoppingCart className="h-4 w-4" />
               )}
-              {isInstalling 
-                ? 'Установка...' 
-                : isAuthRequired 
-                  ? 'Авторизоваться' 
-                  : module.isFree 
-                    ? 'Установить' 
-                    : 'Купить'
-              }
+              {isInstalling
+                ? 'Установка...'
+                : isAuthRequired
+                  ? 'Авторизоваться'
+                  : module.isFree
+                    ? 'Установить'
+                    : 'Купить'}
             </Button>
           </div>
         </CardFooter>
