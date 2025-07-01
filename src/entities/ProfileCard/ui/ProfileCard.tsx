@@ -56,6 +56,7 @@ export const ProfileCard = ({ profile }: ProfileCardParams) => {
     formUpdate.append('enabled', profile?.isEnabled.toString());
     formUpdate.append('jvmArguments', profile?.jvmArguments);
     formUpdate.append('gameArguments', profile?.gameArguments);
+    formUpdate.append('priority', profile?.priority?.toString() ?? '0');
 
     if (body.icon && body.icon[0]) {
       formUpdate.append('icon', body.icon[0]);
