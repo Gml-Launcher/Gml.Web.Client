@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 
+import { getStorageAccessToken } from '@/shared/services/AuthTokenService';
 import { getApiBaseUrl } from '@/views/marketplace/api/plugins';
 
 export function GmlContextInitializer() {
@@ -13,6 +14,9 @@ export function GmlContextInitializer() {
 
       // Add getApiBaseUrl function to GmlContext
       window.GmlContext.getApiBaseUrl = getApiBaseUrl;
+
+      // Add getAccessToken function to GmlContext
+      window.GmlContext.getAccessToken = getStorageAccessToken;
     }
   }, []);
 
@@ -25,6 +29,7 @@ declare global {
   interface Window {
     GmlContext?: {
       getApiBaseUrl?: () => string;
+      getAccessToken?: () => string | null;
       [key: string]: any;
     };
   }
