@@ -1,6 +1,6 @@
 {
   "name": "gml-frontend",
-  "version": "1.0.8",
+  "version": "2025.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
