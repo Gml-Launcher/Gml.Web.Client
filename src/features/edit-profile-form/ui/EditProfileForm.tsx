@@ -16,6 +16,7 @@ import { Button } from '@/shared/ui/button';
 import { Icons } from '@/shared/ui/icons';
 import { DASHBOARD_PAGES } from '@/shared/routes';
 import { Switch } from '@/shared/ui/switch';
+import { Slider } from '@/shared/ui/slider';
 
 interface EditProfileFormProps {
   profile?: ProfileExtendedBaseEntity;
@@ -36,6 +37,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
       gameArguments: profile?.gameArguments || '',
       icon: profile?.iconBase64 || '',
       priority: profile?.priority || 0,
+      recommendedRam: profile?.recommendedRam || 1024,
       background: profile?.background || '',
       isEnabled: profile?.isEnabled,
     },
@@ -53,6 +55,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     formUpdate.append('icon', body.icon?.[0]);
     formUpdate.append('enabled', body.isEnabled?.toString() ?? 'true');
     formUpdate.append('priority', body.priority?.toString() ?? '0');
+    formUpdate.append('recommendedRam', body.recommendedRam?.toString() ?? '50');
 
     if (body.background && body.background[0]) {
       formUpdate.append('background', body.background[0]);
@@ -75,6 +78,8 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     form.reset(body);
   };
 
+  // @ts-ignore
+  // @ts-ignore
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -195,6 +200,33 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               {form.formState.errors.priority && (
                 <FormMessage>{form.formState.errors.priority.message?.toString()}</FormMessage>
               )}
+            </div>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 w-full md:min-w-96 mb-2 lg:mb-0">
+              <h6 className="text-sm font-bold">Рекомендуемая оперативная память</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                Текущее значение:{' '}
+                {form.watch('recommendedRam') ?? 0 >= 1024 * 1024
+                  ? `${((form.watch('recommendedRam') ?? 0) / (1024 * 1024)).toFixed(2)} ТБ`
+                  : (form.watch('recommendedRam') ?? 0) >= 1024
+                    ? `${((form.watch('recommendedRam') ?? 0) / 1024).toFixed(2)} ГБ`
+                    : `${form.watch('recommendedRam') ?? 0} МБ`}
+              </p>
+            </div>
+            <div className="flex flex-col gap-y-1 w-full md:min-w-96 mb-2 lg:mb-0">
+              <FormField
+                control={form.control}
+                name="recommendedRam"
+                render={({ field }) => (
+                  <Slider
+                    value={[field.value ?? 0]}
+                    max={128000}
+                    step={8}
+                    onValueChange={(value) => field.onChange(value[0])}
+                  />
+                )}
+              />
             </div>
           </div>
           <div className="flex justify-end">
