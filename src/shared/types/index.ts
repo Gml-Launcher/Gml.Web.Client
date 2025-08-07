@@ -1,6 +1,6 @@
 export type TMenuItem = {
   icon: React.ReactNode;
-  text: string;
+  text: React.ReactNode;
   path: string;
 };
 
