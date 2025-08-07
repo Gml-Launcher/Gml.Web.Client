@@ -35,7 +35,9 @@ const menu: TMenuItem[] = [
     text: (
       <>
         Маркетплейс
-        <Badge className="ml-1 bg-blue-500 text-white">beta</Badge>
+        <Badge className="ml-1" variant="secondary">
+          beta
+        </Badge>
       </>
     ),
   },
