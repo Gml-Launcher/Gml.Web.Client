@@ -147,7 +147,8 @@ export function AuthenticationRecloudID({ onAuthenticated }: AuthenticationReclo
             </Link>
           </div>
           <p className="mt-4 text-sm" style={{ color: '#FF6347' }}>
-            * Для работы маркетплейса нужна поддержка HTTPS TLS 1.3 и предварительная регистрация, подробности в документации
+            * Для работы маркетплейса нужна поддержка HTTPS TLS 1.3 и предварительная регистрация,
+            подробности в документации
           </p>
         </div>
       </section>
@@ -354,9 +355,12 @@ export function AuthenticationRecloudID({ onAuthenticated }: AuthenticationReclo
                 />
                 Войти через Recloud ID
               </Button>
-              <Button size="lg" variant="outline">
-                Связаться с нами
-              </Button>
+
+              <Link target="_blank" href="mailto:support@recloud.tech">
+                <Button size="lg" variant="outline">
+                  Связаться с нами
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
