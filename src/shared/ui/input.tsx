@@ -28,25 +28,33 @@ export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
   ({ className, id, fileTypes, type = 'file', ...props }, ref) => (
     <label
       htmlFor={id}
-      className="text-base rounded w-full h-32 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 dark:border-gray-800 text-gray-700 dark:text-gray-300 border-dashed font-[sans-serif]"
+      className="relative group text-base rounded-lg w-full h-32 flex flex-col items-center justify-center cursor-pointer border border-dashed border-primary/30 hover:border-primary/50 text-foreground/80 transition-all duration-200 overflow-hidden"
     >
-      <div className="flex justify-center items-center bg-gray-100 w-12 h-12 rounded-full mb-2 dark:bg-black">
-        <UploadCloud size={24} />
+      <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors duration-300"></div>
+      <div className="relative z-10 flex flex-col items-center">
+        <div className="flex justify-center items-center bg-background/80 w-12 h-12 rounded-full mb-3 shadow-sm border border-border/50 group-hover:scale-105 transition-transform duration-200">
+          <UploadCloud
+            size={20}
+            className="text-primary/70 group-hover:text-primary transition-colors duration-200"
+          />
+        </div>
+        <p className="text-xs text-center leading-6 font-medium">
+          <span className="text-primary underline">Нажмите, чтобы загрузить</span>
+        </p>
+        <input type="file" id={id} className="hidden" ref={ref} {...props} />
+        {fileTypes && (
+          <>
+            {fileTypes.length === 1 && (
+              <p className="text-xs mt-2 text-muted-foreground">Доступный формат: {fileTypes[0]}</p>
+            )}
+            {fileTypes.length > 1 && (
+              <p className="text-xs mt-2 text-muted-foreground">
+                Доступные форматы: {fileTypes.join(', ')}
+              </p>
+            )}
+          </>
+        )}
       </div>
-      <p className="text-xs text-center leading-6">
-        <span className="underline">Нажмите, чтобы загрузить</span>, или перетащите изображение
-      </p>
-      <input type="file" id={id} className="hidden" ref={ref} {...props} />
-      {fileTypes && (
-        <>
-          {fileTypes.length === 1 && (
-            <p className="text-xs mt-2">Доступный формат: {fileTypes[0]}</p>
-          )}
-          {fileTypes.length > 1 && (
-            <p className="text-xs mt-2">Доступные форматы: {fileTypes.join(', ')}</p>
-          )}
-        </>
-      )}
     </label>
   ),
 );

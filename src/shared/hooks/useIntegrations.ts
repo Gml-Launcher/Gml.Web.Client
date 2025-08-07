@@ -165,10 +165,13 @@ export const useLauncherBuildVersions = () => {
 };
 
 export const useLauncherUpload = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: integrationsKeys.launcherUpload(),
     mutationFn: (data: TPostLauncherUploadRequest) => integrationService.postLauncherUpload(data),
     onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: integrationsKeys.launcherActualVersion() });
       toast.success('Успешно', {
         description: data.message,
       });
