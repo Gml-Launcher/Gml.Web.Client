@@ -207,11 +207,9 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               <h6 className="text-sm font-bold">Рекомендуемая оперативная память</h6>
               <p className="text-sm text-gray-700 dark:text-gray-300">
                 Текущее значение:{' '}
-                {form.watch('recommendedRam') ?? 0 >= 1024 * 1024
-                  ? `${((form.watch('recommendedRam') ?? 0) / (1024 * 1024)).toFixed(2)} ТБ`
-                  : (form.watch('recommendedRam') ?? 0) >= 1024
-                    ? `${((form.watch('recommendedRam') ?? 0) / 1024).toFixed(2)} ГБ`
-                    : `${form.watch('recommendedRam') ?? 0} МБ`}
+                {(form.watch('recommendedRam') ?? 0) >= 1024
+                  ? `${((form.watch('recommendedRam') ?? 0) / 1024).toFixed(2)} ГБ`
+                  : `${form.watch('recommendedRam') ?? 0} МБ`}
               </p>
             </div>
             <div className="flex flex-col gap-y-1 w-full md:min-w-96 mb-2 lg:mb-0">
@@ -221,7 +219,7 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
                 render={({ field }) => (
                   <Slider
                     value={[field.value ?? 0]}
-                    max={128000}
+                    max={18000}
                     step={8}
                     onValueChange={(value) => field.onChange(value[0])}
                   />
