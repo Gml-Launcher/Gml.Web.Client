@@ -82,7 +82,7 @@ export const installPlugin = async (pluginId: string): Promise<PluginInstallResp
         'Content-Type': 'application/json',
         Accept: 'application/json',
         Authorization: `Bearer ${accessToken}`,
-        'recloud-id-token': recloudIdToken, // Pass token in header as specified
+        ...(recloudIdToken ? { 'recloud-id-token': recloudIdToken } : {}),
       },
       body: JSON.stringify(payload),
       signal: controller.signal,
@@ -140,7 +140,7 @@ export const fetchInstalledPlugins = async (): Promise<PluginsResponse> => {
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${accessToken}`,
-        ...(recloudIdToken && { recloud_id_token: recloudIdToken }), // Include if available
+        ...(recloudIdToken ? { 'recloud-id-token': recloudIdToken } : {}),
       },
       signal: controller.signal,
     });
@@ -195,7 +195,7 @@ export const deletePlugin = async (pluginId: string): Promise<PluginResponse> =>
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${accessToken}`,
-        ...(recloudIdToken && { recloud_id_token: recloudIdToken }), // Include if available
+        ...(recloudIdToken ? { 'recloud-id-token': recloudIdToken } : {}),
       },
       signal: controller.signal,
     });
