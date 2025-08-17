@@ -13,6 +13,7 @@ export const DASHBOARD_PAGES = {
   INTEGRATIONS: '/dashboard/integrations',
   PROFILES: '/dashboard/profiles',
   PROFILE: '/dashboard/profile',
+  MARKETPLACE: '/dashboard/marketplace',
   SENTRY: '/dashboard/sentry',
   PLAYERS: '/dashboard/players',
 };

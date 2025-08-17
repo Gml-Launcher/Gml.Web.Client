@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { getStorageProfile, removeStorageProfile, removeStorageTokens } from '@/shared/services';
+import { getStorageProfile, removeStorageProfile, removeStorageTokens, removeStorageRecloudIDAccessToken } from '@/shared/services';
 import { AUTH_PAGES } from '@/shared/routes';
 
 export const AccountNavigation = () => {
@@ -21,6 +21,7 @@ export const AccountNavigation = () => {
   const destroySession = () => {
     removeStorageProfile();
     removeStorageTokens();
+    removeStorageRecloudIDAccessToken();
     router.push(AUTH_PAGES.SIGN_IN);
   };
 

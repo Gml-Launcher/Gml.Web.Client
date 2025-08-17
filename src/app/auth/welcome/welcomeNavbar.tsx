@@ -80,7 +80,7 @@ export default function WelcomeNavbar() {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem className="text-xlfont-bold leading-none tracking-tight bg-gradient-to-r from-purple-500 to-pink-500 inline-block text-transparent bg-clip-text">
-            <Link href="https://recloud.tb.ru" target="_blank" legacyBehavior passHref>
+            <Link href="https://market.recloud.tech" target="_blank" legacyBehavior passHref>
               <NavigationMenuLink target={'_blank'}> Перейти на Pro</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

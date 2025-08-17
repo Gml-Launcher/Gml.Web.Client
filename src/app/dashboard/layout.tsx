@@ -1,6 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowUpDownIcon, BlocksIcon, PieChartIcon, SettingsIcon, Users2Icon } from 'lucide-react';
+import {
+  ArrowUpDownIcon,
+  BlocksIcon,
+  PieChartIcon,
+  SettingsIcon,
+  ShoppingCartIcon,
+  Users2Icon,
+} from 'lucide-react';
 
 import classes from './styles.module.css';
 
@@ -12,6 +19,7 @@ import { MobileNavigation } from '@/shared/ui/MobileNavigation';
 import { AccountNavigation } from '@/shared/ui/AccountNavigation';
 import { DASHBOARD_PAGES } from '@/shared/routes';
 import { DonationPro } from '@/shared/ui/DonationPro';
+import { Badge } from '@/shared/ui/badge';
 import { TMenuItem } from '@/shared/types';
 import logo from '@/assets/logos/logo.svg';
 
@@ -20,6 +28,18 @@ const menu: TMenuItem[] = [
     icon: <BlocksIcon size={16} />,
     path: DASHBOARD_PAGES.PROFILES,
     text: 'Профили',
+  },
+  {
+    icon: <ShoppingCartIcon size={16} />,
+    path: DASHBOARD_PAGES.MARKETPLACE,
+    text: (
+      <>
+        Маркетплейс
+        <Badge className="ml-1" variant="secondary">
+          beta
+        </Badge>
+      </>
+    ),
   },
   {
     icon: <ArrowUpDownIcon size={16} />,

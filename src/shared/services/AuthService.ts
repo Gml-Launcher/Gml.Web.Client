@@ -5,7 +5,7 @@ import {
   TPostSignUpRequest,
   TPostSignUpResponse,
 } from '@/shared/api/contracts';
-import { removeStorageTokens, setStorageAccessToken, setStorageProfile } from '@/shared/services';
+import { removeStorageTokens, removeStorageRecloudIDAccessToken, setStorageAccessToken, setStorageProfile } from '@/shared/services';
 
 class AuthService {
   private BASE_URL = '/users';
@@ -30,6 +30,7 @@ class AuthService {
 
   async logout() {
     removeStorageTokens();
+    removeStorageRecloudIDAccessToken();
   }
 }
 

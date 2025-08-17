@@ -16,6 +16,7 @@ export type ProfileBaseEntity = {
 };
 
 export type ProfileExtendedBaseEntity = {
+  recommendedRam: number;
   javaPath: string;
   profileName: string;
   displayName: string;
