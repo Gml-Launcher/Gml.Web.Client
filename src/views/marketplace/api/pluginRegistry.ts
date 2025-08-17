@@ -54,7 +54,7 @@ export class PluginRegistry {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
-          ...(recloudIdToken && { recloud_id_token: recloudIdToken }), // Include if available
+          ...(recloudIdToken ? { 'recloud-id-token': recloudIdToken } : {}),
         },
         signal: controller.signal,
       });
@@ -120,7 +120,7 @@ export class PluginRegistry {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${accessToken}`,
-          ...(recloudIdToken && { recloud_id_token: recloudIdToken }), // Include if available
+          ...(recloudIdToken ? { 'recloud-id-token': recloudIdToken } : {}),
         },
         signal: controller.signal,
       });
