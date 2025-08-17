@@ -1,5 +1,8 @@
 import { ResponseBaseEntity } from '@/shared/api/schemas';
-import { getStorageAccessToken, getStorageRecloudIDAccessToken } from '@/shared/services/AuthTokenService';
+import {
+  getStorageAccessToken,
+  getStorageRecloudIDAccessToken,
+} from '@/shared/services/AuthTokenService'; // Helper function to get the API base URL
 
 // Helper function to get the API base URL
 export const getApiBaseUrl = () => (process.env.NEXT_PUBLIC_BACKEND_URL as string)?.slice(0, -7);
@@ -69,7 +72,7 @@ export const installPlugin = async (pluginId: string): Promise<PluginInstallResp
     // Prepare the request payload
     // The backend expects a RecloudPluginCreateDto with a GUID Id
     const payload: PluginInstallRequest = {
-      Id: pluginId
+      Id: pluginId,
     };
 
     // Make the API request
@@ -77,9 +80,9 @@ export const installPlugin = async (pluginId: string): Promise<PluginInstallResp
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        'recloud_id_token': recloudIdToken // Pass token in header as specified
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        'recloud-id-token': recloudIdToken, // Pass token in header as specified
       },
       body: JSON.stringify(payload),
       signal: controller.signal,
@@ -100,7 +103,7 @@ export const installPlugin = async (pluginId: string): Promise<PluginInstallResp
     return {
       ...data,
       statusCode: response.status,
-      ok: response.ok
+      ok: response.ok,
     };
   } catch (error) {
     console.error('Error installing plugin:', error);
@@ -135,9 +138,9 @@ export const fetchInstalledPlugins = async (): Promise<PluginsResponse> => {
     const response = await fetch(`${gmlBackendUrl}/api/v1/plugins`, {
       method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        ...(recloudIdToken && { 'recloud_id_token': recloudIdToken }) // Include if available
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        ...(recloudIdToken && { recloud_id_token: recloudIdToken }), // Include if available
       },
       signal: controller.signal,
     });
@@ -190,9 +193,9 @@ export const deletePlugin = async (pluginId: string): Promise<PluginResponse> =>
     const response = await fetch(`${gmlBackendUrl}/api/v1/plugins/${pluginId}`, {
       method: 'DELETE',
       headers: {
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
-        ...(recloudIdToken && { 'recloud_id_token': recloudIdToken }) // Include if available
+        Accept: 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+        ...(recloudIdToken && { recloud_id_token: recloudIdToken }), // Include if available
       },
       signal: controller.signal,
     });
@@ -212,7 +215,7 @@ export const deletePlugin = async (pluginId: string): Promise<PluginResponse> =>
     return {
       ...data,
       statusCode: response.status,
-      ok: response.ok
+      ok: response.ok,
     };
   } catch (error) {
     console.error('Error deleting plugin:', error);
