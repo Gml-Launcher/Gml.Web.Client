@@ -4,11 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useEditProfile } from '@/shared/hooks';
-import {
-  EditProfileFormSchemaType,
-  EditProfileSchema,
-  ProfileExtendedBaseEntity,
-} from '@/shared/api/contracts';
+import { EditProfileFormSchemaType, EditProfileSchema, ProfileExtendedBaseEntity } from '@/shared/api/contracts';
 import { Form, FormField, FormMessage } from '@/shared/ui/form';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
@@ -52,14 +48,49 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     formUpdate.append('displayName', body.displayName);
     formUpdate.append('originalName', profile?.profileName || '');
     formUpdate.append('description', body.description);
-    formUpdate.append('icon', body.icon?.[0]);
+
+    const iconFile =
+      body.icon && typeof body.icon !== 'string' && body.icon[0] instanceof File
+        ? body.icon[0]
+        : undefined;
+    if (iconFile) {
+      formUpdate.append('icon', iconFile);
+    } else if (profile?.iconBase64) {
+      try {
+        const iconBlob = await fetch(`data:image/png;base64,${profile.iconBase64}`).then((r) =>
+          r.blob(),
+        );
+        formUpdate.append('icon', new File([iconBlob], 'icon.png', { type: 'image/png' }));
+      } catch (e) {
+        console.error('Error converting existing icon to file:', e);
+      }
+    }
+
     formUpdate.append('enabled', body.isEnabled?.toString() ?? 'true');
     formUpdate.append('priority', body.priority?.toString() ?? '0');
     formUpdate.append('recommendedRam', body.recommendedRam?.toString() ?? '50');
 
-    if (body.background && body.background[0]) {
-      formUpdate.append('background', body.background[0]);
+    const backgroundFile =
+      body.background && typeof body.background !== 'string' && body.background[0] instanceof File
+        ? body.background[0]
+        : undefined;
+    if (backgroundFile) {
+      formUpdate.append('background', backgroundFile);
+    } else if (profile?.background && profile.background.trim() !== '') {
+      try {
+        const backgroundResponse = await fetch(profile.background);
+        const backgroundBlob = await backgroundResponse.blob();
+        formUpdate.append(
+          'background',
+          new File([backgroundBlob], 'background.png', { type: 'image/png' }),
+        );
+      } catch (error) {
+        console.error('Error fetching existing background image:', error);
+      }
     }
+
+    const needUpdateImages = Boolean(iconFile) || Boolean(backgroundFile);
+    formUpdate.append('needUpdateImages', needUpdateImages.toString());
 
     if (body.jvmArguments) {
       formUpdate.append('jvmArguments', body.jvmArguments);
