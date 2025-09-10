@@ -36,6 +36,7 @@ export type TGetPlayersResponse = ResponseBaseEntity & {
 
 // Бан юзера
 export type TPostBanPlayersRequest = string[];
+export type TPostBanPlayersOptions = { deviceBlock?: boolean };
 export type TPostBanPlayersResponse = ResponseBaseEntity & {};
 
 // Удаление юзера

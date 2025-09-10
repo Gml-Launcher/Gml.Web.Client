@@ -10,7 +10,7 @@ import { PlayerBaseEntity } from '@/shared/api/contracts';
 import { $api } from '@/services/api.service';
 import { Button } from '@/shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
-import { useBanPlayer, usePardonPlayer, useRemoveUser } from '@/shared/hooks/usePlayers';
+import { useBanPlayer, useBanPlayerHardware, usePardonPlayer, useRemoveUser } from '@/shared/hooks/usePlayers';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { timeAgo } from '@/shared/lib/getFormatDate/getFormatDate';
@@ -60,11 +60,15 @@ function AvatarCell({ name, uuid }: { name?: string; uuid: string }) {
 }
 export const useColumns = () => {
   const banPlayer = useBanPlayer();
+  const banPlayerHardware = useBanPlayerHardware();
   const removePlayer = useRemoveUser();
   const pardonPlayer = usePardonPlayer();
 
   const banUser = async (data: string) => {
     await banPlayer.mutateAsync([data]);
+  };
+  const banUserHardware = async (data: string) => {
+    await banPlayerHardware.mutateAsync([data]);
   };
   const removeUser = async (data: string) => {
     await removePlayer.mutateAsync([data]);
@@ -226,7 +230,7 @@ export const useColumns = () => {
                   Забанить
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem disabled onClick={(e) => e.preventDefault()}>
+              <DropdownMenuItem onClick={() => banUserHardware(row.original.uuid)}>
                 Забанить по железу
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => removeUser(row.original.uuid)}>

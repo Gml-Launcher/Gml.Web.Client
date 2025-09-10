@@ -38,10 +38,28 @@ export const useBanPlayer = () => {
   return useMutation({
     mutationKey: playersKeys.banPlayer(),
     mutationFn: (data: TPostBanPlayersRequest) => playersService.banPlayer(data),
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: playersKeys.all });
       toast.success('Успешно', {
         description: `Пользователь заблокирован`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useBanPlayerHardware = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: playersKeys.banPlayer(),
+    mutationFn: (data: TPostBanPlayersRequest) => playersService.banPlayer(data, { deviceBlock: true }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: playersKeys.all });
+      toast.success('Успешно', {
+        description: `Пользователь заблокирован по железу`,
       });
     },
     onError: (error) => {

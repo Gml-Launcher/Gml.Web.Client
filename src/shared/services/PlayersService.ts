@@ -4,6 +4,7 @@ import {
   TGetPlayersResponse,
   TPostBanPlayersRequest,
   TPostBanPlayersResponse,
+  TPostBanPlayersOptions,
 } from '@/shared/api/contracts';
 
 class PlayersService {
@@ -17,8 +18,11 @@ class PlayersService {
     return data;
   }
 
-  async banPlayer(body: TPostBanPlayersRequest): Promise<TPostBanPlayersResponse> {
-    const { data } = await $api.post<TPostBanPlayersResponse>(`${this.BASE_URL}/ban`, body);
+  async banPlayer(body: TPostBanPlayersRequest, options?: TPostBanPlayersOptions): Promise<TPostBanPlayersResponse> {
+    const { data } = await $api.post<TPostBanPlayersResponse>(
+      `${this.BASE_URL}/ban${options?.deviceBlock ? '?deviceBlock=true' : ''}`,
+      body,
+    );
 
     return data;
   }
