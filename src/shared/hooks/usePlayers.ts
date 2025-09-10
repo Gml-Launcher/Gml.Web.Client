@@ -16,7 +16,7 @@ export const playersKeys = {
 
 export const usePlayers = (search: string) => {
   return useInfiniteQuery({
-    queryKey: playersKeys.all,
+    queryKey: [...playersKeys.all, search],
     initialPageParam: 0,
     queryFn: ({ pageParam }) =>
       playersService.getPlayers({

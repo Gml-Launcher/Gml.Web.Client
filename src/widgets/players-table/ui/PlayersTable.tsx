@@ -25,7 +25,8 @@ import { Button } from '@/shared/ui/button';
 export function PlayersTable() {
   const { ref, inView } = useInView();
   const [search, setSearch] = useState('');
-  const { data: players, status, error, fetchNextPage, refetch } = usePlayers(search);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const { data: players, status, error, fetchNextPage, refetch } = usePlayers(debouncedSearch);
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -57,8 +58,18 @@ export function PlayersTable() {
     }
   }, [fetchNextPage, inView]);
 
+  // Auto-search when user stops typing (debounce)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [search]);
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Manual submit still supported: immediately apply current search value
+    setDebouncedSearch(search.trim());
     refetch();
   };
 
