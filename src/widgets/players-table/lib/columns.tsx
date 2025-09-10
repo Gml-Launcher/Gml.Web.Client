@@ -149,17 +149,11 @@ export const useColumns = () => {
         <DataTableColumnHeader column={column} title={ColumnHeader.SESSION_END_DATE} />
       ),
       cell: ({ getValue }) => {
-        const date = getValue() as any;
-        const full = date ? format(date, 'dd.MM.yyyy в HH:mm:ss') : '-';
-        const rel = date ? timeAgo(date) : '-';
-        return (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className="whitespace-nowrap">{rel}</span>
-            </TooltipTrigger>
-            <TooltipContent>{full}</TooltipContent>
-          </Tooltip>
-        );
+        const raw = getValue() as unknown as string | Date | number | null | undefined;
+        const dateObj = raw ? new Date(raw as any) : null;
+        const isValid = !!(dateObj && !isNaN(dateObj.getTime()));
+        const full = isValid ? format(dateObj as Date, 'dd.MM.yyyy в HH:mm:ss') : '-';
+        return <span className="whitespace-nowrap">{full}</span>;
       },
     }),
     // Merged status column: combines regular ban and hardware ban into one cell
