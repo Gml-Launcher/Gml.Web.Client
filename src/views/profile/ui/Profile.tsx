@@ -39,6 +39,7 @@ import { FolderTable } from '@/widgets/folder-table';
 import { GamePlayers } from '@/widgets/game-players';
 import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
 import { GameMods } from '@/widgets/game-mods';
+import { GameLoaderType } from '@/shared/api/contracts';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -73,6 +74,15 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       setPlayers(profile?.usersWhiteList);
     }
   }, [profile, setPlayers]);
+
+  const isVanilla = profile?.loader === GameLoaderType.VANILLA;
+
+  useEffect(() => {
+    if (isVanilla && activeTab === 'mods') {
+      setActiveTab('main');
+      router.push(`/dashboard/profile/${params.name}?tab=main`, { scroll: false });
+    }
+  }, [isVanilla, activeTab, router, params.name]);
 
   if (isPending || !profile) return <ProfileLoading />;
 
@@ -140,9 +150,11 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           <TabsTrigger className="w-full h-10" value="players">
             Игроки
           </TabsTrigger>
-          <TabsTrigger className="w-full h-10" value="mods">
-            Моды
-          </TabsTrigger>
+          {!isVanilla && (
+            <TabsTrigger className="w-full h-10" value="mods">
+              Моды
+            </TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>
           <Section
@@ -276,11 +288,13 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             <GamePlayers profile={profile} />
           </Section>
         </TabsContent>
-        <TabsContent value="mods" className={classes.tabs__content}>
-          <Section title="Моды" subtitle="Управление игровыми модификациями">
-            <GameMods profile={profile} />
-          </Section>
-        </TabsContent>
+        {!isVanilla && (
+          <TabsContent value="mods" className={classes.tabs__content}>
+            <Section title="Моды" subtitle="Управление игровыми модификациями">
+              <GameMods profile={profile} />
+            </Section>
+          </TabsContent>
+        )}
       </Tabs>
     </>
   );

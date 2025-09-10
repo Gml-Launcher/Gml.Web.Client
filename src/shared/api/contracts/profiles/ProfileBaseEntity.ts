@@ -33,6 +33,7 @@ export type ProfileExtendedBaseEntity = {
   hasUpdate: boolean;
   isEnabled: boolean;
   state: EntityState;
+  loader: number;
   files: ProfileFileBaseEntity[];
   whiteListFiles: ProfileFileBaseEntity[];
   whiteListFolders: ProfileFolderBaseEntity[];
