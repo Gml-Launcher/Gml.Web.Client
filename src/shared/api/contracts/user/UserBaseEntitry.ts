@@ -6,6 +6,7 @@ export type UserBaseEntity = {
 
 export interface PlayerBaseEntity {
   isBanned: boolean;
+  isBannedPermanent?: boolean;
   authHistory: AuthHistoryBaseEntity[];
   serverJoinHistory: any[];
   name: string;

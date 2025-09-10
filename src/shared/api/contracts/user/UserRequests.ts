@@ -39,6 +39,9 @@ export type TPostBanPlayersRequest = string[];
 export type TPostBanPlayersOptions = { deviceBlock?: boolean };
 export type TPostBanPlayersResponse = ResponseBaseEntity & {};
 
+// Разбан юзера
+export type TPostPardonPlayersOptions = { deviceUnblock?: boolean };
+
 // Удаление юзера
 export type TPostRemovePlayersRequest = string[];
 export type TPostRemovePlayersResponse = ResponseBaseEntity & {};

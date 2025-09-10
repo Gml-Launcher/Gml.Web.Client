@@ -10,7 +10,7 @@ import { PlayerBaseEntity } from '@/shared/api/contracts';
 import { $api } from '@/services/api.service';
 import { Button } from '@/shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
-import { useBanPlayer, useBanPlayerHardware, usePardonPlayer, useRemoveUser } from '@/shared/hooks/usePlayers';
+import { useBanPlayer, useBanPlayerHardware, usePardonPlayer, usePardonPlayerHardware, useRemoveUser } from '@/shared/hooks/usePlayers';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { timeAgo } from '@/shared/lib/getFormatDate/getFormatDate';
@@ -22,6 +22,7 @@ enum ColumnHeader {
   SESSION_END_DATE = 'Дата завершения сессии',
   UUID = 'UUID',
   BANNED = 'Заблокирован',
+  BANNED_HARDWARE = 'Заблокирован по железу',
   IP_ADDRESS = 'IP Адрес',
   ACTIONS = 'Действия',
 }
@@ -63,6 +64,7 @@ export const useColumns = () => {
   const banPlayerHardware = useBanPlayerHardware();
   const removePlayer = useRemoveUser();
   const pardonPlayer = usePardonPlayer();
+  const pardonPlayerHardware = usePardonPlayerHardware();
 
   const banUser = async (data: string) => {
     await banPlayer.mutateAsync([data]);
@@ -76,6 +78,10 @@ export const useColumns = () => {
 
   const pardonUser = async (data: string) => {
     await pardonPlayer.mutateAsync([data]);
+  };
+
+  const pardonUserHardware = async (data: string) => {
+    await pardonPlayerHardware.mutateAsync([data]);
   };
 
   const columns: any = [
@@ -156,13 +162,73 @@ export const useColumns = () => {
         );
       },
     }),
-    // Compact: banned state represented as icon near name; keep column minimal for sorting clarity or remove text
-    columnsHelper.accessor('isBanned', {
-      size: 60,
-      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.BANNED} />,
-      cell: ({ getValue }) => (
-        getValue() ? <span className="text-red-500" title="Заблокирован">Да</span> : <span className="text-emerald-500" title="Не заблокирован">Нет</span>
+    // Merged status column: combines regular ban and hardware ban into one cell
+    columnsHelper.display({
+      id: 'status',
+      size: 120,
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Статус" />
       ),
+      sortingFn: (a, b) => {
+        const getHw = (r: any) => {
+          if (r?.isBannedPermanent) return 2;
+          const legacy = (r?.isDeviceBanned ?? r?.deviceBlocked ?? r?.isHardwareBanned ?? r?.isBannedByHardware ?? r?.bannedByHardware) ? 1 : 0;
+          return legacy;
+        };
+        const getBan = (r: any) => (r?.isBanned ? 1 : 0);
+        // Priority: permanent hardware ban (2) > regular hardware ban (1) > regular ban (1) > none (0)
+        const rankA = getHw(a.original) + getBan(a.original);
+        const rankB = getHw(b.original) + getBan(b.original);
+        return rankB - rankA;
+      },
+      cell: ({ row }) => {
+        const anyRow: any = row.original as any;
+        const isBanned = !!anyRow?.isBanned;
+        const isHwPermanent = !!anyRow?.isBannedPermanent;
+        const isHwLegacy = !!(
+          anyRow?.isDeviceBanned ??
+          anyRow?.deviceBlocked ??
+          anyRow?.isHardwareBanned ??
+          anyRow?.isBannedByHardware ??
+          anyRow?.bannedByHardware
+        );
+        const isHw = isHwPermanent || isHwLegacy;
+
+        if (!isBanned && !isHw) {
+          return (
+            <div className="flex items-center gap-2">
+              <span className="text-emerald-500" title="Не заблокирован">
+                <ShieldCheck size={14} />
+              </span>
+              <span className="text-emerald-600">Нет</span>
+            </div>
+          );
+        }
+
+        return (
+          <div className="flex items-center gap-2">
+            {isBanned && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span aria-label="Бан" className="text-red-500 inline-flex"><BanIcon size={14} /></span>
+                </TooltipTrigger>
+                <TooltipContent>Блокировка аккаунта</TooltipContent>
+              </Tooltip>
+            )}
+            {isHw && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span aria-label="Бан по железу" className={`inline-flex ${isHwPermanent ? 'text-red-600' : 'text-red-500'}`}><GavelIcon size={14} /></span>
+                </TooltipTrigger>
+                <TooltipContent>{isHwPermanent ? 'Перманентная блокировка по железу' : 'Блокировка по железу'}</TooltipContent>
+              </Tooltip>
+            )}
+            <span className="text-red-600">
+              {isHw && isBanned ? (isHwPermanent ? 'Бан + Железо (перманентно)' : 'Бан + Железо') : isHw ? (isHwPermanent ? 'Железо (перманентно)' : 'Железо') : 'Бан'}
+            </span>
+          </div>
+        );
+      },
     }),
     columnsHelper.display({
       id: 'address',
@@ -213,6 +279,17 @@ export const useColumns = () => {
         <DataTableColumnHeader column={column} title={ColumnHeader.ACTIONS} />
       ),
       cell: ({ row }) => {
+        const anyRow: any = row.original as any;
+        const isHwPermanent = !!anyRow?.isBannedPermanent;
+        const isHwLegacy = !!(
+          anyRow?.isDeviceBanned ??
+          anyRow?.deviceBlocked ??
+          anyRow?.isHardwareBanned ??
+          anyRow?.isBannedByHardware ??
+          anyRow?.bannedByHardware
+        );
+        const isHw = isHwPermanent || isHwLegacy;
+        const isBanned = !!anyRow?.isBanned;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -221,7 +298,7 @@ export const useColumns = () => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {row.original.isBanned ? (
+              {isBanned ? (
                 <DropdownMenuItem onClick={() => pardonUser(row.original.uuid)}>
                   Разбанить
                 </DropdownMenuItem>
@@ -230,9 +307,16 @@ export const useColumns = () => {
                   Забанить
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem onClick={() => banUserHardware(row.original.uuid)}>
-                Забанить по железу
-              </DropdownMenuItem>
+              {isHwPermanent && (
+                <DropdownMenuItem onClick={() => pardonUserHardware(row.original.uuid)}>
+                  Разбанить по железу
+                </DropdownMenuItem>
+              )}
+              {!isHwPermanent && (
+                <DropdownMenuItem onClick={() => banUserHardware(row.original.uuid)}>
+                  Забанить по железу
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem onClick={() => removeUser(row.original.uuid)}>
                 Удалить
               </DropdownMenuItem>

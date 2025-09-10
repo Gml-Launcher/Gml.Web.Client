@@ -92,10 +92,28 @@ export const usePardonPlayer = () => {
   return useMutation({
     mutationKey: playersKeys.pardonPlayer(),
     mutationFn: (data: TPostBanPlayersRequest) => playersService.pardonPlayer(data),
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: playersKeys.all });
       toast.success('Успешно', {
         description: `Пользователь разблокирован`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const usePardonPlayerHardware = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: playersKeys.pardonPlayer(),
+    mutationFn: (data: TPostBanPlayersRequest) => playersService.pardonPlayer(data, { deviceUnblock: true }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: playersKeys.all });
+      toast.success('Успешно', {
+        description: `Пользователь разблокирован по железу`,
       });
     },
     onError: (error) => {
