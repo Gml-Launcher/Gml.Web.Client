@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { createColumnHelper } from '@tanstack/table-core';
 import { format } from 'date-fns';
-import { Ban as BanIcon, GavelIcon, MoreVertical, ShieldCheck, Trash, User } from 'lucide-react';
+import { Ban as BanIcon, GavelIcon, MoreVertical, ShieldCheck, Trash, User, Monitor, Laptop, Smartphone, Tablet } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/entities/Table';
 import { PlayerBaseEntity } from '@/shared/api/contracts';
@@ -95,9 +95,26 @@ function PlayerDetailsDialog({
     new Set((player.authHistory || []).map((c) => c.address).filter(Boolean)),
   );
 
+  const getDeviceIcon = (device?: string) => {
+    const d = (device || '').toLowerCase();
+    if (
+      d.includes('phone') ||
+      d.includes('mobile') ||
+      d.includes('android') ||
+      d.includes('iphone') ||
+      d.includes('ios')
+    )
+      return <Smartphone className="h-5 w-5 text-muted-foreground" />;
+    if (d.includes('tablet') || d.includes('ipad'))
+      return <Tablet className="h-5 w-5 text-muted-foreground" />;
+    if (d.includes('laptop') || d.includes('notebook'))
+      return <Laptop className="h-5 w-5 text-muted-foreground" />;
+    return <Monitor className="h-5 w-5 text-muted-foreground" />;
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl max-h-[calc(100vh-theme(spacing.16))] overflow-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3">
             <img
@@ -120,7 +137,7 @@ function PlayerDetailsDialog({
             <TabsTrigger value="server">Сервер</TabsTrigger>
           </TabsList>
 
-          <div className="mt-3 min-h-[320px] max-h-[480px] overflow-y-auto">
+          <div className="mt-3 min-h-[320px] max-h-[480px] overflow-auto">
           <TabsContent value="overview">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-3">
@@ -190,10 +207,31 @@ function PlayerDetailsDialog({
               <div className="text-sm text-muted-foreground">Авторизации</div>
               <div className="mt-2 flex flex-col gap-2 pr-1">
                 {(player.authHistory || []).map((h, idx) => (
-                  <div key={idx} className="text-sm">
-                    <div className="font-medium">{h.device || 'Неизвестное устройство'}</div>
-                    <div className="text-muted-foreground">
-                      {h.address || '-'} / {timeAgo(h.date)} / {h.protocol}
+                  <div key={idx} className="flex items-start gap-3 rounded-md border p-3">
+                    <div className="mt-0.5">
+                      {getDeviceIcon(h.device)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <div className="font-medium truncate" title={h.device || 'Неизвестное устройство'} style={{maxWidth:'100%'}}>
+                          {h.device || 'Неизвестное устройство'}
+                        </div>
+                        {h.hwid && (
+                          <span
+                            className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground truncate max-w-[180px]"
+                            title={h.hwid}
+                          >
+                            HWID: {h.hwid}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 text-sm font-mono break-words">
+                        {h.address || '-'}
+                      </div>
+                      <div className="mt-1 text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+                        <span>{timeAgo(h.date)}</span>
+                        <span className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground">{h.protocol}</span>
+                      </div>
                     </div>
                   </div>
                 ))}
