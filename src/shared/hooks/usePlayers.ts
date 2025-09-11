@@ -14,20 +14,35 @@ export const playersKeys = {
   removePlayer: () => [...modsKeys.all, 'pardonPlayer'] as const,
 };
 
-export const usePlayers = (search: string) => {
+export type PlayersFilters = {
+  take?: number;
+  findName?: string;
+  findUuid?: string;
+  findIp?: string;
+  findHwid?: string;
+  onlyBlocked?: boolean;
+  onlyDeviceBlocked?: boolean;
+  sortBy?: 0 | 1 | 2;
+  sortDesc?: boolean;
+};
+
+export const usePlayers = (filters: string | PlayersFilters) => {
+  const normalized: PlayersFilters = typeof filters === 'string' ? { findName: filters } : filters || {};
+  const take = normalized.take ?? 20;
+
   return useInfiniteQuery({
-    queryKey: [...playersKeys.all, search],
+    queryKey: [...playersKeys.all, normalized],
     initialPageParam: 0,
     queryFn: ({ pageParam }) =>
       playersService.getPlayers({
-        take: 20,
+        take,
         offset: pageParam,
-        findName: search,
+        ...normalized,
       }),
     select: (data) => data.pages.flatMap((page) => page.data),
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.data.length < 10) return undefined;
-      return allPages.length * 10;
+      if (lastPage.data.length < take) return undefined;
+      return allPages.length * take;
     },
   });
 };
