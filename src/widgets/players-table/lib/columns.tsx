@@ -221,6 +221,18 @@ function ActionsCell({ row }: { row: any }) {
   const isBanned = !!anyRow?.isBanned;
 
   const [open, setOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const onConfirmDelete = async () => {
+    try {
+      setDeleting(true);
+      await removeUser(row.original.uuid);
+      setConfirmOpen(false);
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <>
@@ -257,7 +269,7 @@ function ActionsCell({ row }: { row: any }) {
               <GavelIcon size={14} className="mr-2" /> Забанить по железу
             </DropdownMenuItem>
           )}
-          <DropdownMenuItem onClick={() => removeUser(row.original.uuid)}>
+          <DropdownMenuItem onClick={() => setConfirmOpen(true)}>
                       <Trash size={14} className="mr-2" /> Удалить
                     </DropdownMenuItem>
         </DropdownMenuContent>
@@ -267,6 +279,24 @@ function ActionsCell({ row }: { row: any }) {
         open={open}
         onOpenChange={setOpen}
       />
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Подтверждение удаления</DialogTitle>
+            <DialogDescription>
+              Вы уверены, что хотите удалить игрока &quot;{row.original.name}&quot; (UUID: {row.original.uuid})? Это действие необратимо.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={deleting}>
+              Отмена
+            </Button>
+            <Button variant="destructive" onClick={onConfirmDelete} disabled={deleting} className="gap-2">
+              <Trash size={14} /> {deleting ? 'Удаление…' : 'Удалить'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
