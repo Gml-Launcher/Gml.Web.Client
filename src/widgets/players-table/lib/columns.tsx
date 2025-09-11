@@ -32,6 +32,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
 enum ColumnHeader {
   ICON = '',
@@ -108,32 +109,58 @@ function PlayerDetailsDialog({
           </DialogTitle>
           <DialogDescription>UUID: {player.uuid}</DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-3">
-            <div>
-              <div className="text-sm text-muted-foreground">Статус</div>
-              <div className="mt-1 flex items-center gap-2">
-                {player.isBanned ? (
-                  <span className="text-red-500 flex items-center gap-1">
-                    <BanIcon size={16} /> Заблокирован
-                  </span>
-                ) : (
-                  <span className="text-emerald-600 flex items-center gap-1">
-                    <ShieldCheck size={16} /> Не заблокирован
-                  </span>
+        {/* Tabs layout for player card */}
+        <div className="w-full">
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="w-full flex flex-wrap gap-2" >
+            <TabsTrigger value="overview">Обзор</TabsTrigger>
+            <TabsTrigger value="textures">Текстуры</TabsTrigger>
+            <TabsTrigger value="auth">Авторизации</TabsTrigger>
+            <TabsTrigger value="network">Сети/IP</TabsTrigger>
+            <TabsTrigger value="server">Сервер</TabsTrigger>
+          </TabsList>
+
+          <div className="mt-3 min-h-[320px] max-h-[480px] overflow-y-auto">
+          <TabsContent value="overview">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <div>
+                  <div className="text-sm text-muted-foreground">Статус</div>
+                  <div className="mt-1 flex items-center gap-2">
+                    {player.isBanned ? (
+                      <span className="text-red-500 flex items-center gap-1">
+                        <BanIcon size={16} /> Заблокирован
+                      </span>
+                    ) : (
+                      <span className="text-emerald-600 flex items-center gap-1">
+                        <ShieldCheck size={16} /> Не заблокирован
+                      </span>
+                    )}
+                  </div>
+                  {player.isLauncherStarted && (
+                    <div className="mt-2 relative flex items-center gap-x-2">
+                      <span className="flex items-center justify-center min-w-3 min-h-3 max-w-3 max-h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 bg-green-600 after:opacity-30 after:bg-green-600"></span>
+                      <span className="text-xs font-medium text-emerald-700">Лаунчер запущен</span>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="text-sm text-muted-foreground">Сессия истекает</div>
+                  <div className="mt-1">{sessionStr}</div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                {addresses.length > 0 && (
+                  <div>
+                    <div className="text-sm text-muted-foreground">IP адреса</div>
+                    <div className="mt-1 text-sm break-words">{addresses.join(', ')}</div>
+                  </div>
                 )}
               </div>
-              {player.isLauncherStarted && (
-                <div className="mt-2 relative flex items-center gap-x-2">
-                  <span className="flex items-center justify-center min-w-3 min-h-3 max-w-3 max-h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 bg-green-600 after:opacity-30 after:bg-green-600"></span>
-                  <span className="text-xs font-medium text-emerald-700">Лаунчер запущен</span>
-                </div>
-              )}
             </div>
-            <div>
-              <div className="text-sm text-muted-foreground">Сессия истекает</div>
-              <div className="mt-1">{sessionStr}</div>
-            </div>
+          </TabsContent>
+
+          <TabsContent value="textures">
             <div>
               <div className="text-sm text-muted-foreground">Текстуры</div>
               <div className="mt-2 flex items-center gap-3">
@@ -151,19 +178,17 @@ function PlayerDetailsDialog({
                     className="h-16 w-16 rounded border object-cover"
                   />
                 )}
+                {!player.textureSkinUrl && !player.textureCloakUrl && (
+                  <div className="text-sm text-muted-foreground">Нет текстур.</div>
+                )}
               </div>
             </div>
-            {addresses.length > 0 && (
-              <div>
-                <div className="text-sm text-muted-foreground">IP адреса</div>
-                <div className="mt-1 text-sm break-words">{addresses.join(', ')}</div>
-              </div>
-            )}
-          </div>
-          <div className="space-y-3">
+          </TabsContent>
+
+          <TabsContent value="auth">
             <div>
               <div className="text-sm text-muted-foreground">Авторизации</div>
-              <div className="mt-2 flex flex-col gap-2 max-h-56 overflow-y-auto pr-2">
+              <div className="mt-2 flex flex-col gap-2 pr-1">
                 {(player.authHistory || []).map((h, idx) => (
                   <div key={idx} className="text-sm">
                     <div className="font-medium">{h.device || 'Неизвестное устройство'}</div>
@@ -177,15 +202,33 @@ function PlayerDetailsDialog({
                 )}
               </div>
             </div>
-            {Array.isArray((player as any).serverJoinHistory) && (
-              <div>
-                <div className="text-sm text-muted-foreground">История входов на сервер</div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  {(player as any).serverJoinHistory?.length || 0} записей
-                </div>
+          </TabsContent>
+
+          <TabsContent value="network">
+            {addresses.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {addresses.map((a) => (
+                  <span key={a} className="px-2 py-1 rounded bg-muted text-xs text-muted-foreground">
+                    {a}
+                  </span>
+                ))}
               </div>
+            ) : (
+              <div className="text-sm text-muted-foreground">Нет IP адресов.</div>
             )}
+          </TabsContent>
+
+          <TabsContent value="server">
+            {Array.isArray((player as any).serverJoinHistory) ? (
+              <div className="text-sm text-muted-foreground">
+                {(player as any).serverJoinHistory?.length || 0} записей
+              </div>
+            ) : (
+              <div className="text-sm text-muted-foreground">Нет данных.</div>
+            )}
+          </TabsContent>
           </div>
+        </Tabs>
         </div>
       </DialogContent>
     </Dialog>
