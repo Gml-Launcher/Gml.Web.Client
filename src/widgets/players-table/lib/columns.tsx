@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { createColumnHelper } from '@tanstack/table-core';
 import { format } from 'date-fns';
-import { Ban as BanIcon, GavelIcon, MoreVertical, ShieldCheck, User, Trash } from 'lucide-react';
+import { Ban as BanIcon, GavelIcon, MoreVertical, ShieldCheck, Trash, User } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/entities/Table';
 import { PlayerBaseEntity } from '@/shared/api/contracts';
@@ -123,6 +123,12 @@ function PlayerDetailsDialog({
                   </span>
                 )}
               </div>
+              {player.isLauncherStarted && (
+                <div className="mt-2 relative flex items-center gap-x-2">
+                  <span className="flex items-center justify-center min-w-3 min-h-3 max-w-3 max-h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 bg-green-600 after:opacity-30 after:bg-green-600"></span>
+                  <span className="text-xs font-medium text-emerald-700">Лаунчер запущен</span>
+                </div>
+              )}
             </div>
             <div>
               <div className="text-sm text-muted-foreground">Сессия истекает</div>
@@ -270,8 +276,8 @@ function ActionsCell({ row }: { row: any }) {
             </DropdownMenuItem>
           )}
           <DropdownMenuItem onClick={() => setConfirmOpen(true)}>
-                      <Trash size={14} className="mr-2" /> Удалить
-                    </DropdownMenuItem>
+            <Trash size={14} className="mr-2" /> Удалить
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <PlayerDetailsDialog
@@ -284,14 +290,20 @@ function ActionsCell({ row }: { row: any }) {
           <DialogHeader>
             <DialogTitle>Подтверждение удаления</DialogTitle>
             <DialogDescription>
-              Вы уверены, что хотите удалить игрока &quot;{row.original.name}&quot; (UUID: {row.original.uuid})? Это действие необратимо.
+              Вы уверены, что хотите удалить игрока &quot;{row.original.name}&quot; (UUID:{' '}
+              {row.original.uuid})? Это действие необратимо.
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={deleting}>
               Отмена
             </Button>
-            <Button variant="destructive" onClick={onConfirmDelete} disabled={deleting} className="gap-2">
+            <Button
+              variant="destructive"
+              onClick={onConfirmDelete}
+              disabled={deleting}
+              className="gap-2"
+            >
               <Trash size={14} /> {deleting ? 'Удаление…' : 'Удалить'}
             </Button>
           </div>
@@ -374,6 +386,12 @@ export const useColumns = () => {
                   </TooltipTrigger>
                   <TooltipContent>Авторизаций: {authCount}</TooltipContent>
                 </Tooltip>
+                {row.original.isLauncherStarted && (
+                  <div className="relative flex items-center gap-x-2">
+                    <span className="flex items-center justify-center min-w-3 min-h-3 max-w-3 max-h-3 rounded-full after:flex after:rounded-full after:min-w-5 after:min-h-5 bg-green-600 after:opacity-30 after:bg-green-600"></span>
+                    <span className="text-xs font-medium text-emerald-700">Лаунчер запущен</span>
+                  </div>
+                )}
               </div>
               <div className="text-xs text-muted-foreground truncate flex items-center gap-1">
                 <span className="opacity-70">UUID:</span>
