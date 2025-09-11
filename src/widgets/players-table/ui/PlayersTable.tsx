@@ -178,15 +178,17 @@ export function PlayersTable() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4">
-                  <label className="inline-flex items-center gap-2 text-sm">
-                    <Checkbox checked={onlyBlocked} onCheckedChange={(v:any) => setOnlyBlocked(!!v)} />
-                    Только заблокированные
-                  </label>
-                  <label className="inline-flex items-center gap-2 text-sm">
-                    <Checkbox checked={onlyDeviceBlocked} onCheckedChange={(v:any) => setOnlyDeviceBlocked(!!v)} />
-                    Только заблокированные по устройству
-                  </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 items-center">
+                  <div className="flex flex-wrap items-center gap-4">
+                    <label className="inline-flex items-center gap-2 text-sm">
+                      <Checkbox checked={onlyBlocked} onCheckedChange={(v:any) => setOnlyBlocked(!!v)} />
+                      Только заблокированные
+                    </label>
+                    <label className="inline-flex items-center gap-2 text-sm">
+                      <Checkbox checked={onlyDeviceBlocked} onCheckedChange={(v:any) => setOnlyDeviceBlocked(!!v)} />
+                      Только заблокированные по устройству
+                    </label>
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Сортировать по</span>
                     <Select value={sortBy === undefined ? undefined : String(sortBy)} onValueChange={(val) => setSortBy((val === undefined || val === '' ? undefined : (Number(val) as 0|1|2)))}>
@@ -217,7 +219,7 @@ export function PlayersTable() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="ml-auto flex items-center gap-2">
+                  <div className="col-span-full flex items-center justify-end gap-2">
                     <Button type="button" variant="ghost" className="text-muted-foreground" onClick={() => { setSearch(''); setUuid(''); setIp(''); setHwid(''); setOnlyBlocked(false); setOnlyDeviceBlocked(false); setSortBy(undefined); setSortDesc(false); setTake(20); }}>
                       <X size={16} /> Сбросить
                     </Button>
