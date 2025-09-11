@@ -3,17 +3,35 @@
 import React, { useMemo, useState } from 'react';
 import { createColumnHelper } from '@tanstack/table-core';
 import { format } from 'date-fns';
-import { GavelIcon, UserXIcon, MoreVertical, Ban as BanIcon, ShieldCheck } from 'lucide-react';
+import { Ban as BanIcon, GavelIcon, MoreVertical, ShieldCheck, User, Trash } from 'lucide-react';
 
 import { DataTableColumnHeader } from '@/entities/Table';
 import { PlayerBaseEntity } from '@/shared/api/contracts';
 import { $api } from '@/services/api.service';
 import { Button } from '@/shared/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
-import { useBanPlayer, useBanPlayerHardware, usePardonPlayer, usePardonPlayerHardware, useRemoveUser } from '@/shared/hooks/usePlayers';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
+import {
+  useBanPlayer,
+  useBanPlayerHardware,
+  usePardonPlayer,
+  usePardonPlayerHardware,
+  useRemoveUser,
+} from '@/shared/hooks/usePlayers';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { timeAgo } from '@/shared/lib/getFormatDate/getFormatDate';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/ui/dialog';
 
 enum ColumnHeader {
   ICON = '',
@@ -59,6 +77,200 @@ function AvatarCell({ name, uuid }: { name?: string; uuid: string }) {
     />
   );
 }
+function PlayerDetailsDialog({
+  player,
+  open,
+  onOpenChange,
+}: {
+  player: PlayerBaseEntity;
+  open: boolean;
+  onOpenChange: (o: boolean) => void;
+}) {
+  const uuid = player.uuid;
+  const sessionDate = player.expiredDate ? new Date(player.expiredDate) : null;
+  const isValidDate = !!(sessionDate && !isNaN(sessionDate.getTime()));
+  const sessionStr = isValidDate ? format(sessionDate as Date, 'dd.MM.yyyy в HH:mm:ss') : '-';
+  const addresses = Array.from(
+    new Set((player.authHistory || []).map((c) => c.address).filter(Boolean)),
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-3">
+            <img
+              src={$api.getUri() + `/integrations/texture/head/${uuid}`}
+              alt="skin"
+              className="w-10 h-10 rounded-lg"
+            />
+            <span className="truncate">{player.name}</span>
+          </DialogTitle>
+          <DialogDescription>UUID: {player.uuid}</DialogDescription>
+        </DialogHeader>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-3">
+            <div>
+              <div className="text-sm text-muted-foreground">Статус</div>
+              <div className="mt-1 flex items-center gap-2">
+                {player.isBanned ? (
+                  <span className="text-red-500 flex items-center gap-1">
+                    <BanIcon size={16} /> Заблокирован
+                  </span>
+                ) : (
+                  <span className="text-emerald-600 flex items-center gap-1">
+                    <ShieldCheck size={16} /> Не заблокирован
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-muted-foreground">Сессия истекает</div>
+              <div className="mt-1">{sessionStr}</div>
+            </div>
+            <div>
+              <div className="text-sm text-muted-foreground">Текстуры</div>
+              <div className="mt-2 flex items-center gap-3">
+                {player.textureSkinUrl && (
+                  <img
+                    src={player.textureSkinUrl}
+                    alt="skin"
+                    className="h-16 w-16 rounded border object-cover"
+                  />
+                )}
+                {player.textureCloakUrl && (
+                  <img
+                    src={player.textureCloakUrl}
+                    alt="cloak"
+                    className="h-16 w-16 rounded border object-cover"
+                  />
+                )}
+              </div>
+            </div>
+            {addresses.length > 0 && (
+              <div>
+                <div className="text-sm text-muted-foreground">IP адреса</div>
+                <div className="mt-1 text-sm break-words">{addresses.join(', ')}</div>
+              </div>
+            )}
+          </div>
+          <div className="space-y-3">
+            <div>
+              <div className="text-sm text-muted-foreground">Авторизации</div>
+              <div className="mt-2 flex flex-col gap-2 max-h-56 overflow-y-auto pr-2">
+                {(player.authHistory || []).map((h, idx) => (
+                  <div key={idx} className="text-sm">
+                    <div className="font-medium">{h.device || 'Неизвестное устройство'}</div>
+                    <div className="text-muted-foreground">
+                      {h.address || '-'} / {timeAgo(h.date)} / {h.protocol}
+                    </div>
+                  </div>
+                ))}
+                {(!player.authHistory || player.authHistory.length === 0) && (
+                  <div className="text-sm text-muted-foreground">Нет данных.</div>
+                )}
+              </div>
+            </div>
+            {Array.isArray((player as any).serverJoinHistory) && (
+              <div>
+                <div className="text-sm text-muted-foreground">История входов на сервер</div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  {(player as any).serverJoinHistory?.length || 0} записей
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ActionsCell({ row }: { row: any }) {
+  const banPlayer = useBanPlayer();
+  const banPlayerHardware = useBanPlayerHardware();
+  const removePlayer = useRemoveUser();
+  const pardonPlayer = usePardonPlayer();
+  const pardonPlayerHardware = usePardonPlayerHardware();
+
+  const banUser = async (data: string) => {
+    await banPlayer.mutateAsync([data]);
+  };
+  const banUserHardware = async (data: string) => {
+    await banPlayerHardware.mutateAsync([data]);
+  };
+  const removeUser = async (data: string) => {
+    await removePlayer.mutateAsync([data]);
+  };
+  const pardonUser = async (data: string) => {
+    await pardonPlayer.mutateAsync([data]);
+  };
+  const pardonUserHardware = async (data: string) => {
+    await pardonPlayerHardware.mutateAsync([data]);
+  };
+
+  const anyRow: any = row.original as any;
+  const isHwPermanent = !!anyRow?.isBannedPermanent;
+  const isHwLegacy = !!(
+    anyRow?.isDeviceBanned ??
+    anyRow?.deviceBlocked ??
+    anyRow?.isHardwareBanned ??
+    anyRow?.isBannedByHardware ??
+    anyRow?.bannedByHardware
+  );
+  const isBanned = !!anyRow?.isBanned;
+
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            className="rounded-full h-8 w-8 p-0 flex items-center justify-center"
+            aria-label="Действия"
+          >
+            <MoreVertical size={16} />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => setOpen(true)}>
+            <User size={14} className="mr-2" /> Карточка игрока
+          </DropdownMenuItem>
+          {isBanned ? (
+            <DropdownMenuItem onClick={() => pardonUser(row.original.uuid)}>
+              <ShieldCheck size={14} className="mr-2" /> Разбанить
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={() => banUser(row.original.uuid)}>
+              <BanIcon size={14} className="mr-2" /> Забанить
+            </DropdownMenuItem>
+          )}
+          {isHwPermanent && (
+            <DropdownMenuItem onClick={() => pardonUserHardware(row.original.uuid)}>
+              <ShieldCheck size={14} className="mr-2" /> Разбанить по железу
+            </DropdownMenuItem>
+          )}
+          {!isHwPermanent && (
+            <DropdownMenuItem onClick={() => banUserHardware(row.original.uuid)}>
+              <GavelIcon size={14} className="mr-2" /> Забанить по железу
+            </DropdownMenuItem>
+          )}
+          <DropdownMenuItem onClick={() => removeUser(row.original.uuid)}>
+                      <Trash size={14} className="mr-2" /> Удалить
+                    </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <PlayerDetailsDialog
+        player={row.original as PlayerBaseEntity}
+        open={open}
+        onOpenChange={setOpen}
+      />
+    </>
+  );
+}
+
 export const useColumns = () => {
   const banPlayer = useBanPlayer();
   const banPlayerHardware = useBanPlayerHardware();
@@ -102,25 +314,33 @@ export const useColumns = () => {
             <AvatarCell name={row.original.name} uuid={uuid} />
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-2 min-w-0">
-                <p className="font-medium truncate" title={row.original.name}>{row.original.name}</p>
+                <p className="font-medium truncate" title={row.original.name}>
+                  {row.original.name}
+                </p>
                 {banned ? (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <span aria-label="Заблокирован" className="text-red-500 inline-flex"><BanIcon size={14} /></span>
+                      <span aria-label="Заблокирован" className="text-red-500 inline-flex">
+                        <BanIcon size={14} />
+                      </span>
                     </TooltipTrigger>
                     <TooltipContent>Заблокирован</TooltipContent>
                   </Tooltip>
                 ) : (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <span aria-label="Не заблокирован" className="text-emerald-500 inline-flex"><ShieldCheck size={14} /></span>
+                      <span aria-label="Не заблокирован" className="text-emerald-500 inline-flex">
+                        <ShieldCheck size={14} />
+                      </span>
                     </TooltipTrigger>
                     <TooltipContent>Не заблокирован</TooltipContent>
                   </Tooltip>
                 )}
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground select-none">{authCount}</span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-muted text-muted-foreground select-none">
+                      {authCount}
+                    </span>
                   </TooltipTrigger>
                   <TooltipContent>Авторизаций: {authCount}</TooltipContent>
                 </Tooltip>
@@ -141,7 +361,7 @@ export const useColumns = () => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.SIGN_IN} />
       ),
-      cell: ({ getValue }) => (getValue()?.length ?? 0),
+      cell: ({ getValue }) => getValue()?.length ?? 0,
     }),
     columnsHelper.accessor('expiredDate', {
       size: 160,
@@ -160,13 +380,18 @@ export const useColumns = () => {
     columnsHelper.display({
       id: 'status',
       size: 120,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Статус" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Статус" />,
       sortingFn: (a, b) => {
         const getHw = (r: any) => {
           if (r?.isBannedPermanent) return 2;
-          const legacy = (r?.isDeviceBanned ?? r?.deviceBlocked ?? r?.isHardwareBanned ?? r?.isBannedByHardware ?? r?.bannedByHardware) ? 1 : 0;
+          const legacy =
+            r?.isDeviceBanned ??
+            r?.deviceBlocked ??
+            r?.isHardwareBanned ??
+            r?.isBannedByHardware ??
+            r?.bannedByHardware
+              ? 1
+              : 0;
           return legacy;
         };
         const getBan = (r: any) => (r?.isBanned ? 1 : 0);
@@ -204,7 +429,9 @@ export const useColumns = () => {
             {isBanned && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span aria-label="Бан" className="text-red-500 inline-flex"><BanIcon size={14} /></span>
+                  <span aria-label="Бан" className="text-red-500 inline-flex">
+                    <BanIcon size={14} />
+                  </span>
                 </TooltipTrigger>
                 <TooltipContent>Блокировка аккаунта</TooltipContent>
               </Tooltip>
@@ -212,13 +439,28 @@ export const useColumns = () => {
             {isHw && (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span aria-label="Бан по железу" className={`inline-flex ${isHwPermanent ? 'text-red-600' : 'text-red-500'}`}><GavelIcon size={14} /></span>
+                  <span
+                    aria-label="Бан по железу"
+                    className={`inline-flex ${isHwPermanent ? 'text-red-600' : 'text-red-500'}`}
+                  >
+                    <GavelIcon size={14} />
+                  </span>
                 </TooltipTrigger>
-                <TooltipContent>{isHwPermanent ? 'Перманентная блокировка по железу' : 'Блокировка по железу'}</TooltipContent>
+                <TooltipContent>
+                  {isHwPermanent ? 'Перманентная блокировка по железу' : 'Блокировка по железу'}
+                </TooltipContent>
               </Tooltip>
             )}
             <span className="text-red-600">
-              {isHw && isBanned ? (isHwPermanent ? 'Бан + Железо (перманентно)' : 'Бан + Железо') : isHw ? (isHwPermanent ? 'Железо (перманентно)' : 'Железо') : 'Бан'}
+              {isHw && isBanned
+                ? isHwPermanent
+                  ? 'Бан + Железо (перманентно)'
+                  : 'Бан + Железо'
+                : isHw
+                  ? isHwPermanent
+                    ? 'Железо (перманентно)'
+                    : 'Железо'
+                  : 'Бан'}
             </span>
           </div>
         );
@@ -243,9 +485,7 @@ export const useColumns = () => {
             <TooltipTrigger>
               <div className="flex items-center gap-1">
                 <span className="truncate max-w-[180px]">{first ?? '-'}</span>
-                {more > 0 && (
-                  <span className="text-xs text-muted-foreground">+{more}</span>
-                )}
+                {more > 0 && <span className="text-xs text-muted-foreground">+{more}</span>}
               </div>
             </TooltipTrigger>
             <TooltipContent className="p-3">
@@ -272,52 +512,7 @@ export const useColumns = () => {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title={ColumnHeader.ACTIONS} />
       ),
-      cell: ({ row }) => {
-        const anyRow: any = row.original as any;
-        const isHwPermanent = !!anyRow?.isBannedPermanent;
-        const isHwLegacy = !!(
-          anyRow?.isDeviceBanned ??
-          anyRow?.deviceBlocked ??
-          anyRow?.isHardwareBanned ??
-          anyRow?.isBannedByHardware ??
-          anyRow?.bannedByHardware
-        );
-        const isHw = isHwPermanent || isHwLegacy;
-        const isBanned = !!anyRow?.isBanned;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="rounded-full h-8 w-8 p-0 flex items-center justify-center" aria-label="Действия">
-                <MoreVertical size={16} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {isBanned ? (
-                <DropdownMenuItem onClick={() => pardonUser(row.original.uuid)}>
-                  Разбанить
-                </DropdownMenuItem>
-              ) : (
-                <DropdownMenuItem onClick={() => banUser(row.original.uuid)}>
-                  Забанить
-                </DropdownMenuItem>
-              )}
-              {isHwPermanent && (
-                <DropdownMenuItem onClick={() => pardonUserHardware(row.original.uuid)}>
-                  Разбанить по железу
-                </DropdownMenuItem>
-              )}
-              {!isHwPermanent && (
-                <DropdownMenuItem onClick={() => banUserHardware(row.original.uuid)}>
-                  Забанить по железу
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem onClick={() => removeUser(row.original.uuid)}>
-                Удалить
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+      cell: ({ row }) => <ActionsCell row={row} />,
     }),
   ];
 
