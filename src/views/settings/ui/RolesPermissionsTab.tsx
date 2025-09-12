@@ -294,11 +294,6 @@ export const RolesPermissionsTab: React.FC = () => {
 
   return (
     <div className="grid gap-6">
-      {error && (
-        <div className="text-sm text-red-500" role="alert">
-          {error}
-        </div>
-      )}
       <Tabs defaultValue="users" className="grid gap-4">
         <TabsList className="justify-start w-full overflow-x-auto">
           <TabsTrigger value="users">Пользователи</TabsTrigger>
