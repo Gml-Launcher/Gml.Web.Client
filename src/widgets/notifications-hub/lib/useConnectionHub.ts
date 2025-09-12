@@ -33,8 +33,7 @@ export const useConnectionHub = () => {
       try {
         const connection = new HubConnectionBuilder()
           .withUrl(CONNECTION_URL(accessToken), {
-            headers: { 'Access-Control-Allow-Credentials': '*' },
-            withCredentials: false,
+            withCredentials: true,
           })
           .withAutomaticReconnect()
           .build();

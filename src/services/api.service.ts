@@ -3,13 +3,13 @@ import axios, { CreateAxiosDefaults, HttpStatusCode } from 'axios';
 import {
   getStorageAccessToken,
   removeStorageProfile,
-  removeStorageTokens,
   removeStorageRecloudIDAccessToken,
+  removeStorageTokens,
 } from '@/shared/services';
 
 const OPTIONS: CreateAxiosDefaults = {
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-  headers: { 'Access-Control-Allow-Credentials': '*' },
+  withCredentials: true,
 };
 
 export const $api = axios.create(OPTIONS);
