@@ -253,6 +253,43 @@ export const RolesPermissionsTab: React.FC = () => {
     ][];
   }, [perms]);
 
+  const roleHasAllGroupPerms = (roleId: number, groupPerms: PermissionDto[]) => {
+    return groupPerms.every((p) => hasRolePerm(roleId, p.id));
+  };
+  const roleHasSomeGroupPerms = (roleId: number, groupPerms: PermissionDto[]) => {
+    return groupPerms.some((p) => hasRolePerm(roleId, p.id));
+  };
+  const toggleRoleGroup = async (
+    roleId: number,
+    groupPerms: PermissionDto[],
+    checked: boolean,
+  ) => {
+    setLoading(true);
+    try {
+      const ops: Promise<any>[] = [];
+      if (checked) {
+        for (const p of groupPerms) {
+          if (!hasRolePerm(roleId, p.id)) {
+            ops.push(rbacApi.assignPermToRole(roleId, p.id));
+          }
+        }
+      } else {
+        for (const p of groupPerms) {
+          if (hasRolePerm(roleId, p.id)) {
+            ops.push(rbacApi.removePermFromRole(roleId, p.id));
+          }
+        }
+      }
+      if (ops.length) {
+        await Promise.all(ops);
+      }
+      await refreshRolesDetails();
+    } catch (e: any) {
+      setError(e?.message ?? 'Ошибка обновления группы прав');
+    } finally {
+      setLoading(false);
+    }
+  };
   const rolesReversed = useMemo(() => [...roles], [roles]);
 
   return (
@@ -389,10 +426,19 @@ export const RolesPermissionsTab: React.FC = () => {
               <TableBody>
                 {permsByGroup.map(([group, list]) => (
                   <React.Fragment key={group}>
-                    <TableRow>
-                      <TableCell colSpan={1 + roles.length} className="bg-muted/40 font-medium">
-                        {group}
+                    <TableRow className="bg-accent/40 border-l-4 border-l-primary">
+                      <TableCell className="font-medium">
+                        <div>{group}</div>
+                        <div className="text-xs text-muted-foreground">Все из группы</div>
                       </TableCell>
+                      {rolesReversed.map((r) => (
+                        <TableCell key={r.id}>
+                          <Checkbox
+                            checked={roleHasAllGroupPerms(r.id, list)}
+                            onCheckedChange={(v: any) => toggleRoleGroup(r.id, list, !!v)}
+                          />
+                        </TableCell>
+                      ))}
                     </TableRow>
                     {list.map((p) => (
                       <TableRow key={p.id} className="cursor-default">
