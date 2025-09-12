@@ -1,4 +1,8 @@
+"use client";
+
 import React from 'react';
+
+import { RolesPermissionsTab } from './RolesPermissionsTab';
 
 import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
@@ -26,9 +30,15 @@ export const SettingsPage = () => {
             <TabsTrigger className="w-full h-10" value="settings">
               Основные
             </TabsTrigger>
+            <TabsTrigger className="w-full h-10" value="roles">
+              Роли
+            </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="settings">
             <EditSettingsPlatformForm />
+          </TabsContent>
+          <TabsContent className="w-full" value="roles">
+            <RolesPermissionsTab />
           </TabsContent>
         </Tabs>
       </div>
