@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from "react";
 
-import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from '@/shared/api/rbac';
-import { Button } from '@/shared/ui/button';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
-import { Badge } from '@/shared/ui/badge';
-import { Checkbox } from '@/shared/ui/checkbox';
+import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from "@/shared/api/rbac";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Label } from "@/shared/ui/label";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
+import { Badge } from "@/shared/ui/badge";
+import { Checkbox } from "@/shared/ui/checkbox";
 
 const emptyRole: Omit<RoleDto, 'id'> = { name: '', description: '' };
 const emptyPerm: Omit<PermissionDto, 'id'> = { name: '', description: '' };
@@ -259,11 +259,7 @@ export const RolesPermissionsTab: React.FC = () => {
   const roleHasSomeGroupPerms = (roleId: number, groupPerms: PermissionDto[]) => {
     return groupPerms.some((p) => hasRolePerm(roleId, p.id));
   };
-  const toggleRoleGroup = async (
-    roleId: number,
-    groupPerms: PermissionDto[],
-    checked: boolean,
-  ) => {
+  const toggleRoleGroup = async (roleId: number, groupPerms: PermissionDto[], checked: boolean) => {
     setLoading(true);
     try {
       const ops: Promise<any>[] = [];
@@ -316,7 +312,6 @@ export const RolesPermissionsTab: React.FC = () => {
                   <TableHead className="min-w-[80px]">ID</TableHead>
                   <TableHead className="min-w-[200px]">Логин/Email</TableHead>
                   <TableHead>Роли пользователя</TableHead>
-                  <TableHead>Права</TableHead>
                   <TableHead className="w-[1%] text-right">Действия</TableHead>
                 </TableRow>
               </TableHeader>
@@ -468,7 +463,7 @@ export const RolesPermissionsTab: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="roles" className="grid gap-3">
-          <h2 className="text-xl font-semibold">Роли (CRUD)</h2>
+          <h2 className="text-xl font-semibold">Роли</h2>
           <div className="flex gap-2 items-end flex-wrap">
             <div className="grid gap-2">
               <Label htmlFor="role-name">Название</Label>
@@ -533,7 +528,7 @@ export const RolesPermissionsTab: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="perms" className="grid gap-3">
-          <h2 className="text-xl font-semibold">Права (CRUD)</h2>
+          <h2 className="text-xl font-semibold">Права</h2>
           <div className="flex gap-2 items-end flex-wrap">
             <div className="grid gap-2">
               <Label htmlFor="perm-name">Название</Label>
