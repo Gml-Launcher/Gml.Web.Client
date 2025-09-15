@@ -439,7 +439,7 @@ export const RolesPermissionsTab: React.FC = () => {
 
   return (
     <div className="grid gap-6">
-      <Tabs defaultValue="users" className="grid gap-4">
+      <Tabs defaultValue="users">
         <TabsList className="justify-start w-full overflow-x-auto">
           <TabsTrigger value="users">Пользователи</TabsTrigger>
           <TabsTrigger value="roles">Роли</TabsTrigger>
