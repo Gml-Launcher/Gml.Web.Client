@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { MoreVertical, Pencil, Trash } from 'lucide-react';
+import { MoreVertical, Pencil, Trash, RefreshCw } from 'lucide-react';
 
 import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from '@/shared/api/rbac';
 import { Button } from '@/shared/ui/button';
@@ -32,6 +32,7 @@ export const RolesPermissionsTab: React.FC = () => {
 
   const [editingPerm, setEditingPerm] = useState<PermissionDto | null>(null);
   const [permForm, setPermForm] = useState<Omit<PermissionDto, 'id'>>(emptyPerm);
+  const [permModalOpen, setPermModalOpen] = useState(false);
 
   const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
   const [permToAssign, setPermToAssign] = useState<number | ''>('');
@@ -119,6 +120,7 @@ export const RolesPermissionsTab: React.FC = () => {
         setPerms((prev) => [created, ...prev]);
       }
       setPermForm(emptyPerm);
+      setPermModalOpen(false);
     } catch (e: any) {
       setError(e?.message ?? 'Ошибка сохранения права');
     } finally {
@@ -634,68 +636,117 @@ export const RolesPermissionsTab: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="perms" className="grid gap-3">
-          <h2 className="text-xl font-semibold">Права</h2>
-          <div className="flex gap-2 items-end flex-wrap">
-            <div className="grid gap-2">
-              <Label htmlFor="perm-name">Название</Label>
-              <Input
-                id="perm-name"
-                placeholder="Название права"
-                value={permForm.name}
-                onChange={(e) => setPermForm({ ...permForm, name: e.target.value })}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="perm-desc">Описание</Label>
-              <Input
-                id="perm-desc"
-                placeholder="Описание права"
-                value={permForm.description ?? ''}
-                onChange={(e) => setPermForm({ ...permForm, description: e.target.value })}
-              />
-            </div>
-            <Button onClick={submitPerm} disabled={loading}>
-              {editingPerm ? 'Сохранить' : 'Создать'}
-            </Button>
-            {editingPerm && (
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setEditingPerm(null);
-                  setPermForm(emptyPerm);
-                }}
-              >
-                Отмена
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Права</h2>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={loadAll} disabled={loading}>
+                <RefreshCw size={14} className="mr-2" /> Обновить
               </Button>
-            )}
+              <Button size="sm" onClick={() => { setEditingPerm(null); setPermForm(emptyPerm); setPermModalOpen(true); }} disabled={loading}>
+                Создать право
+              </Button>
+            </div>
           </div>
-          <div className="grid gap-2">
-            {perms.map((p) => (
-              <div key={p.id} className="flex items-center justify-between border rounded-md p-2">
-                <div>
-                  <div className="font-medium">{p.name}</div>
-                  {p.description && (
-                    <div className="text-sm text-muted-foreground">{p.description}</div>
-                  )}
+
+          {/* Groups */}
+          <div className="grid gap-3">
+            {permsByGroup.map(([group, list]) => (
+              <div key={group} className="rounded-md border">
+                <div className="px-3 py-2 bg-accent/40 border-b flex items-center justify-between">
+                  <div className="font-medium">
+                    {group}
+                    <span className="text-xs text-muted-foreground ml-2">{list.length}</span>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="secondary"
-                    onClick={() => {
-                      setEditingPerm(p);
-                      setPermForm({ name: p.name, description: p.description ?? '' });
-                    }}
-                  >
-                    Редактировать
-                  </Button>
-                  <Button variant="destructive" onClick={() => deletePerm(p.id)}>
-                    Удалить
-                  </Button>
+                <div className="p-2 grid gap-2">
+                  {list.map((p) => (
+                    <div key={p.id} className="flex items-center justify-between border rounded-md p-2">
+                      <div>
+                        <div className="font-medium">{p.name}</div>
+                        {p.description && (
+                          <div className="text-sm text-muted-foreground">{p.description}</div>
+                        )}
+                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="rounded-full h-8 w-8 p-0 flex items-center justify-center"
+                            aria-label="Действия"
+                          >
+                            <MoreVertical size={16} />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setEditingPerm(p);
+                              setPermForm({ name: p.name, description: p.description ?? '' });
+                              setPermModalOpen(true);
+                            }}
+                          >
+                            <Pencil size={14} className="mr-2" /> Редактировать
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => deletePerm(p.id)}>
+                            <Trash size={14} className="mr-2" /> Удалить
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                  ))}
+                  {!list.length && (
+                    <div className="text-sm text-muted-foreground px-2 py-1">Нет прав в группе.</div>
+                  )}
                 </div>
               </div>
             ))}
             {!perms.length && <div className="text-sm text-muted-foreground">Прав пока нет.</div>}
           </div>
+
+          {/* Create/Edit Permission Modal */}
+          <Dialog open={permModalOpen} onOpenChange={setPermModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingPerm ? 'Редактировать право' : 'Создать право'}</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3 py-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="perm-name">Название</Label>
+                  <Input
+                    id="perm-name"
+                    placeholder="Название права"
+                    value={permForm.name}
+                    onChange={(e) => setPermForm({ ...permForm, name: e.target.value })}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="perm-desc">Описание</Label>
+                  <Input
+                    id="perm-desc"
+                    placeholder="Описание права"
+                    value={permForm.description ?? ''}
+                    onChange={(e) => setPermForm({ ...permForm, description: e.target.value })}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setPermModalOpen(false);
+                    setEditingPerm(null);
+                    setPermForm(emptyPerm);
+                  }}
+                  disabled={loading}
+                >
+                  Отмена
+                </Button>
+                <Button onClick={async () => { await submitPerm(); if (!editingPerm) await loadAll(); setPermModalOpen(false); }} disabled={loading || !permForm.name?.trim()}>
+                  {editingPerm ? 'Сохранить' : 'Создать'}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
       </Tabs>
     </div>
