@@ -48,6 +48,8 @@ export const RolesPermissionsTab: React.FC = () => {
   const [rolesDetails, setRolesDetails] = useState<RoleWithPerms[]>([]);
   const [users, setUsers] = useState<RbacUser[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [deleteUserOpen, setDeleteUserOpen] = useState(false);
+  const [deleteUserTarget, setDeleteUserTarget] = useState<RbacUser | null>(null);
 
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [newUser, setNewUser] = useState<{ login: string; password: string; email?: string }>({
@@ -302,6 +304,19 @@ export const RolesPermissionsTab: React.FC = () => {
     }
   };
 
+  const deleteUser = async (id: number) => {
+    setLoading(true);
+    try {
+      await rbacApi.deleteUser(id);
+      await refreshUsers();
+      if (selectedUserId === id) setSelectedUserId(null);
+    } catch (e: any) {
+      setError(e?.message ?? 'Ошибка удаления пользователя');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const submitUser = async () => {
     const errs = validateUser(newUser);
     setUserErrors(errs);
@@ -489,6 +504,23 @@ export const RolesPermissionsTab: React.FC = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="p-3 w-[340px] grid gap-3">
+                                                  <div className="grid gap-2">
+                                                    <div className="text-xs uppercase text-muted-foreground">Действия</div>
+                                                    <div className="flex items-center justify-between">
+                                                      <Button
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                          setSelectedUserId(u.id);
+                                                          setUserId(String(u.id));
+                                                          setDeleteUserTarget(u);
+                                                          setDeleteUserOpen(true);
+                                                        }}
+                                                      >
+                                                        <Trash size={14} className="mr-2" /> Удалить пользователя
+                                                      </Button>
+                                                    </div>
+                                                  </div>
                           <div className="grid gap-2">
                             <div className="text-xs uppercase text-muted-foreground">Роли</div>
                             <div className="flex flex-wrap gap-2">
@@ -537,6 +569,42 @@ export const RolesPermissionsTab: React.FC = () => {
               </TableBody>
             </Table>
           </div>
+
+          <Dialog open={deleteUserOpen} onOpenChange={setDeleteUserOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Подтверждение удаления пользователя</DialogTitle>
+              </DialogHeader>
+              <div className="py-2">
+                Вы уверены, что хотите удалить пользователя «{deleteUserTarget?.login ?? deleteUserTarget?.email ?? deleteUserTarget?.id}»?
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setDeleteUserOpen(false);
+                    setDeleteUserTarget(null);
+                  }}
+                  disabled={loading}
+                >
+                  Отмена
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    if (deleteUserTarget) {
+                      deleteUser(deleteUserTarget.id);
+                    }
+                    setDeleteUserOpen(false);
+                    setDeleteUserTarget(null);
+                  }}
+                  disabled={loading}
+                >
+                  Удалить
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           <Dialog open={userModalOpen} onOpenChange={setUserModalOpen}>
             <DialogContent>

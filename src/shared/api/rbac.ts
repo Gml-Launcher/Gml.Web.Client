@@ -17,6 +17,9 @@ export const rbacApi = {
     const { data } = await $api.post('/users/signup', payload);
     return (data?.data ?? data) as RbacUser;
   },
+  deleteUser: async (userId: number): Promise<void> => {
+    await $api.delete(`/users/${userId}`);
+  },
   // Roles
   getRoles: async (): Promise<RoleDto[]> => {
     const { data } = await $api.get('/roles');
