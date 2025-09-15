@@ -24,7 +24,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import curseforge from '@/assets/logos/curseforge.ico';
 import vk from '@/assets/logos/vk.svg';
 
-export const EditSettingsPlatformForm = () => {
+export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> = ({ showOnlyApiKeys = false }) => {
   const { data: platform, isLoading } = useSettingsPlatform();
   const { mutateAsync, isPending } = useEditSettingsPlatform();
 

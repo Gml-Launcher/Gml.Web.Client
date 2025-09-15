@@ -19,6 +19,7 @@ import { Badge } from '@/shared/ui/badge';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 
 const emptyRole: Omit<RoleDto, 'id'> = { name: '', description: '' };
 const emptyPerm: Omit<PermissionDto, 'id'> = { name: '', description: '' };
@@ -57,6 +58,7 @@ export const RolesPermissionsTab: React.FC = () => {
     password: '',
     email: '',
   });
+  const [newUserRole, setNewUserRole] = useState<string>('');
   const [userErrors, setUserErrors] = useState<{ login?: string; password?: string; email?: string }>({});
 
   const validateUser = (u: { login: string; password: string; email?: string }) => {
@@ -323,13 +325,17 @@ export const RolesPermissionsTab: React.FC = () => {
     if (errs.login || errs.password || errs.email) return;
     setLoading(true);
     try {
-      await rbacApi.createUser({
-        login: newUser.login.trim(),
-        password: newUser.password,
-        email: newUser.email?.trim() || undefined,
-      });
+      await rbacApi.createUser(
+        {
+          login: newUser.login.trim(),
+          password: newUser.password,
+          email: newUser.email?.trim() || undefined,
+        },
+        newUserRole?.trim() || undefined,
+      );
       setUserModalOpen(false);
       setNewUser({ login: '', password: '', email: '' });
+      setNewUserRole('');
       setUserErrors({});
       await refreshUsers();
     } catch (e: any) {
@@ -447,6 +453,8 @@ export const RolesPermissionsTab: React.FC = () => {
                 onClick={() => {
                   setNewUser({ login: '', password: '', email: '' });
                   setUserErrors({});
+                  // Preselect first available role by name; if none, keep empty to default Admin on backend
+                  setNewUserRole(roles[0]?.name ?? '');
                   setUserModalOpen(true);
                 }}
                 disabled={loading}
@@ -662,6 +670,19 @@ export const RolesPermissionsTab: React.FC = () => {
                     <div className="text-xs text-destructive mt-1">{userErrors.email}</div>
                   )}
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="user-role">Роль</Label>
+                  <Select value={newUserRole} onValueChange={setNewUserRole}>
+                    <SelectTrigger id="user-role">
+                      <SelectValue placeholder="Выберите роль (по умолчанию Admin)" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {roles.map((r) => (
+                        <SelectItem key={r.id} value={r.name}>{r.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <DialogFooter>
                 <Button
@@ -669,6 +690,7 @@ export const RolesPermissionsTab: React.FC = () => {
                   onClick={() => {
                     setUserModalOpen(false);
                     setNewUser({ login: '', password: '', email: '' });
+                    setNewUserRole('');
                     setUserErrors({});
                   }}
                   disabled={loading}

@@ -13,8 +13,12 @@ export type RbacUser = {
 
 export const rbacApi = {
   // Users
-  createUser: async (payload: { login: string; password: string; email?: string }): Promise<RbacUser> => {
-    const { data } = await $api.post('/users/signup', payload);
+  createUser: async (
+    payload: { login: string; password: string; email?: string },
+    roleName?: string,
+  ): Promise<RbacUser> => {
+    const qs = roleName && roleName.trim() ? `?role=${encodeURIComponent(roleName.trim())}` : '';
+    const { data } = await $api.post(`/users/signup${qs}`, payload);
     return (data?.data ?? data) as RbacUser;
   },
   deleteUser: async (userId: number): Promise<void> => {

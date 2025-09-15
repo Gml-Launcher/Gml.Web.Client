@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { RolesPermissionsTab } from './RolesPermissionsTab';
+import { ApiKeysTab } from './ApiKeysTab';
 
 import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
@@ -33,12 +34,18 @@ export const SettingsPage = () => {
             <TabsTrigger className="w-full h-10" value="roles">
               Роли и права
             </TabsTrigger>
+            <TabsTrigger className="w-full h-10" value="api-keys">
+              Api ключи
+            </TabsTrigger>
           </TabsList>
           <TabsContent className="w-full" value="settings">
             <EditSettingsPlatformForm />
           </TabsContent>
           <TabsContent className="w-full" value="roles">
             <RolesPermissionsTab />
+          </TabsContent>
+          <TabsContent className="w-full" value="api-keys">
+            <ApiKeysTab />
           </TabsContent>
         </Tabs>
       </div>
