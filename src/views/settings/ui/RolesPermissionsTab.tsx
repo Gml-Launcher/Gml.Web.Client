@@ -487,9 +487,22 @@ export const RolesPermissionsTab: React.FC = () => {
                       ))}
                     </TableRow>
                     {list.map((p) => (
-                      <TableRow key={p.id} className="cursor-default">
+                      <TableRow
+                        key={p.id}
+                        className={`cursor-default ${p.isSystem ? 'border-l-4 border-l-red-500' : ''}`}
+                      >
                         <TableCell title={p.description ?? ''}>
-                          <div className="font-medium">{p.name}</div>
+                          <div className="flex items-center gap-2">
+                            <div className="font-medium">{p.name}</div>
+                            {p.isSystem && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Badge variant="destructive" className="h-5 px-1 text-[10px]">SYSTEM</Badge>
+                                </TooltipTrigger>
+                                <TooltipContent>Системное право. Изменение запрещено.</TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
                           {p.description && (
                             <div className="text-xs text-muted-foreground">{p.description}</div>
                           )}
@@ -498,10 +511,10 @@ export const RolesPermissionsTab: React.FC = () => {
                           <TableCell key={r.id}>
                             <Checkbox
                               checked={hasRolePerm(r.id, p.id)}
-                              disabled={isAdminRole(r)}
-                              className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
+                              disabled={isAdminRole(r) || !!p.isSystem}
+                              className={(isAdminRole(r) || !!p.isSystem) ? 'opacity-50 pointer-events-none' : ''}
                               onCheckedChange={(v: any) => {
-                                if (isAdminRole(r)) return;
+                                if (isAdminRole(r) || p.isSystem) return;
                                 toggleRolePerm(r.id, p.id, !!v);
                               }}
                             />
@@ -660,9 +673,22 @@ export const RolesPermissionsTab: React.FC = () => {
                 </div>
                 <div className="p-2 grid gap-2">
                   {list.map((p) => (
-                    <div key={p.id} className="flex items-center justify-between border rounded-md p-2">
+                    <div
+                      key={p.id}
+                      className={`flex items-center justify-between border rounded-md p-2 ${p.isSystem ? 'border-l-4 border-l-red-500' : ''}`}
+                    >
                       <div>
-                        <div className="font-medium">{p.name}</div>
+                        <div className="flex items-center gap-2">
+                          <div className="font-medium">{p.name}</div>
+                          {p.isSystem && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Badge variant="destructive" className="h-5 px-1 text-[10px]">SYSTEM</Badge>
+                              </TooltipTrigger>
+                              <TooltipContent>Системное право. Изменение запрещено.</TooltipContent>
+                            </Tooltip>
+                          )}
+                        </div>
                         {p.description && (
                           <div className="text-sm text-muted-foreground">{p.description}</div>
                         )}
@@ -679,7 +705,9 @@ export const RolesPermissionsTab: React.FC = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
+                            className={p.isSystem ? 'opacity-50 pointer-events-none' : ''}
                             onClick={() => {
+                              if (p.isSystem) return;
                               setEditingPerm(p);
                               setPermForm({ name: p.name, description: p.description ?? '' });
                               setPermModalOpen(true);
@@ -687,7 +715,10 @@ export const RolesPermissionsTab: React.FC = () => {
                           >
                             <Pencil size={14} className="mr-2" /> Редактировать
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => deletePerm(p.id)}>
+                          <DropdownMenuItem
+                            className={p.isSystem ? 'opacity-50 pointer-events-none' : ''}
+                            onClick={() => { if (!p.isSystem) deletePerm(p.id); }}
+                          >
                             <Trash size={14} className="mr-2" /> Удалить
                           </DropdownMenuItem>
                         </DropdownMenuContent>
