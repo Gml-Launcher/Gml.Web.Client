@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
+import { MoreVertical, Pencil, Trash } from 'lucide-react';
 
 import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from '@/shared/api/rbac';
 import { Button } from '@/shared/ui/button';
@@ -8,10 +9,11 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 import { Badge } from '@/shared/ui/badge';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/shared/ui/dialog';
 
 const emptyRole: Omit<RoleDto, 'id'> = { name: '', description: '' };
 const emptyPerm: Omit<PermissionDto, 'id'> = { name: '', description: '' };
@@ -24,6 +26,9 @@ export const RolesPermissionsTab: React.FC = () => {
 
   const [editingRole, setEditingRole] = useState<RoleDto | null>(null);
   const [roleForm, setRoleForm] = useState<Omit<RoleDto, 'id'>>(emptyRole);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [roleToDelete, setRoleToDelete] = useState<RoleDto | null>(null);
 
   const [editingPerm, setEditingPerm] = useState<PermissionDto | null>(null);
   const [permForm, setPermForm] = useState<Omit<PermissionDto, 'id'>>(emptyPerm);
@@ -93,6 +98,7 @@ export const RolesPermissionsTab: React.FC = () => {
         if (!selectedRoleId) setSelectedRoleId(created.id);
       }
       setRoleForm(emptyRole);
+      setRoleModalOpen(false);
     } catch (e: any) {
       setError(e?.message ?? 'Ошибка сохранения роли');
     } finally {
@@ -517,39 +523,11 @@ export const RolesPermissionsTab: React.FC = () => {
 
         <TabsContent value="roles" className="grid gap-3">
           <h2 className="text-xl font-semibold">Роли</h2>
-          <div className="flex gap-2 items-end flex-wrap">
-            <div className="grid gap-2">
-              <Label htmlFor="role-name">Название</Label>
-              <Input
-                id="role-name"
-                placeholder="Название роли"
-                value={roleForm.name}
-                onChange={(e) => setRoleForm({ ...roleForm, name: e.target.value })}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="role-desc">Описание</Label>
-              <Input
-                id="role-desc"
-                placeholder="Описание роли"
-                value={roleForm.description ?? ''}
-                onChange={(e) => setRoleForm({ ...roleForm, description: e.target.value })}
-              />
-            </div>
-            <Button onClick={submitRole} disabled={loading}>
-              {editingRole ? 'Сохранить' : 'Создать'}
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="text-sm text-muted-foreground">Управление ролями</div>
+            <Button onClick={() => { setEditingRole(null); setRoleForm(emptyRole); setRoleModalOpen(true); }} disabled={loading}>
+              Создать роль
             </Button>
-            {editingRole && (
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setEditingRole(null);
-                  setRoleForm(emptyRole);
-                }}
-              >
-                Отмена
-              </Button>
-            )}
           </div>
           <div className="grid gap-2">
             {roles.map((r) => (
@@ -560,35 +538,99 @@ export const RolesPermissionsTab: React.FC = () => {
                     <div className="text-sm text-muted-foreground">{r.description}</div>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="secondary"
-                    disabled={isAdminRole(r)}
-                    className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
-                    onClick={() => {
-                      if (isAdminRole(r)) return;
-                      setEditingRole(r);
-                      setRoleForm({ name: r.name, description: r.description ?? '' });
-                    }}
-                  >
-                    Редактировать
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    disabled={isAdminRole(r)}
-                    className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
-                    onClick={() => {
-                      if (isAdminRole(r)) return;
-                      deleteRole(r.id);
-                    }}
-                  >
-                    Удалить
-                  </Button>
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="rounded-full h-8 w-8 p-0 flex items-center justify-center"
+                      aria-label="Действия"
+                    >
+                      <MoreVertical size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
+                      onClick={() => {
+                        if (isAdminRole(r)) return;
+                        setEditingRole(r);
+                        setRoleForm({ name: r.name, description: r.description ?? '' });
+                        setRoleModalOpen(true);
+                      }}
+                    >
+                      <Pencil size={14} className="mr-2" /> Редактировать
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
+                      onClick={() => {
+                        if (isAdminRole(r)) return;
+                        setRoleToDelete(r);
+                        setConfirmOpen(true);
+                      }}
+                    >
+                      <Trash size={14} className="mr-2" /> Удалить
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             ))}
             {!roles.length && <div className="text-sm text-muted-foreground">Ролей пока нет.</div>}
           </div>
+
+          <Dialog open={roleModalOpen} onOpenChange={setRoleModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>{editingRole ? 'Редактировать роль' : 'Создать роль'}</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3 py-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="role-name">Название</Label>
+                  <Input
+                    id="role-name"
+                    placeholder="Название роли"
+                    value={roleForm.name}
+                    onChange={(e) => setRoleForm({ ...roleForm, name: e.target.value })}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="role-desc">Описание</Label>
+                  <Input
+                    id="role-desc"
+                    placeholder="Описание роли"
+                    value={roleForm.description ?? ''}
+                    onChange={(e) => setRoleForm({ ...roleForm, description: e.target.value })}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="secondary" onClick={() => { setRoleModalOpen(false); setEditingRole(null); setRoleForm(emptyRole); }} disabled={loading}>
+                  Отмена
+                </Button>
+                <Button onClick={submitRole} disabled={loading || !roleForm.name?.trim()}>
+                  {editingRole ? 'Сохранить' : 'Создать'}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Подтверждение удаления</DialogTitle>
+              </DialogHeader>
+              <div className="py-2">
+                Вы уверены, что хотите удалить роль «{roleToDelete?.name}»?
+              </div>
+              <DialogFooter>
+                <Button variant="secondary" onClick={() => { setConfirmOpen(false); setRoleToDelete(null); }}>
+                  Отмена
+                </Button>
+                <Button variant="destructive" onClick={() => { if (roleToDelete) { deleteRole(roleToDelete.id); } setConfirmOpen(false); setRoleToDelete(null); }}>
+                  Удалить
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
 
         <TabsContent value="perms" className="grid gap-3">
