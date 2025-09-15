@@ -14,13 +14,14 @@ export type TPostSignUpResponse = ResponseBaseEntity & {
 };
 
 // Авторизация
-export type TPostSignInRequest = {
+export type ApiPostSignInRequest = {
   login: string;
   password: string;
 };
-export type TPostSignInResponse = ResponseBaseEntity & {
-  data: UserBaseEntity & {
+export type ApiPostSignInResponse = ResponseBaseEntity & {
+  data: {
     accessToken: string;
+    expiresIn: number;
   };
 };
 

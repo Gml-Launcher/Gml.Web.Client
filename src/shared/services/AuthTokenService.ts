@@ -1,13 +1,22 @@
 import Cookies from 'js-cookie';
 
-import { UserBaseEntity } from '@/shared/api/contracts';
+import { ApiUserBaseEntity, UserBaseEntity } from '@/shared/api/contracts';
 
 export const getStorageProfile = () => {
   const profile = Cookies.get('profile');
 
   return profile ? (JSON.parse(profile) as UserBaseEntity) : null;
 };
-export const setStorageProfile = (profile: UserBaseEntity) => {
+
+export const setStorageProfile = (apiProfile: ApiUserBaseEntity) => {
+  const profile: UserBaseEntity = {
+    name: apiProfile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+    email: apiProfile['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+    role: apiProfile['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+    exp: apiProfile.exp,
+    perm: apiProfile.perm,
+  };
+
   Cookies.set('profile', JSON.stringify(profile), {
     domain: process.env.BASE_URL,
     sameSite: 'strict',
@@ -18,6 +27,7 @@ export const setStorageProfile = (profile: UserBaseEntity) => {
 export const removeStorageProfile = () => Cookies.remove('profile');
 
 export const getStorageAccessToken = () => Cookies.get('accessToken') || null;
+
 export const setStorageAccessToken = (token: string) => {
   Cookies.set('accessToken', token, {
     domain: process.env.BASE_URL,

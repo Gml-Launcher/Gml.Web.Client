@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import { TPostSignInRequest, TPostSignUpRequest } from '@/shared/api/contracts';
+import { ApiPostSignInRequest, TPostSignUpRequest } from '@/shared/api/contracts';
 import { DASHBOARD_PAGES } from '@/shared/routes';
 import { authService } from '@/shared/services';
 import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
@@ -35,7 +35,7 @@ export const useLogin = () => {
 
   return useMutation({
     mutationKey: ['signin'],
-    mutationFn: (data: TPostSignInRequest) => authService.signIn(data),
+    mutationFn: (data: ApiPostSignInRequest) => authService.signIn(data),
     onSuccess: () => {
       toast.success('Успешная авторизация', {
         description: 'Добро пожаловать в платформу',
