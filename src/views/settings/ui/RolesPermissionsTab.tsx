@@ -49,6 +49,59 @@ export const RolesPermissionsTab: React.FC = () => {
   const [users, setUsers] = useState<RbacUser[]>([]);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [newUser, setNewUser] = useState<{ login: string; password: string; email?: string }>({
+    login: '',
+    password: '',
+    email: '',
+  });
+  const [userErrors, setUserErrors] = useState<{ login?: string; password?: string; email?: string }>({});
+
+  const validateUser = (u: { login: string; password: string; email?: string }) => {
+    const errs: { login?: string; password?: string; email?: string } = {};
+
+    // Login
+    const login = (u.login ?? '').trim();
+    if (!login) {
+      errs.login = 'Пожалуйста, укажите login.';
+    } else if (login.length < 3 || login.length > 50) {
+      errs.login = 'Login должен быть от 3 до 50 символов.';
+    } else if (!/^[a-zA-Z0-9]*$/.test(login)) {
+      errs.login = 'Login должен состоять только из букв и цифр.';
+    }
+
+    // Password
+    const pwd = u.password ?? '';
+    if (!pwd) {
+      errs.password = 'Пожалуйста, укажите пароль.';
+    } else if (pwd.length < 5 || pwd.length > 100) {
+      errs.password = 'Пароль должен быть от 5 до 100 символов.';
+    } else {
+      if (!/[A-Z]/.test(pwd)) errs.password = 'Пароль должен содержать хотя бы одну заглавную букву.';
+      else if (!/[a-z]/.test(pwd)) errs.password = 'Пароль должен содержать хотя бы одну строчную букву.';
+      else if (!/[0-9]/.test(pwd)) errs.password = 'Пароль должен содержать хотя бы одну цифру.';
+    }
+
+    // Email
+    const email = (u.email ?? '').trim();
+    if (!email) {
+      errs.email = 'Пожалуйста, укажите адрес электронной почты.';
+    } else {
+      // Basic email check
+      const emailRegex = /^(?:[\w!#$%&'*+/=?`{|}~^.-]+)@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        errs.email = 'Пожалуйста, укажите действующий адрес электронной почты.';
+      }
+    }
+
+    return errs;
+  };
+
+  const isUserFormValid = (u: { login: string; password: string; email?: string }) => {
+    const errs = validateUser(u);
+    return !errs.login && !errs.password && !errs.email;
+  };
+
   const selectedRole = useMemo(
     () => roles.find((r) => r.id === selectedRoleId) || null,
     [roles, selectedRoleId],
@@ -249,6 +302,28 @@ export const RolesPermissionsTab: React.FC = () => {
     }
   };
 
+  const submitUser = async () => {
+    const errs = validateUser(newUser);
+    setUserErrors(errs);
+    if (errs.login || errs.password || errs.email) return;
+    setLoading(true);
+    try {
+      await rbacApi.createUser({
+        login: newUser.login.trim(),
+        password: newUser.password,
+        email: newUser.email?.trim() || undefined,
+      });
+      setUserModalOpen(false);
+      setNewUser({ login: '', password: '', email: '' });
+      setUserErrors({});
+      await refreshUsers();
+    } catch (e: any) {
+      setError(e?.message ?? 'Ошибка создания пользователя');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const permsByGroup = useMemo(() => {
     const map = new Map<string, PermissionDto[]>();
     for (const p of perms) {
@@ -348,9 +423,22 @@ export const RolesPermissionsTab: React.FC = () => {
         <TabsContent value="users" className="grid gap-3">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Пользователи</h2>
-            <Button variant="outline" size="sm" onClick={refreshUsers} disabled={loading}>
-              Обновить
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm" onClick={refreshUsers} disabled={loading}>
+                Обновить
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setNewUser({ login: '', password: '', email: '' });
+                  setUserErrors({});
+                  setUserModalOpen(true);
+                }}
+                disabled={loading}
+              >
+                Создать пользователя
+              </Button>
+            </div>
           </div>
           <div className="rounded-md border">
             <Table>
@@ -449,6 +537,82 @@ export const RolesPermissionsTab: React.FC = () => {
               </TableBody>
             </Table>
           </div>
+
+          <Dialog open={userModalOpen} onOpenChange={setUserModalOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Создать пользователя</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-3 py-2">
+                <div className="grid gap-2">
+                  <Label htmlFor="user-login">Логин</Label>
+                  <Input
+                    id="user-login"
+                    placeholder="Логин"
+                    value={newUser.login}
+                    onChange={(e) => {
+                      const next = { ...newUser, login: e.target.value };
+                      setNewUser(next);
+                      setUserErrors(validateUser(next));
+                    }}
+                  />
+                  {userErrors.login && (
+                    <div className="text-xs text-destructive mt-1">{userErrors.login}</div>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="user-password">Пароль</Label>
+                  <Input
+                    id="user-password"
+                    type="password"
+                    placeholder="Пароль"
+                    value={newUser.password}
+                    onChange={(e) => {
+                      const next = { ...newUser, password: e.target.value };
+                      setNewUser(next);
+                      setUserErrors(validateUser(next));
+                    }}
+                  />
+                  {userErrors.password && (
+                    <div className="text-xs text-destructive mt-1">{userErrors.password}</div>
+                  )}
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="user-email">Email</Label>
+                  <Input
+                    id="user-email"
+                    type="email"
+                    placeholder="email@example.com"
+                    value={newUser.email ?? ''}
+                    onChange={(e) => {
+                      const next = { ...newUser, email: e.target.value };
+                      setNewUser(next);
+                      setUserErrors(validateUser(next));
+                    }}
+                  />
+                  {userErrors.email && (
+                    <div className="text-xs text-destructive mt-1">{userErrors.email}</div>
+                  )}
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setUserModalOpen(false);
+                    setNewUser({ login: '', password: '', email: '' });
+                    setUserErrors({});
+                  }}
+                  disabled={loading}
+                >
+                  Отмена
+                </Button>
+                <Button onClick={submitUser} disabled={loading || !isUserFormValid(newUser)}>
+                  Создать
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </TabsContent>
 
         <TabsContent value="matrix" className="grid gap-3">

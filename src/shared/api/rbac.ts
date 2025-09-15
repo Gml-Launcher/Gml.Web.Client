@@ -12,6 +12,11 @@ export type RbacUser = {
 };
 
 export const rbacApi = {
+  // Users
+  createUser: async (payload: { login: string; password: string; email?: string }): Promise<RbacUser> => {
+    const { data } = await $api.post('/users/signup', payload);
+    return (data?.data ?? data) as RbacUser;
+  },
   // Roles
   getRoles: async (): Promise<RoleDto[]> => {
     const { data } = await $api.get('/roles');
