@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from "@/shared/api/rbac";
-import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
-import { Badge } from "@/shared/ui/badge";
-import { Checkbox } from "@/shared/ui/checkbox";
+import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from '@/shared/api/rbac';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/shared/ui/dropdown-menu';
+import { Badge } from '@/shared/ui/badge';
+import { Checkbox } from '@/shared/ui/checkbox';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 
 const emptyRole: Omit<RoleDto, 'id'> = { name: '', description: '' };
 const emptyPerm: Omit<PermissionDto, 'id'> = { name: '', description: '' };
@@ -288,6 +289,36 @@ export const RolesPermissionsTab: React.FC = () => {
   };
   const rolesReversed = useMemo(() => [...roles], [roles]);
 
+  const RoleWithPermsHover: React.FC<{
+    roleId: number;
+    roleName?: string | null;
+    rolesDetails: RoleWithPerms[];
+  }> = ({ roleId, roleName, rolesDetails }) => {
+    const rd = rolesDetails.find((r) => r.id === roleId);
+    const perms = rd?.permissions ?? [];
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Badge className="cursor-default select-none">{roleName || '—'}</Badge>
+        </TooltipTrigger>
+        <TooltipContent className="w-80 text-xs">
+          <div className="grid gap-2">
+            <div className="font-medium">Права роли: {roleName}</div>
+            {perms.length ? (
+              <ul className="list-disc list-inside space-y-1 max-h-52 overflow-auto">
+                {perms.map((p) => (
+                  <li key={p.id}>{p.name}</li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-muted-foreground">Нет прав</div>
+            )}
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    );
+  };
+
   return (
     <div className="grid gap-6">
       <Tabs defaultValue="users" className="grid gap-4">
@@ -324,10 +355,20 @@ export const RolesPermissionsTab: React.FC = () => {
                     <TableCell>{u.id}</TableCell>
                     <TableCell>{u.login ?? u.email ?? '-'}</TableCell>
                     <TableCell className="text-xs">
-                      {u.roles?.map((r) => r.name).join(', ') || '-'}
-                    </TableCell>
-                    <TableCell className="text-xs">
-                      {u.permissions?.map((p) => p.name).join(', ') || '-'}
+                      {u.roles?.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {u.roles.map((r) => (
+                            <RoleWithPermsHover
+                              key={r.id}
+                              roleId={r.id}
+                              roleName={r.name}
+                              rolesDetails={rolesDetails}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        '-'
+                      )}
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -384,7 +425,7 @@ export const RolesPermissionsTab: React.FC = () => {
                 ))}
                 {!users.length && (
                   <TableRow>
-                    <TableCell className="text-muted-foreground" colSpan={5}>
+                    <TableCell className="text-muted-foreground" colSpan={4}>
                       Нет пользователей
                     </TableCell>
                   </TableRow>
