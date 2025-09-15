@@ -1,13 +1,13 @@
 'use client';
 
-import React from "react";
+import React from 'react';
 
-import { RolesPermissionsTab } from "./RolesPermissionsTab";
+import { RolesPermissionsTab } from './RolesPermissionsTab';
 
-import { EditSettingsPlatformForm } from "@/features/edit-settings-platform-form";
-import { Breadcrumbs } from "@/shared/ui/Breadcrumbs";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
-import { DASHBOARD_PAGES } from "@/shared/routes";
+import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form';
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
+import { DASHBOARD_PAGES } from '@/shared/routes';
 
 export const SettingsPage = () => {
   return (

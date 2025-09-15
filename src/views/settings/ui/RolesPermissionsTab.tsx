@@ -289,6 +289,8 @@ export const RolesPermissionsTab: React.FC = () => {
   };
   const rolesReversed = useMemo(() => [...roles], [roles]);
 
+  const isAdminRole = (r: { name?: string | null }) => (r.name ?? '').toLowerCase() === 'admin';
+
   const RoleWithPermsHover: React.FC<{
     roleId: number;
     roleName?: string | null;
@@ -466,7 +468,12 @@ export const RolesPermissionsTab: React.FC = () => {
                         <TableCell key={r.id}>
                           <Checkbox
                             checked={roleHasAllGroupPerms(r.id, list)}
-                            onCheckedChange={(v: any) => toggleRoleGroup(r.id, list, !!v)}
+                            disabled={isAdminRole(r)}
+                            className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
+                            onCheckedChange={(v: any) => {
+                              if (isAdminRole(r)) return;
+                              toggleRoleGroup(r.id, list, !!v);
+                            }}
                           />
                         </TableCell>
                       ))}
@@ -483,7 +490,12 @@ export const RolesPermissionsTab: React.FC = () => {
                           <TableCell key={r.id}>
                             <Checkbox
                               checked={hasRolePerm(r.id, p.id)}
-                              onCheckedChange={(v: any) => toggleRolePerm(r.id, p.id, !!v)}
+                              disabled={isAdminRole(r)}
+                              className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
+                              onCheckedChange={(v: any) => {
+                                if (isAdminRole(r)) return;
+                                toggleRolePerm(r.id, p.id, !!v);
+                              }}
                             />
                           </TableCell>
                         ))}
@@ -551,14 +563,25 @@ export const RolesPermissionsTab: React.FC = () => {
                 <div className="flex gap-2">
                   <Button
                     variant="secondary"
+                    disabled={isAdminRole(r)}
+                    className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
                     onClick={() => {
+                      if (isAdminRole(r)) return;
                       setEditingRole(r);
                       setRoleForm({ name: r.name, description: r.description ?? '' });
                     }}
                   >
                     Редактировать
                   </Button>
-                  <Button variant="destructive" onClick={() => deleteRole(r.id)}>
+                  <Button
+                    variant="destructive"
+                    disabled={isAdminRole(r)}
+                    className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
+                    onClick={() => {
+                      if (isAdminRole(r)) return;
+                      deleteRole(r.id);
+                    }}
+                  >
                     Удалить
                   </Button>
                 </div>
