@@ -59,7 +59,11 @@ export const RolesPermissionsTab: React.FC = () => {
     email: '',
   });
   const [newUserRole, setNewUserRole] = useState<string>('');
-  const [userErrors, setUserErrors] = useState<{ login?: string; password?: string; email?: string }>({});
+  const [userErrors, setUserErrors] = useState<{
+    login?: string;
+    password?: string;
+    email?: string;
+  }>({});
 
   const validateUser = (u: { login: string; password: string; email?: string }) => {
     const errs: { login?: string; password?: string; email?: string } = {};
@@ -81,8 +85,10 @@ export const RolesPermissionsTab: React.FC = () => {
     } else if (pwd.length < 5 || pwd.length > 100) {
       errs.password = 'Пароль должен быть от 5 до 100 символов.';
     } else {
-      if (!/[A-Z]/.test(pwd)) errs.password = 'Пароль должен содержать хотя бы одну заглавную букву.';
-      else if (!/[a-z]/.test(pwd)) errs.password = 'Пароль должен содержать хотя бы одну строчную букву.';
+      if (!/[A-Z]/.test(pwd))
+        errs.password = 'Пароль должен содержать хотя бы одну заглавную букву.';
+      else if (!/[a-z]/.test(pwd))
+        errs.password = 'Пароль должен содержать хотя бы одну строчную букву.';
       else if (!/[0-9]/.test(pwd)) errs.password = 'Пароль должен содержать хотя бы одну цифру.';
     }
 
@@ -437,8 +443,8 @@ export const RolesPermissionsTab: React.FC = () => {
         <TabsList className="justify-start w-full overflow-x-auto">
           <TabsTrigger value="users">Пользователи</TabsTrigger>
           <TabsTrigger value="roles">Роли</TabsTrigger>
-          <TabsTrigger value="matrix">Матрица</TabsTrigger>
           <TabsTrigger value="perms">Права</TabsTrigger>
+          <TabsTrigger value="matrix">Матрица</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="grid gap-3">
@@ -512,23 +518,23 @@ export const RolesPermissionsTab: React.FC = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="p-3 w-[340px] grid gap-3">
-                                                  <div className="grid gap-2">
-                                                    <div className="text-xs uppercase text-muted-foreground">Действия</div>
-                                                    <div className="flex items-center justify-between">
-                                                      <Button
-                                                        variant="destructive"
-                                                        size="sm"
-                                                        onClick={() => {
-                                                          setSelectedUserId(u.id);
-                                                          setUserId(String(u.id));
-                                                          setDeleteUserTarget(u);
-                                                          setDeleteUserOpen(true);
-                                                        }}
-                                                      >
-                                                        <Trash size={14} className="mr-2" /> Удалить пользователя
-                                                      </Button>
-                                                    </div>
-                                                  </div>
+                          <div className="grid gap-2">
+                            <div className="text-xs uppercase text-muted-foreground">Действия</div>
+                            <div className="flex items-center justify-between">
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedUserId(u.id);
+                                  setUserId(String(u.id));
+                                  setDeleteUserTarget(u);
+                                  setDeleteUserOpen(true);
+                                }}
+                              >
+                                <Trash size={14} className="mr-2" /> Удалить пользователя
+                              </Button>
+                            </div>
+                          </div>
                           <div className="grid gap-2">
                             <div className="text-xs uppercase text-muted-foreground">Роли</div>
                             <div className="flex flex-wrap gap-2">
@@ -584,7 +590,8 @@ export const RolesPermissionsTab: React.FC = () => {
                 <DialogTitle>Подтверждение удаления пользователя</DialogTitle>
               </DialogHeader>
               <div className="py-2">
-                Вы уверены, что хотите удалить пользователя «{deleteUserTarget?.login ?? deleteUserTarget?.email ?? deleteUserTarget?.id}»?
+                Вы уверены, что хотите удалить пользователя «
+                {deleteUserTarget?.login ?? deleteUserTarget?.email ?? deleteUserTarget?.id}»?
               </div>
               <DialogFooter>
                 <Button
@@ -678,7 +685,9 @@ export const RolesPermissionsTab: React.FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {roles.map((r) => (
-                        <SelectItem key={r.id} value={r.name}>{r.name}</SelectItem>
+                        <SelectItem key={r.id} value={r.name}>
+                          {r.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
