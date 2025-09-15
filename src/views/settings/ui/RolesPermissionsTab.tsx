@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { MoreVertical, Pencil, Trash, RefreshCw } from 'lucide-react';
+import { MoreVertical, Pencil, RefreshCw, Trash } from 'lucide-react';
 
 import { PermissionDto, rbacApi, RbacUser, RoleDto, RoleWithPerms } from '@/shared/api/rbac';
 import { Button } from '@/shared/ui/button';
@@ -9,7 +9,12 @@ import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger, DropdownMenuItem } from '@/shared/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
 import { Badge } from '@/shared/ui/badge';
 import { Checkbox } from '@/shared/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
@@ -27,8 +32,8 @@ export const RolesPermissionsTab: React.FC = () => {
   const [editingRole, setEditingRole] = useState<RoleDto | null>(null);
   const [roleForm, setRoleForm] = useState<Omit<RoleDto, 'id'>>(emptyRole);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
-    const [confirmOpen, setConfirmOpen] = useState(false);
-    const [roleToDelete, setRoleToDelete] = useState<RoleDto | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [roleToDelete, setRoleToDelete] = useState<RoleDto | null>(null);
 
   const [editingPerm, setEditingPerm] = useState<PermissionDto | null>(null);
   const [permForm, setPermForm] = useState<Omit<PermissionDto, 'id'>>(emptyPerm);
@@ -298,6 +303,7 @@ export const RolesPermissionsTab: React.FC = () => {
   const rolesReversed = useMemo(() => [...roles], [roles]);
 
   const isAdminRole = (r: { name?: string | null }) => (r.name ?? '').toLowerCase() === 'admin';
+  const isSystemPerm = (p: Partial<PermissionDto> | undefined | null) => !!(p as any)?.isSystem;
 
   const RoleWithPermsHover: React.FC<{
     roleId: number;
@@ -487,19 +493,20 @@ export const RolesPermissionsTab: React.FC = () => {
                       ))}
                     </TableRow>
                     {list.map((p) => (
-                      <TableRow
-                        key={p.id}
-                        className={`cursor-default ${p.isSystem ? 'border-l-4 border-l-red-500' : ''}`}
-                      >
+                      <TableRow key={p.id} className={`cursor-default`}>
                         <TableCell title={p.description ?? ''}>
                           <div className="flex items-center gap-2">
                             <div className="font-medium">{p.name}</div>
-                            {p.isSystem && (
+                            {isSystemPerm(p) && (
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <Badge variant="destructive" className="h-5 px-1 text-[10px]">SYSTEM</Badge>
+                                  <Badge variant="destructive" className="h-5 px-1 text-[10px]">
+                                    SYSTEM
+                                  </Badge>
                                 </TooltipTrigger>
-                                <TooltipContent>Системное право. Изменение запрещено.</TooltipContent>
+                                <TooltipContent>
+                                  Системное право. Изменение запрещено.
+                                </TooltipContent>
                               </Tooltip>
                             )}
                           </div>
@@ -511,10 +518,10 @@ export const RolesPermissionsTab: React.FC = () => {
                           <TableCell key={r.id}>
                             <Checkbox
                               checked={hasRolePerm(r.id, p.id)}
-                              disabled={isAdminRole(r) || !!p.isSystem}
-                              className={(isAdminRole(r) || !!p.isSystem) ? 'opacity-50 pointer-events-none' : ''}
+                              disabled={isAdminRole(r)}
+                              className={isAdminRole(r) ? 'opacity-50 pointer-events-none' : ''}
                               onCheckedChange={(v: any) => {
-                                if (isAdminRole(r) || p.isSystem) return;
+                                if (isAdminRole(r)) return;
                                 toggleRolePerm(r.id, p.id, !!v);
                               }}
                             />
@@ -540,7 +547,14 @@ export const RolesPermissionsTab: React.FC = () => {
           <h2 className="text-xl font-semibold">Роли</h2>
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="text-sm text-muted-foreground">Управление ролями</div>
-            <Button onClick={() => { setEditingRole(null); setRoleForm(emptyRole); setRoleModalOpen(true); }} disabled={loading}>
+            <Button
+              onClick={() => {
+                setEditingRole(null);
+                setRoleForm(emptyRole);
+                setRoleModalOpen(true);
+              }}
+              disabled={loading}
+            >
               Создать роль
             </Button>
           </div>
@@ -618,7 +632,15 @@ export const RolesPermissionsTab: React.FC = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="secondary" onClick={() => { setRoleModalOpen(false); setEditingRole(null); setRoleForm(emptyRole); }} disabled={loading}>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setRoleModalOpen(false);
+                    setEditingRole(null);
+                    setRoleForm(emptyRole);
+                  }}
+                  disabled={loading}
+                >
                   Отмена
                 </Button>
                 <Button onClick={submitRole} disabled={loading || !roleForm.name?.trim()}>
@@ -637,10 +659,25 @@ export const RolesPermissionsTab: React.FC = () => {
                 Вы уверены, что хотите удалить роль «{roleToDelete?.name}»?
               </div>
               <DialogFooter>
-                <Button variant="secondary" onClick={() => { setConfirmOpen(false); setRoleToDelete(null); }}>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setConfirmOpen(false);
+                    setRoleToDelete(null);
+                  }}
+                >
                   Отмена
                 </Button>
-                <Button variant="destructive" onClick={() => { if (roleToDelete) { deleteRole(roleToDelete.id); } setConfirmOpen(false); setRoleToDelete(null); }}>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    if (roleToDelete) {
+                      deleteRole(roleToDelete.id);
+                    }
+                    setConfirmOpen(false);
+                    setRoleToDelete(null);
+                  }}
+                >
                   Удалить
                 </Button>
               </DialogFooter>
@@ -655,7 +692,15 @@ export const RolesPermissionsTab: React.FC = () => {
               <Button variant="outline" size="sm" onClick={loadAll} disabled={loading}>
                 <RefreshCw size={14} className="mr-2" /> Обновить
               </Button>
-              <Button size="sm" onClick={() => { setEditingPerm(null); setPermForm(emptyPerm); setPermModalOpen(true); }} disabled={loading}>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setEditingPerm(null);
+                  setPermForm(emptyPerm);
+                  setPermModalOpen(true);
+                }}
+                disabled={loading}
+              >
                 Создать право
               </Button>
             </div>
@@ -675,15 +720,17 @@ export const RolesPermissionsTab: React.FC = () => {
                   {list.map((p) => (
                     <div
                       key={p.id}
-                      className={`flex items-center justify-between border rounded-md p-2 ${p.isSystem ? 'border-l-4 border-l-red-500' : ''}`}
+                      className={`flex items-center justify-between border rounded-md p-2 ${isSystemPerm(p) ? 'border-l-4 border-l-red-500' : ''}`}
                     >
                       <div>
                         <div className="flex items-center gap-2">
                           <div className="font-medium">{p.name}</div>
-                          {p.isSystem && (
+                          {isSystemPerm(p) && (
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Badge variant="destructive" className="h-5 px-1 text-[10px]">SYSTEM</Badge>
+                                <Badge variant="destructive" className="h-5 px-1 text-[10px]">
+                                  SYSTEM
+                                </Badge>
                               </TooltipTrigger>
                               <TooltipContent>Системное право. Изменение запрещено.</TooltipContent>
                             </Tooltip>
@@ -705,9 +752,9 @@ export const RolesPermissionsTab: React.FC = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem
-                            className={p.isSystem ? 'opacity-50 pointer-events-none' : ''}
+                            className={isSystemPerm(p) ? 'opacity-50 pointer-events-none' : ''}
                             onClick={() => {
-                              if (p.isSystem) return;
+                              if (isSystemPerm(p)) return;
                               setEditingPerm(p);
                               setPermForm({ name: p.name, description: p.description ?? '' });
                               setPermModalOpen(true);
@@ -716,8 +763,10 @@ export const RolesPermissionsTab: React.FC = () => {
                             <Pencil size={14} className="mr-2" /> Редактировать
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            className={p.isSystem ? 'opacity-50 pointer-events-none' : ''}
-                            onClick={() => { if (!p.isSystem) deletePerm(p.id); }}
+                            className={isSystemPerm(p) ? 'opacity-50 pointer-events-none' : ''}
+                            onClick={() => {
+                              if (!isSystemPerm(p)) deletePerm(p.id);
+                            }}
                           >
                             <Trash size={14} className="mr-2" /> Удалить
                           </DropdownMenuItem>
@@ -726,7 +775,9 @@ export const RolesPermissionsTab: React.FC = () => {
                     </div>
                   ))}
                   {!list.length && (
-                    <div className="text-sm text-muted-foreground px-2 py-1">Нет прав в группе.</div>
+                    <div className="text-sm text-muted-foreground px-2 py-1">
+                      Нет прав в группе.
+                    </div>
                   )}
                 </div>
               </div>
@@ -772,7 +823,14 @@ export const RolesPermissionsTab: React.FC = () => {
                 >
                   Отмена
                 </Button>
-                <Button onClick={async () => { await submitPerm(); if (!editingPerm) await loadAll(); setPermModalOpen(false); }} disabled={loading || !permForm.name?.trim()}>
+                <Button
+                  onClick={async () => {
+                    await submitPerm();
+                    if (!editingPerm) await loadAll();
+                    setPermModalOpen(false);
+                  }}
+                  disabled={loading || !permForm.name?.trim()}
+                >
                   {editingPerm ? 'Сохранить' : 'Создать'}
                 </Button>
               </DialogFooter>
