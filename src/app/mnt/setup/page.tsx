@@ -23,6 +23,7 @@ export default function MntSetupPage() {
   const [backendUrl, setBackendUrl] = useState(process.env.NEXT_PUBLIC_BACKEND_URL || '');
   const [projectName, setProjectName] = useState('');
   const [adminUsername, setAdminUsername] = useState('');
+  const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -41,6 +42,7 @@ export default function MntSetupPage() {
       ProjectName: projectName,
       BackendAddress: backendUrl,
       AdminUsername: adminUsername,
+      AdminEmail: adminEmail,
       AdminPassword: adminPassword,
       ConfirmPassword: confirmPassword,
     };
@@ -189,6 +191,17 @@ export default function MntSetupPage() {
                 placeholder="admin"
                 value={adminUsername}
                 onChange={(e) => setAdminUsername(e.target.value)}
+              />
+            </label>
+            <label className="grid gap-2 text-sm">
+              <span>Email администратора</span>
+              <input
+                id="adminEmail"
+                type="email"
+                className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="admin@example.com"
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
               />
             </label>
             <label className="grid gap-2 text-sm">
