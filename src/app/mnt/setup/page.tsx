@@ -28,10 +28,18 @@ export default function MntSetupPage() {
       <div className="grid gap-6 w-full max-w-2xl">
         <Card>
           <CardHeader>
-            <CardTitle>Адрес бекенда</CardTitle>
-            <CardDescription>Укажите адрес API сервера {config.name}.</CardDescription>
+            <CardTitle>Настройки проекта</CardTitle>
+            <CardDescription>Укажите основные параметры проекта.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <label className="grid gap-2 text-sm">
+              <span>Наименование проекта</span>
+              <input
+                id="projectName"
+                className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="Мой проект"
+              />
+            </label>
             <label className="grid gap-2 text-sm">
               <span>Адрес бекенда</span>
               <input
