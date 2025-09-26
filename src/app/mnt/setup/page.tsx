@@ -26,6 +26,7 @@ export default function MntSetupPage() {
   const [adminPassword, setAdminPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [fetchFailed, setFetchFailed] = useState(false);
 
   async function onSave() {
     if (!backendUrl) return;
@@ -35,7 +36,7 @@ export default function MntSetupPage() {
       return;
     }
     const base = backendUrl.replace(/\/$/, '');
-    const url = `${base}/api/v1/settings/install`;
+    const url = `${base}/settings/install`;
     const body = {
       ProjectName: projectName,
       BackendAddress: backendUrl,
@@ -45,6 +46,7 @@ export default function MntSetupPage() {
     };
     try {
       setSubmitting(true);
+      setFetchFailed(false);
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -57,9 +59,12 @@ export default function MntSetupPage() {
       }
       router.push('/dashboard');
     } catch (e: any) {
+      const message: string = e?.message || '';
+      if (message.toLowerCase().includes('failed to fetch')) {
+        setFetchFailed(true);
+      }
       // Fallback alert; project also has sonner Toaster globally mounted
-      const msg = e?.message || 'Не удалось выполнить установку';
-      // dynamic import to avoid adding dependency at module scope
+      const msg = message || 'Не удалось выполнить установку';
       const { toast } = await import('sonner');
       toast.error(msg);
     } finally {
@@ -110,7 +115,10 @@ export default function MntSetupPage() {
                   className={`w-full rounded-md border bg-background pr-8 pl-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${mismatch ? 'border-[#E3DEAA]' : ''}`}
                   placeholder={process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.example.com'}
                   value={backendUrl}
-                  onChange={(e) => setBackendUrl(e.target.value)}
+                  onChange={(e) => {
+                    setBackendUrl(e.target.value);
+                    if (fetchFailed) setFetchFailed(false);
+                  }}
                 />
                 {mismatch && (
                   <Tooltip>
@@ -181,8 +189,29 @@ export default function MntSetupPage() {
               />
             </label>
           </CardContent>
-          <CardFooter className="justify-end">
-            <div className="action-block flex gap-2">
+          <CardFooter className="justify-between flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-2">
+            {fetchFailed && (
+              <Alert variant="warning" className="w-full">
+                <AlertTitle>Не удалось выполнить запрос (Failed to fetch)</AlertTitle>
+                <AlertDescription>
+                  Убедитесь, что ваш бекенд работает и сертификат валиден. Для проверки откройте
+                  адрес здоровья бекенда — вы должны увидеть &quot;Healthy&quot;. Если вы видите
+                  Healthy, вернитесь на эту страницу и продолжите установку.
+                  <div className="mt-2">
+                    <a
+                      href={`${backendUrl.replace(/\/$/, '')}/health`.replace('/api/v1', '')}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Button size="sm" variant="outline">
+                        Проверить
+                      </Button>
+                    </a>
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+            <div className="action-block flex gap-2 self-end">
               <Button variant="secondary" onClick={() => router.back()}>
                 Назад
               </Button>
