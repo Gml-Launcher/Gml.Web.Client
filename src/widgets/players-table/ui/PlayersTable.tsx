@@ -11,7 +11,7 @@ import {
   VisibilityState,
 } from '@tanstack/react-table';
 import { useInView } from 'react-intersection-observer';
-import { Cpu, Fingerprint, Hash, SearchIcon, User as UserIcon, X, Filter } from 'lucide-react';
+import { Cpu, Filter, Fingerprint, Hash, SearchIcon, User as UserIcon, X } from 'lucide-react';
 
 import { useColumns } from '../lib/columns';
 
@@ -49,7 +49,14 @@ export function PlayersTable() {
     take: 20,
   });
 
-  const { data: players, status, error, fetchNextPage, refetch } = usePlayers(debouncedFilters);
+  const {
+    data: players,
+    isPending,
+    isError,
+    error,
+    fetchNextPage,
+    refetch,
+  } = usePlayers(debouncedFilters);
 
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -117,9 +124,9 @@ export function PlayersTable() {
 
   return (
     <>
-      {status === 'pending' ? (
+      {isPending ? (
         <PlayersTableSkeleton />
-      ) : status === 'error' ? (
+      ) : isError ? (
         <span>Error: {error.message}</span>
       ) : (
         <div className="flex flex-col gap-4">
@@ -181,17 +188,30 @@ export function PlayersTable() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 items-center">
                   <div className="flex flex-wrap items-center gap-4">
                     <label className="inline-flex items-center gap-2 text-sm">
-                      <Checkbox checked={onlyBlocked} onCheckedChange={(v:any) => setOnlyBlocked(!!v)} />
+                      <Checkbox
+                        checked={onlyBlocked}
+                        onCheckedChange={(v: any) => setOnlyBlocked(!!v)}
+                      />
                       Только заблокированные
                     </label>
                     <label className="inline-flex items-center gap-2 text-sm">
-                      <Checkbox checked={onlyDeviceBlocked} onCheckedChange={(v:any) => setOnlyDeviceBlocked(!!v)} />
+                      <Checkbox
+                        checked={onlyDeviceBlocked}
+                        onCheckedChange={(v: any) => setOnlyDeviceBlocked(!!v)}
+                      />
                       Только заблокированные по устройству
                     </label>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Сортировать по</span>
-                    <Select value={sortBy === undefined ? undefined : String(sortBy)} onValueChange={(val) => setSortBy((val === undefined || val === '' ? undefined : (Number(val) as 0|1|2)))}>
+                    <Select
+                      value={sortBy === undefined ? undefined : String(sortBy)}
+                      onValueChange={(val) =>
+                        setSortBy(
+                          val === undefined || val === '' ? undefined : (Number(val) as 0 | 1 | 2),
+                        )
+                      }
+                    >
                       <SelectTrigger className="w-[200px]">
                         <SelectValue placeholder="Не выбрано" />
                       </SelectTrigger>
@@ -202,7 +222,7 @@ export function PlayersTable() {
                       </SelectContent>
                     </Select>
                     <label className="inline-flex items-center gap-2 text-sm">
-                      <Checkbox checked={sortDesc} onCheckedChange={(v:any) => setSortDesc(!!v)} />
+                      <Checkbox checked={sortDesc} onCheckedChange={(v: any) => setSortDesc(!!v)} />
                       По убыванию
                     </label>
                   </div>
@@ -220,23 +240,50 @@ export function PlayersTable() {
                     </Select>
                   </div>
                   <div className="col-span-full flex items-center justify-end gap-2">
-                    <Button type="button" variant="ghost" className="text-muted-foreground" onClick={() => { setSearch(''); setUuid(''); setIp(''); setHwid(''); setOnlyBlocked(false); setOnlyDeviceBlocked(false); setSortBy(undefined); setSortDesc(false); setTake(20); }}>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      className="text-muted-foreground"
+                      onClick={() => {
+                        setSearch('');
+                        setUuid('');
+                        setIp('');
+                        setHwid('');
+                        setOnlyBlocked(false);
+                        setOnlyDeviceBlocked(false);
+                        setSortBy(undefined);
+                        setSortDesc(false);
+                        setTake(20);
+                      }}
+                    >
                       <X size={16} /> Сбросить
                     </Button>
-                    <Button type="submit" variant="outline" className="gap-2" disabled={status === 'pending'}>
+                    <Button type="submit" variant="outline" className="gap-2" disabled={isPending}>
                       <SearchIcon size={16} />
-                      {status === 'pending' ? 'Поиск…' : 'Найти'}
+                      {isPending ? 'Поиск…' : 'Найти'}
                     </Button>
                   </div>
                 </div>
 
                 {/* Active filters summary */}
-                {(search || uuid || ip || hwid || onlyBlocked || onlyDeviceBlocked || sortBy !== undefined || sortDesc) && (
+                {(search ||
+                  uuid ||
+                  ip ||
+                  hwid ||
+                  onlyBlocked ||
+                  onlyDeviceBlocked ||
+                  sortBy !== undefined ||
+                  sortDesc) && (
                   <div className="flex flex-wrap items-center gap-2 pt-2">
                     {search && (
                       <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground flex items-center gap-1">
                         Ник: {search}
-                        <button type="button" className="ml-1 opacity-70 hover:opacity-100" onClick={() => setSearch('')} aria-label="Очистить фильтр нику">
+                        <button
+                          type="button"
+                          className="ml-1 opacity-70 hover:opacity-100"
+                          onClick={() => setSearch('')}
+                          aria-label="Очистить фильтр нику"
+                        >
                           <X size={12} />
                         </button>
                       </span>
@@ -244,7 +291,12 @@ export function PlayersTable() {
                     {uuid && (
                       <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground flex items-center gap-1">
                         UUID: {uuid}
-                        <button type="button" className="ml-1 opacity-70 hover:opacity-100" onClick={() => setUuid('')} aria-label="Очистить фильтр UUID">
+                        <button
+                          type="button"
+                          className="ml-1 opacity-70 hover:opacity-100"
+                          onClick={() => setUuid('')}
+                          aria-label="Очистить фильтр UUID"
+                        >
                           <X size={12} />
                         </button>
                       </span>
@@ -252,7 +304,12 @@ export function PlayersTable() {
                     {ip && (
                       <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground flex items-center gap-1">
                         IP: {ip}
-                        <button type="button" className="ml-1 opacity-70 hover:opacity-100" onClick={() => setIp('')} aria-label="Очистить фильтр IP">
+                        <button
+                          type="button"
+                          className="ml-1 opacity-70 hover:opacity-100"
+                          onClick={() => setIp('')}
+                          aria-label="Очистить фильтр IP"
+                        >
                           <X size={12} />
                         </button>
                       </span>
@@ -260,21 +317,36 @@ export function PlayersTable() {
                     {hwid && (
                       <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground flex items-center gap-1">
                         HWID: {hwid}
-                        <button type="button" className="ml-1 opacity-70 hover:opacity-100" onClick={() => setHwid('')} aria-label="Очистить фильтр HWID">
+                        <button
+                          type="button"
+                          className="ml-1 opacity-70 hover:opacity-100"
+                          onClick={() => setHwid('')}
+                          aria-label="Очистить фильтр HWID"
+                        >
                           <X size={12} />
                         </button>
                       </span>
                     )}
                     {onlyBlocked && (
-                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">Только заблокированные</span>
+                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">
+                        Только заблокированные
+                      </span>
                     )}
                     {onlyDeviceBlocked && (
-                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">Только по устройству</span>
+                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">
+                        Только по устройству
+                      </span>
                     )}
                     {sortBy !== undefined && (
-                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">Сортировка: {sortBy === 0 ? 'Имя' : sortBy === 1 ? 'Авторизации' : 'Сессия'}</span>
+                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">
+                        Сортировка: {sortBy === 0 ? 'Имя' : sortBy === 1 ? 'Авторизации' : 'Сессия'}
+                      </span>
                     )}
-                    {sortDesc && <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">По убыванию</span>}
+                    {sortDesc && (
+                      <span className="px-2 py-1 text-xs rounded bg-muted text-muted-foreground">
+                        По убыванию
+                      </span>
+                    )}
                   </div>
                 )}
               </form>
