@@ -1,4 +1,7 @@
+"use client";
+
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 import { config } from '@/core/configs';
 import {
@@ -13,13 +16,7 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import logo from '@/assets/logos/logo.svg';
 
-export const metadata = {
-  title: 'Gml Первый запуск',
-};
 
-"use client";
-
-import { useRouter } from 'next/navigation';
 
 export default function MntPage() {
   const router = useRouter();
