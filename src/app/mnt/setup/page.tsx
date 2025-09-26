@@ -84,6 +84,22 @@ export default function MntSetupPage() {
         }
         throw new Error(readable);
       }
+      // Success: backend returns accessToken similar to signup. Save user like signup flow
+      try {
+        const json = await res.json();
+        const accessToken: string | undefined = json?.data?.accessToken;
+        if (accessToken) {
+          // Dynamically import to avoid SSR issues
+          const { setStorageAccessToken, setStorageProfile } = await import('@/shared/services');
+          setStorageAccessToken(accessToken);
+          const payloadRaw = accessToken.split('.')[1];
+          const payload = atob(payloadRaw);
+          const profile = JSON.parse(payload);
+          setStorageProfile(profile);
+        }
+      } catch {
+        // ignore if response body is empty or malformed; navigation will still proceed
+      }
       router.push('/dashboard');
     } catch (e: any) {
       const message: string = e?.message || '';
