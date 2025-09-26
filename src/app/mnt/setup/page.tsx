@@ -50,6 +50,32 @@ export default function MntSetupPage() {
                 onChange={(e) => setBackendUrl(e.target.value)}
               />
             </label>
+            <label className="grid gap-2 text-sm">
+              <span>Имя пользователя администратора</span>
+              <input
+                id="adminUsername"
+                className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="admin"
+              />
+            </label>
+            <label className="grid gap-2 text-sm">
+              <span>Пароль администратора</span>
+              <input
+                id="adminPassword"
+                type="password"
+                className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="Введите пароль"
+              />
+            </label>
+            <label className="grid gap-2 text-sm">
+              <span>Подтверждение пароля</span>
+              <input
+                id="confirmPassword"
+                type="password"
+                className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                placeholder="Подтвердите пароль"
+              />
+            </label>
           </CardContent>
           <CardFooter className="justify-end">
             <div className="action-block flex gap-2">
