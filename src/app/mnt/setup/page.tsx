@@ -54,8 +54,33 @@ export default function MntSetupPage() {
         credentials: 'include',
       });
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `Request failed with status ${res.status}`);
+        // Try to parse JSON error and build a readable message
+        let readable = `Request failed with status ${res.status}`;
+        const contentType = res.headers.get('content-type') || '';
+        try {
+          if (contentType.includes('application/json')) {
+            const data: any = await res.json();
+            const base = (typeof data?.message === 'string' && data.message) || '';
+            const details = Array.isArray(data?.errors) ? data.errors.filter((x: any) => typeof x === 'string') : [];
+            if (base || details.length) {
+              readable = [base, details.join('\n')].filter(Boolean).join('\n');
+            }
+          } else {
+            const text = await res.text();
+            // Some backends return JSON string as text; try to parse
+            try {
+              const data: any = JSON.parse(text);
+              const base = (typeof data?.message === 'string' && data.message) || '';
+              const details = Array.isArray(data?.errors) ? data.errors.filter((x: any) => typeof x === 'string') : [];
+              readable = [base, details.join('\n')].filter(Boolean).join('\n') || text || readable;
+            } catch {
+              readable = text || readable;
+            }
+          }
+        } catch {
+          // ignore parsing errors and use default readable
+        }
+        throw new Error(readable);
       }
       router.push('/dashboard');
     } catch (e: any) {
