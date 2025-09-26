@@ -58,7 +58,7 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
     }
   }, [platform, isLoading, form]);
 
-  const currentProtocol = extractProtocol(process.env.NEXT_PUBLIC_BACKEND_URL);
+  const currentProtocol = typeof window !== 'undefined' ? extractProtocol(`${window.location.origin}/api/v1`) : undefined;
 
   const watchRegistration = form.watch('registrationIsEnabled');
   const watchStorageType = form.watch('storageType');

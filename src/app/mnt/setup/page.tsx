@@ -20,7 +20,9 @@ import logo from '@/assets/logos/logo.svg';
 
 export default function MntSetupPage() {
   const router = useRouter();
-  const [backendUrl, setBackendUrl] = useState(process.env.NEXT_PUBLIC_BACKEND_URL || '');
+  const [backendUrl, setBackendUrl] = useState(
+      typeof window !== 'undefined' ? `${window.location.origin}/api/v1` : ''
+    );
   const [projectName, setProjectName] = useState('');
   const [adminUsername, setAdminUsername] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
@@ -156,7 +158,7 @@ export default function MntSetupPage() {
                 <input
                   id="backendAddress"
                   className={`w-full rounded-md border bg-background pr-8 pl-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${mismatch ? 'border-[#E3DEAA]' : ''}`}
-                  placeholder={process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.example.com'}
+                  placeholder={typeof window !== 'undefined' ? `${window.location.origin}/api/v1` : 'https://api.example.com'}
                   value={backendUrl}
                   onChange={(e) => {
                     setBackendUrl(e.target.value);

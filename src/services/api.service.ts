@@ -8,8 +8,16 @@ import {
   removeStorageTokens,
 } from '@/shared/services';
 
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin + '/api/v1';
+  }
+  // SSR or build time fallback: use relative path so browser will resolve current origin
+  return '/api/v1';
+};
+
 const OPTIONS: CreateAxiosDefaults = {
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+  baseURL: getBaseUrl(),
   withCredentials: true,
 };
 
