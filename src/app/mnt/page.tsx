@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,9 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import logo from '@/assets/logos/logo.svg';
 
-
+{
+  config.name;
+}
 
 export default function MntPage() {
   const router = useRouter();
@@ -82,7 +84,9 @@ export default function MntPage() {
               <Button id="restoreButton" variant="secondary">
                 Восстановить из резервной копии
               </Button>
-              <Button id="proceedButton" onClick={() => router.push('/mnt/setup')}>Продолжить</Button>
+              <Button id="proceedButton" onClick={() => router.push('/mnt/license')}>
+                Продолжить
+              </Button>
             </div>
           </CardFooter>
         </Card>
