@@ -14,6 +14,8 @@ import {
   CardTitle,
 } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import logo from '@/assets/logos/logo.svg';
 
 export default function MntSetupPage() {
@@ -65,6 +67,19 @@ export default function MntSetupPage() {
     }
   }
 
+  // Compute protocols and mismatch for tooltip/visual warning
+  const pageProto = typeof window !== 'undefined' ? window.location.protocol.replace(':', '') : '';
+  let backendProto = '';
+  try {
+    if (backendUrl) {
+      const u = new URL(backendUrl.startsWith('http') ? backendUrl : `https://${backendUrl}`);
+      backendProto = u.protocol.replace(':', '');
+    }
+  } catch {
+    backendProto = '';
+  }
+  const mismatch = Boolean(pageProto && backendProto && pageProto !== backendProto);
+
   return (
     <div className="min-h-screen p-4 sm:p-10 flex flex-col items-center justify-center gap-6">
       <Image src={logo} alt="Gml Frontend" className="w-12 sm:w-16" />
@@ -89,15 +104,50 @@ export default function MntSetupPage() {
             </label>
             <label className="grid gap-2 text-sm">
               <span>Адрес бекенда</span>
-
-              <input
-                id="backendAddress"
-                className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                placeholder={process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.example.com'}
-                value={backendUrl}
-                onChange={(e) => setBackendUrl(e.target.value)}
-              />
+              <div className="relative">
+                <input
+                  id="backendAddress"
+                  className={`w-full rounded-md border bg-background pr-8 pl-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${mismatch ? 'border-[#E3DEAA]' : ''}`}
+                  placeholder={process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.example.com'}
+                  value={backendUrl}
+                  onChange={(e) => setBackendUrl(e.target.value)}
+                />
+                {mismatch && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-2 my-auto inline-flex h-5 w-5 items-center justify-center rounded-full border text-[11px] font-semibold cursor-help select-none"
+                        aria-label="Предупреждение о смешанном контенте"
+                        title="Предупреждение"
+                        tabIndex={-1}
+                        style={{
+                          color: '#E3DEAA',
+                          borderColor: '#E3DEAA',
+                          backgroundColor: 'color-mix(in oklab, #E3DEAA 10%, transparent)',
+                        }}
+                      >
+                        ?
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="p-0 border-0 bg-transparent shadow-none">
+                      <Alert variant="warning" className="max-w-sm">
+                        <AlertTitle>
+                          Возможная ошибка смешанного контента (mixed content)
+                        </AlertTitle>
+                        <AlertDescription>
+                          Страница открыта по протоколу <b>{pageProto.toUpperCase()}</b>, а адрес
+                          бекенда указан с протоколом <b>{backendProto.toUpperCase()}</b>. Браузер
+                          может заблокировать запросы из-за несовпадения протоколов. Рекомендуется
+                          использовать одинаковый протокол (например, HTTPS для обоих адресов).
+                        </AlertDescription>
+                      </Alert>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
             </label>
+
             <label className="grid gap-2 text-sm">
               <span>Имя пользователя администратора</span>
               <input
