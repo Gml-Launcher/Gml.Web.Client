@@ -5,13 +5,20 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import { config } from '@/core/configs';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import logo from '@/assets/logos/logo.svg';
 
 export default function MntSetupPage() {
   const router = useRouter();
-  const [backendUrl, setBackendUrl] = useState('');
+  const [backendUrl, setBackendUrl] = useState(process.env.NEXT_PUBLIC_BACKEND_URL || '');
   const [projectName, setProjectName] = useState('');
   const [adminUsername, setAdminUsername] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
@@ -82,10 +89,11 @@ export default function MntSetupPage() {
             </label>
             <label className="grid gap-2 text-sm">
               <span>Адрес бекенда</span>
+
               <input
                 id="backendAddress"
                 className="w-full rounded-md border bg-background px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                placeholder="https://api.example.com"
+                placeholder={process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.example.com'}
                 value={backendUrl}
                 onChange={(e) => setBackendUrl(e.target.value)}
               />
