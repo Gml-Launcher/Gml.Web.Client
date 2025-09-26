@@ -20,7 +20,11 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
 import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from '@/shared/hooks';
 import { getStorageAccessToken, getStorageProfile } from '@/shared/services';
-import { FileListBaseEntity, FileListFolderBaseEntity } from '@/shared/api/contracts';
+import {
+  FileListBaseEntity,
+  FileListFolderBaseEntity,
+  GameLoaderType,
+} from '@/shared/api/contracts';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Button } from '@/shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -39,7 +43,6 @@ import { FolderTable } from '@/widgets/folder-table';
 import { GamePlayers } from '@/widgets/game-players';
 import { useGamePlayerStore } from '@/widgets/game-players/lib/store';
 import { GameMods } from '@/widgets/game-mods';
-import { GameLoaderType } from '@/shared/api/contracts';
 
 export const ProfilePage = ({ params }: { params: { name: string } }) => {
   const account = getStorageProfile();
@@ -59,7 +62,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   useEffect(() => {
     if (account && accessToken) {
       mutate({
-        UserName: account.login,
+        UserName: account.name,
         ProfileName: decodeURIComponent(params.name),
         UserAccessToken: accessToken,
         UserUuid: 'uuid',
