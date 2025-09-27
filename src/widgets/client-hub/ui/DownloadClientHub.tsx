@@ -28,7 +28,6 @@ import {
 } from '@/shared/ui/command';
 import { Separator } from '@/shared/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { useGetJavaVersions } from '@/shared/hooks';
 
 interface DownloadClientHubProps {
   profile?: ProfileExtendedBaseEntity;
@@ -57,7 +56,8 @@ export function DownloadClientHub(props: DownloadClientHubProps) {
     logs,
   } = useConnectionHub(props);
 
-  const javaVersions = useGetJavaVersions();
+  // const javaVersions = useGetJavaVersions();
+  const javaVersions: { data?: JavaVersionBaseEntity[] } = { data: [] };
 
   const form = useForm<RestoreProfileSchemaType>();
 
