@@ -124,12 +124,9 @@ export function PlayersTable() {
 
   return (
     <>
-      {isPending ? (
-        <PlayersTableSkeleton />
-      ) : isError ? (
-        <span>Error: {error.message}</span>
-      ) : (
-        <div className="flex flex-col gap-4">
+      {/* Keep filters always mounted to preserve focus */}
+      {isError && <span>Error: {error.message}</span>}
+      <div className="flex flex-col gap-4" style={{ opacity: isPending ? 0.6 : 1 }}>
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
@@ -392,7 +389,6 @@ export function PlayersTable() {
           )}
           <div ref={ref} style={{ height: '10px' }} />
         </div>
-      )}
     </>
   );
 }
