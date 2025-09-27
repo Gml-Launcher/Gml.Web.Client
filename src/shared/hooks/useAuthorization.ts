@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 import { ApiPostSignInRequest, TPostSignUpRequest } from '@/shared/api/contracts';
 import { DASHBOARD_PAGES } from '@/shared/routes';
-import { authService } from '@/shared/services';
+import { authService, getStorageAccessToken } from '@/shared/services';
 import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
 
 export const useRegistration = () => {
@@ -13,12 +13,19 @@ export const useRegistration = () => {
   return useMutation({
     mutationKey: ['signup'],
     mutationFn: (data: TPostSignUpRequest) => authService.signUp(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Успешная регистрация', {
         description: 'Добро пожаловать в платформу',
       });
 
-      route.push(DASHBOARD_PAGES.PROFILES);
+      const waitForCookie = async (timeoutMs = 1000, stepMs = 50) => {
+        const start = Date.now();
+        while (!getStorageAccessToken() && Date.now() - start < timeoutMs) {
+          await new Promise((r) => setTimeout(r, stepMs));
+        }
+      };
+      await waitForCookie();
+      route.replace(DASHBOARD_PAGES.PROFILES);
     },
     onError: (error) => {
       isAxiosError({
@@ -36,11 +43,19 @@ export const useLogin = () => {
   return useMutation({
     mutationKey: ['signin'],
     mutationFn: (data: ApiPostSignInRequest) => authService.signIn(data),
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success('Успешная авторизация', {
         description: 'Добро пожаловать в платформу',
       });
-      route.push(DASHBOARD_PAGES.PROFILES);
+
+      const waitForCookie = async (timeoutMs = 1000, stepMs = 50) => {
+        const start = Date.now();
+        while (!getStorageAccessToken() && Date.now() - start < timeoutMs) {
+          await new Promise((r) => setTimeout(r, stepMs));
+        }
+      };
+      await waitForCookie();
+      route.replace(DASHBOARD_PAGES.PROFILES);
     },
     onError: (error) => {
       isAxiosError({
