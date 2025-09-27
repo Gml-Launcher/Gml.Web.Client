@@ -46,6 +46,24 @@ class AuthService {
     return data;
   }
 
+  async refresh(): Promise<{ accessToken: string; expiresIn: number }> {
+    // The API returns ResponseMessage<AuthTokensDto>
+    const { data } = await $api.get<{
+      data: { accessToken: string; expiresIn: number };
+    }>(`${this.BASE_URL}/refresh`);
+
+    const { accessToken, expiresIn } = data.data;
+    setStorageAccessToken(accessToken);
+
+    // Update profile from JWT payload so that exp is current
+    const payloadRaw = accessToken.split('.')[1];
+    const payload = atob(payloadRaw);
+    const profile = JSON.parse(payload) as ApiUserBaseEntity;
+    setStorageProfile(profile);
+
+    return { accessToken, expiresIn };
+  }
+
   async logout() {
     removeStorageTokens();
     removeStorageRecloudIDAccessToken();
