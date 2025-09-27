@@ -38,10 +38,10 @@ export function PlayersTable() {
   const [take, setTake] = useState(20);
 
   const [debouncedFilters, setDebouncedFilters] = useState({
-    findName: '',
-    findUuid: '',
-    findIp: '',
-    findHwid: '',
+    findName: undefined as string | undefined,
+    findUuid: undefined as string | undefined,
+    findIp: undefined as string | undefined,
+    findHwid: undefined as string | undefined,
     onlyBlocked: false,
     onlyDeviceBlocked: false,
     sortBy: undefined as 0 | 1 | 2 | undefined,
