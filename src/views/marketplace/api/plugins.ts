@@ -5,7 +5,10 @@ import {
 } from '@/shared/services/AuthTokenService'; // Helper function to get the API base URL
 
 // Helper function to get the API base URL
-export const getApiBaseUrl = () => (process.env.NEXT_PUBLIC_BACKEND_URL as string)?.slice(0, -7);
+export const getApiBaseUrl = () => {
+  if (typeof window !== 'undefined') return window.location.origin;
+  return '';
+};
 
 // Request type for installing a plugin
 export type PluginInstallRequest = {

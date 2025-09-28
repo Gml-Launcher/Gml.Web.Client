@@ -24,7 +24,7 @@ import { Skeleton } from '@/shared/ui/skeleton';
 import curseforge from '@/assets/logos/curseforge.ico';
 import vk from '@/assets/logos/vk.svg';
 
-export const EditSettingsPlatformForm = () => {
+export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> = ({ showOnlyApiKeys = false }) => {
   const { data: platform, isLoading } = useSettingsPlatform();
   const { mutateAsync, isPending } = useEditSettingsPlatform();
 
@@ -58,7 +58,7 @@ export const EditSettingsPlatformForm = () => {
     }
   }, [platform, isLoading, form]);
 
-  const currentProtocol = extractProtocol(process.env.NEXT_PUBLIC_BACKEND_URL);
+  const currentProtocol = typeof window !== 'undefined' ? extractProtocol(`${window.location.origin}/api/v1`) : undefined;
 
   const watchRegistration = form.watch('registrationIsEnabled');
   const watchStorageType = form.watch('storageType');

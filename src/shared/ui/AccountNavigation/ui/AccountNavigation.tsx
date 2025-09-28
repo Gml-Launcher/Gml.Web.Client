@@ -11,7 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { getStorageProfile, removeStorageProfile, removeStorageTokens, removeStorageRecloudIDAccessToken } from '@/shared/services';
+import {
+  getStorageProfile,
+  removeStorageProfile,
+  removeStorageRecloudIDAccessToken,
+  removeStorageTokens,
+} from '@/shared/services';
 import { AUTH_PAGES } from '@/shared/routes';
 
 export const AccountNavigation = () => {
@@ -36,7 +41,7 @@ export const AccountNavigation = () => {
       <DropdownMenuContent align="end" className="min-w-48">
         <div className="px-2 py-1.5 text-sm font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{profile?.login}</p>
+            <p className="text-sm font-medium leading-none">{profile?.name}</p>
             <p className="text-xs leading-none text-muted-foreground">{profile?.email}</p>
           </div>
         </div>

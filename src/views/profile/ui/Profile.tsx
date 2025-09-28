@@ -20,7 +20,11 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { OsArchitectureEnum, OsTypeEnum } from '@/shared/enums';
 import { useDeleteFilesWhitelist, useDeleteFolderWhitelist, useProfile } from '@/shared/hooks';
 import { getStorageAccessToken, getStorageProfile } from '@/shared/services';
-import { FileListBaseEntity, FileListFolderBaseEntity } from '@/shared/api/contracts';
+import {
+  FileListBaseEntity,
+  FileListFolderBaseEntity,
+  GameLoaderType,
+} from '@/shared/api/contracts';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Button } from '@/shared/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
@@ -58,7 +62,7 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
   useEffect(() => {
     if (account && accessToken) {
       mutate({
-        UserName: account.login,
+        UserName: account.name,
         ProfileName: decodeURIComponent(params.name),
         UserAccessToken: accessToken,
         UserUuid: 'uuid',
@@ -73,6 +77,15 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
       setPlayers(profile?.usersWhiteList);
     }
   }, [profile, setPlayers]);
+
+  const isVanilla = profile?.loader === GameLoaderType.VANILLA;
+
+  useEffect(() => {
+    if (isVanilla && activeTab === 'mods') {
+      setActiveTab('main');
+      router.push(`/dashboard/profile/${params.name}?tab=main`, { scroll: false });
+    }
+  }, [isVanilla, activeTab, router, params.name]);
 
   if (isPending || !profile) return <ProfileLoading />;
 
@@ -140,9 +153,11 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
           <TabsTrigger className="w-full h-10" value="players">
             Игроки
           </TabsTrigger>
-          <TabsTrigger className="w-full h-10" value="mods">
-            Моды
-          </TabsTrigger>
+          {!isVanilla && (
+            <TabsTrigger className="w-full h-10" value="mods">
+              Моды
+            </TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="main" className={classes.tabs__content}>
           <Section
@@ -276,11 +291,13 @@ export const ProfilePage = ({ params }: { params: { name: string } }) => {
             <GamePlayers profile={profile} />
           </Section>
         </TabsContent>
-        <TabsContent value="mods" className={classes.tabs__content}>
-          <Section title="Моды" subtitle="Управление игровыми модификациями">
-            <GameMods profile={profile} />
-          </Section>
-        </TabsContent>
+        {!isVanilla && (
+          <TabsContent value="mods" className={classes.tabs__content}>
+            <Section title="Моды" subtitle="Управление игровыми модификациями">
+              <GameMods profile={profile} />
+            </Section>
+          </TabsContent>
+        )}
       </Tabs>
     </>
   );

@@ -14,13 +14,14 @@ export type TPostSignUpResponse = ResponseBaseEntity & {
 };
 
 // Авторизация
-export type TPostSignInRequest = {
+export type ApiPostSignInRequest = {
   login: string;
   password: string;
 };
-export type TPostSignInResponse = ResponseBaseEntity & {
-  data: UserBaseEntity & {
+export type ApiPostSignInResponse = ResponseBaseEntity & {
+  data: {
     accessToken: string;
+    expiresIn: number;
   };
 };
 
@@ -28,7 +29,14 @@ export type TPostSignInResponse = ResponseBaseEntity & {
 export type TGetPlayersRequest = {
   take: number;
   offset: number;
-  findName: string;
+  findName?: string;
+  findUuid?: string;
+  findIp?: string;
+  findHwid?: string;
+  onlyBlocked?: boolean;
+  onlyDeviceBlocked?: boolean;
+  sortBy?: 0 | 1 | 2;
+  sortDesc?: boolean;
 };
 export type TGetPlayersResponse = ResponseBaseEntity & {
   data: PlayerBaseEntity[];
@@ -36,7 +44,11 @@ export type TGetPlayersResponse = ResponseBaseEntity & {
 
 // Бан юзера
 export type TPostBanPlayersRequest = string[];
+export type TPostBanPlayersOptions = { deviceBlock?: boolean };
 export type TPostBanPlayersResponse = ResponseBaseEntity & {};
+
+// Разбан юзера
+export type TPostPardonPlayersOptions = { deviceUnblock?: boolean };
 
 // Удаление юзера
 export type TPostRemovePlayersRequest = string[];

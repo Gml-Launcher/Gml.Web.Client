@@ -14,20 +14,35 @@ export const playersKeys = {
   removePlayer: () => [...modsKeys.all, 'pardonPlayer'] as const,
 };
 
-export const usePlayers = (search: string) => {
+export type PlayersFilters = {
+  take?: number;
+  findName?: string;
+  findUuid?: string;
+  findIp?: string;
+  findHwid?: string;
+  onlyBlocked?: boolean;
+  onlyDeviceBlocked?: boolean;
+  sortBy?: 0 | 1 | 2;
+  sortDesc?: boolean;
+};
+
+export const usePlayers = (filters: string | PlayersFilters) => {
+  const normalized: PlayersFilters = typeof filters === 'string' ? { findName: filters } : filters || {};
+  const take = normalized.take ?? 20;
+
   return useInfiniteQuery({
-    queryKey: playersKeys.all,
+    queryKey: [...playersKeys.all, normalized],
     initialPageParam: 0,
     queryFn: ({ pageParam }) =>
       playersService.getPlayers({
-        take: 20,
+        take,
         offset: pageParam,
-        findName: search,
+        ...normalized,
       }),
     select: (data) => data.pages.flatMap((page) => page.data),
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.data.length < 10) return undefined;
-      return allPages.length * 10;
+      if (lastPage.data.length < take) return undefined;
+      return allPages.length * take;
     },
   });
 };
@@ -38,10 +53,28 @@ export const useBanPlayer = () => {
   return useMutation({
     mutationKey: playersKeys.banPlayer(),
     mutationFn: (data: TPostBanPlayersRequest) => playersService.banPlayer(data),
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: playersKeys.all });
       toast.success('Успешно', {
         description: `Пользователь заблокирован`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useBanPlayerHardware = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: playersKeys.banPlayer(),
+    mutationFn: (data: TPostBanPlayersRequest) => playersService.banPlayer(data, { deviceBlock: true }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: playersKeys.all });
+      toast.success('Успешно', {
+        description: `Пользователь заблокирован по железу`,
       });
     },
     onError: (error) => {
@@ -74,10 +107,28 @@ export const usePardonPlayer = () => {
   return useMutation({
     mutationKey: playersKeys.pardonPlayer(),
     mutationFn: (data: TPostBanPlayersRequest) => playersService.pardonPlayer(data),
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: playersKeys.all });
       toast.success('Успешно', {
         description: `Пользователь разблокирован`,
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const usePardonPlayerHardware = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: playersKeys.pardonPlayer(),
+    mutationFn: (data: TPostBanPlayersRequest) => playersService.pardonPlayer(data, { deviceUnblock: true }),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: playersKeys.all });
+      toast.success('Успешно', {
+        description: `Пользователь разблокирован по железу`,
       });
     },
     onError: (error) => {

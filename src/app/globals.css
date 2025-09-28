@@ -88,6 +88,21 @@
     }
 }
 
+/* Page transition animations for installer (/mnt) */
+.page-transition {
+    animation: pageFadeIn .25s ease-out, pageSlideIn .25s ease-out;
+}
+
+@keyframes pageFadeIn {
+    from { opacity: 0 }
+    to { opacity: 1 }
+}
+
+@keyframes pageSlideIn {
+    from { transform: translateY(8px) }
+    to { transform: translateY(0) }
+}
+
 .card-container {
     opacity: .5;
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
