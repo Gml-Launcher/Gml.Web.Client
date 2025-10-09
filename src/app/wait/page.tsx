@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import logo from '@/assets/logos/logo.svg';
 import { config } from '@/core/configs';
 import {
