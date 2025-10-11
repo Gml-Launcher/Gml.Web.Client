@@ -75,7 +75,7 @@ export default function MntPage() {
             <p className="text-sm">
               Расположение каталога данных:{' '}
               <b>
-                <span className="font-mono bg-white/10 p-2 rounded-md">/srv/gml/GmlBackend</span>
+                <span className="font-mono bg-white/10 p-2 rounded-md">/srv/gml</span>
               </b>
             </p>
           </CardContent>
