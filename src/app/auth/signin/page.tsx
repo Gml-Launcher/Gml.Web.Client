@@ -1,10 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 import classes from './styles.module.css';
 
 import { LoginPluginScriptViewer, SignInForm } from '@/features/auth-credentials-form';
-import { AUTH_PAGES } from '@/shared/routes';
 import logo from '@/assets/logos/logo.svg';
 
 export default function Page() {
@@ -22,12 +20,12 @@ export default function Page() {
             </div>
             <SignInForm />
             <LoginPluginScriptViewer />
-            <div className={classes.login__registration}>
-              Нет аккаунта?{' '}
-              <Link href={AUTH_PAGES.SIGN_UP} className={classes.login__link}>
-                Регистрация
-              </Link>
-            </div>
+            {/*<div className={classes.login__registration}>*/}
+            {/*  Нет аккаунта?{' '}*/}
+            {/*  <Link href={AUTH_PAGES.SIGN_UP} className={classes.login__link}>*/}
+            {/*    Регистрация*/}
+            {/*  </Link>*/}
+            {/*</div>*/}
           </div>
         </div>
         <div className={classes.login__banner}>
