@@ -66,7 +66,7 @@ export function AuthenticationFormAzuriom({ className, onOpenChange, ...props }:
               <AlertDescription>
                 в Azuriom есть проблема, которая не позволит заходить другим людям на ваши сервера!
                 <br />
-                <a href="https://gml-launcher.github.io/Gml.Docs/gml-auth-azuriom.html">
+                <a href="https://wiki.recloud.tech/docs/gml-launcher/backend/authorization/azuriom/">
                   <strong className="underline">Прочитайте эту статью</strong>
                 </a>
                 , чтобы узнать подробности.
