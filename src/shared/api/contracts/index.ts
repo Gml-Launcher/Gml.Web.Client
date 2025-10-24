@@ -25,3 +25,7 @@ export * from '@/shared/api/contracts/gameservers/zod';
 // Контракты для уведомлений
 export * from '@/shared/api/contracts/notification/schemas';
 export * from '@/shared/api/contracts/notification/requests';
+
+// Applications
+export * from '@/shared/api/contracts/applications/schemas';
+export * from '@/shared/api/contracts/applications/requests';
