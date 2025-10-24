@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { RolesPermissionsTab } from './RolesPermissionsTab';
+import { ApplicationsTab } from './ApplicationsTab';
 import { ApiKeysTab } from './ApiKeysTab';
 
 import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form';
@@ -31,10 +32,21 @@ export const SettingsPage = () => {
             <TabsTrigger className="w-full h-10" value="settings">
               Основные
             </TabsTrigger>
-            <TabsTrigger className="w-full h-10 flex items-center justify-between gap-2" value="roles">
+            <TabsTrigger
+              className="w-full h-10 flex items-center justify-between gap-2"
+              value="roles"
+            >
               <span>Роли и права</span>
+            </TabsTrigger>
+            <TabsTrigger
+              className="w-full h-10 flex items-center justify-between gap-2"
+              value="applications"
+            >
+              <span>Приложения</span>
               <span className="ml-2">
-                <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30">Beta</span>
+                <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30">
+                  Beta
+                </span>
               </span>
             </TabsTrigger>
             {/*<TabsTrigger className="w-full h-10" value="api-keys">*/}
@@ -46,6 +58,9 @@ export const SettingsPage = () => {
           </TabsContent>
           <TabsContent className="w-full" value="roles">
             <RolesPermissionsTab />
+          </TabsContent>
+          <TabsContent className="w-full" value="applications">
+            <ApplicationsTab />
           </TabsContent>
           <TabsContent className="w-full" value="api-keys">
             <ApiKeysTab />
