@@ -31,6 +31,8 @@ export interface PlayerBaseEntity {
   expiredDate: string;
   textureSkinUrl: string;
   textureCloakUrl: string;
+  externalTextureSkinUrl: string;
+  externalTextureCloakUrl: string;
   textureSkinGuid: string;
   textureCloakGuid: string;
   fullSkinUrl?: any;

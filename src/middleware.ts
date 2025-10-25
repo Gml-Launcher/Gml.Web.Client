@@ -12,7 +12,7 @@ const protectedRoutes = [
   DASHBOARD_PAGES.PROFILES,
   DASHBOARD_PAGES.PROFILE,
 ];
-const publicRoutes = ['/', AUTH_PAGES.HOME, AUTH_PAGES.SIGN_IN, AUTH_PAGES.SIGN_UP];
+const publicRoutes = ['/', AUTH_PAGES.HOME, AUTH_PAGES.SIGN_IN];
 
 export async function middleware(request: NextRequest) {
   const {
