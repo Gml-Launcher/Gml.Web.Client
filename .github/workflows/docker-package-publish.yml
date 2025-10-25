@@ -192,7 +192,7 @@ jobs:
       - name: Sign image with cosign
         if: github.event_name != 'pull_request'
         env:
-          DIGEST: ${{ steps.build.outputs.digest }}
+          DIGEST: ${{ steps.create-manifest.outputs.digest }}
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |
           echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
