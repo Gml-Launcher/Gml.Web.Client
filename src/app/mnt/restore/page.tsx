@@ -41,7 +41,7 @@ export default function MntRestorePage() {
           setKeys(list);
           setSelectedKey((prev) => prev || list[0] || '');
         }
-      } catch (error) {
+      } catch (error: any) {
         isAxiosError({
           toast,
           error,
@@ -90,7 +90,7 @@ export default function MntRestorePage() {
       toast.success('Процесс восстановления запущен, завершите установку');
       // Redirect to setup page after success
       setTimeout(() => router.push('/mnt/setup'), 500);
-    } catch (error) {
+    } catch (error: any) {
       isAxiosError({ toast, error, customDescription: 'Не удалось запустить восстановление' });
     } finally {
       // keep the progress at its current value for a short moment for better UX
