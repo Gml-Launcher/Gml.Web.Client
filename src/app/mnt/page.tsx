@@ -81,7 +81,7 @@ export default function MntPage() {
           </CardContent>
           <CardFooter className="justify-end">
             <div className=" action-block flex gap-2">
-              <Button id="restoreButton" variant="secondary">
+              <Button id="restoreButton" variant="secondary" onClick={() => router.push('/mnt/restore')}>
                 Восстановить из резервной копии
               </Button>
               <Button id="proceedButton" onClick={() => router.push('/mnt/license')}>
