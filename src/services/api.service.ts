@@ -102,35 +102,5 @@ $api.interceptors.response.use(
     }
 
     return response;
-  },
-  (error) => {
-    try {
-      const status = error?.response?.status;
-      const data = error?.response?.data ?? {};
-      const errors: string[] | undefined = data?.errors;
-      const message: string | undefined = data?.message || error?.message;
-
-      if (Array.isArray(errors) && errors.length) {
-        errors.forEach((e: any) => {
-          const text = typeof e === 'string' ? e : JSON.stringify(e);
-          toast.error(text);
-        });
-      } else if (message) {
-        toast.error(message);
-      } else {
-        toast.error('Произошла ошибка запроса');
-      }
-
-      if (status === HttpStatusCode.Unauthorized) {
-        removeStorageProfile();
-        removeStorageTokens();
-        removeStorageRecloudIDAccessToken();
-      }
-    } catch (_) {
-      // Fallback toast if parsing fails
-      toast.error('Произошла ошибка запроса');
-    }
-
-    return Promise.reject(error);
-  },
+  }
 );
