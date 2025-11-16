@@ -21,6 +21,7 @@ import { Input } from '@/shared/ui/input';
 import { enumValues } from '@/shared/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@/shared/ui/alert';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import curseforge from '@/assets/logos/curseforge.ico';
 import vk from '@/assets/logos/vk.svg';
 
@@ -78,7 +79,16 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-y-4 w-full lg:w-[58rem]">
-          <div className="flex flex-col gap-y-4 gap-x-8">
+          <Tabs className="flex flex-col md:flex-row gap-6 items-start" defaultValue="general" aria-orientation="vertical" orientation="vertical">
+            <TabsList className="flex-col h-auto items-start min-w-44">
+              <TabsTrigger className="w-full h-10" value="general">Общие</TabsTrigger>
+              <TabsTrigger className="w-full h-10" value="errors">Ошибки</TabsTrigger>
+              <TabsTrigger className="w-full h-10" value="textures">Текстуры</TabsTrigger>
+              <TabsTrigger className="w-full h-10" value="storage">Хранилище</TabsTrigger>
+              <TabsTrigger className="w-full h-10" value="integrations">Интеграции</TabsTrigger>
+            </TabsList>
+            <TabsContent className="w-full" value="general">
+              <div className="flex flex-col gap-y-4 gap-x-8">
             <FormField
               control={form.control}
               name="registrationIsEnabled"
@@ -106,6 +116,10 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
                 </FormItem>
               )}
             />
+            </div>
+            </TabsContent>
+            <TabsContent className="w-full" value="errors">
+              <div className="flex flex-col gap-y-4 gap-x-8">
             {/* Sentry auto-clear toggle */}
             <FormField
               control={form.control}
@@ -178,6 +192,10 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
                 </FormItem>
               )}
             />
+            </div>
+            </TabsContent>
+            <TabsContent className="w-full" value="textures">
+              <div className="flex flex-col gap-y-4 gap-x-8">
             <div className="flex flex-col gap-6 w-full rounded-lg border p-4">
               <FormField
                 control={form.control}
@@ -229,6 +247,9 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
               )}
             </div>
           </div>
+          </TabsContent>
+          <TabsContent className="w-full" value="storage">
+            <div className="flex flex-col gap-y-4 gap-x-8">
           <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
             <div className="flex flex-col gap-y-1 w-1/2">
               <div className="flex flex-row items-center gap-x-1 mb-2">
@@ -377,6 +398,10 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
             </div>
           )}
 
+          </div>
+          </TabsContent>
+          <TabsContent className="w-full" value="integrations">
+            <div className="flex flex-col gap-y-4 gap-x-8">
           <div className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
             <div className="flex flex-col gap-y-1 w-1/2">
               <div className="flex flex-row items-center gap-x-1 mb-2">
@@ -462,6 +487,10 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
               />
             </div>
           </div>
+
+          </div>
+          </TabsContent>
+          </Tabs>
 
           <div className="flex justify-end">
             {isLoading ? (
