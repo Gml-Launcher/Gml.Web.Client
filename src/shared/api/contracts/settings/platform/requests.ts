@@ -17,5 +17,9 @@ export type TPutSettingsPlatformRequest = {
   storageHost: string;
   storageLogin: string;
   storagePassword: string;
+  textureProtocol: number;
+  // Sentry auto-clear settings (TimeSpan serialized as string, e.g., "00:05:00", "1.00:00:00")
+  sentryNeedAutoClear: boolean;
+  sentryAutoClearPeriod: string;
 };
 export type TPutSettingsPlatformResponse = ResponseBaseEntity & {};

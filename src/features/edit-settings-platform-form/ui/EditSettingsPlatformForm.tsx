@@ -40,6 +40,8 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
       storageHost: '',
       storageLogin: '',
       storagePassword: '',
+      sentryNeedAutoClear: false,
+      sentryAutoClearPeriod: '00:05:00',
     },
   });
 
@@ -54,6 +56,8 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
         storageLogin: platform.storageLogin || '',
         storagePassword: '',
         textureProtocol: platform.textureProtocol,
+        sentryNeedAutoClear: platform.sentryNeedAutoClear ?? false,
+        sentryAutoClearPeriod: platform.sentryAutoClearPeriod || '00:05:00',
       });
     }
   }, [platform, isLoading, form]);
@@ -99,6 +103,78 @@ export const EditSettingsPlatformForm: React.FC<{ showOnlyApiKeys?: boolean }> =
                       <Switch checked={field.value} onCheckedChange={field.onChange} />
                     )}
                   </FormControl>
+                </FormItem>
+              )}
+            />
+            {/* Sentry auto-clear toggle */}
+            <FormField
+              control={form.control}
+              name="sentryNeedAutoClear"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <div className="flex flex-row items-center gap-x-1 mb-2">
+                      <UsersIcon className="mr-2 h-4 w-4" />
+                      <h6 className="text-sm font-bold">
+                        Нужно ли чистить ошибки автоматически? ({field.value ? 'Да' : 'Нет'})
+                      </h6>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      Если включено, ошибки Sentry будут очищаться по расписанию ниже
+                    </p>
+                  </div>
+                  <FormControl>
+                    {isLoading ? (
+                      <Skeleton className="w-12 h-6" />
+                    ) : (
+                      <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    )}
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            {/* Sentry auto-clear period select */}
+            <FormField
+              control={form.control}
+              name="sentryAutoClearPeriod"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between w-full rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <div className="flex flex-row items-center gap-x-1 mb-2">
+                      <ImagesIcon className="mr-2 h-4 w-4" />
+                      <h6 className="text-sm font-bold">Чистить:</h6>
+                    </div>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      Период автоматической очистки ошибок Sentry
+                    </p>
+                  </div>
+                  {isLoading ? (
+                    <Skeleton className="w-48 h-10" />
+                  ) : (
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      value={String(field.value)}
+                      disabled={!form.watch('sentryNeedAutoClear')}
+                    >
+                      <FormControl className="max-w-48">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Выберите период" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="00:01:00">Каждую минуту</SelectItem>
+                        <SelectItem value="00:05:00">Каждые 5 минут</SelectItem>
+                        <SelectItem value="00:10:00">Каждые 10 минут</SelectItem>
+                        <SelectItem value="00:15:00">Каждые 15 минут</SelectItem>
+                        <SelectItem value="00:30:00">Каждые 30 минут</SelectItem>
+                        <SelectItem value="01:00:00">Каждый час</SelectItem>
+                        <SelectItem value="02:00:00">Каждые 2 часа</SelectItem>
+                        <SelectItem value="12:00:00">Каждые 12 часов</SelectItem>
+                        <SelectItem value="1.00:00:00">Раз в сутки</SelectItem>
+                        <SelectItem value="7.00:00:00">Раз в неделю</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
                 </FormItem>
               )}
             />
