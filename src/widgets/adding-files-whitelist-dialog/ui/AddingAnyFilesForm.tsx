@@ -23,11 +23,11 @@ export function AddingAnyFilesForm({ profile }: { profile: string }) {
 
     const directory = {
       profileName: profile,
-      directory: `/clients/${profile}/${value}`,
+      directory: value,
     };
 
     addDirectory(directory);
-    setValue(''); // Clear input after adding
+    setValue('');
   };
 
   return (
@@ -67,7 +67,7 @@ export function AddingAnyFilesForm({ profile }: { profile: string }) {
           <FormDescription className="mt-3 p-3 bg-muted/50 rounded-md border text-sm">
             Будет исключен файл:{' '}
             <span className="font-medium text-primary block mt-1 break-all">
-              {value ? `C:/Users/test/AppData/Roaming/launcher/clients/${profile}/${value}` : '—'}
+              {value ? `C:/Users/test/AppData/Roaming/{НазваниеВашегоЛаунчера}/${value}` : '—'}
             </span>
           </FormDescription>
         </FormItem>
