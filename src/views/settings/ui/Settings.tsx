@@ -5,12 +5,12 @@ import React from 'react';
 import { RolesPermissionsTab } from './RolesPermissionsTab';
 import { ApplicationsTab } from './ApplicationsTab';
 import { ApiKeysTab } from './ApiKeysTab';
+import { AuditSystemTab } from './AuditSystemTab';
 
 import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form';
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { DASHBOARD_PAGES } from '@/shared/routes';
-import { AuditSystemTab } from './AuditSystemTab';
 
 export const SettingsPage = () => {
   return (
