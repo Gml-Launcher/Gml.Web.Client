@@ -10,6 +10,7 @@ import { EditSettingsPlatformForm } from '@/features/edit-settings-platform-form
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { DASHBOARD_PAGES } from '@/shared/routes';
+import { AuditSystemTab } from './AuditSystemTab';
 
 export const SettingsPage = () => {
   return (
@@ -44,6 +45,12 @@ export const SettingsPage = () => {
             >
               <span>Приложения</span>
             </TabsTrigger>
+            <TabsTrigger
+              className="w-full h-10 flex items-center gap-2"
+              value="audit"
+            >
+              <span>Аудит системы</span>
+            </TabsTrigger>
             {/*<TabsTrigger className="w-full h-10" value="api-keys">*/}
             {/*  Api ключи*/}
             {/*</TabsTrigger>*/}
@@ -56,6 +63,9 @@ export const SettingsPage = () => {
           </TabsContent>
           <TabsContent className="w-full" value="applications">
             <ApplicationsTab />
+          </TabsContent>
+          <TabsContent className="w-full" value="audit">
+            <AuditSystemTab />
           </TabsContent>
           <TabsContent className="w-full" value="api-keys">
             <ApiKeysTab />
