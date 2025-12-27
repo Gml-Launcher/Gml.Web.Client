@@ -86,8 +86,7 @@ export const AddingFoldersWhitelistDialog = ({
             </div>
             <p className="text-sm text-muted-foreground">
               Будет исключена: C:/Users/test/AppData/Roaming/
-              {'{НазваниеВашегоЛаунчера}'}/clients/
-              {profileName}/{folder}
+              {'{НазваниеВашегоЛаунчера}'}/{folder}
             </p>
             <ul className="max-h-[200px] overflow-y-scroll">
               {folders.map((folder) => (

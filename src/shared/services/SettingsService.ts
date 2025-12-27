@@ -10,6 +10,7 @@ import {
 
 class SettingsService {
   private BASE_URL_PLATFORM = '/settings/platform';
+  private BASE_URL_RESTORE = '/settings/restore';
 
   async getPlatform(
     params?: TGetSettingsPlatformRequest,
@@ -21,6 +22,14 @@ class SettingsService {
     body: TPutSettingsPlatformRequest,
   ): Promise<AxiosResponse<TPutSettingsPlatformResponse>> {
     return await $api.put<TPutSettingsPlatformResponse>(this.BASE_URL_PLATFORM, body);
+  }
+
+  async getRestoreKeys(): Promise<AxiosResponse<{ data: string[] }>> {
+    return await $api.get<{ data: string[] }>(`${this.BASE_URL_RESTORE}/keys`);
+  }
+
+  async restoreByKey(key: string): Promise<AxiosResponse<unknown>> {
+    return await $api.post(`${this.BASE_URL_RESTORE}/${encodeURIComponent(key)}`, '');
   }
 }
 

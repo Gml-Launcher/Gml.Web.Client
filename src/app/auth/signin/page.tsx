@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import classes from './styles.module.css';
+import { AutoRefreshOnAuthPage } from './AutoRefreshOnAuthPage';
 
 import { LoginPluginScriptViewer, SignInForm } from '@/features/auth-credentials-form';
 import logo from '@/assets/logos/logo.svg';
@@ -8,6 +9,8 @@ import logo from '@/assets/logos/logo.svg';
 export default function Page() {
   return (
     <>
+      {/* Try to automatically refresh using HttpOnly refresh token and redirect to dashboard */}
+      <AutoRefreshOnAuthPage />
       <div className={classes.login}>
         <div className={classes['login__main-content']}>
           <div className={classes.login__form}>

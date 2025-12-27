@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect } from 'react';
 import Image from 'next/image';
 
 import logo from '@/assets/logos/logo.svg';
@@ -13,6 +16,15 @@ import {
 import { Icons } from '@/shared/ui/icons';
 
 export default function WaitPage() {
+  useEffect(() => {
+    // Reload the page every second to re-check backend availability
+    const id = setInterval(() => {
+      // Use location.reload to trigger Next server-side revalidation/route checks
+      window.location.reload();
+    }, 2500);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <div className="min-h-screen p-4 sm:p-10 flex flex-col items-center justify-center gap-6">
       <Image src={logo} alt="Gml Frontend" className="w-12 sm:w-16" />

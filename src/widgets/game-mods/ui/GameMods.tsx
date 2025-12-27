@@ -1,4 +1,4 @@
-import { FileIcon, PlusIcon } from '@radix-ui/react-icons';
+import { FileIcon, PlusIcon, MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { clsx } from 'clsx';
 
@@ -27,6 +27,9 @@ export const GameMods = ({ profile }: GameServersParams) => {
   const { mutateAsync: removeModMutate } = useRemoveProfileMod();
   const { data: detailsMods, isPending } = useDetailsMods();
   const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
+  // 🔍 Состояние для поиска
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -61,6 +64,14 @@ export const GameMods = ({ profile }: GameServersParams) => {
     await removeModMutate({ profileName: profile.profileName, modName: fileName });
   };
 
+  // 🔍 Фильтрация по названию мода
+  const filteredMods = mods?.filter((mod) =>
+    mod.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+  const filteredOptionalMods = optionalMods?.filter((mod) =>
+    mod.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return (
     <div className="grid gap-y-4 relative">
       {canEditModsList && (
@@ -74,17 +85,33 @@ export const GameMods = ({ profile }: GameServersParams) => {
           </Card>
         </div>
       )}
+
       <div
         className={clsx('flex flex-col md:flex-row gap-5', {
           'blur-sm': canEditModsList,
         })}
       >
+        {/* === Основные моды === */}
         <div className="flex flex-col gap-3 w-[calc(100vw-35px)] md:w-full">
-          <div className="text-xl font-bold">Список модов</div>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+            <div className="text-xl font-bold">Список модов</div>
+            {/* 🔍 Поле поиска */}
+            <div className="relative w-full md:w-[250px]">
+              <MagnifyingGlassIcon className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Поиск по модам..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+          </div>
+
           <Table className="border border-dashed rounded-2xl">
             <TableBody>
-              {mods &&
-                mods.map((mod, index) => (
+              {filteredMods && filteredMods.length > 0 ? (
+                filteredMods.map((mod, index) => (
                   <TableRow key={index}>
                     <TableCell key={index}>
                       <div className="flex items-center gap-2">
@@ -100,16 +127,24 @@ export const GameMods = ({ profile }: GameServersParams) => {
                         </Badge>
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-right">
                       <Button variant="link" onClick={() => removeMod(`${mod?.name}.jar`)}>
                         Удалить
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))}
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={2} className="text-center text-sm text-muted-foreground py-4">
+                    Моды не найдены
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
 
+          {/* === Добавление модов === */}
           <div className="flex flex-col md:flex-row gap-2">
             <div className="flex gap-2">
               <Label
@@ -122,29 +157,38 @@ export const GameMods = ({ profile }: GameServersParams) => {
               <Input
                 id="loadMod"
                 type="file"
-                multiple={true}
+                multiple
                 accept=".jar"
                 onChange={(e) => handleFileChange(e, false)}
-                className="w-[300px] hidden"
+                className="hidden"
               />
             </div>
             <AddingModsDialog profile={profile} modDirection="mods" modType={ModType.MODRINTH} />
             <AddingModsDialog profile={profile} modDirection="mods" modType={ModType.CURSE_FORGE} />
           </div>
         </div>
+
+        {/* === Опциональные моды === */}
         <div className="flex flex-col gap-3 w-[calc(100vw-35px)] md:w-full">
           <div className="text-xl">Опциональные моды</div>
           <Table className="border border-dashed rounded-2xl overflow-x-hidden">
             <TableBody>
-              {optionalMods &&
-                detailsMods &&
-                optionalMods.map((mod, index) => (
+              {filteredOptionalMods && detailsMods && filteredOptionalMods.length > 0 ? (
+                filteredOptionalMods.map((mod, index) => (
                   <TableRow key={index}>
                     <GameModItem mod={mod} details={detailsMods} profile={profile} />
                   </TableRow>
-                ))}
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell className="text-center text-sm text-muted-foreground py-4">
+                    Опциональные моды не найдены
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
+
           <div className="flex flex-col md:flex-row gap-2">
             <div className="flex gap-2">
               <Label
@@ -157,10 +201,10 @@ export const GameMods = ({ profile }: GameServersParams) => {
               <Input
                 id="loadOptionalMod"
                 type="file"
-                multiple={true}
+                multiple
                 accept=".jar"
                 onChange={(e) => handleFileChange(e, true)}
-                className="w-[300px] hidden"
+                className="hidden"
               />
             </div>
             <AddingModsDialog

@@ -1,4 +1,4 @@
-import axios, { CreateAxiosDefaults, HttpStatusCode, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, CreateAxiosDefaults, HttpStatusCode, InternalAxiosRequestConfig } from 'axios';
 import { toast } from 'sonner';
 
 import {
@@ -94,43 +94,49 @@ $api.interceptors.request.use(
 );
 
 $api.interceptors.response.use(
-  (response) => {
-    if (response.status === HttpStatusCode.Unauthorized) {
-      removeStorageProfile();
-      removeStorageTokens();
-      removeStorageRecloudIDAccessToken();
-    }
+  (response) => response,
+  async (error) => {
+    const axiosError = error as AxiosError;
+    const status = axiosError.response?.status;
+    const originalRequest = axiosError.config as (InternalAxiosRequestConfig & { _retry?: boolean }) | undefined;
 
-    return response;
-  },
-  (error) => {
-    try {
-      const status = error?.response?.status;
-      const data = error?.response?.data ?? {};
-      const errors: string[] | undefined = data?.errors;
-      const message: string | undefined = data?.message || error?.message;
+    if (status === HttpStatusCode.Unauthorized && originalRequest && !originalRequest._retry) {
+      // Avoid infinite loop
+      originalRequest._retry = true;
 
-      if (Array.isArray(errors) && errors.length) {
-        errors.forEach((e: any) => {
-          const text = typeof e === 'string' ? e : JSON.stringify(e);
-          toast.error(text);
-        });
-      } else if (message) {
-        toast.error(message);
-      } else {
-        toast.error('Произошла ошибка запроса');
-      }
+      const url = (originalRequest.url || '').toString();
+      const isAuthEndpoint = url.endsWith('/users/refresh') || url.endsWith('/users/signin') || url.endsWith('/users/signup');
+      try {
+        if (!isAuthEndpoint) {
+          // Attempt refresh (single-flight guarded)
+          if (!tokenRefreshPromise) {
+            tokenRefreshPromise = authService
+              .refresh()
+              .then(() => {
+                lastTokenRefreshAtSec = Math.floor(Date.now() / 1000);
+              })
+              .finally(() => {
+                tokenRefreshPromise = null;
+              });
+          }
+          await tokenRefreshPromise;
 
-      if (status === HttpStatusCode.Unauthorized) {
+          // Retry the original request with the new token
+          const newToken = getStorageAccessToken();
+          if (newToken) {
+            originalRequest.headers = originalRequest.headers || {};
+            (originalRequest.headers as any)['Authorization'] = `Bearer ${newToken}`;
+          }
+          return $api.request(originalRequest);
+        }
+      } catch (_) {
+        // Refresh failed → clear auth and propagate 401
         removeStorageProfile();
         removeStorageTokens();
         removeStorageRecloudIDAccessToken();
       }
-    } catch (_) {
-      // Fallback toast if parsing fails
-      toast.error('Произошла ошибка запроса');
     }
 
     return Promise.reject(error);
-  },
+  }
 );
