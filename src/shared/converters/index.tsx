@@ -11,13 +11,13 @@ import quilt from '@/assets/logos/quilt.png';
 
 export const convertGameLoaderImage = (loader: GameLoaderOption) => {
   const converter: Record<GameLoaderOption, ReactElement> = {
-    [GameLoaderOption.VANILLA]: <Image src={vanilla} alt="Minecraft" width={24} height={24} />,
-    [GameLoaderOption.FORGE]: <Image src={forge} alt="Forge" width={24} height={24} />,
-    [GameLoaderOption.FABRIC]: <Image src={fabric} alt="Fabric" width={24} height={24} />,
-    [GameLoaderOption.NEOFORGE]: <Image src={neoForge} alt="NeoForge" width={18} height={18} />,
-    [GameLoaderOption.QUILT]: <Image src={quilt} alt="Quilt" width={18} height={18} />,
+    [GameLoaderOption.VANILLA]: <Image src={vanilla} alt="Minecraft" width={24} height={24}/>,
+    [GameLoaderOption.FORGE]: <Image src={forge} alt="Forge" width={24} height={24}/>,
+    [GameLoaderOption.FABRIC]: <Image src={fabric} alt="Fabric" width={24} height={24}/>,
+    [GameLoaderOption.NEOFORGE]: <Image src={neoForge} alt="NeoForge" width={18} height={18}/>,
+    [GameLoaderOption.QUILT]: <Image src={quilt} alt="Quilt" width={18} height={18}/>,
     [GameLoaderOption.LITELOADER]: (
-      <Image src={liteLoader} alt="Liteloader" width={24} height={24} />
+      <Image src={liteLoader} alt="Liteloader" width={24} height={24}/>
     ),
   };
 
@@ -27,23 +27,37 @@ export const convertGameLoaderImage = (loader: GameLoaderOption) => {
 export const convertApiGameLoaderImage = (loader: GameLoaderType) => {
   const converter: Record<GameLoaderType, ReactElement> = {
     [GameLoaderType.VANILLA]: (
-      <Image src={vanilla} alt="Minecraft" className="min-w-4" width={24} height={24} />
+      <Image src={vanilla} alt="Minecraft" className="min-w-4" width={24} height={24}/>
     ),
     [GameLoaderType.FORGE]: (
-      <Image src={forge} alt="Forge" className="min-w-6" width={24} height={24} />
+      <Image src={forge} alt="Forge" className="min-w-6" width={24} height={24}/>
     ),
     [GameLoaderType.FABRIC]: (
-      <Image src={fabric} alt="Fabric" className="min-w-4" width={24} height={24} />
+      <Image src={fabric} alt="Fabric" className="min-w-4" width={24} height={24}/>
     ),
     [GameLoaderType.NEOFORGE]: (
-      <Image src={neoForge} alt="NeoForge" className="min-w-4" width={18} height={18} />
+      <Image src={neoForge} alt="NeoForge" className="min-w-4" width={18} height={18}/>
     ),
     [GameLoaderType.QUILT]: (
-      <Image src={quilt} alt="Quilt" className="min-w-4" width={18} height={18} />
+      <Image src={quilt} alt="Quilt" className="min-w-4" width={18} height={18}/>
     ),
     [GameLoaderType.LITELOADER]: (
-      <Image src={liteLoader} alt="Liteloader" className="min-w-4" width={24} height={24} />
+      <Image src={liteLoader} alt="Liteloader" className="min-w-4" width={24} height={24}/>
     ),
+  };
+
+  return converter[loader];
+};
+
+
+export const convertApiGameLoaderName = (loader: GameLoaderType) => {
+  const converter: Record<GameLoaderType, string> = {
+    [GameLoaderType.VANILLA]: 'Minecraft',
+    [GameLoaderType.FORGE]: 'Forge',
+    [GameLoaderType.FABRIC]: 'Fabric',
+    [GameLoaderType.NEOFORGE]: 'NeoForge',
+    [GameLoaderType.QUILT]: 'Quilt',
+    [GameLoaderType.LITELOADER]: 'Liteloader',
   };
 
   return converter[loader];
