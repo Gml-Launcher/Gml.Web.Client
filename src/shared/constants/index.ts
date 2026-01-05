@@ -9,6 +9,7 @@ export const HREF_GET_WORDPRESS_AUTH_PHP =
 export const HREF_DOCUMENTATION_CUSTOM_ENDPOINT =
   'https://wiki.recloud.tech/docs/gml-launcher/backend/authorization/custom';
 export const HREF_DISCORD = 'https://discord.com/invite/b5xgqfWgNt';
+export const HREF_YOUTRACK = 'https://youtrack.recloud.tech/agiles/173-5/current';
 export const HREF_RECLOUD_PRO =
   'https://market.recloud.tech/#:~:text=Gml%20Лаунчер%20%7C-,Тариф%20Pro,-(месяц)';
 
