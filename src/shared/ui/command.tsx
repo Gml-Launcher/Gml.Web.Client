@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentPropsWithoutRef, ElementRef, forwardRef, HTMLAttributes } from 'react';
+import { ComponentPropsWithoutRef, ElementRef, forwardRef, HTMLAttributes, useEffect, useRef } from 'react';
 import { type DialogProps } from '@radix-ui/react-dialog';
 import { Command as CommandPrimitive } from 'cmdk';
 import { Search } from 'lucide-react';
@@ -59,13 +59,53 @@ CommandInput.displayName = CommandPrimitive.Input.displayName;
 const CommandList = forwardRef<
   ElementRef<typeof CommandPrimitive.List>,
   ComponentPropsWithoutRef<typeof CommandPrimitive.List>
->(({ className, ...props }, ref) => (
-  <CommandPrimitive.List
-    ref={ref}
-    className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden', className)}
-    {...props}
-  />
-));
+>(({ className, ...props }, forwardedRef) => {
+  const localRef = useRef<ElementRef<typeof CommandPrimitive.List> | null>(null);
+
+  useEffect(() => {
+    const element = localRef.current;
+    if (!element) return;
+
+    const onWheel = (event: WheelEvent) => {
+      if (event.ctrlKey) return;
+
+      if (element.scrollHeight <= element.clientHeight) return;
+
+      const multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? element.clientHeight : 1;
+      const delta = event.deltaY * multiplier;
+      if (delta === 0) return;
+
+      const maxScrollTop = element.scrollHeight - element.clientHeight;
+      const nextScrollTop = element.scrollTop + delta;
+
+      // Don't block wheel if there's nothing to scroll in that direction.
+      if ((delta > 0 && element.scrollTop >= maxScrollTop) || (delta < 0 && element.scrollTop <= 0)) {
+        return;
+      }
+
+      event.preventDefault();
+      element.scrollTop = Math.max(0, Math.min(maxScrollTop, nextScrollTop));
+    };
+
+    element.addEventListener('wheel', onWheel, { passive: false });
+    return () => element.removeEventListener('wheel', onWheel);
+  }, []);
+
+  return (
+    <CommandPrimitive.List
+      ref={(node) => {
+        localRef.current = node;
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          (forwardedRef as any).current = node;
+        }
+      }}
+      className={cn('max-h-[300px] overflow-y-auto overflow-x-hidden', className)}
+      {...props}
+    />
+  );
+});
 
 CommandList.displayName = CommandPrimitive.List.displayName;
 
