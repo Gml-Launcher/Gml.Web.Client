@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PlugIcon, Trash2Icon, EyeIcon, LinkIcon, Loader2Icon } from 'lucide-react';
+import { EyeIcon, LinkIcon, Loader2Icon, PlugIcon, Trash2Icon } from 'lucide-react';
 import Image, { StaticImageData } from 'next/image';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,11 +13,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { Section } from '@/entities/Section';
 import { useAddNewsProvider, useDeleteNewsProvider, useNewsProviders } from '@/shared/hooks';
 import vkLogo from '@/assets/logos/vk.svg';
+import discordLogo from '@/assets/logos/discord.svg';
 import telegramLogo from '@/assets/logos/telegram.svg';
 import websiteLogo from '@/assets/logos/website.svg';
 import unicoreLogo from '@/assets/logos/unicore.svg';
 import azuriomLogo from '@/assets/logos/azuriom.svg';
-import { NewsTypeEnum, NewsTypeOption } from '@/shared/enums/news-type';
+import { NewsDocumentationLinks, NewsTypeEnum, NewsTypeOption } from '@/shared/enums/news-type';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
 import {
@@ -31,7 +32,6 @@ import {
 } from '@/shared/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
 import { enumValues } from '@/shared/lib/utils';
-import { Icons } from '@/shared/ui/icons';
 import { NewsListComponent } from '@/widgets/news-provider-dialog/ui/NewsListComponent';
 
 export const socialNetworkLogos: Record<NewsTypeEnum, StaticImageData> = {
@@ -39,6 +39,7 @@ export const socialNetworkLogos: Record<NewsTypeEnum, StaticImageData> = {
   [NewsTypeEnum.UnicoreCMS]: unicoreLogo,
   [NewsTypeEnum.Azuriom]: azuriomLogo,
   [NewsTypeEnum.Telegram]: telegramLogo,
+  [NewsTypeEnum.Discord]: discordLogo,
   [NewsTypeEnum.Custom]: websiteLogo,
 };
 
@@ -51,7 +52,7 @@ export function NewsProviderDialog() {
     refetch: getNewsProvidersRefetch,
   } = useNewsProviders();
   const { mutateAsync, isPending } = useAddNewsProvider();
-  const { mutateAsync: deleteMutateAsync, isPending: isDeletePending } = useDeleteNewsProvider();
+  const { mutateAsync: deleteMutateAsync } = useDeleteNewsProvider();
 
   const formSchema = z.object({
     url: z.string().min(2, {
@@ -77,6 +78,8 @@ export function NewsProviderDialog() {
     await deleteMutateAsync(type);
     await getNewsProvidersRefetch();
   }
+
+  const newsType = form.watch('type') as NewsTypeEnum;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -228,15 +231,20 @@ export function NewsProviderDialog() {
                                   <div className="relative">
                                     <LinkIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                     <Input
-                                      placeholder="https://blog.tecloud.tech"
+                                      placeholder="https://blog.recloud.tech"
                                       className="pl-10 h-10"
                                       {...field}
                                     />
                                   </div>
                                 </FormControl>
+                                Версия игры
                                 <FormDescription className="text-xs">
                                   Не знаете какую ссылку вводить?{' '}
-                                  <a href="#" className="text-primary hover:underline">
+                                  <a
+                                    target="_blank"
+                                    href={NewsDocumentationLinks[newsType]}
+                                    className="text-primary hover:underline"
+                                  >
                                     Ознакомьтесь с документацией
                                   </a>
                                   .

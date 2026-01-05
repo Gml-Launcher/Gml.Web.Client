@@ -6,21 +6,10 @@ import Link from 'next/link';
 import { ClientUpdateFormSchemaType, ClientUpdateSchema } from '../lib/static';
 
 import { Icons } from '@/shared/ui/icons';
-import {
-  useLauncherActualVersion,
-  useLauncherBuildVersions,
-  useLauncherUpload,
-} from '@/shared/hooks';
+import { useLauncherActualVersion, useLauncherBuildVersions, useLauncherUpload } from '@/shared/hooks';
 import { cn, getApiBaseUrl, getFormatDate } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/shared/ui/form';
+import { Form, FormControl, FormDescription, FormItem, FormLabel, FormMessage } from '@/shared/ui/form';
 import { Textarea } from '@/shared/ui/textarea';
 import { Input } from '@/shared/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
@@ -64,7 +53,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
                 <FormControl>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите версию билда" />
+                      <SelectValue placeholder="Выберите версию билда"/>
                     </SelectTrigger>
                     <SelectContent>
                       {versions &&
@@ -147,7 +136,7 @@ export function UpdateClientForm({ className, onOpenChange, ...props }: UpdateCl
 
           <div className="flex gap-x-4 justify-end items-center">
             <Button className="w-fit" disabled={isPending || !form.formState.isDirty}>
-              {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>}
               Обновить
             </Button>
           </div>
