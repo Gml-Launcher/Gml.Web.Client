@@ -1,4 +1,4 @@
-import { LinkIcon } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 
 import { GenerateLauncherDialog } from '@/widgets/generate-launcher-dialog';
@@ -18,7 +18,7 @@ import {
   DATA_TEST_ID_DIALOG_NEWS_PROVIDER,
 } from '@/shared/constants/data';
 import { Button } from '@/shared/ui/button';
-import { HREF_DISCORD } from '@/shared/constants';
+import { HREF_YOUTRACK } from '@/shared/constants';
 import { NewsProviderDialog } from '@/widgets/news-provider-dialog';
 
 export const IntegrationsPage = () => {
@@ -37,25 +37,25 @@ export const IntegrationsPage = () => {
             <IntegrationCard
               title="Аутентификация"
               description="Синхронизация и управление данными о пользователях на платформе"
-              dialog={<ChooseAuthenticationMethodDialog />}
+              dialog={<ChooseAuthenticationMethodDialog/>}
               testid={DATA_TEST_ID_DIALOG_AUTHENTICATION_METHOD}
             />
             <IntegrationCard
               title="Сервис скинов"
               description="Добавь интеграцию со сервисом скинов, для отображения скинов и плащей в игре"
-              dialog={<ConnectTexturesDialog />}
+              dialog={<ConnectTexturesDialog/>}
               testid={DATA_TEST_ID_DIALOG_CONNECT_TEXTURES}
             />
             <IntegrationCard
               title="Discord"
               description="Синхронизация лаунчера и вашего Discord сервера"
-              dialog={<ConnectDiscordDialog />}
+              dialog={<ConnectDiscordDialog/>}
               testid={DATA_TEST_ID_DIALOG_CONNECT_DISCORD}
             />
             <IntegrationCard
               title="Новости"
               description="Выводите новости из социальных сетей Вконтакте, Telegram или вашего сайта"
-              dialog={<NewsProviderDialog />}
+              dialog={<NewsProviderDialog/>}
               testid={DATA_TEST_ID_DIALOG_NEWS_PROVIDER}
             />
           </div>
@@ -66,7 +66,7 @@ export const IntegrationsPage = () => {
             <IntegrationCard
               title="Сборка лаунчера"
               description="Создайте лаунчер для платформ Windows, MacOS и Linux в пару кликов"
-              dialog={<GenerateLauncherDialog />}
+              dialog={<GenerateLauncherDialog/>}
               testid={DATA_TEST_ID_DIALOG_GENERATE_LAUNCHER}
             />
           </div>
@@ -77,17 +77,17 @@ export const IntegrationsPage = () => {
             <IntegrationCard
               title="Sentry"
               description={'Подключение платформы для отслеживания ошибок и мониторинга приложений'}
-              dialog={<ConnectSentryDialog />}
+              dialog={<ConnectSentryDialog/>}
               testid={DATA_TEST_ID_DIALOG_CONNECT_SENTRY}
             />
             <IntegrationCard
-              title="Нужен сервис?"
-              description="Отправь заявку, а мы придумаем что-нибудь"
+              title="Предложите свою идею"
+              description="Ваше предложение может стать частью будущих обновлений"
               dialog={
-                <Link target="_blank" href={HREF_DISCORD}>
+                <Link target="_blank" href={HREF_YOUTRACK}>
                   <Button size="sm" variant="outline" className="w-fit">
-                    <LinkIcon className="mr-2" size={16} />
-                    Поддержка
+                    <Lightbulb className="mr-2" size={16}/>
+                    Предложить идею
                   </Button>
                 </Link>
               }
