@@ -34,14 +34,14 @@ interface ProfileModDialog {
   profile?: ProfileExtendedBaseEntity;
   modDirection: string;
   modType: ModType;
+  disabled: boolean;
 }
 
-export function AddingModsDialog({ profile, modDirection, modType }: ProfileModDialog) {
+export function AddingModsDialog({ profile, modDirection, modType, disabled }: ProfileModDialog) {
   const form = useForm<SearchFormSchemaType>();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { ref, inView } = useInView();
 
-  // Используем useCallback для мемоизации функции поиска
   const handleSearch = useCallback(
     debounce((query: string) => {
       setSearchQuery(query);
@@ -52,19 +52,16 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
   const {
     data: searchMods,
     status,
-    error,
     fetchNextPage,
     refetch,
   } = useSearchMods(profile?.profileName ?? '', searchQuery, modType);
 
-  // Эффект для автоматического поиска при изменении searchQuery
   useEffect(() => {
     if (searchQuery) {
       refetch();
     }
   }, [searchQuery, refetch]);
 
-  // Эффект для пагинации
   useEffect(() => {
     if (inView) {
       fetchNextPage();
@@ -75,22 +72,21 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
     handleSearch(content.name);
   };
 
-  // Добавляем обработчик изменений инпута для живого поиска
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleSearch(e.target.value);
   };
 
   return (
     <Drawer>
-      <DrawerTrigger className="flex items-start">
-        <Button variant="secondary" className="w-max gap-2">
+      <DrawerTrigger disabled={disabled} className="flex items-start">
+        <Button variant="secondary" className="w-max gap-2" disabled={disabled}>
           {modType === 1 ? (
-            <Image src={modrinth} alt="Modrinth" className="w-4 h-4" />
+            <Image src={modrinth} alt="Modrinth" className="w-4 h-4"/>
           ) : (
-            <Image src={curseforge} alt="Curseforge" className="w-4 h-4" />
+            <Image src={curseforge} alt="Curseforge" className="w-4 h-4"/>
           )}
           Добавить
-          <PlusIcon width={16} height={16} />
+          <PlusIcon width={16} height={16}/>
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -100,26 +96,30 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
             <Badge className="cursor-pointer text-sm bg-blue-500 text-white hover:bg-opacity-100 hover:bg-blue-500">
               {modDirection}
             </Badge>
-            <Badge className="cursor-pointer h-7 text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+            <Badge
+              className="cursor-pointer h-7 text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               {modType === 1 ? (
                 <>
-                  <Image src={modrinth} alt="Modrinth" className="w-4 h-4 mr-2" />
+                  <Image src={modrinth} alt="Modrinth" className="w-4 h-4 mr-2"/>
                   Modrinth
                 </>
               ) : (
                 <>
-                  <Image src={curseforge} alt="Curseforge" className="w-4 h-4 mr-2" />
+                  <Image src={curseforge} alt="Curseforge" className="w-4 h-4 mr-2"/>
                   CurseForge
                 </>
               )}
             </Badge>
-            <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+            <Badge
+              className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               Minecraft: {profile?.minecraftVersion}
             </Badge>
-            <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+            <Badge
+              className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               Загрузчик: {profile?.launchVersion}
             </Badge>
-            <Badge className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+            <Badge
+              className="cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
               Фильтр: Mods
             </Badge>
           </DrawerTitle>
@@ -139,7 +139,7 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
               </FormItem>
 
               <Button type="submit" className="w-fit ml-auto" disabled={status === 'pending'}>
-                {status === 'pending' && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                {status === 'pending' && <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>}
                 Поиск
               </Button>
             </form>
@@ -152,20 +152,22 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
                 <Card key={mod?.id} className="py-4 px-5">
                   <div className="flex gap-4 h-full">
                     <Avatar className="w-8 h-8 mt-2">
-                      <AvatarImage src={mod?.iconUrl} alt="Icon" />
+                      <AvatarImage src={mod?.iconUrl} alt="Icon"/>
                       <AvatarFallback>
-                        <FileIcon />
+                        <FileIcon/>
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col h-full">
                       <h3 className="flex items-center font-bold text-sm gap-2">
                         {mod?.name}
-                        <Badge className="gap-1 cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
-                          <DownloadIcon width={16} height={16} />
+                        <Badge
+                          className="gap-1 cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+                          <DownloadIcon width={16} height={16}/>
                           {formatNumber(mod?.downloadCount)}
                         </Badge>
-                        <Badge className="gap-1 cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
-                          <HeartFilledIcon className="text-red-500" width={16} height={16} />
+                        <Badge
+                          className="gap-1 cursor-pointer text-sm bg-white bg-opacity-10 text-white text-opacity-90 hover:bg-opacity-100 hover:bg-white hover:text-black">
+                          <HeartFilledIcon className="text-red-500" width={16} height={16}/>
                           {formatNumber(mod?.followsCount)}
                         </Badge>
                       </h3>
@@ -181,12 +183,12 @@ export function AddingModsDialog({ profile, modDirection, modType }: ProfileModD
               ))}
 
               <div ref={ref} className="flex items-center justify-center p-5">
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
               </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
-              <FileIcon className="w-12 h-12 text-muted-foreground mb-4" />
+              <FileIcon className="w-12 h-12 text-muted-foreground mb-4"/>
               <p className="text-lg font-bold">Ничего не найдено</p>
               <p className="text-muted-foreground">
                 Попробуйте изменить запрос или проверьте параметры фильтрации.
