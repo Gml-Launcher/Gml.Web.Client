@@ -41,6 +41,8 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
       version: profile?.clientVersion || '',
     },
     resolver: zodResolver(CreateProfileSchema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
 
   const versions = useGetGameVersions({
@@ -158,7 +160,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                       disabled={!form.getFieldState('version').isDirty || loaderVersion.isFetching}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Выберите игровой загрузчик" />
+                        <SelectValue placeholder="Выберите игровой загрузчик"/>
                       </SelectTrigger>
                       <SelectContent>
                         {enumValues(GameLoaderOption).map(([loader, value]) => (
@@ -217,7 +219,7 @@ export function CreateProfileForm(props: CreateProfileFormProps) {
                 loaderVersion.isFetching
               }
             >
-              {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+              {isPending && <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>}
               Создать
             </Button>
           </div>
