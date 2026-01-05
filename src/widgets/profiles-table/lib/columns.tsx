@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { createColumnHelper } from '@tanstack/table-core';
-import { Edit2Icon, Trash2Icon } from 'lucide-react';
+import { Edit2Icon, Trash2Icon, X } from 'lucide-react';
 
 import { ClientState } from '@/widgets/client-hub';
 import { DataTableColumnHeader } from '@/entities/Table';
@@ -16,14 +16,14 @@ import { DASHBOARD_PAGES } from '@/shared/routes';
 import { Icons } from '@/shared/ui/icons';
 import { getFormatDate } from '@/shared/lib/utils';
 import { profileKeys } from '@/shared/hooks';
-import { convertApiGameLoaderImage } from '@/shared/converters';
+import { convertApiGameLoaderImage, convertApiGameLoaderName } from '@/shared/converters';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 enum ColumnHeader {
   ICON = '',
   NAME = 'Название',
   CREATED_AT = 'Дата создания',
   VERSION_LAUNCHER = 'Запускаемая версия',
-  LOADER_LAUNCHER = '',
   GAME_VERSION = 'Версия',
   PRIORITY = 'Приоритет',
   PROFILE_STATE = 'Статус',
@@ -71,29 +71,68 @@ export const useColumns = (props: UseColumnsProps) => {
       enableSorting: false,
       enableHiding: false,
     }),
+
+
     columnsHelper.accessor('iconBase64', {
       size: 64,
       header: ColumnHeader.ICON,
-      cell: ({ row }) =>
-        row.original.iconBase64 ? (
-          <Image
-            className="min-w-12 min-h-12 h-12 w-12"
-            src={`data:image/png;base64,${row.original.iconBase64}`}
-            alt={row.original.name || 'Profile Icon'}
-            width={48}
-            height={48}
-          />
-        ) : (
-          <div className="flex items-center justify-center min-w-12 min-h-12 h-12 w-12 bg-gray-200/5 rounded-xl">
-            {row.original.name.substring(0, 2).toUpperCase()}
+      cell: ({ row }) => {
+        const hasIcon = Boolean(row.original.iconBase64);
+        const hasLoader = Boolean(row.original.loader);
+
+        const loaderIcon = convertApiGameLoaderImage(row.original.loader);
+        const loaderName = convertApiGameLoaderName(row.original.loader);
+
+        return (
+          <div className="relative">
+            <div className="absolute bottom-[-.5rem] right-[-1rem] bg-primary rounded-full">
+              {hasLoader ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {loaderIcon}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {loaderName}: {row.original.launchVersion}
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <X/>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Не загружен</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+
+
+            {hasIcon ? (
+              <Image
+                className="min-w-12 min-h-12 h-12 w-12"
+                src={`data:image/png;base64,${row.original.iconBase64}`}
+                alt={row.original.name || 'Profile Icon'}
+                width={48}
+                height={48}
+              />
+            ) : (
+              <div className="flex items-center justify-center min-w-12 min-h-12 h-12 w-12 bg-gray-200/5 rounded-xl">
+                {row.original.name.substring(0, 2).toUpperCase()}
+              </div>
+            )}
           </div>
-        ),
+
+
+        );
+      }
+
     }),
 
     columnsHelper.display({
       size: 400,
       id: 'name',
-      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME} />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title={ColumnHeader.NAME}/>,
       cell: ({ row }) => (
         <div className="flex flex-col gap-2">
           <p className="text-sm text-muted-foreground">{row.original.name}</p>
@@ -101,18 +140,10 @@ export const useColumns = (props: UseColumnsProps) => {
         </div>
       ),
     }),
-    columnsHelper.accessor('loader', {
-      size: 70,
-      enableSorting: false,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.LOADER_LAUNCHER} />
-      ),
-      cell: ({ getValue }) => (getValue() ? convertApiGameLoaderImage(getValue()) : 'Не загружен'),
-    }),
     columnsHelper.accessor('launchVersion', {
       size: 500,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.VERSION_LAUNCHER} />
+        <DataTableColumnHeader column={column} title={ColumnHeader.VERSION_LAUNCHER}/>
       ),
       cell: ({ getValue }) => (getValue() ? getValue() : 'Не загружен'),
     }),
@@ -120,37 +151,37 @@ export const useColumns = (props: UseColumnsProps) => {
       size: 100,
 
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION} />
+        <DataTableColumnHeader column={column} title={ColumnHeader.GAME_VERSION}/>
       ),
       cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor('createDate', {
       size: 500,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT} />
+        <DataTableColumnHeader column={column} title={ColumnHeader.CREATED_AT}/>
       ),
       cell: ({ getValue }) => getFormatDate(getValue()),
     }),
     columnsHelper.accessor('priority', {
       size: 150,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.PRIORITY} />
+        <DataTableColumnHeader column={column} title={ColumnHeader.PRIORITY}/>
       ),
       cell: ({ getValue }) => getValue(),
     }),
     columnsHelper.accessor('state', {
       size: 270,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE} />
+        <DataTableColumnHeader column={column} title={ColumnHeader.PROFILE_STATE}/>
       ),
-      cell: ({ getValue }) => <ClientState state={getValue()} />,
+      cell: ({ getValue }) => <ClientState state={getValue()}/>,
     }),
     columnsHelper.display({
       size: 48,
       id: 'edit',
       cell: ({ row }) => (
         <Button variant="ghost" size="icon" onClick={onRedirectEditProfile(row.original.name)}>
-          <Edit2Icon size={16} />
+          <Edit2Icon size={16}/>
         </Button>
       ),
     }),
@@ -171,9 +202,9 @@ export const useColumns = (props: UseColumnsProps) => {
             disabled={props.isPendingDelete}
           >
             {props.isPendingDelete ? (
-              <Icons.spinner className="h-4 w-4 animate-spin" />
+              <Icons.spinner className="h-4 w-4 animate-spin"/>
             ) : (
-              <Trash2Icon size={16} />
+              <Trash2Icon size={16}/>
             )}
           </Button>
         );
