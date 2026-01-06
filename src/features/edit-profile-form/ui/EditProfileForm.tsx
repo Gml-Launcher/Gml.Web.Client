@@ -1,10 +1,14 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useEditProfile } from '@/shared/hooks';
-import { EditProfileFormSchemaType, EditProfileSchema, ProfileExtendedBaseEntity } from '@/shared/api/contracts';
+import {
+  EditProfileFormSchemaType,
+  EditProfileSchema,
+  ProfileExtendedBaseEntity,
+} from '@/shared/api/contracts';
 import { Form, FormField, FormMessage } from '@/shared/ui/form';
 import { Input } from '@/shared/ui/input';
 import { Textarea } from '@/shared/ui/textarea';
@@ -13,6 +17,17 @@ import { Icons } from '@/shared/ui/icons';
 import { DASHBOARD_PAGES } from '@/shared/routes';
 import { Switch } from '@/shared/ui/switch';
 import { Slider } from '@/shared/ui/slider';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select';
+import { JavaMajorVersion } from '@/shared/enums/java-major-version';
+import { ProfileJavaVendor } from '@/shared/enums/profile-java-vendor';
 
 interface EditProfileFormProps {
   profile?: ProfileExtendedBaseEntity;
@@ -36,6 +51,8 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
       recommendedRam: profile?.recommendedRam || 1024,
       background: profile?.background || '',
       isEnabled: profile?.isEnabled,
+      profileJavaVendor: profile?.profileJavaVendor,
+      javaMajorVersion: profile?.javaMajorVersion,
     },
     resolver: zodResolver(EditProfileSchema),
   });
@@ -69,6 +86,8 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     formUpdate.append('enabled', body.isEnabled?.toString() ?? 'true');
     formUpdate.append('priority', body.priority?.toString() ?? '0');
     formUpdate.append('recommendedRam', body.recommendedRam?.toString() ?? '50');
+    formUpdate.append('profileJavaVendor', body.profileJavaVendor?.toString() ?? '0');
+    formUpdate.append('javaMajorVersion', body.javaMajorVersion?.toString() ?? '');
 
     const backgroundFile =
       body.background && typeof body.background !== 'string' && body.background[0] instanceof File
@@ -109,8 +128,10 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     form.reset(body);
   };
 
-  // @ts-ignore
-  // @ts-ignore
+  console.log({
+    error: form.formState.errors,
+  });
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -233,6 +254,62 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
               )}
             </div>
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+            <div className="flex flex-col gap-y-1 w-full md:min-w-96 mb-2 lg:mb-0">
+              <h6 className="text-sm font-bold">Версия Java</h6>
+              <p className="text-sm text-gray-700 dark:text-gray-300">Версия запускаемой Java</p>
+            </div>
+            <div className="flex flex-col gap-y-1 w-full md:min-w-96 mb-2 lg:mb-0">
+              <Controller
+                control={form.control}
+                name="javaMajorVersion"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={String(field.value)}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Версия" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Minecraft</SelectLabel>
+                        <SelectItem
+                          value="0"
+                          onMouseDown={() => {
+                            form.setValue('profileJavaVendor', ProfileJavaVendor.DEFAULT);
+                          }}
+                        >
+                          По умолчанию
+                        </SelectItem>
+                      </SelectGroup>
+
+                      <SelectGroup>
+                        <SelectLabel>Azul</SelectLabel>
+                        {Object.values(JavaMajorVersion).map((version) => (
+                          <SelectItem
+                            key={version}
+                            value={version}
+                            onMouseDown={() => {
+                              form.setValue('profileJavaVendor', ProfileJavaVendor.AZUL);
+                            }}
+                          >
+                            Java {version}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+
+              {form.formState.errors.profileJavaVendor && (
+                <FormMessage>
+                  {form.formState.errors.profileJavaVendor.message?.toString()}
+                </FormMessage>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
             <div className="flex flex-col gap-y-1 w-full md:min-w-96 mb-2 lg:mb-0">
               <h6 className="text-sm font-bold">Рекомендуемая оперативная память</h6>
