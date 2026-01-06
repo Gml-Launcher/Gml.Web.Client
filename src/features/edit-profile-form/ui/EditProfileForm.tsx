@@ -128,10 +128,6 @@ export const EditProfileForm = (props: EditProfileFormProps) => {
     form.reset(body);
   };
 
-  console.log({
-    error: form.formState.errors,
-  });
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
