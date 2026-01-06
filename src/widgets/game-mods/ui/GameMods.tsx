@@ -15,7 +15,7 @@ import { Button } from '@/shared/ui/button';
 import { EntityState, ModType } from '@/shared/enums';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { GameModItem } from '@/widgets/game-mods/ui/GameModItem';
-import { useProfileCardStore } from "@/entities/ProfileCard/lib/store";
+import { useProfileCardStore } from '@/entities/ProfileCard/lib/store';
 
 interface GameServersParams {
   profile: ProfileExtendedBaseEntity;
@@ -64,6 +64,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
     EntityState.ENTITY_STATE_ERROR,
     EntityState.ENTITY_STATE_PACKING,
     EntityState.ENTITY_STATE_DISABLED,
+    EntityState.ENTITY_STATE_NEED_DOWNLOAD,
   ].includes(state || EntityState.ENTITY_STATE_ACTIVE);
 
   const removeMod = async (fileName: string) => {
@@ -101,7 +102,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-2">
             <div className="text-xl font-bold">Список модов</div>
             <div className="relative w-full md:w-[250px]">
-              <MagnifyingGlassIcon className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground"/>
+              <MagnifyingGlassIcon className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="text"
                 placeholder="Поиск по модам..."
@@ -120,14 +121,13 @@ export const GameMods = ({ profile }: GameServersParams) => {
                     <TableCell key={index}>
                       <div className="flex items-center gap-2">
                         <Avatar className="w-8 h-8">
-                          <AvatarImage src={mod?.iconUrl} alt="@shadcn"/>
+                          <AvatarImage src={mod?.iconUrl} alt="@shadcn" />
                           <AvatarFallback>
-                            <FileIcon/>
+                            <FileIcon />
                           </AvatarFallback>
                         </Avatar>
                         {mod?.name}
-                        <Badge
-                          className="bg-orange-500 bg-opacity-20 text-orange-500 hover:bg-opacity-100 hover:bg-orange-500 hover:text-white">
+                        <Badge className="bg-orange-500 bg-opacity-20 text-orange-500 hover:bg-opacity-100 hover:bg-orange-500 hover:text-white">
                           Jar
                         </Badge>
                       </div>
@@ -156,7 +156,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-max gap-2"
               >
                 Загрузить
-                <PlusIcon width={16} height={16}/>
+                <PlusIcon width={16} height={16} />
               </Label>
               <Input
                 id="loadMod"
@@ -191,7 +191,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
               {filteredOptionalMods && detailsMods && filteredOptionalMods.length > 0 ? (
                 filteredOptionalMods.map((mod, index) => (
                   <TableRow key={index}>
-                    <GameModItem mod={mod} details={detailsMods} profile={profile}/>
+                    <GameModItem mod={mod} details={detailsMods} profile={profile} />
                   </TableRow>
                 ))
               ) : (
@@ -211,7 +211,7 @@ export const GameMods = ({ profile }: GameServersParams) => {
                 className="cursor-pointer inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-2 w-max gap-2"
               >
                 Загрузить
-                <PlusIcon width={16} height={16}/>
+                <PlusIcon width={16} height={16} />
               </Label>
               <Input
                 id="loadOptionalMod"
