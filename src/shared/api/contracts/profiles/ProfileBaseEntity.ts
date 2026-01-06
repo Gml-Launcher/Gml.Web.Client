@@ -1,5 +1,7 @@
 import { EntityState } from '@/shared/enums';
 import { PlayerBaseEntity } from '@/shared/api/contracts';
+import { ProfileJavaVendor } from '@/shared/enums/profile-java-vendor';
+import { JavaMajorVersion } from '@/shared/enums/java-major-version';
 
 export type ProfileBaseEntity = {
   name: string;
@@ -32,6 +34,8 @@ export type ProfileExtendedBaseEntity = {
   gameArguments: string;
   hasUpdate: boolean;
   isEnabled: boolean;
+  profileJavaVendor: ProfileJavaVendor;
+  javaMajorVersion: JavaMajorVersion;
   state: EntityState;
   loader: number;
   files: ProfileFileBaseEntity[];

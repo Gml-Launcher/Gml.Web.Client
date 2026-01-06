@@ -15,6 +15,7 @@ const stateColorMap: Record<EntityState, string> = {
   [EntityState.ENTITY_STATE_ERROR]: 'bg-red-500',
   [EntityState.ENTITY_STATE_NEED_COMPILE]: 'bg-blue-500',
   [EntityState.ENTITY_STATE_PACKING]: 'bg-orange-500',
+  [EntityState.ENTITY_STATE_NEED_DOWNLOAD]: 'bg-blue-500',
 };
 
 export function ClientState({ state }: ClientStateProps) {
