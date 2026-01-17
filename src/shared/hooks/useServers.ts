@@ -6,6 +6,7 @@ import {
   TDeleteGameServersRequest,
   TGetGameServersRequest,
   TPostGameServersRequest,
+  TPutGameServersRequest,
 } from '@/shared/api/contracts';
 import { isAxiosError } from '@/shared/lib/isAxiosError/isAxiosError';
 
@@ -62,6 +63,27 @@ export const useDeleteGameServer = () => {
 
       toast.success('Успешно', {
         description: 'Сервер успешно удален',
+      });
+    },
+    onError: (error) => {
+      isAxiosError({ toast, error });
+    },
+  });
+};
+
+export const useUpdateGameServer = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: serversKeys.editing(),
+    mutationFn: (data: TPutGameServersRequest) => gameServerService.updateServer(data),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: serversKeys.entities(),
+      });
+
+      toast.success('Успешно', {
+        description: `Сервер "${data.data.name}" успешно обновлен`,
       });
     },
     onError: (error) => {

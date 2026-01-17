@@ -6,6 +6,8 @@ import {
   TGetGameServersResponse,
   TPostGameServersRequest,
   TPostGameServersResponse,
+  TPutGameServersRequest,
+  TPutGameServersResponse,
 } from '@/shared/api/contracts';
 
 class GameServerService {
@@ -33,6 +35,18 @@ class GameServerService {
       `${this.BASE_URL}/${body.profileName}/${body.serverName}`,
     );
 
+    return data;
+  }
+
+  async updateServer({
+    profileName,
+    serverName,
+    ...body
+  }: TPutGameServersRequest): Promise<TPutGameServersResponse> {
+    const { data } = await $api.put<TPutGameServersResponse>(
+      `${this.BASE_URL}/${profileName}/${serverName}`,
+      body,
+    );
     return data;
   }
 }

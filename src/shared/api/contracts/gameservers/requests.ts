@@ -23,3 +23,14 @@ export type TDeleteGameServersRequest = {
   serverName: string;
 };
 export type TDeleteGameServersResponse = ResponseBaseEntity & {};
+
+export type TPutGameServersRequest = {
+  profileName: string;
+  serverName: string;
+  name: string;
+  address: string;
+  port: number;
+};
+export type TPutGameServersResponse = ResponseBaseEntity & {
+  data: GameServerBaseEntity;
+};

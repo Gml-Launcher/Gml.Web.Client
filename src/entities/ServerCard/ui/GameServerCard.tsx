@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import { ClientState } from '@/widgets/client-hub';
 import { DeleteGameServerDialog } from '@/features/delete-game-server';
+import { EditGameServerDialog } from '@/features/edit-game-server';
 import { GameServerBaseEntity } from '@/shared/api/contracts';
 import { Card } from '@/shared/ui/card';
 import { Progress } from '@/shared/ui/progress';
@@ -54,6 +55,7 @@ export const GameServerCard = ({ server, profileName }: GameServerCardParams) =>
         ) : (
           <ClientState state={EntityState.ENTITY_STATE_DISABLED} />
         )}
+        <EditGameServerDialog server={server} profileName={profileName} />
         <DeleteGameServerDialog serverName={server.name} profileName={profileName} />
       </div>
     </Card>
