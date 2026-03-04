@@ -18,16 +18,23 @@ import {
   removeStorageTokens,
 } from '@/shared/services';
 import { AUTH_PAGES } from '@/shared/routes';
+import { authService } from '@/shared/services';
 
 export const AccountNavigation = () => {
   const router = useRouter();
   const profile = getStorageProfile();
 
-  const destroySession = () => {
-    removeStorageProfile();
-    removeStorageTokens();
-    removeStorageRecloudIDAccessToken();
-    router.push(AUTH_PAGES.SIGN_IN);
+  const destroySession = async () => {
+    try {
+      // Отправляем запрос на бэкенд для отзыва refresh-токена (в куках)
+      await authService.logout();
+    } finally {
+      // Всегда чистим локальный профиль и уводим на страницу входа
+      removeStorageProfile();
+      // Токены и интеграции чистятся внутри authService.logout() в finally,
+      // но повторная очистка безопасна, оставим только профиль здесь для ясности
+      router.push(AUTH_PAGES.SIGN_IN);
+    }
   };
 
   return (

@@ -65,8 +65,13 @@ class AuthService {
   }
 
   async logout() {
-    removeStorageTokens();
-    removeStorageRecloudIDAccessToken();
+    try {
+      await $api.post(`${this.BASE_URL}/logout`, {});
+    } catch (_) {
+    } finally {
+      removeStorageTokens();
+      removeStorageRecloudIDAccessToken();
+    }
   }
 }
 
