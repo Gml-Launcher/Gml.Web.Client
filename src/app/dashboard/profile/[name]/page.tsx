@@ -8,7 +8,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 type Props = {
-  params: { name: string };
+  params: Promise<{ name: string }>;
 };
 
 const Page = async (props: Props) => {
