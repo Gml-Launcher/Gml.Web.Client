@@ -45,13 +45,17 @@ yarn install
 
 ### 3. Configure Environment Variables
 
-Create a `.env` file in the root of the project and add the following configuration:
+The development server proxies API and WebSocket requests to the local backend on port
+5002 and skin requests to port 5086. To use different upstreams, create `.env.development.local`:
 
 ```env
-NEXT_PUBLIC_BACKEND_URL=http://localhost:5000/api/v1
+DEV_BACKEND_URL=http://127.0.0.1:5002
+DEV_SKINS_URL=http://127.0.0.1:5086
 ```
 
-Replace `http://localhost:5000/api/v1` with the actual URL of your Gml Launcher backend API if different.
+These variables are server-side only. Browser requests use the frontend origin, including
+`/api/v1` and `/ws`; no separate browser-facing backend URL is needed. Restart the development
+server after changing upstreams.
 
 ### 4. Run the Development Server
 
@@ -69,6 +73,15 @@ yarn dev
 
 The application will be available at `http://localhost:3000`.
 
+Development routing follows Angie's `gml-routes.conf`: `/api*`, `/swagger*`, `/ws*`, and
+exact `/health` retain their paths; `/skins` and `/skins/*` strip the `/skins` prefix.
+The root redirects to `/mnt` while setup is needed. Once installed, `/mnt` and its nested
+pages redirect to `/`. An unavailable API or a setup check exceeding three seconds leaves
+the root reachable and redirects `/mnt` to `/`.
+
+For the complete backend repository, open `Gml.Backend.sln` in Rider and run **GML Development**,
+or use `./scripts/dev.sh` from its root on Linux/macOS.
+
 ## Building for Production
 
 To create a production-ready build:
@@ -83,11 +96,14 @@ Start the production server:
 npm run start
 ```
 
+The development proxy and setup check are disabled for production. Run the production
+frontend behind Angie, which supplies API, skins, and setup routing.
+
 ## Environment Variables
 
-| Variable                  | Description                         | Default Value                  |
-|---------------------------|-------------------------------------|--------------------------------|
-| `NEXT_PUBLIC_BACKEND_URL` | URL of the Gml Launcher backend API | `http://localhost:5000/api/v1` |
+- `DEV_BACKEND_URL`: development API upstream; defaults to `http://127.0.0.1:5002`.
+- `DEV_SKINS_URL`: development skins upstream; defaults to `http://127.0.0.1:5086`.
+- `NEXT_PUBLIC_BACKEND_URL`: optional setup form placeholder; requests use the frontend origin.
 
 ## Contributing
 

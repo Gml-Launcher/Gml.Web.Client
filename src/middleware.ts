@@ -14,6 +14,25 @@ const protectedRoutes = [
 ];
 const publicRoutes = ['/', AUTH_PAGES.HOME, AUTH_PAGES.SIGN_IN];
 
+async function needsSetup(): Promise<boolean> {
+  const backend = process.env.DEV_BACKEND_URL || 'http://127.0.0.1:5002';
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
+  try {
+    // Like Angie's auth_request: a 2xx response means setup is still needed.
+    const response = await fetch(new URL('/api/v1/settings/checkInstalled', backend), {
+      cache: 'no-store',
+      redirect: 'manual',
+      signal: controller.signal,
+    });
+    return response.ok;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 async function attemptRefresh(request: NextRequest): Promise<string | null> {
   try {
     // Call backend refresh using existing HttpOnly cookies
@@ -45,6 +64,19 @@ export async function middleware(request: NextRequest) {
     cookies,
     nextUrl: { pathname },
   } = request;
+
+  if (process.env.NODE_ENV === 'development') {
+    const isSetupRoute = pathname === '/mnt' || pathname.startsWith('/mnt/');
+    if (pathname === '/' || isSetupRoute) {
+      const setupRequired = await needsSetup();
+      if (pathname === '/' && setupRequired) {
+        return NextResponse.redirect(new URL('/mnt', request.url), 307);
+      }
+      if (isSetupRoute && !setupRequired) {
+        return NextResponse.redirect(new URL('/', request.url), 307);
+      }
+    }
+  }
 
   const isProtectedRoute = protectedRoutes.includes(pathname);
   const isPublicRoute = publicRoutes.includes(pathname);
@@ -86,5 +118,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  matcher: ['/((?!api|swagger|ws|skins(?:/|$)|health$|_next/static|_next/image|.*\\.png$).*)'],
 };
