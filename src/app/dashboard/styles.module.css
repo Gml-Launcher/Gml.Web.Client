@@ -15,7 +15,7 @@
 }
 
 .aside__logo {
-  @apply flex items-center gap-2 font-semibold;
+  @apply flex min-w-0 items-center gap-2 font-semibold;
 }
 
 .aside__logo > img {

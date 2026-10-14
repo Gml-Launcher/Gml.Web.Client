@@ -17,6 +17,7 @@ import { Notifications } from '@/features/notifications';
 import { DesktopNavigation } from '@/shared/ui/DesktopNavigation';
 import { MobileNavigation } from '@/shared/ui/MobileNavigation';
 import { AccountNavigation } from '@/shared/ui/AccountNavigation';
+import { BackendVersion } from '@/shared/ui/BackendVersion';
 import { DASHBOARD_PAGES } from '@/shared/routes';
 import { DonationPro } from '@/shared/ui/DonationPro';
 import { Badge } from '@/shared/ui/badge';
@@ -71,8 +72,10 @@ export default function Page({ children }: React.PropsWithChildren) {
           <div className={classes['aside__wrapper-logo']}>
             <Link href="/" className={classes.aside__logo}>
               <Image src={logo} alt="Gml Frontend" />
-              {config.name}
-              <sup className={classes.version}>{config.version}</sup>
+              <span className="flex min-w-0 flex-col">
+                {config.name}
+                <BackendVersion className={classes.version} />
+              </span>
             </Link>
           </div>
           <DesktopNavigation menu={menu} />

@@ -11,6 +11,7 @@ import { config } from '@/core/configs';
 import { cn } from '@/shared/lib/utils';
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui/sheet';
 import { Button } from '@/shared/ui/button';
+import { BackendVersion } from '@/shared/ui/BackendVersion';
 import { TMenuItem } from '@/shared/types';
 import logo from '@/assets/logos/logo.svg';
 
@@ -33,8 +34,10 @@ export const MobileNavigation = ({ menu }: MobileNavigationParams) => {
         <nav className={classes.sheet__navigation}>
           <Link href="/" className={classes.sheet__logo}>
             <Image src={logo} alt="Gml Frontend" />
-            {config.name}
-            <sup className={classes.version}>{config.version}</sup>
+            <span className="flex min-w-0 flex-col">
+              {config.name}
+              <BackendVersion className={classes.version} />
+            </span>
           </Link>
           {menu.map(({ icon, path, text }) => (
             <Link
