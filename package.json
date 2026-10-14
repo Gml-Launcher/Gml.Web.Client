@@ -52,7 +52,7 @@
     "react-dom": "19.3.0",
     "react-hook-form": "7.90.0",
     "react-intersection-observer": "9.13.1",
-    "react-resizable-panels": "2.0.20",
+    "react-resizable-panels": "4.14.4",
     "recharts": "2.12.7",
     "seedrandom": "3.0.5",
     "sharp": "0.35.5",
