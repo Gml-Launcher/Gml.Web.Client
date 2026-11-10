@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Ensure repository/image name is lowercase for Docker registry
       - name: Set lowercase image name
